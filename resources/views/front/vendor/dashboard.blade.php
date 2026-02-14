@@ -6,6 +6,8 @@
 
 @section('css')
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
     :root{
         --v-bg:#f6f7fb;
         --v-card:#fff;
@@ -15,6 +17,11 @@
         --v-shadow: 0 10px 30px rgba(17,24,39,.08);
         --v-shadow-sm: 0 6px 18px rgba(17,24,39,.08);
         --v-radius:16px;
+    }
+
+    .v-page,
+    .v-page *{
+        font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
     .v-page{
@@ -34,7 +41,7 @@
 
     .v-title{
         margin:0;
-        font-weight:900;
+        font-weight:700;
         letter-spacing:-.02em;
         color: var(--v-text);
     }
@@ -43,6 +50,7 @@
         margin:6px 0 0;
         color: var(--v-muted);
         font-size: 14px;
+        font-weight: 400;
     }
 
     .v-pill{
@@ -99,7 +107,7 @@
     .stat-ico i{ font-size: 18px; }
     .stat-value{
         font-size: 30px;
-        font-weight: 900;
+        font-weight: 700;
         margin: 10px 0 2px;
         letter-spacing:-.02em;
         position:relative;
@@ -108,6 +116,7 @@
         font-size: 13px;
         opacity: .92;
         position:relative;
+        font-weight: 500;
     }
 
     .stat-card.orders { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
@@ -132,7 +141,7 @@
     }
     .v-card-head h5{
         margin:0;
-        font-weight:900;
+        font-weight:700;
         color: var(--v-text);
         font-size: 15px;
     }
@@ -167,8 +176,8 @@
         flex: 0 0 auto;
     }
     .action-ico i{ font-size: 18px; }
-    .action-title{ margin:0; font-weight:900; font-size: 14px; color: var(--v-text); line-height: 1.2; }
-    .action-desc{ margin:3px 0 0; font-size: 12px; color: var(--v-muted); }
+    .action-title{ margin:0; font-weight:600; font-size: 14px; color: var(--v-text); line-height: 1.2; }
+    .action-desc{ margin:3px 0 0; font-size: 12px; color: var(--v-muted); font-weight: 400; }
 
     /* Lists */
     .recent-item{
