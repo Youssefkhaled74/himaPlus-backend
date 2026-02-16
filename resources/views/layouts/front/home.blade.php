@@ -31,6 +31,11 @@
                 line-height: 1 !important;
             }
             html, body { overflow-x: hidden; }
+            body.landing-page { padding-top: 96px !important; }
+            .landing-page .alert { position: relative; z-index: 1040; }
+            @media (max-width: 991.98px) {
+                body.landing-page { padding-top: 82px !important; }
+            }
 
         </style>
         @yield('css')

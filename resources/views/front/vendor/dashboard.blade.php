@@ -214,7 +214,7 @@
 @endsection
 
 @section('content')
-<main class="container my-4" style="max-width: 95%; margin-top: 8% !important;">
+<main class="container my-4" style="max-width: 95%;">
     @include('flash::message')
 
     <div class="v-page">

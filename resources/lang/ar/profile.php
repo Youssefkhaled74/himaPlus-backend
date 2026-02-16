@@ -83,5 +83,6 @@ return [
     'status' => 'الحالة',
     'update_profile' => 'تحديث البيانات',
     'notes' => 'ملاحظات',
+    'profile' =>'الملف الشخصي',
 ];
 

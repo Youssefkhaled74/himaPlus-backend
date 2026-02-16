@@ -5,6 +5,7 @@ return [
     'about_us' => 'About Us',
     'service_providers' => 'Service Providers',
     'categories' => 'Categories',
+    'requests' => 'Requests',
     'orders' => 'Orders',
     'contact_us' => 'Contact Us',
     'login' => 'Login',

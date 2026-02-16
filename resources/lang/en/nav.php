@@ -185,4 +185,16 @@ return [
     'search_products' => 'Search Products',
     'search_products_placeholder' => 'Search for products...',
     'search' => 'Search',
+
+
+        'add_product_desc' => 'Add new products to the catalog',
+    'scheduled_orders_desc' => 'Manage recurring deliveries',
+    'profile_desc' => 'Update account information',
+    'view_products_desc' => 'Manage product inventory',
+    'view_offers_desc' => 'Track price quotations',
+    'notifications_desc' => 'View alerts and updates',
+    'view_orders_desc' => 'View and manage customer orders',
+    'ratings_desc' => 'View customer ratings',
+    'analytics_desc' => 'View business insights and reports',
+    'requests' => 'Requests',
 ];

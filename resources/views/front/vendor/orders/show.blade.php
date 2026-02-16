@@ -21,9 +21,9 @@
         --vos-accent:#0ec6a0;
     }
 
-    .vendor-order-show{max-width:95%;margin:8% auto 0;padding-bottom:28px;background:var(--vos-bg);}
+    .vendor-order-show{max-width:95%;margin:7% auto 0;padding-bottom:28px;background:var(--vos-bg);}
 
-    .vos-breadcrumb{font-size:16px;color:#6d7482;display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+    .vos-breadcrumb{font-size:15px;color:#6d7482;display:flex;align-items:center;gap:10px;margin-bottom:18px;}
     .vos-breadcrumb a{text-decoration:none;color:#6d7482;}
     .vos-breadcrumb .current{color:#0f3f9f;font-weight:600;}
     .vos-breadcrumb i{color:#0ec6a0;font-size:12px;}
@@ -31,49 +31,49 @@
     .vos-grid{display:grid;grid-template-columns:1.35fr .95fr;gap:18px;align-items:start;}
     .vos-card{background:var(--vos-card);border:1px solid var(--vos-border);border-radius:16px;padding:20px 22px;}
     .vos-card h4,.vos-card h5{margin:0 0 14px;color:var(--vos-title);font-weight:600;}
-    .vos-card h4{font-size:42px;}
-    .vos-card h5{font-size:34px;}
+    .vos-card h4{font-size:24px;}
+    .vos-card h5{font-size:18px;}
 
     .vos-rows{display:grid;gap:10px;}
     .vos-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;}
-    .vos-key{font-size:31px;color:#3b4453;font-weight:500;}
-    .vos-val{font-size:31px;color:#313844;font-weight:500;text-align:right;max-width:62%;line-height:1.25;}
+    .vos-key{font-size:15px;color:#3b4453;font-weight:500;}
+    .vos-val{font-size:15px;color:#313844;font-weight:500;text-align:right;max-width:62%;line-height:1.35;}
 
-    .vos-payment .vos-key,.vos-payment .vos-val{font-size:30px;}
+    .vos-payment .vos-key,.vos-payment .vos-val{font-size:15px;}
     .vos-total .vos-key,.vos-total .vos-val{font-weight:700;color:#1f2937;}
 
     .vos-actions{display:flex;gap:12px;flex-wrap:wrap;}
     .btn-vos{
         min-height:64px;border-radius:12px;border:1px solid transparent;padding:0 24px;
-        font-size:29px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
+        font-size:18px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
     }
     .btn-vos-main{background:linear-gradient(90deg,#0f4bbf 0%, #10b981 100%);color:#fff;}
     .btn-vos-main:hover{color:#fff;filter:brightness(.98);}
     .btn-vos-outline{background:#fff;color:#0f3f9f;border-color:#0f4bbf;}
 
-    .vos-alert{border:2px solid #2d67d8;background:#f8fbff;border-radius:12px;padding:12px 14px;color:#214eb5;font-size:27px;font-weight:600;line-height:1.35;}
+    .vos-alert{border:2px solid #2d67d8;background:#f8fbff;border-radius:12px;padding:12px 14px;color:#214eb5;font-size:15px;font-weight:600;line-height:1.35;}
 
     .vos-timeline .line{position:relative;padding-left:38px;}
     .vos-timeline .line::before{content:"";position:absolute;left:11px;top:10px;bottom:10px;border-left:2px dashed #d5dae2;}
     .vos-step{position:relative;padding:10px 0 14px;}
     .vos-step .dot{position:absolute;left:-2px;top:14px;width:24px;height:24px;border-radius:50%;background:#a3a7af;display:grid;place-items:center;color:#fff;font-size:13px;}
     .vos-step.done .dot{background:linear-gradient(90deg,#0f4bbf,#10b981);}
-    .vos-step .name{font-size:30px;font-weight:600;color:#0f3f9f;line-height:1.2;}
-    .vos-step .date{font-size:25px;color:#7a8292;line-height:1.2;}
+    .vos-step .name{font-size:15px;font-weight:600;color:#0f3f9f;line-height:1.2;}
+    .vos-step .date{font-size:13px;color:#7a8292;line-height:1.2;}
     .vos-step.pending .name{color:#9aa1af;}
 
     .vos-contact{background:#f0f1f3;border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
-    .vos-contact-name{font-size:28px;font-weight:600;color:#1f2937;}
-    .vos-contact-phone{font-size:23px;color:#7a8292;}
+    .vos-contact-name{font-size:16px;font-weight:600;color:#1f2937;}
+    .vos-contact-phone{font-size:14px;color:#7a8292;}
     .vos-contact-actions{display:flex;gap:10px;}
     .vos-circle{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(90deg,#0f4bbf,#10b981);text-decoration:none;}
 
     .vos-offer{border:1px solid var(--vos-border);border-radius:12px;overflow:hidden;}
-    .vos-offer-head{background:#f3f4f6;padding:12px 14px;font-size:28px;font-weight:600;color:#303846;}
+    .vos-offer-head{background:#f3f4f6;padding:12px 14px;font-size:16px;font-weight:600;color:#303846;}
     .vos-offer-body{padding:14px;}
     .vos-file{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eceef2;margin-bottom:10px;}
-    .vos-file a{text-decoration:none;color:#2f3747;font-size:27px;}
-    .vos-offer-line{font-size:27px;color:#6b7280;line-height:1.5;}
+    .vos-file a{text-decoration:none;color:#2f3747;font-size:14px;}
+    .vos-offer-line{font-size:14px;color:#6b7280;line-height:1.5;}
 
     @media (max-width: 1200px){
         .vos-grid{grid-template-columns:1fr;}
@@ -105,6 +105,8 @@
     }
 
     $actionLabel = null;
+    $timelineActionNo = null;
+    $showPendingConfirmActions = false;
     if ($isQuotation) {
         if (!$myOffer) {
             $actionLabel = __('Send Offer') ?? 'Send Offer';
@@ -115,10 +117,13 @@
             } elseif ($offerStatus === '2' || $offerStatus === 'accepted') {
                 if ($lastTimelineNo >= 4 && $lastTimelineNo < 5) {
                     $actionLabel = __('Mark as Delivered') ?? 'Mark as Delivered';
+                    $timelineActionNo = 5;
                 } elseif ($lastTimelineNo >= 3 && $lastTimelineNo < 4) {
                     $actionLabel = __('Mark as Shipped') ?? 'Mark as Shipped';
+                    $timelineActionNo = 4;
                 } elseif ($lastTimelineNo >= 2 && $lastTimelineNo < 3) {
                     $actionLabel = __('Mark as Processing') ?? 'Mark as Processing';
+                    $timelineActionNo = 3;
                 }
             } else {
                 $actionLabel = __('Edit Offer') ?? 'Edit Offer';
@@ -135,14 +140,20 @@
     } else {
         if ($lastTimelineNo >= 5 && $lastTimelineNo < 6) {
             $actionLabel = __('Mark as Completed') ?? 'Mark as Completed';
+            $timelineActionNo = 6;
         } elseif ($lastTimelineNo >= 4 && $lastTimelineNo < 5) {
             $actionLabel = __('Mark as Delivered') ?? 'Mark as Delivered';
+            $timelineActionNo = 5;
         } elseif ($lastTimelineNo >= 3 && $lastTimelineNo < 4) {
             $actionLabel = __('Mark as Shipped') ?? 'Mark as Shipped';
+            $timelineActionNo = 4;
         } elseif ($lastTimelineNo >= 2 && $lastTimelineNo < 3) {
             $actionLabel = __('Mark as Processing') ?? 'Mark as Processing';
+            $timelineActionNo = 3;
         } elseif ($lastTimelineNo === 1) {
             $actionLabel = __('Confirmed') ?? 'Confirmed';
+            $timelineActionNo = 2;
+            $showPendingConfirmActions = true;
         }
     }
 
@@ -178,18 +189,18 @@
                 <h5>{{ __('Order Details') ?? 'Order Details' }}</h5>
                 <div class="vos-rows">
                     <div class="vos-row"><span class="vos-key">{{ __('Request Number') ?? 'Request Number' }}</span><span class="vos-val">#{{ $order->id }}</span></div>
-                    <div class="vos-row"><span class="vos-key">{{ __('Delivery Address') ?? 'Delivery Address' }}</span><span class="vos-val">{{ $order->address ?: '—' }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ __('Delivery Address') ?? 'Delivery Address' }}</span><span class="vos-val">{{ $order->address ?: '-' }}</span></div>
                     @if($isScheduled)
                         <div class="vos-row"><span class="vos-key">{{ __('Supplier') ?? 'Supplier' }}</span><span class="vos-val">{{ auth()->user()->company_name ?? auth()->user()->name }}</span></div>
                     @endif
-                    <div class="vos-row"><span class="vos-key">{{ __('Payment Method') ?? 'Payment Method' }}</span><span class="vos-val">{{ $order->payment_type ?: ($order->payment_status ?: '—') }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ __('Payment Method') ?? 'Payment Method' }}</span><span class="vos-val">{{ $order->payment_type ?: ($order->payment_status ?: '-') }}</span></div>
                     <div class="vos-row"><span class="vos-key">{{ __('Status') ?? 'Status' }}</span><span class="vos-val">{{ $currentStatus }}</span></div>
                     @if($isScheduled)
                         @php
                             $start = $order->schedule_start_date ? \Carbon\Carbon::parse($order->schedule_start_date) : null;
                             $end = $start ? (clone $start)->addMonths(3) : null;
                         @endphp
-                        <div class="vos-row"><span class="vos-key">{{ __('Duration') ?? 'Duration' }}</span><span class="vos-val">{{ $start ? $start->format('M d') : '—' }} – {{ $end ? $end->format('M d, Y') : '—' }}</span></div>
+                        <div class="vos-row"><span class="vos-key">{{ __('Duration') ?? 'Duration' }}</span><span class="vos-val">{{ $start ? $start->format('M d') : '-' }} - {{ $end ? $end->format('M d, Y') : '-' }}</span></div>
                     @endif
                     <div class="vos-row"><span class="vos-key">{{ __('Date') ?? 'Date' }}</span><span class="vos-val">{{ $order->created_at->format('M d, Y') }}</span></div>
                 </div>
@@ -293,8 +304,8 @@
                             </div>
                             <div class="vos-offer-line">Total Price: {{ number_format((float)($myOffer->cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</div>
                             <div class="vos-offer-line">Delivery Time: {{ $myOffer->delivery_time ?? 0 }} {{ __('Days') ?? 'Days' }}</div>
-                            <div class="vos-offer-line">Warranty: {{ $myOffer->warranty ?? '—' }}</div>
-                            <div class="vos-offer-line">Notes: {{ $myOffer->notes ?? '—' }}</div>
+                            <div class="vos-offer-line">Warranty: {{ $myOffer->warranty ?? '-' }}</div>
+                            <div class="vos-offer-line">Notes: {{ $myOffer->notes ?? '-' }}</div>
                         </div>
                     </div>
                 </div>
@@ -335,9 +346,36 @@
                         </form>
                         <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn-vos btn-vos-main" style="flex:1;">{{ __('Edit Offer') ?? 'Edit Offer' }}</a>
                     </div>
+                @elseif($showPendingConfirmActions)
+                    <div class="vos-actions">
+                        <button type="button" class="btn-vos btn-vos-outline" style="flex:1;">{{ __('Cancel Order') ?? 'Cancel Order' }}</button>
+                        <form method="POST" action="{{ route('user/order-timeline') }}" style="flex:1;">
+                            @csrf
+                            <input type="hidden" name="order_type" value="{{ encrypt((int)$order->order_type) }}">
+                            <input type="hidden" name="timeline_no" value="{{ encrypt(2) }}">
+                            <input type="hidden" name="order_id" value="{{ encrypt((int)$order->id) }}">
+                            @if((int)$order->order_type === 1)
+                                <input type="hidden" name="delivery_fee" value="{{ (float)($order->delivery_fee ?? 0) }}">
+                            @endif
+                            <button type="submit" class="btn-vos btn-vos-main" style="width:100%;">{{ __('Confirmed') ?? 'Confirmed' }}</button>
+                        </form>
+                    </div>
+                @elseif($timelineActionNo)
+                    <div class="vos-actions">
+                        <form method="POST" action="{{ route('user/order-timeline') }}" style="width:100%;">
+                            @csrf
+                            <input type="hidden" name="order_type" value="{{ encrypt((int)$order->order_type) }}">
+                            <input type="hidden" name="timeline_no" value="{{ encrypt((int)$timelineActionNo) }}">
+                            <input type="hidden" name="order_id" value="{{ encrypt((int)$order->id) }}">
+                            @if((int)$timelineActionNo === 2 && (int)$order->order_type === 1)
+                                <input type="hidden" name="delivery_fee" value="{{ (float)($order->delivery_fee ?? 0) }}">
+                            @endif
+                            <button type="submit" class="btn-vos btn-vos-main" style="width:100%;">{{ $actionLabel }}</button>
+                        </form>
+                    </div>
                 @elseif($actionLabel)
                     <div class="vos-actions">
-                        <button type="button" class="btn-vos {{ strtolower($actionLabel) === 'cancelled' ? 'btn-vos-outline' : 'btn-vos-main' }}" style="width:100%;">{{ $actionLabel }}</button>
+                        <button type="button" class="btn-vos {{ strtolower($actionLabel) === 'cancelled' ? 'btn-vos-outline' : 'btn-vos-main' }}" style="width:100%;" disabled>{{ $actionLabel }}</button>
                     </div>
                 @endif
             </div>

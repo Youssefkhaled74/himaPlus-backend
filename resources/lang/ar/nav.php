@@ -176,4 +176,31 @@ return [
     'vendor_portal' => 'بوابة الموردين',
     'mark_all_read' => 'وضع علامة على الكل كمقروء',
     'mark_read' => 'وضع علامة كمقروء',
+    'veiw_orders' => 'عرض الطلبات',
+        // Quick Actions (Dashboard shortcuts)
+    'quick_actions' => 'الإجراءات السريعة',
+    'shortcuts' => 'الاختصارات',
+
+    // Titles
+    'add_product' => 'إضافة منتج',
+    'scheduled_orders' => 'الطلبات المجدولة',
+    'profile' => 'الملف الشخصي',
+    'view_products' => 'عرض المنتجات',
+    'view_offers' => 'عرض العروض',
+    'notifications' => 'الإشعارات',
+    'view_orders' => 'عرض الطلبات',
+    'ratings' => 'التقييمات',
+    'analytics' => 'التحليلات',
+
+    // Descriptions (the ones showing like: nav.xxx_desc)
+    'add_product_desc' => 'إضافة منتجات جديدة إلى الكتالوج',
+    'scheduled_orders_desc' => 'إدارة التسليمات المتكررة',
+    'profile_desc' => 'تحديث معلومات الحساب',
+    'view_products_desc' => 'إدارة مخزون المنتجات',
+    'view_offers_desc' => 'تتبع عروض الأسعار',
+    'notifications_desc' => 'عرض التنبيهات والتحديثات',
+    'view_orders_desc' => 'عرض وإدارة طلبات العملاء',
+    'ratings_desc' => 'عرض تقييمات العملاء',
+    'analytics_desc' => 'عرض رؤى الأعمال والتقارير',
+    'requests' => 'الطلبات',
 ];

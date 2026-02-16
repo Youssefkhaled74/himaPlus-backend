@@ -22,25 +22,25 @@
         --vo-accent:#0ec6a0;
     }
 
-    .vendor-orders{max-width:95%;margin:8% auto 0;background:var(--vo-bg);padding:8px 0 24px;}
-    .vo-title{font-size:34px;font-weight:700;color:#0f2f7f;margin:0 0 14px;}
+    .vendor-orders{max-width:95%;margin:7% auto 0;background:var(--vo-bg);padding:8px 0 24px;}
+    .vo-title{font-size:34px;font-weight:600;color:#0f2f7f;margin:0 0 14px;}
 
     .vo-tabs{display:flex;flex-wrap:wrap;gap:0;background:#efeff2;border-radius:10px;padding:0;margin-bottom:22px;overflow:hidden;}
-    .vo-tab{padding:12px 28px;font-size:28px;font-weight:500;color:#2f3747;text-decoration:none;background:transparent;line-height:1.2;}
+    .vo-tab{padding:12px 22px;font-size:16px;font-weight:500;color:#2f3747;text-decoration:none;background:transparent;line-height:1.2;}
     .vo-tab:hover{color:#0f4bbf;}
     .vo-tab.active{background:linear-gradient(90deg,#0f4bbf 0%, #10b981 100%);color:#fff;}
 
     .vo-card{display:block;text-decoration:none;color:inherit;background:var(--vo-card);border:1px solid var(--vo-border);border-radius:12px;overflow:hidden;margin-bottom:18px;}
     .vo-card-head{background:var(--vo-head);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    .vo-card-head h6{margin:0;font-size:30px;font-weight:600;color:#21242c;}
+    .vo-card-head h6{margin:0;font-size:18px;font-weight:600;color:#21242c;}
     .vo-card-body{padding:18px 22px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 
-    .vo-name{font-size:38px;font-weight:600;line-height:1.1;margin-bottom:10px;color:#1f2633;}
-    .vo-meta{margin:0;color:#5d6471;font-size:28px;line-height:1.5;}
+    .vo-name{font-size:16px;font-weight:600;line-height:1.25;margin-bottom:8px;color:#1f2633;}
+    .vo-meta{margin:0;color:#5d6471;font-size:14px;line-height:1.5;}
 
-    .vo-arrow{font-size:56px;color:#b0b5bf;line-height:1;}
+    .vo-arrow{font-size:26px;color:#b0b5bf;line-height:1;}
 
-    .vo-chip{display:inline-flex;align-items:center;padding:7px 14px;border-radius:8px;font-size:20px;font-weight:600;line-height:1;border:1px solid transparent;}
+    .vo-chip{display:inline-flex;align-items:center;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:600;line-height:1;border:1px solid transparent;}
     .chip-pending{background:#eef0f4;color:#666d79;}
     .chip-confirmed{background:#dbefff;color:#2285e8;}
     .chip-under-review{background:#ffefda;color:#e4972d;}
@@ -59,7 +59,7 @@
 
     .vo-pagination{display:flex;justify-content:center;margin-top:26px;}
     .vo-pagination .pagination{gap:8px;}
-    .vo-pagination .page-link{min-width:42px;height:42px;border:1px solid #dce6fb;border-radius:10px;color:#2b4a8f;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 10px;background:#eaf1ff;}
+    .vo-pagination .page-link{min-width:36px;height:36px;border:1px solid #dce6fb;border-radius:10px;color:#2b4a8f;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 10px;background:#eaf1ff;}
     .vo-pagination .page-item.active .page-link{background:linear-gradient(90deg,#0f4bbf 0%, #10b981 100%);border-color:transparent;color:#fff;}
 
     @media (max-width: 992px){
@@ -177,16 +177,16 @@
                             $start = $order->schedule_start_date ? \Carbon\Carbon::parse($order->schedule_start_date) : null;
                             $end = $start ? (clone $start)->addMonths(3) : null;
                         @endphp
-                        <p class="vo-meta">{{ __('Duration') ?? 'Duration' }}: {{ $start ? $start->format('M d') : '—' }} – {{ $end ? $end->format('M d, Y') : '—' }}</p>
-                        <p class="vo-meta">{{ __('Frequency') ?? 'Frequency' }}: {{ $order->frequency ?: '—' }}</p>
-                        <p class="vo-meta">{{ __('Next Shipment') ?? 'Next Shipment' }}: {{ $order->delivery_duration ?: '—' }}</p>
+                        <p class="vo-meta">{{ __('Duration') ?? 'Duration' }}: {{ $start ? $start->format('M d') : '-' }} - {{ $end ? $end->format('M d, Y') : '-' }}</p>
+                        <p class="vo-meta">{{ __('Frequency') ?? 'Frequency' }}: {{ $order->frequency ?: '-' }}</p>
+                        <p class="vo-meta">{{ __('Next Shipment') ?? 'Next Shipment' }}: {{ $order->delivery_duration ?: '-' }}</p>
                     @elseif((int)$order->order_type === 3)
-                        <p class="vo-meta">{{ __('Device') ?? 'Device' }}: {{ $order->device_name ?: '—' }}</p>
-                        <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '—' }}</p>
+                        <p class="vo-meta">{{ __('Device') ?? 'Device' }}: {{ $order->device_name ?: '-' }}</p>
+                        <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '-' }}</p>
                         <p class="vo-meta">{{ __('Assigned To') ?? 'Assigned To' }}: {{ __('Technician who finished the job') }}</p>
                     @else
-                        <p class="vo-meta">{{ __('Product') ?? 'Product' }}: {{ optional($order->items->first())->product->name ?? ($order->device_name ?: '—') }} @if($order->items->count()) - {{ $order->items->sum('quantity') }} {{ __('Units') ?? 'Units' }} @endif</p>
-                        <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '—' }}</p>
+                        <p class="vo-meta">{{ __('Product') ?? 'Product' }}: {{ optional($order->items->first())->product->name ?? ($order->device_name ?: '-') }} @if($order->items->count()) - {{ $order->items->sum('quantity') }} {{ __('Units') ?? 'Units' }} @endif</p>
+                        <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '-' }}</p>
                         <p class="vo-meta">{{ __('Total') ?? 'Total' }}: {{ number_format((float)($order->total_cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</p>
                     @endif
                 </div>

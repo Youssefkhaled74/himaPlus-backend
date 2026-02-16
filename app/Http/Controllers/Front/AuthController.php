@@ -56,7 +56,7 @@ class AuthController extends Controller
             'location' => 'required_if:user_type,2|string|max:255',
             'tax_number' => 'required_if:user_type,2|string|max:255',
             'cr_number' => 'required_if:user_type,2|string|max:255',
-            'cr_file_document' => 'required_if:user_type,2|image|mimes:jpeg,png,jpg,gif,webp,webm,pdf',
+            'cr_file_document' => 'required_if:user_type,2|file|mimes:jpeg,png,jpg,gif,webp,pdf|max:5120',
 
             'terms' => 'nullable|in:1',
             'fcm_token' => 'nullable|string',
@@ -67,7 +67,7 @@ class AuthController extends Controller
         try {
 
             DB::beginTransaction();
-            $request->merge(['user_type' => 1]);
+            $request->merge(['user_type' => (int) $request->user_type]);
             $user = $this->userRepository->store($request);
             $user->update([
                 // 'code' => 1111,
@@ -134,6 +134,9 @@ class AuthController extends Controller
             if ($request->session()->regenerate()) {
                 DB::commit();
                 flash()->success("success");
+                if ((int) $user->user_type === 2) {
+                    return redirect(route('vendor/dashboard'));
+                }
                 return redirect(route('user/profile'));
             }else{
                 // flash()->error("There IS Something Worng");
@@ -194,6 +197,9 @@ class AuthController extends Controller
     public function loginForm()
     {
         if (auth()->check()) {
+            if ((int) auth()->user()->user_type === 2) {
+                return redirect()->route('vendor/dashboard');
+            }
             return redirect()->route('user/profile');
         }
         return view('front.auth.login.login');
@@ -225,6 +231,10 @@ class AuthController extends Controller
             }
 
             if(FacadesAuth::guard('web')->attempt($request->only('email', 'password'))){
+                $loggedInUser = auth()->user();
+                if ($loggedInUser && (int) $loggedInUser->user_type === 2) {
+                    return redirect(route('vendor/dashboard'));
+                }
                 return redirect(route('user/profile'));
             }else{
                 flash()->error("There IS Something Worng");
