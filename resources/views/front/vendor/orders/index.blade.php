@@ -5,297 +5,200 @@
 @endsection
 
 @section('css')
-    <style>
-        :root{
-            --page-bg:#f5f6f8;
-            --card-bg:#fff;
-            --border:#ececec;
-            --text:#111827;
-            --muted:#6b7280;
-            --shadow:0 6px 20px rgba(16,24,40,.06);
-            --radius:10px;
-            --primary:#0d6efd;
-        }
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-        .orders-page{
-            background: var(--page-bg);
-            border: 1px solid rgba(0,0,0,.04);
-            border-radius: 12px;
-            padding: 18px;
-        }
+    .vendor-orders,
+    .vendor-orders *{font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
 
-        /* Tabs like screenshot */
-        .orders-tabs{
-            display:flex;
-            gap: 8px;
-            overflow-x: auto;
-            margin-bottom: 18px;
-            padding-bottom: 4px;
-        }
-        .orders-tabs::-webkit-scrollbar{ height: 4px; }
-        .orders-tabs::-webkit-scrollbar-thumb{ background: #cbd5e1; border-radius:4px; }
-        
-        .tab-btn{
-            padding: 8px 16px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-            color: var(--muted);
-            font-weight: 700;
-            font-size: 13px;
-            white-space: nowrap;
-            text-decoration: none;
-            transition: all .15s ease;
-        }
-        .tab-btn:hover{
-            border-color: rgba(13,110,253,.22);
-            color: var(--primary);
-        }
-        .tab-btn.active{
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #fff;
-        }
+    :root{
+        --vo-bg:#f5f6f8;
+        --vo-card:#ffffff;
+        --vo-border:#e8eaee;
+        --vo-head:#f2f2f4;
+        --vo-text:#1f2937;
+        --vo-muted:#6b7280;
+        --vo-primary:#0f4bbf;
+        --vo-accent:#0ec6a0;
+    }
 
-        /* Order Card like screenshot */
-        .order-card{
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 14px 16px;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap: 14px;
-            margin-bottom: 10px;
-            transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-            text-decoration:none;
-            color: inherit;
-            position: relative;
-        }
-        .order-card:hover{
-            transform: translateY(-1px);
-            box-shadow: 0 10px 26px rgba(16,24,40,.10);
-            border-color: rgba(13,110,253,.22);
-        }
+    .vendor-orders{max-width:95%;margin:8% auto 0;background:var(--vo-bg);padding:8px 0 24px;}
+    .vo-title{font-size:34px;font-weight:700;color:#0f2f7f;margin:0 0 14px;}
 
-        .order-main{ flex: 1; min-width: 0; }
-        .order-title-row{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:10px;
-            margin-bottom: 6px;
-        }
-        .order-title{
-            font-weight: 800;
-            font-size: 14px;
-            color: var(--text);
-            margin:0;
-        }
+    .vo-tabs{display:flex;flex-wrap:wrap;gap:0;background:#efeff2;border-radius:10px;padding:0;margin-bottom:22px;overflow:hidden;}
+    .vo-tab{padding:12px 28px;font-size:28px;font-weight:500;color:#2f3747;text-decoration:none;background:transparent;line-height:1.2;}
+    .vo-tab:hover{color:#0f4bbf;}
+    .vo-tab.active{background:linear-gradient(90deg,#0f4bbf 0%, #10b981 100%);color:#fff;}
 
-        .order-meta{
-            font-size: 12px;
-            color: var(--muted);
-            margin: 3px 0 0 0;
-            line-height: 1.6;
-        }
-        .order-meta div{ margin-bottom: 2px; }
+    .vo-card{display:block;text-decoration:none;color:inherit;background:var(--vo-card);border:1px solid var(--vo-border);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+    .vo-card-head{background:var(--vo-head);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+    .vo-card-head h6{margin:0;font-size:30px;font-weight:600;color:#21242c;}
+    .vo-card-body{padding:18px 22px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
 
-        /* Status badge at top-right */
-        .order-status{
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            display:inline-flex;
-            align-items:center;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: 800;
-            border-radius: 6px;
-            border: 1px solid transparent;
-            white-space: nowrap;
-        }
+    .vo-name{font-size:38px;font-weight:600;line-height:1.1;margin-bottom:10px;color:#1f2633;}
+    .vo-meta{margin:0;color:#5d6471;font-size:28px;line-height:1.5;}
 
-        /* Chevron arrow */
-        .order-arrow{
-            flex: 0 0 auto;
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
-            display:grid;
-            place-items:center;
-            border: 1px solid var(--border);
-            background:#fff;
-            color:#9ca3af;
-        }
-        .order-card:hover .order-arrow{ color: var(--primary); border-color: rgba(13,110,253,.22); }
+    .vo-arrow{font-size:56px;color:#b0b5bf;line-height:1;}
 
-        /* Pagination like screenshot (center pills) */
-        .pagination-wrap{
-            display:flex;
-            justify-content:center;
-            margin-top: 20px;
-        }
-        .pagination-wrap .pagination{
-            gap: 6px;
-        }
-        .pagination-wrap .page-link{
-            border-radius: 8px !important;
-            border: 1px solid var(--border);
-            color: #374151;
-            padding: 6px 10px;
-            font-weight: 700;
-            box-shadow: none;
-        }
-        .pagination-wrap .page-item.active .page-link{
-            background: #0b5ed7;
-            border-color: #0b5ed7;
-            color: #fff;
-        }
+    .vo-chip{display:inline-flex;align-items:center;padding:7px 14px;border-radius:8px;font-size:20px;font-weight:600;line-height:1;border:1px solid transparent;}
+    .chip-pending{background:#eef0f4;color:#666d79;}
+    .chip-confirmed{background:#dbefff;color:#2285e8;}
+    .chip-under-review{background:#ffefda;color:#e4972d;}
+    .chip-processing{background:#ffefda;color:#e4972d;}
+    .chip-shipped{background:#e8e0f9;color:#7a58c9;}
+    .chip-delivered,.chip-completed{background:#dff0e3;color:#4fa464;}
+    .chip-cancelled,.chip-rejected{background:#ffe1df;color:#ef5753;}
+    .chip-upcoming{background:#eef0f4;color:#666d79;}
+    .chip-active{background:#dbefff;color:#2285e8;}
+    .chip-paused{background:#ffefda;color:#e4972d;}
+    .chip-converted{background:#dff0e3;color:#4fa464;}
+    .chip-offers-received{background:#dbefff;color:#2285e8;}
+    .chip-supplier-selected{background:#e8e0f9;color:#7a58c9;}
+    .chip-assigned{background:#dbefff;color:#2285e8;}
+    .chip-on-hold{background:#ece4fa;color:#7a58c9;}
 
-        @media (max-width: 576px){
-            .order-card{ padding: 12px; }
-            .order-arrow{ width: 32px; height: 32px; }
-            .order-status{ position: static; margin-bottom: 6px; }
-        }
-    </style>
+    .vo-pagination{display:flex;justify-content:center;margin-top:26px;}
+    .vo-pagination .pagination{gap:8px;}
+    .vo-pagination .page-link{min-width:42px;height:42px;border:1px solid #dce6fb;border-radius:10px;color:#2b4a8f;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 10px;background:#eaf1ff;}
+    .vo-pagination .page-item.active .page-link{background:linear-gradient(90deg,#0f4bbf 0%, #10b981 100%);border-color:transparent;color:#fff;}
+
+    @media (max-width: 992px){
+        .vo-tab{font-size:18px;padding:10px 16px;}
+        .vo-card-head h6{font-size:18px;}
+        .vo-name{font-size:24px;}
+        .vo-meta{font-size:16px;}
+        .vo-chip{font-size:14px;padding:6px 10px;}
+        .vo-arrow{font-size:30px;}
+    }
+</style>
 @endsection
 
 @section('content')
-    <main class="container my-4" style="max-width: 95%; margin-top: 8% !important;">
-        @include('flash::message')
-        
-        <div class="orders-page">
-            <nav class="mb-2" style="font-size:12px;">
-                <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ __('nav.dashboard') ?? 'Dashboard' }}</a>
-                <span class="text-muted mx-1">/</span>
-                <span class="text-primary fw-bold">{{ __('nav.view_orders') ?? 'Orders' }}</span>
-            </nav>
+@php
+    $statusClasses = [
+        'pending' => 'chip-pending',
+        'confirmed' => 'chip-confirmed',
+        'under review' => 'chip-under-review',
+        'under_review' => 'chip-under-review',
+        'processing' => 'chip-processing',
+        'shipped' => 'chip-shipped',
+        'delivered' => 'chip-delivered',
+        'completed' => 'chip-completed',
+        'cancelled' => 'chip-cancelled',
+        'canceled' => 'chip-cancelled',
+        'rejected' => 'chip-rejected',
+        'upcoming' => 'chip-upcoming',
+        'active' => 'chip-active',
+        'paused' => 'chip-paused',
+        'converted to order' => 'chip-converted',
+        'offers received' => 'chip-offers-received',
+        'supplier selected' => 'chip-supplier-selected',
+        'assigned to supplier' => 'chip-assigned',
+        'assigned' => 'chip-assigned',
+        'on hold' => 'chip-on-hold',
+    ];
+@endphp
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="m-0 fw-bold">{{ __('nav.view_orders') ?? 'Orders' }}</h4>
-                <a href="{{ route('vendor/orders/my-offers') }}" class="btn btn-outline-primary btn-sm" style="border-radius:10px;font-weight:800;">
-                    <i class="bi bi-star"></i> {{ __('nav.my_offers') ?? 'My Offers' }} ({{ $myOffersCount ?? 0 }})
-                </a>
+<main class="vendor-orders">
+    @include('flash::message')
+
+    <h3 class="vo-title">{{ __('nav.view_orders') ?? 'Orders' }}</h3>
+
+    <div class="vo-tabs">
+        <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="vo-tab {{ $tab === 'all' ? 'active' : '' }}">{{ __('All') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'purchase']) }}" class="vo-tab {{ $tab === 'purchase' ? 'active' : '' }}">{{ __('Purchase Orders') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="vo-tab {{ $tab === 'quotations' ? 'active' : '' }}">{{ __('Quotations') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'maintenance']) }}" class="vo-tab {{ $tab === 'maintenance' ? 'active' : '' }}">{{ __('Maintenance') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="vo-tab {{ $tab === 'scheduled' ? 'active' : '' }}">{{ __('Scheduled Orders') }}</a>
+    </div>
+
+    @forelse($orders as $order)
+        @php
+            $lastTimelineNo = optional($order->timeline->sortByDesc('timeline_no')->first())->timeline_no;
+            $lastTimelineLabel = strtolower(trim((string) timelineName((int) $lastTimelineNo)));
+            $myOffer = $order->offers->where('provider_id', auth()->id())->first();
+
+            if ((int) $order->request_type === 2) {
+                $statusText = ucfirst($order->scheduled_status);
+                $statusKey = strtolower($order->scheduled_status);
+                $title = __('Scheduled Order') ?? 'Scheduled Order';
+            } else {
+                if ((int) $order->order_type === 1) {
+                    $title = __('Purchase Order') ?? 'Purchase Order';
+                } elseif ((int) $order->order_type === 2) {
+                    $title = __('Quotation Request') ?? 'Quotation Request';
+                } else {
+                    $title = __('Maintenance Request') ?? 'Maintenance Request';
+                }
+
+                if ($myOffer) {
+                    $offerStatus = strtolower((string) $myOffer->status);
+                    if ($offerStatus === '2' || $offerStatus === 'accepted') {
+                        $statusText = 'Confirmed';
+                        $statusKey = 'confirmed';
+                    } elseif ($offerStatus === '3' || $offerStatus === 'rejected') {
+                        $statusText = 'Rejected';
+                        $statusKey = 'rejected';
+                    } else {
+                        $statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
+                        $statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
+                    }
+                } else {
+                    $statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
+                    $statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
+                }
+            }
+
+            $statusClass = $statusClasses[$statusKey] ?? 'chip-pending';
+        @endphp
+
+        <a href="{{ route('vendor/orders/show', $order->id) }}" class="vo-card">
+            <div class="vo-card-head">
+                <h6>{{ $title }}</h6>
+                <span class="vo-chip {{ $statusClass }}">{{ $statusText }}</span>
             </div>
-
-            <!-- Tabs -->
-            <div class="orders-tabs">
-                <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="tab-btn {{ $tab === 'all' ? 'active' : '' }}">
-                    {{ __('All') ?? 'All' }} @if(isset($counts['all']))({{ $counts['all'] }})@endif
-                </a>
-                <a href="{{ route('vendor/orders', ['tab' => 'purchase']) }}" class="tab-btn {{ $tab === 'purchase' ? 'active' : '' }}">
-                    {{ __('Purchase Orders') ?? 'Purchase Orders' }} @if(isset($counts['purchase']))({{ $counts['purchase'] }})@endif
-                </a>
-                <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="tab-btn {{ $tab === 'quotations' ? 'active' : '' }}">
-                    {{ __('Quotations') ?? 'Quotations' }} @if(isset($counts['quotations']))({{ $counts['quotations'] }})@endif
-                </a>
-                <a href="{{ route('vendor/orders', ['tab' => 'maintenance']) }}" class="tab-btn {{ $tab === 'maintenance' ? 'active' : '' }}">
-                    {{ __('Maintenance') ?? 'Maintenance' }} @if(isset($counts['maintenance']))({{ $counts['maintenance'] }})@endif
-                </a>
-                <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="tab-btn {{ $tab === 'scheduled' ? 'active' : '' }}">
-                    {{ __('Scheduled Orders') ?? 'Scheduled Orders' }} @if(isset($counts['scheduled']))({{ $counts['scheduled'] }})@endif
-                </a>
-            </div>
-
-            @if($orders->count() > 0)
-                @foreach($orders as $order)
-                    <a href="{{ route('vendor/orders/show', $order->id) }}" class="order-card">
-                        <div class="order-main">
-                            <div class="order-title-row">
-                                <h6 class="order-title">
-                                    @if($order->request_type == 2)
-                                        {{ __('Scheduled Order') ?? 'Scheduled Order' }}
-                                    @else
-                                        @if($order->order_type == 1)
-                                            {{ __('Purchase Order') ?? 'Purchase Order' }}
-                                        @elseif($order->order_type == 2)
-                                            {{ __('Quotation Request') ?? 'Quotation Request' }}
-                                        @elseif($order->order_type == 3)
-                                            {{ __('Maintenance Request') ?? 'Maintenance Request' }}
-                                        @else
-                                            {{ __('Order') ?? 'Order' }}
-                                        @endif
-                                    @endif
-                                </h6>
-                            </div>
-                            <div class="order-meta">
-                                @if($order->request_type == 2)
-                                    {{-- Scheduled Order Info --}}
-                                    @if($order->device_name || $order->notes)
-                                        <div><strong>{{ __('Item') ?? 'Item' }}:</strong> {{ $order->device_name ?? Str::limit($order->notes, 30) }}</div>
-                                    @endif
-                                    @if($order->schedule_start_date)
-                                        <div><strong>{{ __('Duration') ?? 'Duration' }}:</strong> {{ \Carbon\Carbon::parse($order->schedule_start_date)->format('M d, Y') }}</div>
-                                    @endif
-                                    @if($order->frequency)
-                                        <div><strong>{{ __('Frequency') ?? 'Frequency' }}:</strong> {{ $order->frequency }}</div>
-                                    @endif
-                                    @if($order->delivery_duration)
-                                        <div><strong>{{ __('Next Shipment') ?? 'Next Shipment' }}:</strong> {{ $order->delivery_duration }}</div>
-                                    @endif
-                                @else
-                                    {{-- Regular Order Info --}}
-                                    <div><strong>{{ __('Order ID') ?? 'Order ID' }}:</strong> #{{ $order->id }}</div>
-                                    @if($order->user)
-                                        <div><strong>{{ __('Customer') ?? 'Customer' }}:</strong> {{ $order->user->name }}</div>
-                                    @endif
-                                    <div><strong>{{ __('Date') ?? 'Date' }}:</strong> {{ $order->created_at->format('M d, Y') }}</div>
-                                @endif
-                            </div>
-                        </div>
-                        
-                        {{-- Status Badge --}}
-                        @if($order->request_type == 2)
-                            @php
-                                $colors = $order->scheduled_status_color;
-                            @endphp
-                            <span class="order-status" style="background:{{ $colors['bg'] }}; color:{{ $colors['text'] }}; border-color:{{ $colors['border'] }};">
-                                {{ ucfirst($order->scheduled_status) }}
-                            </span>
+            <div class="vo-card-body">
+                <div>
+                    <div class="vo-name">
+                        @if((int)$order->request_type === 2)
+                            {{ $order->device_name ?: (__('Scheduled Supply') ?? 'Scheduled Supply') }}
                         @else
-                            @php
-                                $myOffer = $order->offers->where('provider_id', auth()->id())->first();
-                                if($myOffer) {
-                                    $offerStatus = (string) $myOffer->status;
-                                    if($offerStatus === '2' || strtolower($offerStatus) === 'accepted') {
-                                        $statusColor = ['bg' => 'rgba(34,197,94,.12)', 'text' => '#166534', 'border' => 'rgba(34,197,94,.20)'];
-                                        $statusText = 'Accepted';
-                                    } elseif($offerStatus === '3' || strtolower($offerStatus) === 'rejected') {
-                                        $statusColor = ['bg' => 'rgba(239,68,68,.12)', 'text' => '#991b1b', 'border' => 'rgba(239,68,68,.20)'];
-                                        $statusText = 'Rejected';
-                                    } else {
-                                        $statusColor = ['bg' => 'rgba(251,191,36,.12)', 'text' => '#92400e', 'border' => 'rgba(251,191,36,.20)'];
-                                        $statusText = 'Pending';
-                                    }
-                                } else {
-                                    $statusColor = ['bg' => '#f3f4f6', 'text' => '#6b7280', 'border' => '#e5e7eb'];
-                                    $statusText = 'New';
-                                }
-                            @endphp
-                            <span class="order-status" style="background:{{ $statusColor['bg'] }}; color:{{ $statusColor['text'] }}; border-color:{{ $statusColor['border'] }};">
-                                {{ $statusText }}
-                            </span>
+                            @if((int)$order->order_type === 3)
+                                {{ __('Request') ?? 'Request' }} #{{ $order->id }} - {{ $order->created_at->format('M d, Y') }}
+                            @elseif((int)$order->order_type === 2)
+                                {{ __('Request') ?? 'Request' }} #{{ $order->id }} - {{ $order->created_at->format('M d, Y') }}
+                            @else
+                                {{ __('Order') ?? 'Order' }} #{{ $order->id }} - {{ $order->created_at->format('M d, Y') }}
+                            @endif
                         @endif
-                        
-                        <div class="order-arrow">
-                            <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
-                        </div>
-                    </a>
-                @endforeach
+                    </div>
+                    @if((int)$order->request_type === 2)
+                        @php
+                            $start = $order->schedule_start_date ? \Carbon\Carbon::parse($order->schedule_start_date) : null;
+                            $end = $start ? (clone $start)->addMonths(3) : null;
+                        @endphp
+                        <p class="vo-meta">{{ __('Duration') ?? 'Duration' }}: {{ $start ? $start->format('M d') : '—' }} – {{ $end ? $end->format('M d, Y') : '—' }}</p>
+                        <p class="vo-meta">{{ __('Frequency') ?? 'Frequency' }}: {{ $order->frequency ?: '—' }}</p>
+                        <p class="vo-meta">{{ __('Next Shipment') ?? 'Next Shipment' }}: {{ $order->delivery_duration ?: '—' }}</p>
+                    @elseif((int)$order->order_type === 3)
+                        <p class="vo-meta">{{ __('Device') ?? 'Device' }}: {{ $order->device_name ?: '—' }}</p>
+                        <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '—' }}</p>
+                        <p class="vo-meta">{{ __('Assigned To') ?? 'Assigned To' }}: {{ __('Technician who finished the job') }}</p>
+                    @else
+                        <p class="vo-meta">{{ __('Product') ?? 'Product' }}: {{ optional($order->items->first())->product->name ?? ($order->device_name ?: '—') }} @if($order->items->count()) - {{ $order->items->sum('quantity') }} {{ __('Units') ?? 'Units' }} @endif</p>
+                        <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '—' }}</p>
+                        <p class="vo-meta">{{ __('Total') ?? 'Total' }}: {{ number_format((float)($order->total_cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</p>
+                    @endif
+                </div>
+                <span class="vo-arrow"><i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i></span>
+            </div>
+        </a>
+    @empty
+        <div class="alert alert-light border">{{ __('No orders found.') ?? 'No orders found.' }}</div>
+    @endforelse
 
-                <!-- Pagination -->
-                <div class="pagination-wrap">
-                    {{ $orders->appends(['tab' => $tab, 'status' => $status, 'search' => $search])->links('pagination::bootstrap-4') }}
-                </div>
-            @else
-                <div class="alert alert-info" role="alert" style="border-radius:var(--radius);">
-                    <i class="bi bi-info-circle me-2"></i>
-                    {{ __('No orders found.') ?? 'No orders found.' }}
-                </div>
-            @endif
-        </div>
-    </main>
+    <div class="vo-pagination">
+        {{ $orders->appends(['tab' => $tab, 'status' => $status, 'search' => $search])->links('pagination::bootstrap-4') }}
+    </div>
+</main>
 @endsection

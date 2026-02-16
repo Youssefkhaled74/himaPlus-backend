@@ -47,7 +47,13 @@ class VendorOrderController extends Controller
         $status = $request->get('status', '');
         $search = $request->get('search', '');
         
-        $query = Order::with('user:id,name,email,mobile', 'offers');
+        $query = Order::with(['user:id,name,email,mobile', 'offers', 'timeline'])
+            ->where(function ($builder) use ($vendor) {
+                $builder->where('provider_id', $vendor->id)
+                    ->orWhereHas('offers', function ($offersQuery) use ($vendor) {
+                        $offersQuery->where('provider_id', $vendor->id);
+                    });
+            });
         
         // Filter by tab
         switch($tab) {
@@ -84,12 +90,20 @@ class VendorOrderController extends Controller
         $myOffersCount = Offer::where('provider_id', $vendor->id)->count();
         
         // Get counts for tabs
+        $countsBase = Order::whereNull('deleted_at')
+            ->where(function ($builder) use ($vendor) {
+                $builder->where('provider_id', $vendor->id)
+                    ->orWhereHas('offers', function ($offersQuery) use ($vendor) {
+                        $offersQuery->where('provider_id', $vendor->id);
+                    });
+            });
+
         $counts = [
-            'all' => Order::whereNull('deleted_at')->count(),
-            'purchase' => Order::purchaseOrders()->notScheduled()->whereNull('deleted_at')->count(),
-            'quotations' => Order::quotations()->notScheduled()->whereNull('deleted_at')->count(),
-            'maintenance' => Order::maintenance()->notScheduled()->whereNull('deleted_at')->count(),
-            'scheduled' => Order::scheduled()->whereNull('deleted_at')->count(),
+            'all' => (clone $countsBase)->count(),
+            'purchase' => (clone $countsBase)->purchaseOrders()->notScheduled()->count(),
+            'quotations' => (clone $countsBase)->quotations()->notScheduled()->count(),
+            'maintenance' => (clone $countsBase)->maintenance()->notScheduled()->count(),
+            'scheduled' => (clone $countsBase)->scheduled()->count(),
         ];
         
         return view('front.vendor.orders.index', compact('orders', 'tab', 'status', 'search', 'myOffersCount', 'counts'));
@@ -104,6 +118,15 @@ class VendorOrderController extends Controller
         $order = Order::where('id', $id)
             ->with(['user', 'items.product', 'timeline', 'offers.provider'])
             ->firstOrFail();
+
+        $isAllowed = ((int) $order->provider_id === (int) $vendor->id)
+            || $order->offers->contains(function ($offer) use ($vendor) {
+                return (int) $offer->provider_id === (int) $vendor->id;
+            });
+
+        if (!$isAllowed) {
+            abort(403);
+        }
         
         $myOffer = Offer::where('order_id', $id)
             ->where('provider_id', $vendor->id)

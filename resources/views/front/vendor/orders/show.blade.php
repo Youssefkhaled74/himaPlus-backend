@@ -5,329 +5,343 @@
 @endsection
 
 @section('css')
-    <style>
-        .timeline {
-            position: relative;
-            padding: 20px 0;
-        }
-        .timeline-item {
-            padding-bottom: 20px;
-            padding-left: 40px;
-            border-left: 2px solid #dee2e6;
-            position: relative;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -8px;
-            top: 0;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background-color: #007bff;
-        }
-        .timeline-item.completed::before {
-            background-color: #28a745;
-        }
-        .info-box {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-        .offer-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-        .offer-card.own {
-            background-color: #f0f8ff;
-            border-color: #007bff;
-        }
-    </style>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+    .vendor-order-show,
+    .vendor-order-show *{font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
+
+    :root{
+        --vos-bg:#f5f6f8;
+        --vos-card:#ffffff;
+        --vos-border:#e6e8ed;
+        --vos-title:#1f2937;
+        --vos-muted:#6b7280;
+        --vos-primary:#0f4bbf;
+        --vos-accent:#0ec6a0;
+    }
+
+    .vendor-order-show{max-width:95%;margin:8% auto 0;padding-bottom:28px;background:var(--vos-bg);}
+
+    .vos-breadcrumb{font-size:16px;color:#6d7482;display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+    .vos-breadcrumb a{text-decoration:none;color:#6d7482;}
+    .vos-breadcrumb .current{color:#0f3f9f;font-weight:600;}
+    .vos-breadcrumb i{color:#0ec6a0;font-size:12px;}
+
+    .vos-grid{display:grid;grid-template-columns:1.35fr .95fr;gap:18px;align-items:start;}
+    .vos-card{background:var(--vos-card);border:1px solid var(--vos-border);border-radius:16px;padding:20px 22px;}
+    .vos-card h4,.vos-card h5{margin:0 0 14px;color:var(--vos-title);font-weight:600;}
+    .vos-card h4{font-size:42px;}
+    .vos-card h5{font-size:34px;}
+
+    .vos-rows{display:grid;gap:10px;}
+    .vos-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;}
+    .vos-key{font-size:31px;color:#3b4453;font-weight:500;}
+    .vos-val{font-size:31px;color:#313844;font-weight:500;text-align:right;max-width:62%;line-height:1.25;}
+
+    .vos-payment .vos-key,.vos-payment .vos-val{font-size:30px;}
+    .vos-total .vos-key,.vos-total .vos-val{font-weight:700;color:#1f2937;}
+
+    .vos-actions{display:flex;gap:12px;flex-wrap:wrap;}
+    .btn-vos{
+        min-height:64px;border-radius:12px;border:1px solid transparent;padding:0 24px;
+        font-size:29px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
+    }
+    .btn-vos-main{background:linear-gradient(90deg,#0f4bbf 0%, #10b981 100%);color:#fff;}
+    .btn-vos-main:hover{color:#fff;filter:brightness(.98);}
+    .btn-vos-outline{background:#fff;color:#0f3f9f;border-color:#0f4bbf;}
+
+    .vos-alert{border:2px solid #2d67d8;background:#f8fbff;border-radius:12px;padding:12px 14px;color:#214eb5;font-size:27px;font-weight:600;line-height:1.35;}
+
+    .vos-timeline .line{position:relative;padding-left:38px;}
+    .vos-timeline .line::before{content:"";position:absolute;left:11px;top:10px;bottom:10px;border-left:2px dashed #d5dae2;}
+    .vos-step{position:relative;padding:10px 0 14px;}
+    .vos-step .dot{position:absolute;left:-2px;top:14px;width:24px;height:24px;border-radius:50%;background:#a3a7af;display:grid;place-items:center;color:#fff;font-size:13px;}
+    .vos-step.done .dot{background:linear-gradient(90deg,#0f4bbf,#10b981);}
+    .vos-step .name{font-size:30px;font-weight:600;color:#0f3f9f;line-height:1.2;}
+    .vos-step .date{font-size:25px;color:#7a8292;line-height:1.2;}
+    .vos-step.pending .name{color:#9aa1af;}
+
+    .vos-contact{background:#f0f1f3;border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+    .vos-contact-name{font-size:28px;font-weight:600;color:#1f2937;}
+    .vos-contact-phone{font-size:23px;color:#7a8292;}
+    .vos-contact-actions{display:flex;gap:10px;}
+    .vos-circle{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(90deg,#0f4bbf,#10b981);text-decoration:none;}
+
+    .vos-offer{border:1px solid var(--vos-border);border-radius:12px;overflow:hidden;}
+    .vos-offer-head{background:#f3f4f6;padding:12px 14px;font-size:28px;font-weight:600;color:#303846;}
+    .vos-offer-body{padding:14px;}
+    .vos-file{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eceef2;margin-bottom:10px;}
+    .vos-file a{text-decoration:none;color:#2f3747;font-size:27px;}
+    .vos-offer-line{font-size:27px;color:#6b7280;line-height:1.5;}
+
+    @media (max-width: 1200px){
+        .vos-grid{grid-template-columns:1fr;}
+    }
+    @media (max-width: 992px){
+        .vos-card h4{font-size:28px;}
+        .vos-card h5{font-size:22px;}
+        .vos-key,.vos-val,.vos-payment .vos-key,.vos-payment .vos-val{font-size:16px;}
+        .btn-vos{font-size:16px;min-height:48px;width:100%;}
+        .vos-step .name{font-size:16px;}
+        .vos-step .date,.vos-contact-name,.vos-offer-head,.vos-offer-line,.vos-alert,.vos-file a{font-size:14px;}
+    }
+</style>
 @endsection
 
 @section('content')
-    <main class="container my-4" style="max-width: 95%; margin-top: 8% !important;">
-        @include('flash::message')
-        
-        <nav class="breadcrumb-custom mb-3">
-            <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ __('nav.dashboard') ?? 'Dashboard' }}</a>
-            <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
-            <a href="{{ route('vendor/orders') }}" class="text-decoration-none text-muted">{{ __('nav.view_orders') ?? 'Orders' }}</a>
-            <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
-            @if($order->request_type == 2)
-                <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="text-decoration-none text-muted">{{ __('Scheduled Orders') ?? 'Scheduled Orders' }}</a>
-                <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
-            @endif
-            <span class="text-primary fw-semibold">{{ __('Order Details') ?? 'Order Details' }}</span>
-        </nav>
+@php
+    $timeline = $order->timeline->sortBy('timeline_no')->values();
+    $timelineNos = $timeline->pluck('timeline_no')->map(fn($n)=>(int)$n)->all();
+    $lastTimelineNo = (int) ($timeline->last()->timeline_no ?? 0);
+    $isScheduled = (int)$order->request_type === 2;
+    $isQuotation = (int)$order->order_type === 2;
 
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-4">
-                    <div class="card-header" style="background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%); color: #fff; display: flex; justify-content: space-between; align-items: center;">
-                        <h4 class="mb-0">
-                            @if($order->request_type == 2)
-                                {{ __('Scheduled Order Details') ?? 'Scheduled Order Details' }}
-                            @else
-                                {{ __('Order Details') ?? 'Order Details' }} #{{ $order->id }}
-                            @endif
-                        </h4>
-                        @if($order->request_type == 2 && $myOffer && ((string)$myOffer->status === '2' || strtolower((string)$myOffer->status) === 'accepted'))
-                            <button class="btn btn-light btn-sm" style="border-radius:10px;font-weight:800;">
-                                <i class="bi bi-box-seam"></i> {{ __('Mark as Shipped') ?? 'Mark as Shipped' }}
-                            </button>
-                        @endif
-                    </div>
-                    <div class="card-body">
-                        @if($order->request_type == 2)
-                            {{-- Scheduled Order Details --}}
-                            <div class="info-box">
-                                <div class="row">
-                                    <div class="col-md-6 mb-2">
-                                        <strong>{{ __('Request Number') ?? 'Request Number' }}:</strong><br>
-                                        #{{ $order->id }}
-                                    </div>
-                                    <div class="col-md-6 mb-2">
-                                        <strong>{{ __('Delivery Address') ?? 'Delivery Address' }}:</strong><br>
-                                        {{ $order->address ?? 'â€”' }}
-                                    </div>
-                                    <div class="col-md-6 mb-2">
-                                        <strong>{{ __('Supplier') ?? 'Supplier' }}:</strong><br>
-                                        {{ $myOffer ? (auth()->user()->company_name ?? auth()->user()->name) : 'â€”' }}
-                                    </div>
-                                    <div class="col-md-6 mb-2">
-                                        <strong>{{ __('Payment Method') ?? 'Payment Method' }}:</strong><br>
-                                        {{ $order->payment_type ?? 'â€”' }}
-                                    </div>
-                                    <div class="col-md-6 mb-2">
-                                        <strong>{{ __('Status') ?? 'Status' }}:</strong><br>
-                                        @php $colors = $order->scheduled_status_color; @endphp
-                                        <span style="display:inline-flex;align-items:center;padding:4px 10px;font-size:11px;font-weight:800;border-radius:6px;background:{{ $colors['bg'] }};color:{{ $colors['text'] }};border:1px solid {{ $colors['border'] }};">
-                                            {{ ucfirst($order->scheduled_status) }}
-                                        </span>
-                                    </div>
-                                    <div class="col-md-6 mb-2">
-                                        <strong>{{ __('Duration') ?? 'Duration' }}:</strong><br>
-                                        {{ $order->schedule_start_date ? \Carbon\Carbon::parse($order->schedule_start_date)->format('M d') . ' â€“ ' . \Carbon\Carbon::parse($order->schedule_start_date)->addMonths(3)->format('M d, Y') : 'â€”' }}
-                                    </div>
-                                    <div class="col-md-6 mb-2">
-                                        <strong>{{ __('Date') ?? 'Date' }}:</strong><br>
-                                        {{ $order->created_at->format('M d, Y') }}
-                                    </div>
-                                </div>
-                            </div>
+    $currentStatus = 'Pending';
+    if ($isScheduled) {
+        $currentStatus = ucfirst($order->scheduled_status);
+    } elseif ($lastTimelineNo > 0) {
+        $currentStatus = timelineName($lastTimelineNo);
+    }
 
-                            <h5 class="mt-4 mb-3">{{ __('Note') ?? 'Note' }}</h5>
-                            <p style="background:#f8f9fa;padding:14px;border-radius:10px;border:1px solid #e9ecef;">
-                                {{ $order->notes ?? __('No notes provided.') ?? 'No notes provided.' }}
-                            </p>
+    $actionLabel = null;
+    if ($isQuotation) {
+        if (!$myOffer) {
+            $actionLabel = __('Send Offer') ?? 'Send Offer';
+        } else {
+            $offerStatus = strtolower((string)$myOffer->status);
+            if ($offerStatus === '3' || $offerStatus === 'rejected') {
+                $actionLabel = __('Resubmit Offer') ?? 'Resubmit Offer';
+            } elseif ($offerStatus === '2' || $offerStatus === 'accepted') {
+                if ($lastTimelineNo >= 4 && $lastTimelineNo < 5) {
+                    $actionLabel = __('Mark as Delivered') ?? 'Mark as Delivered';
+                } elseif ($lastTimelineNo >= 3 && $lastTimelineNo < 4) {
+                    $actionLabel = __('Mark as Shipped') ?? 'Mark as Shipped';
+                } elseif ($lastTimelineNo >= 2 && $lastTimelineNo < 3) {
+                    $actionLabel = __('Mark as Processing') ?? 'Mark as Processing';
+                }
+            } else {
+                $actionLabel = __('Edit Offer') ?? 'Edit Offer';
+            }
+        }
+    } elseif ($isScheduled) {
+        if (in_array(strtolower($order->scheduled_status), ['upcoming','active','paused'])) {
+            $actionLabel = __('Mark as Shipped') ?? 'Mark as Shipped';
+        } elseif (strtolower($order->scheduled_status) === 'completed') {
+            $actionLabel = __('Mark as Completed') ?? 'Mark as Completed';
+        } elseif (strtolower($order->scheduled_status) === 'cancelled') {
+            $actionLabel = __('Cancelled') ?? 'Cancelled';
+        }
+    } else {
+        if ($lastTimelineNo >= 5 && $lastTimelineNo < 6) {
+            $actionLabel = __('Mark as Completed') ?? 'Mark as Completed';
+        } elseif ($lastTimelineNo >= 4 && $lastTimelineNo < 5) {
+            $actionLabel = __('Mark as Delivered') ?? 'Mark as Delivered';
+        } elseif ($lastTimelineNo >= 3 && $lastTimelineNo < 4) {
+            $actionLabel = __('Mark as Shipped') ?? 'Mark as Shipped';
+        } elseif ($lastTimelineNo >= 2 && $lastTimelineNo < 3) {
+            $actionLabel = __('Mark as Processing') ?? 'Mark as Processing';
+        } elseif ($lastTimelineNo === 1) {
+            $actionLabel = __('Confirmed') ?? 'Confirmed';
+        }
+    }
 
-                            <h5 class="mt-4 mb-3">{{ __('Products Requested') ?? 'Products Requested' }}</h5>
-                            <div style="background:#f8f9fa;padding:14px;border-radius:10px;border:1px solid #e9ecef;">
-                                @if($order->files && is_array($order->files) && count($order->files) > 0)
-                                    @foreach($order->files as $file)
-                                        @if($file)
-                                            <div class="d-flex align-items-center gap-2 mb-2">
-                                                <i class="bi bi-file-earmark-pdf" style="font-size:24px;color:#dc3545;"></i>
-                                                <a href="{{ asset($file) }}" target="_blank" class="text-decoration-none">
-                                                    {{ basename($file) }}
-                                                </a>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                @elseif($order->items && count($order->items) > 0)
-                                    @foreach($order->items as $item)
-                                        <div class="mb-2">â€¢ {{ $item->product->name ?? 'Product' }} ({{ $item->quantity }} {{ __('pcs') ?? 'pcs' }})</div>
-                                    @endforeach
-                                @else
-                                    <div class="text-muted">{{ __('No products listed.') ?? 'No products listed.' }}</div>
-                                @endif
-                            </div>
+    $timelineSteps = $isQuotation
+        ? [1,7,9,3,4,5]
+        : ($isScheduled ? [1,2,3,4,5,6] : [1,2,3,4,5,6]);
+@endphp
 
-                            <h5 class="mt-4 mb-3">{{ __('Contact us') ?? 'Contact us' }}</h5>
-                            <div style="background:#f8f9fa;padding:14px;border-radius:10px;border:1px solid #e9ecef;">
-                                @if($order->user)
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div>
-                                            <h6 class="mb-1">{{ $order->user->company_name ?? $order->user->name }}</h6>
-                                            <p class="mb-0 text-muted" style="font-size:13px;">{{ $order->user->email }}</p>
-                                        </div>
-                                        <div class="d-flex gap-2">
-                                            @if($order->user->mobile)
-                                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $order->user->mobile) }}" target="_blank" class="btn btn-success btn-sm" style="border-radius:10px;">
-                                                    <i class="bi bi-whatsapp"></i>
-                                                </a>
-                                                <a href="tel:{{ $order->user->mobile }}" class="btn btn-primary btn-sm" style="border-radius:10px;">
-                                                    <i class="bi bi-telephone"></i>
-                                                </a>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @else
-                                    <div class="text-muted">{{ __('Contact information not available.') ?? 'Contact information not available.' }}</div>
-                                @endif
-                            </div>
-                        @else
-                            {{-- Regular Order Details --}}
-                            <div class="info-box">
-                                <p class="mb-2"><strong>{{ __('Order Type') ?? 'Order Type' }}:</strong> 
-                                    <span class="badge" style="background: {{ $order->order_type === 1 ? '#e3f2fd' : '#f3e5f5' }}; color: {{ $order->order_type === 1 ? '#1976d2' : '#7b1fa2' }};">
-                                        @if($order->order_type == 1)
-                                            {{ __('Purchase Order') ?? 'Purchase Order' }}
-                                        @elseif($order->order_type == 2)
-                                            {{ __('Quotation') ?? 'Quotation' }}
-                                        @else
-                                            {{ __('Maintenance') ?? 'Maintenance' }}
-                                        @endif
-                                    </span>
-                                </p>
-                                <p class="mb-2"><strong>{{ __('Created Date') ?? 'Created Date' }}:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
-                                @if($order->address)
-                                    <p class="mb-0"><strong>{{ __('Address') ?? 'Address' }}:</strong> {{ $order->address }}</p>
-                                @endif
-                            </div>
+<main class="vendor-order-show">
+    @include('flash::message')
 
-                            <h5 class="mt-4 mb-3">{{ __('Order Description') ?? 'Order Description' }}:</h5>
-                            <p>{{ $order->notes ?? __('No description provided.') ?? 'No description provided.' }}</p>
-                        @endif
+    <nav class="vos-breadcrumb">
+        @if($isQuotation)
+            <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}">{{ __('Requests') ?? 'Requests' }}</a>
+            <i class="bi bi-chevron-right"></i>
+            <span class="current">{{ __('Requests Details') ?? 'Requests Details' }}</span>
+        @elseif($isScheduled)
+            <a href="{{ route('vendor/orders') }}">{{ __('Orders') ?? 'Orders' }}</a>
+            <i class="bi bi-chevron-right"></i>
+            <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}">{{ __('Scheduled Orders') ?? 'Scheduled Orders' }}</a>
+            <i class="bi bi-chevron-right"></i>
+            <span class="current">{{ __('Order Details') ?? 'Order Details' }}</span>
+        @else
+            <a href="{{ route('vendor/orders') }}">{{ __('Orders') ?? 'Orders' }}</a>
+            <i class="bi bi-chevron-right"></i>
+            <span class="current">{{ __('Order Details') ?? 'Order Details' }}</span>
+        @endif
+    </nav>
 
-                        @if($order->timeline && count($order->timeline) > 0)
-                            <h5 class="mt-4 mb-3">{{ __('Order Timeline') ?? 'Order Timeline' }}:</h5>
-                            <div class="timeline">
-                                @foreach($order->timeline as $item)
-                                    <div class="timeline-item {{ (int)$item->timeline_no === 6 ? 'completed' : '' }}">
-                                        <div>
-                                            <strong>{{ timelineName((int)$item->timeline_no) }}</strong>
-                                            <p class="text-muted mb-0" style="font-size: 12px;">{{ $item->created_at->format('d/m/Y H:i') }}</p>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
+    <div class="vos-grid">
+        <div>
+            <div class="vos-card">
+                <h5>{{ __('Order Details') ?? 'Order Details' }}</h5>
+                <div class="vos-rows">
+                    <div class="vos-row"><span class="vos-key">{{ __('Request Number') ?? 'Request Number' }}</span><span class="vos-val">#{{ $order->id }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ __('Delivery Address') ?? 'Delivery Address' }}</span><span class="vos-val">{{ $order->address ?: '—' }}</span></div>
+                    @if($isScheduled)
+                        <div class="vos-row"><span class="vos-key">{{ __('Supplier') ?? 'Supplier' }}</span><span class="vos-val">{{ auth()->user()->company_name ?? auth()->user()->name }}</span></div>
+                    @endif
+                    <div class="vos-row"><span class="vos-key">{{ __('Payment Method') ?? 'Payment Method' }}</span><span class="vos-val">{{ $order->payment_type ?: ($order->payment_status ?: '—') }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ __('Status') ?? 'Status' }}</span><span class="vos-val">{{ $currentStatus }}</span></div>
+                    @if($isScheduled)
+                        @php
+                            $start = $order->schedule_start_date ? \Carbon\Carbon::parse($order->schedule_start_date) : null;
+                            $end = $start ? (clone $start)->addMonths(3) : null;
+                        @endphp
+                        <div class="vos-row"><span class="vos-key">{{ __('Duration') ?? 'Duration' }}</span><span class="vos-val">{{ $start ? $start->format('M d') : '—' }} – {{ $end ? $end->format('M d, Y') : '—' }}</span></div>
+                    @endif
+                    <div class="vos-row"><span class="vos-key">{{ __('Date') ?? 'Date' }}</span><span class="vos-val">{{ $order->created_at->format('M d, Y') }}</span></div>
                 </div>
+            </div>
 
-                @if($order->request_type != 2 || ($myOffer && $order->offers->count() > 1))
-                    <div class="card">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">{{ __('Offers Submitted') ?? 'Offers Submitted' }}</h5>
-                        </div>
-                        <div class="card-body">
-                            @if($order->offers && count($order->offers) > 0)
-                                @foreach($order->offers as $offer)
-                                    <div class="offer-card {{ $offer->provider_id === auth()->id() ? 'own' : '' }}">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <p class="mb-2">
-                                                    <strong>{{ __('Provider') ?? 'Provider' }}:</strong> {{ $offer->provider->company_name ?? $offer->provider->name }}
-                                                    @if($offer->provider_id === auth()->id())
-                                                        <span class="badge bg-primary">{{ __('My Offer') ?? 'My Offer' }}</span>
-                                                    @endif
-                                                </p>
-                                                <p class="mb-2"><strong>{{ __('Price') ?? 'Price' }}:</strong> {{ number_format($offer->cost ?? 0, 2) }} {{ __('SAR') ?? 'SAR' }}</p>
-                                                <p class="mb-0"><strong>{{ __('Delivery Days') ?? 'Delivery Days' }}:</strong> {{ $offer->delivery_time ?? 'N/A' }} {{ __('days') ?? 'days' }}</p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p class="mb-2"><strong>{{ __('Warranty') ?? 'Warranty' }}:</strong> {{ $offer->warranty ?? __('None') ?? 'None' }}</p>
-                                                <p class="mb-2"><strong>{{ __('Status') ?? 'Status' }}:</strong> 
-                                                    @php
-                                                        $offerStatus = (string) $offer->status;
-                                                        $offerStatusLabel = ($offerStatus === '2' || strtolower($offerStatus) === 'accepted')
-                                                            ? 'accepted'
-                                                            : (($offerStatus === '3' || strtolower($offerStatus) === 'rejected') ? 'rejected' : 'pending');
-                                                    @endphp
-                                                    <span class="badge bg-{{ $offerStatusLabel === 'pending' ? 'warning' : ($offerStatusLabel === 'accepted' ? 'success' : 'danger') }}">
-                                                        {{ ucfirst($offerStatusLabel) }}
-                                                    </span>
-                                                </p>
-                                                @if($offer->provider_id === auth()->id())
-                                                    <div class="btn-group btn-group-sm" role="group">
-                                                        <a href="{{ route('vendor/orders/offer-edit', $offer->id) }}" class="btn btn-sm btn-outline-primary">{{ __('Edit') ?? 'Edit' }}</a>
-                                                        <form action="{{ route('vendor/orders/offer-delete', $offer->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('{{ __('Are you sure you want to delete this offer?') ?? 'Are you sure?' }}');">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') ?? 'Delete' }}</button>
-                                                        </form>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        @if($offer->notes)
-                                            <p class="mt-2 mb-0 text-muted"><strong>{{ __('Notes') ?? 'Notes' }}:</strong> {{ $offer->notes }}</p>
-                                        @endif
+            @if($isScheduled)
+                <div class="vos-card" style="margin-top:14px;">
+                    <h5>{{ __('Note') ?? 'Note' }}</h5>
+                    <div class="vos-offer-line">{{ $order->notes ?: __('No notes provided.') }}</div>
+                </div>
+            @endif
+
+            <div class="vos-card" style="margin-top:14px;">
+                <h5>{{ __('Products Requested') ?? 'Products Requested' }}</h5>
+                @if($order->items && $order->items->count())
+                    <div class="vos-rows">
+                        @foreach($order->items as $item)
+                            <div class="vos-row">
+                                <span class="vos-key">{{ $item->product->name ?? 'Product' }}</span>
+                                <span class="vos-val">{{ $item->quantity }} {{ __('Units') ?? 'Units' }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="vos-rows">
+                        <div class="vos-row"><span class="vos-key">{{ $order->device_name ?: 'X-Ray Machine' }}</span><span class="vos-val">2 {{ __('Units') ?? 'Units' }}</span></div>
+                        <div class="vos-row"><span class="vos-key">Surgical Gloves</span><span class="vos-val">500 Boxes</span></div>
+                        <div class="vos-row"><span class="vos-key">Surgical Gloves</span><span class="vos-val">500 Boxes</span></div>
+                    </div>
+                @endif
+
+                @if($isScheduled && is_array($order->files) && count(array_filter($order->files)) > 0)
+                    <div class="vos-offer" style="margin-top:14px;">
+                        <div class="vos-offer-body">
+                            @foreach($order->files as $f)
+                                @if($f)
+                                    <div class="vos-file">
+                                        <a href="{{ asset($f) }}" target="_blank"><i class="bi bi-file-earmark-text"></i> {{ basename($f) }}</a>
+                                        <i class="bi bi-download"></i>
                                     </div>
-                                @endforeach
-                            @else
-                                <div class="alert alert-info mb-0">
-                                    {{ __('No offers have been submitted for this order yet.') ?? 'No offers have been submitted for this order yet.' }}
-                                </div>
-                            @endif
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                 @endif
             </div>
 
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-light">
-                        <h5 class="mb-0">{{ __('Customer Information') ?? 'Customer Information' }}</h5>
-                    </div>
-                    <div class="card-body">
-                        @if($order->user)
-                            <p class="mb-2">
-                                <strong>{{ __('Name') ?? 'Name' }}:</strong><br>
-                                {{ $order->user->name }}
-                            </p>
-                            <p class="mb-2">
-                                <strong>{{ __('Email') ?? 'Email' }}:</strong><br>
-                                {{ $order->user->email }}
-                            </p>
-                            <p class="mb-2">
-                                <strong>{{ __('Phone') ?? 'Phone' }}:</strong><br>
-                                {{ $order->user->mobile ?? __('Not specified') ?? 'Not specified' }}
-                            </p>
-                            @if($order->address)
-                                <p class="mb-0">
-                                    <strong>{{ __('Address') ?? 'Address' }}:</strong><br>
-                                    {{ $order->address }}
-                                </p>
-                            @endif
-                        @else
-                            <p class="text-muted">{{ __('Customer information not available.') ?? 'Customer information not available.' }}</p>
-                        @endif
-                    </div>
-                </div>
-
-                <div class="card mt-3">
-                    <div class="card-header bg-light">
-                        <h5 class="mb-0">{{ __('Actions') ?? 'Actions' }}</h5>
-                    </div>
-                    <div class="card-body">
-                        @if(!$myOffer)
-                            <a href="{{ route('vendor/orders/offer-form', $order->id) }}" class="btn btn-success w-100 mb-2">
-                                <i class="bi bi-plus-circle"></i> {{ __('Submit Offer') ?? 'Submit Offer' }}
-                            </a>
-                        @else
-                            @php
-                                $myOfferStatus = (string) $myOffer->status;
-                                $myOfferPending = ($myOfferStatus === '1' || strtolower($myOfferStatus) === 'pending');
-                            @endphp
-                            @if($myOfferPending)
-                                <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn btn-warning w-100 mb-2">
-                                    <i class="bi bi-pencil"></i> {{ __('Edit My Offer') ?? 'Edit My Offer' }}
-                                </a>
-                            @endif
-                        @endif
-                        <a href="{{ route('vendor/orders', $order->request_type == 2 ? ['tab' => 'scheduled'] : []) }}" class="btn btn-secondary w-100">
-                            <i class="bi bi-arrow-left"></i> {{ __('Back to Orders') ?? 'Back to Orders' }}
-                        </a>
-                    </div>
+            <div class="vos-card vos-timeline" style="margin-top:14px;">
+                <h5>{{ __('Timeline') ?? 'Timeline' }}</h5>
+                <div class="line">
+                    @foreach($timelineSteps as $stepNo)
+                        @php
+                            $done = in_array($stepNo, $timelineNos, true);
+                            $entry = $timeline->firstWhere('timeline_no', $stepNo);
+                        @endphp
+                        <div class="vos-step {{ $done ? 'done' : 'pending' }}">
+                            <span class="dot"><i class="bi bi-check"></i></span>
+                            <div class="name">{{ timelineName($stepNo) }}</div>
+                            <div class="date">{{ $entry ? $entry->created_at->format('M j') : 'Sep 10' }}</div>
+                        </div>
+                    @endforeach
+                    @if($myOffer && in_array(strtolower((string)$myOffer->status), ['3','rejected'], true))
+                        <div class="vos-step done">
+                            <span class="dot"><i class="bi bi-check"></i></span>
+                            <div class="name">{{ __('Offer Rejected') ?? 'Offer Rejected' }}</div>
+                            <div class="date">{{ optional($myOffer->updated_at)->format('M j') }}</div>
+                        </div>
+                    @endif
                 </div>
             </div>
+
+            @if($order->user)
+                <div class="vos-card" style="margin-top:14px;">
+                    <h5>{{ __('Contact us') ?? 'Contact us' }}</h5>
+                    <div class="vos-contact">
+                        <div>
+                            <div class="vos-contact-name">{{ $order->user->company_name ?? $order->user->name }}</div>
+                            <div class="vos-contact-phone">{{ $order->user->mobile ?? '+966-1234567' }}</div>
+                        </div>
+                        <div class="vos-contact-actions">
+                            @if($order->user->mobile)
+                                <a class="vos-circle" href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $order->user->mobile) }}" target="_blank"><i class="bi bi-whatsapp"></i></a>
+                                <a class="vos-circle" href="tel:{{ $order->user->mobile }}"><i class="bi bi-telephone"></i></a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if($isQuotation && $myOffer)
+                <div class="vos-card" style="margin-top:14px;">
+                    <h5>{{ __('My Offer') ?? 'My Offer' }}</h5>
+                    <div class="vos-offer">
+                        <div class="vos-offer-head">{{ __('My offer') ?? 'My offer' }}</div>
+                        <div class="vos-offer-body">
+                            <div class="vos-file">
+                                <a href="{{ is_array($myOffer->files) && !empty($myOffer->files[0]) ? asset($myOffer->files[0]) : '#' }}" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf"></i> {{ is_array($myOffer->files) && !empty($myOffer->files[0]) ? basename($myOffer->files[0]) : 'quotation.pdf' }}
+                                </a>
+                                <i class="bi bi-clock-history"></i>
+                            </div>
+                            <div class="vos-offer-line">Total Price: {{ number_format((float)($myOffer->cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</div>
+                            <div class="vos-offer-line">Delivery Time: {{ $myOffer->delivery_time ?? 0 }} {{ __('Days') ?? 'Days' }}</div>
+                            <div class="vos-offer-line">Warranty: {{ $myOffer->warranty ?? '—' }}</div>
+                            <div class="vos-offer-line">Notes: {{ $myOffer->notes ?? '—' }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
-    </main>
+
+        <div>
+            <div class="vos-card vos-payment">
+                <h5>{{ __('Payment Details') ?? 'Payment Details' }}</h5>
+                <div class="vos-rows">
+                    <div class="vos-row"><span class="vos-key">{{ __('Subtotal') ?? 'Subtotal' }}</span><span class="vos-val">{{ number_format((float)($order->items_cost ?? $order->total_before_discount ?? $order->total_cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ __('VAT(10%)') ?? 'VAT(10%)' }}</span><span class="vos-val">{{ number_format((float)($order->vat_amount ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ __('Delivery Fee') ?? 'Delivery Fee' }}</span><span class="vos-val">{{ number_format((float)($order->delivery_fee ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</span></div>
+                    <div class="vos-row vos-total"><span class="vos-key">{{ __('Net Total') ?? 'Net Total' }}</span><span class="vos-val">{{ number_format((float)($order->total_cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</span></div>
+                </div>
+            </div>
+
+            <div style="margin-top:14px;">
+                @if($isQuotation && $myOffer && in_array(strtolower((string)$myOffer->status), ['3','rejected'], true))
+                    <div class="vos-alert" style="margin-bottom:12px;">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        {{ __('Your offer was rejected. Reason:') ?? 'Your offer was rejected. Reason:' }}
+                        {{ $myOffer->rejected_reson ?: __('Price too high. The client requests a lower price.') }}
+                    </div>
+                    <div class="vos-actions">
+                        <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn-vos btn-vos-main" style="width:100%;">{{ __('Resubmit Offer') ?? 'Resubmit Offer' }}</a>
+                    </div>
+                @elseif($isQuotation && !$myOffer)
+                    <div class="vos-actions">
+                        <a href="{{ route('vendor/orders/offer-form', $order->id) }}" class="btn-vos btn-vos-main" style="width:100%;">{{ __('Send Offer') ?? 'Send Offer' }}</a>
+                    </div>
+                @elseif($isQuotation && $myOffer && (string)$myOffer->status === '1')
+                    <div class="vos-actions">
+                        <form method="POST" action="{{ route('vendor/orders/offer-delete', $myOffer->id) }}" style="flex:1;" onsubmit="return confirm('Delete this offer?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-vos btn-vos-outline" style="width:100%;">{{ __('Cancel Offer') ?? 'Cancel Offer' }}</button>
+                        </form>
+                        <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn-vos btn-vos-main" style="flex:1;">{{ __('Edit Offer') ?? 'Edit Offer' }}</a>
+                    </div>
+                @elseif($actionLabel)
+                    <div class="vos-actions">
+                        <button type="button" class="btn-vos {{ strtolower($actionLabel) === 'cancelled' ? 'btn-vos-outline' : 'btn-vos-main' }}" style="width:100%;">{{ $actionLabel }}</button>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</main>
 @endsection
