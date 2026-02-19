@@ -8,176 +8,196 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-    :root{
-        --v-bg:#f6f7fb;
-        --v-card:#fff;
-        --v-border: rgba(0,0,0,.08);
-        --v-text:#111827;
-        --v-muted:#6b7280;
-        --v-shadow: 0 10px 30px rgba(17,24,39,.08);
-        --v-shadow-sm: 0 6px 18px rgba(17,24,39,.08);
-        --v-radius:16px;
+    :root {
+        --page-bg: #edf2fb;
+        --card-bg: #ffffff;
+        --border-soft: rgba(15, 23, 42, .08);
+        --text-main: #0b2545;
+        --text-muted: #64748b;
+        --shadow-soft: 0 18px 50px rgba(15, 23, 42, .12);
+        --shadow-sm: 0 8px 26px rgba(15, 23, 42, .08);
+        --radius-lg: 28px;
+        --radius-md: 18px;
+        --accent-blue: linear-gradient(135deg, #2d8bfd 0%, #1d4ed8 100%);
+        --accent-pink: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+        --accent-teal: linear-gradient(135deg, #0bc5ea 0%, #0ea5e9 100%);
+        --accent-green: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+        --accent-gold: linear-gradient(135deg, #f97316 0%, #f59e0b 100%);
     }
 
-    .v-page,
-    .v-page *{
+    body, .v-page, .v-page * {
         font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
-    .v-page{
-        background: var(--v-bg);
-        border: 1px solid var(--v-border);
-        border-radius: var(--v-radius);
-        padding: 22px;
+    .dashboard-layout {
+        background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 70%, #eef2fb 100%);
+        padding: 60px 24px 80px;
+        min-height: 100vh;
     }
 
-    .v-head{
-        display:flex;
-        align-items:flex-start;
-        justify-content:space-between;
-        gap:16px;
-        margin-bottom: 16px;
+    .v-page {
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        padding: 36px;
+        border: none;
+        box-shadow: var(--shadow-soft);
+        max-width: 1400px;
+        margin: 0 auto;
     }
 
-    .v-title{
-        margin:0;
-        font-weight:700;
-        letter-spacing:-.02em;
-        color: var(--v-text);
+    .v-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 32px;
     }
 
-    .v-sub{
-        margin:6px 0 0;
-        color: var(--v-muted);
-        font-size: 14px;
-        font-weight: 400;
-    }
-
-    .v-pill{
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        padding: 10px 12px;
-        background: rgba(13,110,253,.08);
-        color: #0d6efd;
-        border: 1px solid rgba(13,110,253,.18);
-        border-radius: 999px;
-        font-size: 13px;
-        white-space: nowrap;
-    }
-
-    /* Stat Cards */
-    .stat-card{
-        position:relative;
-        overflow:hidden;
-        padding: 18px;
-        border-radius: var(--v-radius);
-        color: #fff;
-        box-shadow: var(--v-shadow-sm);
-        transition: transform .15s ease, box-shadow .15s ease;
-        height:100%;
-    }
-    .stat-card:hover{
-        transform: translateY(-2px);
-        box-shadow: var(--v-shadow);
-    }
-    .stat-card:before{
-        content:"";
-        position:absolute;
-        inset:-1px;
-        background: radial-gradient(600px 180px at 20% 0%, rgba(255,255,255,.18), transparent 60%);
-        pointer-events:none;
-    }
-    .stat-top{
-        display:flex;
-        align-items:flex-start;
-        justify-content:space-between;
-        gap:10px;
-        position:relative;
-    }
-    .stat-ico{
-        width:42px;height:42px;
-        border-radius: 14px;
-        display:grid;
-        place-items:center;
-        background: rgba(255,255,255,.18);
-        border: 1px solid rgba(255,255,255,.20);
-        flex: 0 0 auto;
-    }
-    .stat-ico i{ font-size: 18px; }
-    .stat-value{
-        font-size: 30px;
+    .v-title {
+        margin: 0;
         font-weight: 700;
-        margin: 10px 0 2px;
-        letter-spacing:-.02em;
-        position:relative;
-    }
-    .stat-label{
-        font-size: 13px;
-        opacity: .92;
-        position:relative;
-        font-weight: 500;
+        font-size: 36px;
+        color: var(--text-main);
+        letter-spacing: -0.03em;
     }
 
-    .stat-card.orders { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
-    .stat-card.offers { background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); }
-    .stat-card.products { background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%); }
-    .stat-card.rating { background: linear-gradient(135deg, #22c55e 0%, #10b981 100%); }
-
-    /* Section Card */
-    .v-card{
-        background: var(--v-card);
-        border: 1px solid var(--v-border);
-        border-radius: var(--v-radius);
-        box-shadow: var(--v-shadow-sm);
-    }
-    .v-card-head{
-        padding: 14px 16px;
-        border-bottom: 1px solid rgba(0,0,0,.06);
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:10px;
-    }
-    .v-card-head h5{
-        margin:0;
-        font-weight:700;
-        color: var(--v-text);
+    .v-sub {
+        margin: 6px 0 0;
+        color: var(--text-muted);
         font-size: 15px;
     }
 
-    /* Action Tiles */
-    .action-tile{
-        display:flex;
-        align-items:center;
-        gap:12px;
-        padding: 14px;
-        border-radius: 14px;
-        border: 1px solid rgba(0,0,0,.07);
-        background:#fff;
-        text-decoration:none;
+    .v-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(13, 110, 253, .25);
+        background: rgba(13, 110, 253, .08);
+        color: #0b49c6;
+        font-weight: 600;
+    }
+
+    .stats-grid {
+        margin-bottom: 36px;
+    }
+
+    .stat-card {
+        position: relative;
+        border-radius: var(--radius-md);
+        padding: 24px;
+        color: #fff;
+        height: 170px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .stat-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .stat-ico {
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, .15);
+        border: 1px solid rgba(255, 255, 255, .25);
+    }
+
+    .stat-ico i {
+        font-size: 18px;
+    }
+
+    .stat-value {
+        font-size: 34px;
+        font-weight: 700;
+        margin: 12px 0 4px;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        opacity: .9;
+    }
+
+    .stat-card.orders { background: var(--accent-blue); }
+    .stat-card.offers { background: var(--accent-pink); }
+    .stat-card.products { background: var(--accent-teal); }
+    .stat-card.rating { background: var(--accent-green); }
+    .stat-card.scheduled { background: var(--accent-gold); }
+
+    .v-card {
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        border: none;
+        box-shadow: var(--shadow-sm);
+        background: #fff;
+    }
+
+    .v-card-head {
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba(0, 0, 0, .06);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .v-card-head h5 {
+        margin: 0;
+        font-weight: 700;
+        color: var(--text-main);
+        font-size: 18px;
+    }
+
+    .action-tile {
+        align-items: flex-start;
+        border: 1px solid rgba(15, 23, 42, .08);
+        background: #fdfdff;
+        border-radius: 18px;
         transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-        height: 100%;
-        color: inherit;
     }
-    .action-tile:hover{
+
+    .action-tile:hover {
         transform: translateY(-2px);
-        box-shadow: var(--v-shadow);
-        border-color: rgba(13,110,253,.22);
+        box-shadow: var(--shadow-sm);
+        border-color: rgba(13, 110, 253, .35);
     }
-    .action-ico{
-        width:42px;height:42px;
-        border-radius: 14px;
-        display:grid;
-        place-items:center;
-        background: rgba(13,110,253,.08);
-        color:#0d6efd;
-        border: 1px solid rgba(13,110,253,.16);
-        flex: 0 0 auto;
+
+    .action-ico {
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        background: rgba(13, 110, 253, .12);
+        border: 1px solid rgba(13, 110, 253, .20);
+        color: #0d6efd;
     }
-    .action-ico i{ font-size: 18px; }
-    .action-title{ margin:0; font-weight:600; font-size: 14px; color: var(--v-text); line-height: 1.2; }
-    .action-desc{ margin:3px 0 0; font-size: 12px; color: var(--v-muted); font-weight: 400; }
+
+    .action-title {
+        margin: 2px 0 0;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .action-desc {
+        margin: 5px 0 0;
+        font-size: 12px;
+        color: var(--text-muted);
+    }
 
     /* Lists */
     .recent-item{
@@ -214,7 +234,7 @@
 @endsection
 
 @section('content')
-<main class="container my-4" style="max-width: 95%;">
+<main class="dashboard-layout">
     @include('flash::message')
 
     <div class="v-page">
@@ -232,7 +252,7 @@
         </div>
 
         <!-- Stats -->
-        <div class="row g-3 mb-3">
+        <div class="row g-3 mb-3 stats-grid">
             <div class="col-12 col-sm-6 col-lg-3">
                 <div class="stat-card orders">
                     <div class="stat-top">
@@ -282,7 +302,7 @@
             </div>
 
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <div class="stat-card scheduled">
                     <div class="stat-top">
                         <div>
                             <div class="stat-value">{{ $scheduledOrdersCount ?? 0 }}</div>

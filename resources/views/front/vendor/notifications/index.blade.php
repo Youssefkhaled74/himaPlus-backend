@@ -7,22 +7,23 @@
 @section('css')
 <style>
     :root {
-        --vn-bg: #f5f6f8;
-        --vn-card: #fff;
-        --vn-border: #ececec;
-        --vn-text: #111827;
+        --vn-bg: #f1f3f7;
+        --vn-card: #ffffff;
+        --vn-border: #dfe4ed;
+        --vn-text: #102a43;
         --vn-muted: #6b7280;
-        --vn-shadow: 0 6px 20px rgba(16, 24, 40, .06);
-        --vn-radius: 12px;
+        --vn-shadow: 0 18px 40px rgba(15, 23, 42, .12);
+        --vn-radius: 18px;
         --vn-primary: #0d6efd;
-        --vn-notify-bg: #eaf2ff;
+        --vn-notify-bg: #e9f0ff;
     }
 
     .vn-page {
-        background: var(--vn-bg);
-        border: 1px solid rgba(0, 0, 0, .04);
-        border-radius: var(--vn-radius);
-        padding: 20px;
+        background: var(--vn-card);
+        border-radius: 32px;
+        padding: 40px;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, .12);
+        border: none;
     }
 
     .vn-header {
@@ -33,10 +34,11 @@
     }
 
     .vn-title {
-        font-size: 24px;
-        font-weight: 900;
-        color: var(--vn-text);
+        font-size: 32px;
+        font-weight: 700;
+        color: #0f4c8c;
         margin: 0;
+        letter-spacing: .3px;
     }
 
     .vn-actions {
@@ -48,17 +50,17 @@
     /* Notification Card */
     .vn-card {
         background: var(--vn-notify-bg);
-        border: 1px solid rgba(59, 130, 246, .15);
-        border-radius: var(--vn-radius);
-        padding: 16px 18px;
-        margin-bottom: 12px;
+        border-radius: 16px;
+        padding: 18px 24px;
+        margin-bottom: 16px;
         display: flex;
         align-items: center;
-        gap: 14px;
-        transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+        gap: 18px;
+        transition: transform .12s ease, box-shadow .12s ease;
         text-decoration: none;
         color: inherit;
         position: relative;
+        border: none;
     }
 
     .vn-card:hover {
@@ -69,24 +71,23 @@
 
     .vn-card.unread {
         background: #eaf2ff;
-        border-left: 4px solid #3b82f6;
     }
 
     .vn-card.read {
-        background: #f9fafb;
-        border-color: #e5e7eb;
-        opacity: 0.92;
+        background: #f8fafc;
+        opacity: 0.95;
     }
 
     /* Icon Container */
     .vn-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
         display: grid;
         place-items: center;
         flex: 0 0 auto;
-        font-size: 20px;
+        font-size: 22px;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, .12);
     }
 
     .vn-icon.order {
@@ -128,13 +129,13 @@
     .vn-header-row {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-bottom: 4px;
+        gap: 10px;
+        margin-bottom: 6px;
     }
 
     .vn-card-title {
-        font-weight: 800;
-        font-size: 15px;
+        font-weight: 700;
+        font-size: 16px;
         color: var(--vn-text);
         margin: 0;
     }
@@ -152,10 +153,10 @@
     }
 
     .vn-message {
-        font-size: 13px;
+        font-size: 14px;
         color: var(--vn-muted);
         margin: 4px 0 0 0;
-        line-height: 1.5;
+        line-height: 1.6;
     }
 
     /* Time */
@@ -165,12 +166,13 @@
         font-size: 12px;
         color: var(--vn-muted);
         white-space: nowrap;
+        min-width: 110px;
     }
 
     /* Filter buttons */
     .vn-filters {
         display: flex;
-        gap: 8px;
+        gap: 10px;
         margin-bottom: 18px;
         flex-wrap: wrap;
     }
@@ -224,9 +226,9 @@
         color: #fff;
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 768px) {
         .vn-card {
-            padding: 12px;
+            padding: 14px;
             flex-direction: column;
             align-items: flex-start;
         }
@@ -240,7 +242,7 @@
 @endsection
 
 @section('content')
-<main class="container my-4" style="max-width: 95%; margin-top: 8% !important;">
+<main class="container-fluid my-5" style="max-width: 1200px;">
     @include('flash::message')
 
     <div class="vn-page">
