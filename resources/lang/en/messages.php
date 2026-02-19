@@ -29,4 +29,8 @@ return [
     'delivery_days_required' => 'Delivery days are required',
     'order_not_found' => 'Order not found',
     'unauthorized' => 'You are not authorized to perform this action',
+    'notification_marked' => 'Notification marked as read',
+    'notification_deleted' => 'Notification deleted successfully',
+    'all_marked' => 'All notifications marked as read',
+    'not_found' => ':item not found',
 ];

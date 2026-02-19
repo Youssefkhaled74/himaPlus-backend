@@ -122,7 +122,7 @@ class Order extends Model
 		
 		if ($acceptedOffer) {
 			// Check timeline for completion
-			$completedTimeline = $this->timeline()->where('status', 'completed')->exists();
+			$completedTimeline = $this->timeline()->where('timeline_no', 6)->exists();
 			if ($completedTimeline) {
 				return 'completed';
 			}

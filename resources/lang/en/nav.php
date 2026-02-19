@@ -197,4 +197,6 @@ return [
     'ratings_desc' => 'View customer ratings',
     'analytics_desc' => 'View business insights and reports',
     'requests' => 'Requests',
+    'mark_all_read'=> 'Mark All as Read',
+    'mark_read'=> 'Mark as Read',
 ];
