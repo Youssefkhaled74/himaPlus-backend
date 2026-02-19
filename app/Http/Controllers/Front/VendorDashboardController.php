@@ -60,7 +60,7 @@ class VendorDashboardController extends Controller
             ->where('deleted_at', null)
             ->with(['user:id,name,email,mobile'])
             ->latest()
-            ->take(5)
+            ->take(3)
             ->get();
         
         // Get recent scheduled orders
@@ -74,7 +74,7 @@ class VendorDashboardController extends Controller
             ->where('deleted_at', null)
             ->with(['user:id,name,email,mobile', 'offers'])
             ->latest()
-            ->take(5)
+            ->take(3)
             ->get();
         
         // Get pending offers
@@ -83,13 +83,13 @@ class VendorDashboardController extends Controller
             ->whereIn('status', $this->pendingOfferStatuses())
             ->with(['order:id,order_type,user_id'])
             ->latest()
-            ->take(5)
+            ->take(3)
             ->get();
         
         // Get notifications
         $recentNotifications = Notification::where('user_id', $vendor->id)
             ->orderBy('created_at', 'desc')
-            ->take(5)
+            ->take(3)
             ->get();
         
         $unreadNotificationsCount = Notification::where('user_id', $vendor->id)

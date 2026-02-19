@@ -332,42 +332,56 @@ class VendorProductController extends Controller
                 'warranty' => $request->warranty,
             ]);
             
-            // Handle image uploads
-            if ($request->hasFile('images')) {
-                $imagePaths = $this->normalizeImagePaths($product->imgs);
-                
-                // Remove specific images if requested
-                if ($request->filled('removed_images')) {
-                    $removedIndexes = explode(',', $request->removed_images);
-                    foreach ($removedIndexes as $index) {
-                        unset($imagePaths[(int)$index]);
+            // Handle existing + removed + newly uploaded images.
+            $imagePaths = $this->normalizeImagePaths($product->imgs);
+
+            if ($request->filled('removed_images')) {
+                $removedIndexes = array_filter(array_map('intval', explode(',', $request->removed_images)), function ($idx) {
+                    return $idx >= 0;
+                });
+
+                // Remove highest indexes first to avoid shifting.
+                rsort($removedIndexes);
+                $filesToDelete = [];
+                foreach ($removedIndexes as $index) {
+                    if (array_key_exists($index, $imagePaths)) {
+                        $filesToDelete[] = $imagePaths[$index];
+                        unset($imagePaths[$index]);
                     }
-                    $imagePaths = array_values($imagePaths); // Re-index array
                 }
-                
-                // Add new images
+                $imagePaths = array_values($imagePaths);
+
+                foreach ($filesToDelete as $file) {
+                    Storage::disk('public')->delete(ltrim((string) $file, '/'));
+                }
+            }
+
+            if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
                     $path = $image->store('products', 'public');
                     $imagePaths[] = $path;  // Store without 'storage/' prefix
                 }
-                
-                if (!empty($imagePaths)) {
-                    $clean = $this->sanitizeImagePaths($imagePaths);
-                    $json = json_encode($clean);
-                    $max = 1255;
-                    while (strlen($json) > $max && count($clean) > 1) {
-                        array_pop($clean);
-                        $json = json_encode($clean);
-                    }
-                    if (strlen($json) > $max) {
-                        $clean = array_slice($clean, 0, 1);
-                        $json = json_encode($clean);
-                    }
-                    $product->imgs = $json;
-                    $product->img = $clean[0] ?? $product->img;
-                    $product->save();
-                }
             }
+
+            $clean = $this->sanitizeImagePaths($imagePaths);
+            if (!empty($clean)) {
+                $json = json_encode($clean);
+                $max = 1255;
+                while (strlen($json) > $max && count($clean) > 1) {
+                    array_pop($clean);
+                    $json = json_encode($clean);
+                }
+                if (strlen($json) > $max) {
+                    $clean = array_slice($clean, 0, 1);
+                    $json = json_encode($clean);
+                }
+                $product->imgs = $json;
+                $product->img = $clean[0] ?? null;
+            } else {
+                $product->imgs = null;
+                $product->img = null;
+            }
+            $product->save();
             
             DB::commit();
             flash()->success('تم تحديث المنتج بنجاح');

@@ -31,17 +31,17 @@
 
     .dashboard-layout {
         background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 70%, #eef2fb 100%);
-        padding: 60px 24px 80px;
+        padding: 18px 20px 32px;
         min-height: 100vh;
     }
 
     .v-page {
         background: var(--card-bg);
         border-radius: var(--radius-lg);
-        padding: 36px;
+        padding: 22px;
         border: none;
         box-shadow: var(--shadow-soft);
-        max-width: 1400px;
+        max-width: 1320px;
         margin: 0 auto;
     }
 
@@ -51,13 +51,13 @@
         align-items: center;
         justify-content: space-between;
         gap: 18px;
-        margin-bottom: 32px;
+        margin-bottom: 18px;
     }
 
     .v-title {
         margin: 0;
         font-weight: 700;
-        font-size: 36px;
+        font-size: 28px;
         color: var(--text-main);
         letter-spacing: -0.03em;
     }
@@ -65,14 +65,14 @@
     .v-sub {
         margin: 6px 0 0;
         color: var(--text-muted);
-        font-size: 15px;
+        font-size: 13px;
     }
 
     .v-pill {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 12px 18px;
+        padding: 8px 14px;
         border-radius: 999px;
         border: 1px solid rgba(13, 110, 253, .25);
         background: rgba(13, 110, 253, .08);
@@ -81,17 +81,17 @@
     }
 
     .stats-grid {
-        margin-bottom: 36px;
+        margin-bottom: 14px;
     }
 
     .stat-card {
         position: relative;
         border-radius: var(--radius-md);
-        padding: 24px;
+        padding: 14px;
         color: #fff;
-        height: 170px;
+        height: 116px;
         overflow: hidden;
-        box-shadow: var(--shadow-sm);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, .10);
         transition: transform .15s ease, box-shadow .15s ease;
     }
 
@@ -108,9 +108,9 @@
     }
 
     .stat-ico {
-        width: 48px;
-        height: 48px;
-        border-radius: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
         display: grid;
         place-items: center;
         background: rgba(255, 255, 255, .15);
@@ -118,17 +118,17 @@
     }
 
     .stat-ico i {
-        font-size: 18px;
+        font-size: 15px;
     }
 
     .stat-value {
-        font-size: 34px;
+        font-size: 24px;
         font-weight: 700;
-        margin: 12px 0 4px;
+        margin: 6px 0 2px;
     }
 
     .stat-label {
-        font-size: 13px;
+        font-size: 11px;
         opacity: .9;
     }
 
@@ -147,7 +147,7 @@
     }
 
     .v-card-head {
-        padding: 20px 24px;
+        padding: 13px 16px;
         border-bottom: 1px solid rgba(0, 0, 0, .06);
         display: flex;
         align-items: center;
@@ -159,14 +159,17 @@
         margin: 0;
         font-weight: 700;
         color: var(--text-main);
-        font-size: 18px;
+        font-size: 15px;
     }
 
     .action-tile {
+        display: flex;
+        gap: 10px;
+        padding: 12px;
         align-items: flex-start;
         border: 1px solid rgba(15, 23, 42, .08);
         background: #fdfdff;
-        border-radius: 18px;
+        border-radius: 12px;
         transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     }
 
@@ -177,9 +180,9 @@
     }
 
     .action-ico {
-        width: 48px;
-        height: 48px;
-        border-radius: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
         display: grid;
         place-items: center;
         background: rgba(13, 110, 253, .12);
@@ -190,18 +193,18 @@
     .action-title {
         margin: 2px 0 0;
         font-weight: 600;
-        font-size: 15px;
+        font-size: 13px;
     }
 
     .action-desc {
         margin: 5px 0 0;
-        font-size: 12px;
+        font-size: 11px;
         color: var(--text-muted);
     }
 
     /* Lists */
     .recent-item{
-        padding: 14px 16px;
+        padding: 10px 12px;
         border-top: 1px solid rgba(0,0,0,.06);
     }
     .recent-item:first-child{ border-top: 0; }
@@ -220,15 +223,16 @@
     .status-rejected{ background: rgba(239,68,68,.12); color:#991b1b; border-color: rgba(239,68,68,.20); }
 
     .v-cta{
-        border-radius: var(--v-radius);
+        border-radius: 12px;
         border: 1px solid rgba(13,110,253,.18);
         background: linear-gradient(135deg, rgba(13,110,253,.10), rgba(236,72,153,.06));
-        padding: 14px 16px;
+        padding: 10px 12px;
     }
 
     @media (max-width:576px){
         .v-page{ padding: 16px; }
-        .stat-value{ font-size: 26px; }
+        .stat-value{ font-size: 22px; }
+        .v-title{ font-size: 22px; }
     }
 </style>
 @endsection
@@ -252,8 +256,8 @@
         </div>
 
         <!-- Stats -->
-        <div class="row g-3 mb-3 stats-grid">
-            <div class="col-12 col-sm-6 col-lg-3">
+        <div class="row g-2 mb-3 stats-grid">
+            <div class="col-6 col-md-4 col-xl">
                 <div class="stat-card orders">
                     <div class="stat-top">
                         <div>
@@ -265,7 +269,7 @@
                 </div>
             </div>
 
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-6 col-md-4 col-xl">
                 <div class="stat-card offers">
                     <div class="stat-top">
                         <div>
@@ -277,7 +281,7 @@
                 </div>
             </div>
 
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-6 col-md-4 col-xl">
                 <div class="stat-card products">
                     <div class="stat-top">
                         <div>
@@ -289,7 +293,7 @@
                 </div>
             </div>
 
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-6 col-md-4 col-xl">
                 <div class="stat-card rating">
                     <div class="stat-top">
                         <div>
@@ -301,7 +305,7 @@
                 </div>
             </div>
 
-            <div class="col-12 col-sm-6 col-lg-3">
+            <div class="col-6 col-md-4 col-xl">
                 <div class="stat-card scheduled">
                     <div class="stat-top">
                         <div>
@@ -322,7 +326,7 @@
             </div>
             <div class="p-3">
                 <div class="row g-2">
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-xl-4">
                         <a href="{{ route('vendor/products/create') }}" class="action-tile">
                             <div class="action-ico"><i class="bi bi-plus-lg"></i></div>
                             <div>
@@ -332,7 +336,7 @@
                         </a>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-xl-4">
                         <a href="{{ route('vendor/products') }}" class="action-tile">
                             <div class="action-ico" style="background:rgba(2,132,199,.08);color:#0284c7;border-color:rgba(2,132,199,.16)">
                                 <i class="bi bi-box-seam"></i>
@@ -344,7 +348,7 @@
                         </a>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-xl-4">
                         <a href="{{ route('vendor/orders') }}" class="action-tile">
                             <div class="action-ico" style="background:rgba(245,158,11,.10);color:#92400e;border-color:rgba(245,158,11,.18)">
                                 <i class="bi bi-receipt"></i>
@@ -356,7 +360,7 @@
                         </a>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-xl-4">
                         <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="action-tile">
                             <div class="action-ico" style="background:rgba(251,191,36,.10);color:#92400e;border-color:rgba(251,191,36,.18)">
                                 <i class="bi bi-calendar-check"></i>
@@ -368,7 +372,7 @@
                         </a>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-xl-4">
                         <a href="{{ route('vendor/orders/my-offers') }}" class="action-tile">
                             <div class="action-ico" style="background:rgba(124,58,237,.10);color:#7c3aed;border-color:rgba(124,58,237,.18)">
                                 <i class="bi bi-chat-quote"></i>
@@ -380,7 +384,7 @@
                         </a>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-xl-4">
                         <a href="{{ route('vendor/ratings') }}" class="action-tile">
                             <div class="action-ico" style="background:rgba(34,197,94,.10);color:#166534;border-color:rgba(34,197,94,.18)">
                                 <i class="bi bi-star-fill"></i>
@@ -392,7 +396,7 @@
                         </a>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-xl-4">
                         <a href="{{ route('vendor/profile') }}" class="action-tile">
                             <div class="action-ico" style="background:rgba(17,24,39,.06);color:#111827;border-color:rgba(17,24,39,.12)">
                                 <i class="bi bi-person-circle"></i>
@@ -404,7 +408,7 @@
                         </a>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-xl-4">
                         <a href="{{ route('vendor/notifications') }}" class="action-tile">
                             <div class="action-ico"><i class="bi bi-bell-fill"></i></div>
                             <div>
@@ -419,7 +423,7 @@
                         </a>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-xl-4">
                         <a href="{{ route('vendor/analytics') }}" class="action-tile">
                             <div class="action-ico" style="background:rgba(236,72,153,.08);color:#ec4899;border-color:rgba(236,72,153,.16)">
                                 <i class="bi bi-graph-up"></i>

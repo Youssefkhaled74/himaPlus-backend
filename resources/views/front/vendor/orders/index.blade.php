@@ -22,7 +22,7 @@
         --vo-accent:#0ec6a0;
     }
 
-    .vendor-orders{max-width:95%;margin:7% auto 0;background:var(--vo-bg);padding:8px 0 24px;}
+    .vendor-orders{max-width:95%;margin:12px auto 0;background:var(--vo-bg);padding:8px 0 24px;}
     .vo-title{font-size:34px;font-weight:600;color:#0f2f7f;margin:0 0 14px;}
 
     .vo-tabs{display:flex;flex-wrap:wrap;gap:0;background:#efeff2;border-radius:10px;padding:0;margin-bottom:22px;overflow:hidden;}
@@ -105,11 +105,11 @@
     <h3 class="vo-title">{{ __('nav.view_orders') ?? 'Orders' }}</h3>
 
     <div class="vo-tabs">
-        <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="vo-tab {{ $tab === 'all' ? 'active' : '' }}">{{ __('All') }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => 'purchase']) }}" class="vo-tab {{ $tab === 'purchase' ? 'active' : '' }}">{{ __('Purchase Orders') }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="vo-tab {{ $tab === 'quotations' ? 'active' : '' }}">{{ __('Quotations') }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => 'maintenance']) }}" class="vo-tab {{ $tab === 'maintenance' ? 'active' : '' }}">{{ __('Maintenance') }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="vo-tab {{ $tab === 'scheduled' ? 'active' : '' }}">{{ __('Scheduled Orders') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="vo-tab {{ $tab === 'all' ? 'active' : '' }}">{{ __('nav.all') ?? 'All' }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'purchase']) }}" class="vo-tab {{ $tab === 'purchase' ? 'active' : '' }}">{{ __('nav.purchase_orders') ?? 'Purchase Orders' }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="vo-tab {{ $tab === 'quotations' ? 'active' : '' }}">{{ __('nav.quotations') ?? 'Quotations' }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'maintenance']) }}" class="vo-tab {{ $tab === 'maintenance' ? 'active' : '' }}">{{ __('nav.maintenance') ?? 'Maintenance' }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="vo-tab {{ $tab === 'scheduled' ? 'active' : '' }}">{{ __('nav.scheduled_orders') ?? 'Scheduled Orders' }}</a>
     </div>
 
     @forelse($orders as $order)

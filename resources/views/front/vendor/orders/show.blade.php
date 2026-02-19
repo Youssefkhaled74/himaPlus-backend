@@ -21,7 +21,7 @@
         --vos-accent:#0ec6a0;
     }
 
-    .vendor-order-show{max-width:95%;margin:7% auto 0;padding-bottom:28px;background:var(--vos-bg);}
+    .vendor-order-show{max-width:95%;margin:12px auto 0;padding-bottom:28px;background:var(--vos-bg);}
 
     .vos-breadcrumb{font-size:15px;color:#6d7482;display:flex;align-items:center;gap:10px;margin-bottom:18px;}
     .vos-breadcrumb a{text-decoration:none;color:#6d7482;}
@@ -160,6 +160,66 @@
     $timelineSteps = $isQuotation
         ? [1,7,9,3,4,5]
         : ($isScheduled ? [1,2,3,4,5,6] : [1,2,3,4,5,6]);
+
+    $isAr = app()->getLocale() === 'ar';
+    $tr = function ($text) use ($isAr) {
+        if (!$isAr) {
+            return $text;
+        }
+        $map = [
+            'pending' => 'قيد الانتظار',
+            'confirmed' => 'تم التأكيد',
+            'under review' => 'قيد المراجعة',
+            'processing' => 'قيد المعالجة',
+            'shipped' => 'تم الشحن',
+            'delivered' => 'تم التسليم',
+            'completed' => 'مكتمل',
+            'cancelled' => 'ملغي',
+            'canceled' => 'ملغي',
+            'rejected' => 'مرفوض',
+            'paused' => 'متوقف',
+            'upcoming' => 'قادم',
+            'active' => 'نشط',
+            'offers received' => 'تم استلام العروض',
+            'supplier selected' => 'تم اختيار المورد',
+            'converted to order' => 'تم التحويل إلى طلب',
+            'assigned to supplier' => 'تم التعيين إلى المورد',
+            'on hold' => 'معلق',
+            'order created' => 'تم إنشاء الطلب',
+            'edit offer' => 'تعديل العرض',
+            'cancel offer' => 'إلغاء العرض',
+            'send offer' => 'إرسال عرض',
+            'resubmit offer' => 'إعادة تقديم العرض',
+            'mark as processing' => 'تحديد كقيد المعالجة',
+            'mark as shipped' => 'تحديد كتم الشحن',
+            'mark as delivered' => 'تحديد كتم التسليم',
+            'mark as completed' => 'تحديد كمكتمل',
+            'requests details' => 'تفاصيل الطلبات',
+            'my offer' => 'عرضي',
+            'offer rejected' => 'تم رفض العرض',
+            'contact us' => 'تواصل معنا',
+            'no notes provided.' => 'لا توجد ملاحظات.',
+            'delete this offer?' => 'هل تريد حذف هذا العرض؟',
+        ];
+
+        $key = strtolower(trim((string) $text));
+        return $map[$key] ?? $text;
+    };
+
+    $currentStatus = $tr($currentStatus);
+    $actionLabel = $actionLabel ? $tr($actionLabel) : null;
+
+    $paymentRaw = $order->payment_type ?: ($order->payment_status ?: '-');
+    $paymentKey = strtolower(trim((string) $paymentRaw));
+    $paymentMap = [
+        'cash on delivery' => $isAr ? 'الدفع عند الاستلام' : 'Cash on Delivery',
+        'cod' => $isAr ? 'الدفع عند الاستلام' : 'Cash on Delivery',
+        'paid' => $isAr ? 'مدفوع' : 'Paid',
+        'unpaid' => $isAr ? 'غير مدفوع' : 'Unpaid',
+        '1' => $isAr ? 'مدفوع' : 'Paid',
+        '0' => $isAr ? 'غير مدفوع' : 'Unpaid',
+    ];
+    $paymentDisplay = $paymentMap[$paymentKey] ?? $paymentRaw;
 @endphp
 
 <main class="vendor-order-show">
@@ -167,68 +227,66 @@
 
     <nav class="vos-breadcrumb">
         @if($isQuotation)
-            <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}">{{ __('Requests') ?? 'Requests' }}</a>
+            <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}">{{ __('nav.requests') ?? 'Requests' }}</a>
             <i class="bi bi-chevron-right"></i>
-            <span class="current">{{ __('Requests Details') ?? 'Requests Details' }}</span>
+            <span class="current">{{ $tr('Requests Details') }}</span>
         @elseif($isScheduled)
-            <a href="{{ route('vendor/orders') }}">{{ __('Orders') ?? 'Orders' }}</a>
+            <a href="{{ route('vendor/orders') }}">{{ __('nav.orders') ?? 'Orders' }}</a>
             <i class="bi bi-chevron-right"></i>
-            <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}">{{ __('Scheduled Orders') ?? 'Scheduled Orders' }}</a>
+            <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}">{{ __('nav.scheduled_orders') ?? 'Scheduled Orders' }}</a>
             <i class="bi bi-chevron-right"></i>
-            <span class="current">{{ __('Order Details') ?? 'Order Details' }}</span>
+            <span class="current">{{ __('nav.order_details') ?? 'Order Details' }}</span>
         @else
-            <a href="{{ route('vendor/orders') }}">{{ __('Orders') ?? 'Orders' }}</a>
+            <a href="{{ route('vendor/orders') }}">{{ __('nav.orders') ?? 'Orders' }}</a>
             <i class="bi bi-chevron-right"></i>
-            <span class="current">{{ __('Order Details') ?? 'Order Details' }}</span>
+            <span class="current">{{ __('nav.order_details') ?? 'Order Details' }}</span>
         @endif
     </nav>
 
     <div class="vos-grid">
         <div>
             <div class="vos-card">
-                <h5>{{ __('Order Details') ?? 'Order Details' }}</h5>
+                <h5>{{ __('nav.order_details') ?? 'Order Details' }}</h5>
                 <div class="vos-rows">
-                    <div class="vos-row"><span class="vos-key">{{ __('Request Number') ?? 'Request Number' }}</span><span class="vos-val">#{{ $order->id }}</span></div>
-                    <div class="vos-row"><span class="vos-key">{{ __('Delivery Address') ?? 'Delivery Address' }}</span><span class="vos-val">{{ $order->address ?: '-' }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ $isAr ? 'رقم الطلب' : 'Request Number' }}</span><span class="vos-val">#{{ $order->id }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ $isAr ? 'عنوان التسليم' : 'Delivery Address' }}</span><span class="vos-val">{{ $order->address ?: '-' }}</span></div>
                     @if($isScheduled)
-                        <div class="vos-row"><span class="vos-key">{{ __('Supplier') ?? 'Supplier' }}</span><span class="vos-val">{{ auth()->user()->company_name ?? auth()->user()->name }}</span></div>
+                        <div class="vos-row"><span class="vos-key">{{ $isAr ? 'المورد' : 'Supplier' }}</span><span class="vos-val">{{ auth()->user()->company_name ?? auth()->user()->name }}</span></div>
                     @endif
-                    <div class="vos-row"><span class="vos-key">{{ __('Payment Method') ?? 'Payment Method' }}</span><span class="vos-val">{{ $order->payment_type ?: ($order->payment_status ?: '-') }}</span></div>
-                    <div class="vos-row"><span class="vos-key">{{ __('Status') ?? 'Status' }}</span><span class="vos-val">{{ $currentStatus }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ $isAr ? 'طريقة الدفع' : 'Payment Method' }}</span><span class="vos-val">{{ $paymentDisplay }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ __('nav.status') ?? 'Status' }}</span><span class="vos-val">{{ $currentStatus }}</span></div>
                     @if($isScheduled)
                         @php
                             $start = $order->schedule_start_date ? \Carbon\Carbon::parse($order->schedule_start_date) : null;
                             $end = $start ? (clone $start)->addMonths(3) : null;
                         @endphp
-                        <div class="vos-row"><span class="vos-key">{{ __('Duration') ?? 'Duration' }}</span><span class="vos-val">{{ $start ? $start->format('M d') : '-' }} - {{ $end ? $end->format('M d, Y') : '-' }}</span></div>
+                        <div class="vos-row"><span class="vos-key">{{ __('nav.duration') ?? 'Duration' }}</span><span class="vos-val">{{ $start ? $start->translatedFormat('M d') : '-' }} - {{ $end ? $end->translatedFormat('M d, Y') : '-' }}</span></div>
                     @endif
-                    <div class="vos-row"><span class="vos-key">{{ __('Date') ?? 'Date' }}</span><span class="vos-val">{{ $order->created_at->format('M d, Y') }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ __('nav.date') ?? 'Date' }}</span><span class="vos-val">{{ $order->created_at->translatedFormat('M d, Y') }}</span></div>
                 </div>
             </div>
 
             @if($isScheduled)
                 <div class="vos-card" style="margin-top:14px;">
-                    <h5>{{ __('Note') ?? 'Note' }}</h5>
-                    <div class="vos-offer-line">{{ $order->notes ?: __('No notes provided.') }}</div>
+                    <h5>{{ $isAr ? 'ملاحظة' : 'Note' }}</h5>
+                    <div class="vos-offer-line">{{ $order->notes ?: $tr('No notes provided.') }}</div>
                 </div>
             @endif
 
             <div class="vos-card" style="margin-top:14px;">
-                <h5>{{ __('Products Requested') ?? 'Products Requested' }}</h5>
+                <h5>{{ $isAr ? 'المنتجات المطلوبة' : 'Products Requested' }}</h5>
                 @if($order->items && $order->items->count())
                     <div class="vos-rows">
                         @foreach($order->items as $item)
                             <div class="vos-row">
                                 <span class="vos-key">{{ $item->product->name ?? 'Product' }}</span>
-                                <span class="vos-val">{{ $item->quantity }} {{ __('Units') ?? 'Units' }}</span>
+                                <span class="vos-val">{{ $item->quantity }} {{ __('nav.units') ?? 'Units' }}</span>
                             </div>
                         @endforeach
                     </div>
                 @else
                     <div class="vos-rows">
-                        <div class="vos-row"><span class="vos-key">{{ $order->device_name ?: 'X-Ray Machine' }}</span><span class="vos-val">2 {{ __('Units') ?? 'Units' }}</span></div>
-                        <div class="vos-row"><span class="vos-key">Surgical Gloves</span><span class="vos-val">500 Boxes</span></div>
-                        <div class="vos-row"><span class="vos-key">Surgical Gloves</span><span class="vos-val">500 Boxes</span></div>
+                        <div class="vos-row"><span class="vos-key">{{ $order->device_name ?: '-' }}</span><span class="vos-val">-</span></div>
                     </div>
                 @endif
 
@@ -249,7 +307,7 @@
             </div>
 
             <div class="vos-card vos-timeline" style="margin-top:14px;">
-                <h5>{{ __('Timeline') ?? 'Timeline' }}</h5>
+                <h5>{{ $isAr ? 'الجدول الزمني' : 'Timeline' }}</h5>
                 <div class="line">
                     @foreach($timelineSteps as $stepNo)
                         @php
@@ -258,15 +316,15 @@
                         @endphp
                         <div class="vos-step {{ $done ? 'done' : 'pending' }}">
                             <span class="dot"><i class="bi bi-check"></i></span>
-                            <div class="name">{{ timelineName($stepNo) }}</div>
-                            <div class="date">{{ $entry ? $entry->created_at->format('M j') : 'Sep 10' }}</div>
+                            <div class="name">{{ $tr(timelineName($stepNo)) }}</div>
+                            <div class="date">{{ $entry ? $entry->created_at->translatedFormat('M j') : '-' }}</div>
                         </div>
                     @endforeach
                     @if($myOffer && in_array(strtolower((string)$myOffer->status), ['3','rejected'], true))
                         <div class="vos-step done">
                             <span class="dot"><i class="bi bi-check"></i></span>
-                            <div class="name">{{ __('Offer Rejected') ?? 'Offer Rejected' }}</div>
-                            <div class="date">{{ optional($myOffer->updated_at)->format('M j') }}</div>
+                            <div class="name">{{ $tr('Offer Rejected') }}</div>
+                            <div class="date">{{ optional($myOffer->updated_at)->translatedFormat('M j') }}</div>
                         </div>
                     @endif
                 </div>
@@ -274,7 +332,7 @@
 
             @if($order->user)
                 <div class="vos-card" style="margin-top:14px;">
-                    <h5>{{ __('Contact us') ?? 'Contact us' }}</h5>
+                    <h5>{{ __('nav.contact_us') ?? ($isAr ? 'اتصل بنا' : 'Contact us') }}</h5>
                     <div class="vos-contact">
                         <div>
                             <div class="vos-contact-name">{{ $order->user->company_name ?? $order->user->name }}</div>
@@ -292,9 +350,9 @@
 
             @if($isQuotation && $myOffer)
                 <div class="vos-card" style="margin-top:14px;">
-                    <h5>{{ __('My Offer') ?? 'My Offer' }}</h5>
+                    <h5>{{ $tr('My Offer') }}</h5>
                     <div class="vos-offer">
-                        <div class="vos-offer-head">{{ __('My offer') ?? 'My offer' }}</div>
+                        <div class="vos-offer-head">{{ $tr('My Offer') }}</div>
                         <div class="vos-offer-body">
                             <div class="vos-file">
                                 <a href="{{ is_array($myOffer->files) && !empty($myOffer->files[0]) ? asset($myOffer->files[0]) : '#' }}" target="_blank">
@@ -302,10 +360,10 @@
                                 </a>
                                 <i class="bi bi-clock-history"></i>
                             </div>
-                            <div class="vos-offer-line">Total Price: {{ number_format((float)($myOffer->cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</div>
-                            <div class="vos-offer-line">Delivery Time: {{ $myOffer->delivery_time ?? 0 }} {{ __('Days') ?? 'Days' }}</div>
-                            <div class="vos-offer-line">Warranty: {{ $myOffer->warranty ?? '-' }}</div>
-                            <div class="vos-offer-line">Notes: {{ $myOffer->notes ?? '-' }}</div>
+                            <div class="vos-offer-line">{{ $isAr ? 'السعر الإجمالي' : 'Total Price' }}: {{ number_format((float)($myOffer->cost ?? 0), 0) }} {{ $isAr ? 'ر.س' : 'SAR' }}</div>
+                            <div class="vos-offer-line">{{ $isAr ? 'مدة التسليم' : 'Delivery Time' }}: {{ $myOffer->delivery_time ?? 0 }} {{ __('nav.days') ?? 'Days' }}</div>
+                            <div class="vos-offer-line">{{ __('nav.warranty') ?? ($isAr ? 'الضمان' : 'Warranty') }}: {{ $myOffer->warranty ?? '-' }}</div>
+                            <div class="vos-offer-line">{{ $isAr ? 'ملاحظات' : 'Notes' }}: {{ $myOffer->notes ?? '-' }}</div>
                         </div>
                     </div>
                 </div>
@@ -314,12 +372,12 @@
 
         <div>
             <div class="vos-card vos-payment">
-                <h5>{{ __('Payment Details') ?? 'Payment Details' }}</h5>
+                <h5>{{ $isAr ? 'تفاصيل الدفع' : 'Payment Details' }}</h5>
                 <div class="vos-rows">
-                    <div class="vos-row"><span class="vos-key">{{ __('Subtotal') ?? 'Subtotal' }}</span><span class="vos-val">{{ number_format((float)($order->items_cost ?? $order->total_before_discount ?? $order->total_cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</span></div>
-                    <div class="vos-row"><span class="vos-key">{{ __('VAT(10%)') ?? 'VAT(10%)' }}</span><span class="vos-val">{{ number_format((float)($order->vat_amount ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</span></div>
-                    <div class="vos-row"><span class="vos-key">{{ __('Delivery Fee') ?? 'Delivery Fee' }}</span><span class="vos-val">{{ number_format((float)($order->delivery_fee ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</span></div>
-                    <div class="vos-row vos-total"><span class="vos-key">{{ __('Net Total') ?? 'Net Total' }}</span><span class="vos-val">{{ number_format((float)($order->total_cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ $isAr ? 'المجموع الفرعي' : 'Subtotal' }}</span><span class="vos-val">{{ number_format((float)($order->items_cost ?? $order->total_before_discount ?? $order->total_cost ?? 0), 0) }} {{ $isAr ? 'ر.س' : 'SAR' }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ $isAr ? 'ضريبة القيمة المضافة (10%)' : 'VAT(10%)' }}</span><span class="vos-val">{{ number_format((float)($order->vat_amount ?? 0), 0) }} {{ $isAr ? 'ر.س' : 'SAR' }}</span></div>
+                    <div class="vos-row"><span class="vos-key">{{ $isAr ? 'رسوم التوصيل' : 'Delivery Fee' }}</span><span class="vos-val">{{ number_format((float)($order->delivery_fee ?? 0), 0) }} {{ $isAr ? 'ر.س' : 'SAR' }}</span></div>
+                    <div class="vos-row vos-total"><span class="vos-key">{{ $isAr ? 'الإجمالي' : 'Net Total' }}</span><span class="vos-val">{{ number_format((float)($order->total_cost ?? 0), 0) }} {{ $isAr ? 'ر.س' : 'SAR' }}</span></div>
                 </div>
             </div>
 
@@ -327,28 +385,28 @@
                 @if($isQuotation && $myOffer && in_array(strtolower((string)$myOffer->status), ['3','rejected'], true))
                     <div class="vos-alert" style="margin-bottom:12px;">
                         <i class="bi bi-exclamation-triangle"></i>
-                        {{ __('Your offer was rejected. Reason:') ?? 'Your offer was rejected. Reason:' }}
-                        {{ $myOffer->rejected_reson ?: __('Price too high. The client requests a lower price.') }}
+                        {{ $isAr ? 'تم رفض عرضك. السبب:' : 'Your offer was rejected. Reason:' }}
+                        {{ $myOffer->rejected_reson ?: ($isAr ? 'السعر مرتفع. العميل يطلب سعراً أقل.' : 'Price too high. The client requests a lower price.') }}
                     </div>
                     <div class="vos-actions">
-                        <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn-vos btn-vos-main" style="width:100%;">{{ __('Resubmit Offer') ?? 'Resubmit Offer' }}</a>
+                        <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn-vos btn-vos-main" style="width:100%;">{{ $tr('Resubmit Offer') }}</a>
                     </div>
                 @elseif($isQuotation && !$myOffer)
                     <div class="vos-actions">
-                        <a href="{{ route('vendor/orders/offer-form', $order->id) }}" class="btn-vos btn-vos-main" style="width:100%;">{{ __('Send Offer') ?? 'Send Offer' }}</a>
+                        <a href="{{ route('vendor/orders/offer-form', $order->id) }}" class="btn-vos btn-vos-main" style="width:100%;">{{ $tr('Send Offer') }}</a>
                     </div>
                 @elseif($isQuotation && $myOffer && (string)$myOffer->status === '1')
                     <div class="vos-actions">
-                        <form method="POST" action="{{ route('vendor/orders/offer-delete', $myOffer->id) }}" style="flex:1;" onsubmit="return confirm('Delete this offer?')">
+                        <form method="POST" action="{{ route('vendor/orders/offer-delete', $myOffer->id) }}" style="flex:1;" onsubmit="return confirm('{{ $tr('Delete this offer?') }}')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn-vos btn-vos-outline" style="width:100%;">{{ __('Cancel Offer') ?? 'Cancel Offer' }}</button>
+                            <button type="submit" class="btn-vos btn-vos-outline" style="width:100%;">{{ $tr('Cancel Offer') }}</button>
                         </form>
-                        <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn-vos btn-vos-main" style="flex:1;">{{ __('Edit Offer') ?? 'Edit Offer' }}</a>
+                        <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn-vos btn-vos-main" style="flex:1;">{{ $tr('Edit Offer') }}</a>
                     </div>
                 @elseif($showPendingConfirmActions)
                     <div class="vos-actions">
-                        <button type="button" class="btn-vos btn-vos-outline" style="flex:1;">{{ __('Cancel Order') ?? 'Cancel Order' }}</button>
+                        <button type="button" class="btn-vos btn-vos-outline" style="flex:1;">{{ $isAr ? 'إلغاء الطلب' : 'Cancel Order' }}</button>
                         <form method="POST" action="{{ route('user/order-timeline') }}" style="flex:1;">
                             @csrf
                             <input type="hidden" name="order_type" value="{{ encrypt((int)$order->order_type) }}">
@@ -357,7 +415,7 @@
                             @if((int)$order->order_type === 1)
                                 <input type="hidden" name="delivery_fee" value="{{ (float)($order->delivery_fee ?? 0) }}">
                             @endif
-                            <button type="submit" class="btn-vos btn-vos-main" style="width:100%;">{{ __('Confirmed') ?? 'Confirmed' }}</button>
+                            <button type="submit" class="btn-vos btn-vos-main" style="width:100%;">{{ $tr('Confirmed') }}</button>
                         </form>
                     </div>
                 @elseif($timelineActionNo)
