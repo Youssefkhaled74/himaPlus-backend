@@ -19,63 +19,28 @@
             background: #f7f9fc;
         }
 
-        .vendor-hero {
-            position: relative;
-            height: 185px;
-            width: 100%;
-            overflow: hidden;
-            margin: 0;
-            border-top: 1px solid #e8edf5;
-            border-bottom: 1px solid #e8edf5;
-        }
-
-        .vendor-hero .hero-bg {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 40%;
-        }
-
-        .vendor-hero::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(15, 23, 42, .36) 0%, rgba(15, 23, 42, .52) 100%);
-            z-index: 1;
-        }
-
-        .vendor-hero .hero-content {
-            position: relative;
-            z-index: 2;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 16px;
-            color: #fff;
-        }
-
-        .vendor-hero .hero-title {
-            font-size: 34px;
-            font-weight: 700;
-            margin: 0 0 8px;
-        }
-
-        .vendor-hero .hero-subtitle {
-            max-width: 760px;
-            margin: 0 auto;
-            font-size: 12px;
-            opacity: .92;
-            line-height: 1.6;
-        }
-
         .vendor-products-wrap {
             max-width: 1320px;
-            padding-top: 22px;
+            padding-top: 10px;
             padding-bottom: 40px;
+        }
+
+        .hp-page-head {
+            margin-bottom: 16px;
+        }
+
+        .hp-page-title {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+        }
+
+        .hp-page-subtitle {
+            margin: 6px 0 0;
+            font-size: 14px;
+            color: #64748b;
         }
 
         .hp-section-row {
@@ -234,14 +199,6 @@
         }
 
         @media (max-width: 991.98px) {
-            .vendor-hero {
-                height: 145px;
-            }
-
-            .vendor-hero .hero-title {
-                font-size: 28px;
-            }
-
             .hp-section-title {
                 font-size: 24px;
             }
@@ -262,6 +219,14 @@
                 font-size: 21px;
             }
 
+            .hp-page-title {
+                font-size: 24px;
+            }
+
+            .hp-page-subtitle {
+                font-size: 13px;
+            }
+
             .hp-search {
                 max-width: 100%;
             }
@@ -271,19 +236,7 @@
 
 @section('content')
     <main class="hp-main">
-        <section class="vendor-hero">
-            <img src="{{ asset('front/assets/images/herosectionproducts.png') }}" alt="Products Hero" class="hero-bg" />
-            <div class="hero-content">
-                <div>
-                    <!-- <h1 class="hero-title">{{ app()->getLocale() == 'ar' ? 'المنتجات' : 'Products' }}</h1> -->
-                    <!-- <p class="hero-subtitle">
-                        {{ app()->getLocale() == 'ar'
-                            ? 'اكتشف منتجات طبية عالية الجودة من موردين موثوقين.'
-                            : 'Find high-quality medical products from verified suppliers.' }}
-                    </p> -->
-                </div>
-            </div>
-        </section>
+        <section id="hero" class="hero-landing hero-home" style="background-image:url({{ asset('front/assets/images/men-girls-are-surfing.png') }});"></section>
 
         <div class="container vendor-products-wrap">
             @include('flash::message')
@@ -297,6 +250,15 @@
                     </ul>
                 </div>
             @endif
+
+            <div class="hp-page-head">
+                <h1 class="hp-page-title">{{ app()->getLocale() == 'ar' ? 'إدارة المنتجات' : 'Product Management' }}</h1>
+                <p class="hp-page-subtitle">
+                    {{ app()->getLocale() == 'ar'
+                        ? 'تابع منتجاتك بسهولة، وحدث الأسعار والمخزون بسرعة من لوحة واحدة.'
+                        : 'Manage your catalog efficiently and keep pricing and stock details up to date.' }}
+                </p>
+            </div>
 
             <div class="hp-section-row">
                 <h2 class="hp-section-title">{{ app()->getLocale() == 'ar' ? 'منتجاتنا' : 'Our Products' }}</h2>
@@ -329,7 +291,16 @@
                             <a href="{{ route('vendor/products/show', $product->id) }}" class="product-card">
                                 <div class="product-thumb">
                                     @if(!empty($product->img))
-                                        <img src="{{ asset('storage/' . $product->img) }}" alt="{{ $product->name }}">
+                                        @php
+                                            $imgPath = ltrim((string) $product->img, '/');
+                                            if (!str_starts_with($imgPath, 'http') && !str_contains($imgPath, '/')) {
+                                                $imgPath = 'products/' . $imgPath;
+                                            }
+                                            $imgUrl = str_starts_with((string) $product->img, 'http')
+                                                ? (string) $product->img
+                                                : asset('storage/' . $imgPath);
+                                        @endphp
+                                        <img src="{{ $imgUrl }}" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}';">
                                     @else
                                         <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
                                             <i class="bi bi-image fs-1"></i>

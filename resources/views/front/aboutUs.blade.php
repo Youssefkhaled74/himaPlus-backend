@@ -14,22 +14,42 @@
         font-size: 20px;
     }
     .custom-container {
+        position: relative;
+        overflow: hidden;
         padding-left: 9% !important;
         padding-right: 9% !important;
+        padding-top: 4% !important;
         padding-bottom: 8% !important;
+    }
+    .about-intro-row,
+    .about-feature-row {
+        position: relative;
+        z-index: 2;
+    }
+    .about-text-col {
+        margin-top: 3rem !important;
+    }
+    .about-image-stack {
+        margin-top: 3rem;
     }
     .text-muted-soft {
         color: #6f7d92 !important;
-        font-size: 22px;
+        font-size: 20px;
+        line-height: 1.55;
     }
     .hp-img-vert {
         width: 345px;
         height: 520px;
+        border-radius: 22px;
+        object-fit: cover;
     }
     .side-img {
         position: absolute;
         left: 0;
         bottom: 10px;
+        z-index: 0;
+        opacity: .85;
+        pointer-events: none;
     }
     .line-img-1 {
         position: absolute;
@@ -38,6 +58,9 @@
         top: 38%;
         width: 100%;
         height: 76%;
+        z-index: 0;
+        opacity: .42;
+        pointer-events: none;
     }
     .line-img-2 {
         position: absolute;
@@ -45,6 +68,9 @@
         width: 188%;
         height: -webkit-fill-available;
         top: 5%;
+        z-index: 0;
+        opacity: .42;
+        pointer-events: none;
     }
     .line-img-3 {
         position: absolute;
@@ -52,6 +78,9 @@
         width: 100%;
         height: -webkit-fill-available;
         top: 26%;
+        z-index: 0;
+        opacity: .42;
+        pointer-events: none;
     }
     .line-img-4 {
         position: absolute;
@@ -59,6 +88,9 @@
         top: 0;
         right: 0;
         height: 34%;
+        z-index: 0;
+        opacity: .42;
+        pointer-events: none;
     }
     .line-img-5 {
         position: absolute;
@@ -66,6 +98,32 @@
         top: 0;
         right: 0;
         height: 93%;
+        z-index: 0;
+        opacity: .42;
+        pointer-events: none;
+    }
+    @media (max-width: 991.98px) {
+        .about-text-col {
+            margin-top: 0 !important;
+        }
+        .about-image-stack {
+            margin-top: 0;
+            justify-content: center !important;
+        }
+        .hp-img-vert {
+            width: 100%;
+            max-width: 320px;
+            height: 400px;
+        }
+        .text-muted-soft {
+            font-size: 18px;
+        }
+    }
+    @media (max-width: 575.98px) {
+        .text-muted-soft {
+            font-size: 16px;
+            line-height: 1.6;
+        }
     }
 </style>
 @endsection
@@ -89,8 +147,8 @@
 
         <section class="hp-curves" dir="ltr">
             <div class="custom-container">
-                <div class="row g-4 align-items-start">
-                    <div class="col-lg-6" style="margin-top: 11%;"  data-aos-once="false" data-aos-mirror="true" data-aos="fade-right">
+                <div class="row g-4 align-items-start about-intro-row">
+                    <div class="col-lg-6 about-text-col" data-aos-once="false" data-aos-mirror="true" data-aos="fade-right">
                         {{-- <h4 class="fw-bold mb-3"><span class="text-primary">Who</span> we <span class="hp-green">are</span></h4> --}}
                         <h4 class="fw-bold mb-3"><span class="" style="color: #287d6c; font-size: 36px;">{{ __('about.who_we_are') }}</span></h4>
                         <p class="text-muted-soft">
@@ -103,8 +161,8 @@
                             {{ __('about.who_p3') }}
                         </p>
                     </div>
-                    <div class="col-lg-6"  data-aos-once="false" data-aos-mirror="true" data-aos="fade-left">
-                        <div class="d-flex gap-3 justify-content-lg-end" style="margin-top: 11%;">
+                    <div class="col-lg-6" data-aos-once="false" data-aos-mirror="true" data-aos="fade-left">
+                        <div class="d-flex gap-3 justify-content-lg-end about-image-stack">
                             <img class="hp-img-vert" src="{{ asset('front/assets/images/close-up-individual-checking-delivery-list 1.png') }}" alt="Medical facility">
                             <img style="margin-top: 10% !important;" class="hp-img-vert second-img" src="{{ asset('front/assets/images/healthcare-worker-protective-gear-handling-medical-supplies-packaging-healthcare-facility-focus-safety-precision 1.png') }}" alt="Team collaboration">
                         </div>
@@ -117,7 +175,7 @@
                 <img class="line-img-2" src="{{ asset('front/assets/images/Vector 3.png') }}" alt="Medical facility">
                 <img class="line-img-1" src="{{ asset('front/assets/images/Vector 4.png') }}" alt="Medical facility">
                 <img class="side-img" src="{{ asset('front/assets/images/Group 1000002405.png') }}" alt="Medical facility">
-                <div class="row g-3 g-lg-4 mt-4" style="margin-top: 10% !important;" data-aos-once="false" data-aos-mirror="true" data-aos="zoom-in" data-aos-delay="200">
+                <div class="row g-3 g-lg-4 mt-4 about-feature-row" style="margin-top: 6% !important;" data-aos-once="false" data-aos-mirror="true" data-aos="zoom-in" data-aos-delay="200">
                     <div class="col-lg-6">
                         <div class="hp-feature card h-100" style="padding: 12px;" dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
                             <div class="card-body p-4 d-flex gap-3">

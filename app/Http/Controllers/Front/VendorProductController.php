@@ -240,6 +240,11 @@ class VendorProductController extends Controller
 
             // If looks like a path, keep it
             if (preg_match('/^[A-Za-z0-9_\-\/\.]+\.(?:png|jpe?g|gif|webp)$/i', $s)) {
+                // Legacy rows may store only filename (e.g. seed-product-1.jpg).
+                // Normalize to products/filename to match storage structure.
+                if (!str_contains($s, '/')) {
+                    $s = 'products/' . ltrim($s, '/');
+                }
                 $flatten[] = $s;
             }
         };
@@ -334,6 +339,9 @@ class VendorProductController extends Controller
             
             // Handle existing + removed + newly uploaded images.
             $imagePaths = $this->normalizeImagePaths($product->imgs);
+            if (!empty($product->img) && !in_array($product->img, $imagePaths, true)) {
+                array_unshift($imagePaths, $product->img);
+            }
 
             if ($request->filled('removed_images')) {
                 $removedIndexes = array_filter(array_map('intval', explode(',', $request->removed_images)), function ($idx) {
@@ -352,7 +360,11 @@ class VendorProductController extends Controller
                 $imagePaths = array_values($imagePaths);
 
                 foreach ($filesToDelete as $file) {
-                    Storage::disk('public')->delete(ltrim((string) $file, '/'));
+                    $normalized = ltrim((string) $file, '/');
+                    Storage::disk('public')->delete($normalized);
+                    if (!str_contains($normalized, '/')) {
+                        Storage::disk('public')->delete('products/' . $normalized);
+                    }
                 }
             }
 

@@ -48,6 +48,7 @@
     .image-gallery { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
     .image-item { position: relative; display:inline-block; }
     .image-item .close-btn { position:absolute; top:-8px; right:-8px; background:#ef4444; color:#fff; border:none; border-radius:999px; width:26px; height:26px; padding:0; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .image-main-badge { position:absolute; bottom:6px; left:6px; background:#0d6efd; color:#fff; border-radius:999px; font-size:10px; font-weight:700; padding:2px 8px; }
 
     .hp-btn-gradient { height:46px; border-radius:12px; font-weight:700; font-size:14px; display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:0 26px; border:0; color:#fff !important; background: linear-gradient(90deg,#0b3a82 0%,#0e5bd8 55%,#10b981 120%); box-shadow:0 12px 26px rgba(14,91,216,.18); }
 
@@ -150,14 +151,31 @@
                         </div>
 
                         {{-- Existing Images --}}
-                        @php $existingImages = is_array($product->imgs) ? $product->imgs : []; @endphp
+                        @php
+                            $existingImages = is_array($product->imgs) ? $product->imgs : [];
+                            if (!empty($product->img)) {
+                                $existingImages = array_values(array_filter($existingImages, fn($p) => (string) $p !== (string) $product->img));
+                                array_unshift($existingImages, $product->img);
+                            }
+                            $placeholderImage = asset('front/assets/images/emptyproducts.png');
+                        @endphp
                         @if(count($existingImages) > 0)
                         <div class="mb-3">
                             <label class="form-label fw-semibold">{{ app()->getLocale() == 'ar' ? 'الصور الحالية' : 'Current Images' }}</label>
                             <div class="image-gallery">
                                 @foreach($existingImages as $index => $img)
+                                @php
+                                    $imgPath = ltrim((string) $img, '/');
+                                    if (!str_starts_with($imgPath, 'http') && !str_contains($imgPath, '/')) {
+                                        $imgPath = 'products/' . $imgPath;
+                                    }
+                                    $imgUrl = str_starts_with((string) $img, 'http') ? $img : asset('storage/' . $imgPath);
+                                @endphp
                                 <div class="image-item">
-                                    <img src="{{ (str_starts_with($img, 'http') ? $img : asset('storage/' . ltrim($img, '/'))) }}" class="preview-image" alt="product">
+                                    <img src="{{ $imgUrl }}" class="preview-image" alt="product" onerror="this.onerror=null;this.src='{{ $placeholderImage }}';">
+                                    @if($index === 0)
+                                        <span class="image-main-badge">{{ app()->getLocale() == 'ar' ? 'رئيسية' : 'Main' }}</span>
+                                    @endif
                                     <button type="button" class="close-btn" onclick="removeExistingImage({{ $index }}, this)"><i class="bi bi-x"></i></button>
                                 </div>
                                 @endforeach
@@ -221,7 +239,7 @@
 </main>
 @endsection
 
-@section('scripts')
+@section('script')
 <script>
     // Image preview for new uploads
     document.getElementById('images')?.addEventListener('change', function(e) {
@@ -258,7 +276,9 @@
     function removeExistingImage(index, btn) {
         const removed = document.getElementById('removedImages');
         const currentValue = removed.value ? removed.value.split(',') : [];
-        currentValue.push(index);
+        if (!currentValue.includes(String(index))) {
+            currentValue.push(String(index));
+        }
         removed.value = currentValue.join(',');
         btn.closest('.image-item').remove();
     }

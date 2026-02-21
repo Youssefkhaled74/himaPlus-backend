@@ -283,10 +283,19 @@
                         $firstImg = null;
                         if(isset($images) && count($images)) $firstImg = $images[0];
                         elseif(!empty($product->img)) $firstImg = $product->img;
+
+                        $toStorageUrl = function ($path) {
+                            $p = ltrim((string) $path, '/');
+                            if (!str_starts_with($p, 'http') && !str_contains($p, '/')) {
+                                $p = 'products/' . $p;
+                            }
+                            return str_starts_with((string) $path, 'http') ? (string) $path : asset('storage/' . $p);
+                        };
+                        $placeholderImage = asset('front/assets/images/emptyproducts.png');
                     @endphp
 
                     @if($firstImg)
-                        <img id="mainPreview" src="{{ asset('storage/' . $firstImg) }}" alt="{{ $product->name }}">
+                        <img id="mainPreview" src="{{ $toStorageUrl($firstImg) }}" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ $placeholderImage }}';">
                     @else
                         <div class="text-muted">
                             <i class="bi bi-image fs-1"></i>
@@ -303,8 +312,8 @@
                 @if(count($thumbs))
                     <div class="thumbs" id="thumbsWrap">
                         @foreach($thumbs as $idx => $img)
-                            <div class="thumb {{ $idx==0 ? 'active' : '' }}" data-src="{{ asset('storage/' . $img) }}">
-                                <img src="{{ asset('storage/' . $img) }}" alt="thumb">
+                            <div class="thumb {{ $idx==0 ? 'active' : '' }}" data-src="{{ $toStorageUrl($img) }}">
+                                <img src="{{ $toStorageUrl($img) }}" alt="thumb" onerror="this.onerror=null;this.src='{{ $placeholderImage }}';">
                             </div>
                         @endforeach
                     </div>
