@@ -16,8 +16,8 @@
 
 
 -- Dumping database structure for hemaplus-database
-CREATE DATABASE IF NOT EXISTS `hemaplus-database` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-USE `hemaplus-database`;
+-- CREATE DATABASE IF NOT EXISTS `hemaplus-database` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+-- USE `hemaplus-database`;
 
 -- Dumping structure for table hemaplus-database.admins
 CREATE TABLE IF NOT EXISTS `admins` (
