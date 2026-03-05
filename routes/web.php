@@ -51,18 +51,18 @@ Route::group(['middleware' => ['limitReq']], function(){
     
     Route::get('/user/login', [AuthController::class, 'loginForm'])->name('login');
     Route::get('/user/login', [AuthController::class, 'loginForm'])->name('user/loginForm');
-    Route::post('/user/check/login', [AuthController::class, 'login'])->name('user/check/login');
+    Route::post('/user/check/login', [AuthController::class, 'login'])->middleware('throttle:auth-login')->name('user/check/login');
     Route::post('user/register/store', [AuthController::class, 'register'])->name('user/register/store');
     
     Route::get('user/account-check/{id?}', [AuthController::class, 'accountCheckForm'])->name('user/account-check/form');
-    Route::post('account-check/{id?}', [AuthController::class, 'accountCheck'])->name('user/account-check');
-    Route::get('regenerate-code/{id?}', [AuthController::class, 'regenerateCode'])->name('user/regenerate-code');
+    Route::post('account-check/{id?}', [AuthController::class, 'accountCheck'])->middleware('throttle:auth-otp')->name('user/account-check');
+    Route::get('regenerate-code/{id?}', [AuthController::class, 'regenerateCode'])->middleware('throttle:auth-otp')->name('user/regenerate-code');
     Route::get('check-token', [AuthController::class, 'checkToken']);
 
     Route::get('send-reset-code', [AuthController::class, 'sendResetCodePasswordForm'])->name('user/send-reset-code/form');
-    Route::post('send-reset-code', [AuthController::class, 'sendResetCodePassword'])->name('user/send-reset-code/check');
+    Route::post('send-reset-code', [AuthController::class, 'sendResetCodePassword'])->middleware('throttle:auth-reset')->name('user/send-reset-code/check');
     Route::get('reset/{id?}', [AuthController::class, 'resetPasswordForm'])->name('user/reset-password/form');
-    Route::post('reset/{id?}', [AuthController::class, 'resetPassword'])->name('user/reset-password');
+    Route::post('reset/{id?}', [AuthController::class, 'resetPassword'])->middleware('throttle:auth-reset')->name('user/reset-password');
     
     Route::group(['middleware' => ['auth']], function(){
 
@@ -137,7 +137,7 @@ Route::group(['middleware' => ['limitReq']], function(){
 Route::group(['prefix' => 'vendor', 'middleware' => ['limitReq']], function() {
     // Login
     Route::get('/login', [VendorAuthController::class, 'loginForm'])->name('vendor/login');
-    Route::post('/check/login', [VendorAuthController::class, 'login'])->name('vendor/check/login');
+    Route::post('/check/login', [VendorAuthController::class, 'login'])->middleware('throttle:auth-login')->name('vendor/check/login');
     
     // Register
     Route::get('/register', [VendorAuthController::class, 'registerForm'])->name('vendor/register/form');
@@ -145,14 +145,14 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['limitReq']], function() {
     
     // Account Verification
     Route::get('/account-check/{id?}', [VendorAuthController::class, 'accountCheckForm'])->name('vendor/account-check/form');
-    Route::post('/account-check/{id?}', [VendorAuthController::class, 'accountCheck'])->name('vendor/account-check');
-    Route::post('/regenerate-code/{id?}', [VendorAuthController::class, 'regenerateCode'])->name('vendor/regenerate-code');
+    Route::post('/account-check/{id?}', [VendorAuthController::class, 'accountCheck'])->middleware('throttle:auth-otp')->name('vendor/account-check');
+    Route::post('/regenerate-code/{id?}', [VendorAuthController::class, 'regenerateCode'])->middleware('throttle:auth-otp')->name('vendor/regenerate-code');
     
     // Password Reset
     Route::get('/send-reset-code', [VendorAuthController::class, 'sendResetCodePasswordForm'])->name('vendor/send-reset-code/form');
-    Route::post('/send-reset-code', [VendorAuthController::class, 'sendResetCodePassword'])->name('vendor/send-reset-code/check');
+    Route::post('/send-reset-code', [VendorAuthController::class, 'sendResetCodePassword'])->middleware('throttle:auth-reset')->name('vendor/send-reset-code/check');
     Route::get('/reset/{id?}', [VendorAuthController::class, 'resetPasswordForm'])->name('vendor/reset-password/form');
-    Route::post('/reset/{id?}', [VendorAuthController::class, 'resetPassword'])->name('vendor/reset-password');
+    Route::post('/reset/{id?}', [VendorAuthController::class, 'resetPassword'])->middleware('throttle:auth-reset')->name('vendor/reset-password');
 });
 
 // Vendor Protected Routes
@@ -202,4 +202,3 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['auth', 'vendorCheck']], fu
     // Analytics (Phase 3)
     Route::get('/analytics', [VendorAnalyticsController::class, 'index'])->name('vendor/analytics');
 });
-

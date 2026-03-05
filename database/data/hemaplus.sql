@@ -430,9 +430,9 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `batch` int NOT NULL,
   `report_id` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=384 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=385 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table hemaplus-database.migrations: ~30 rows (approximately)
+-- Dumping data for table hemaplus-database.migrations: ~31 rows (approximately)
 DELETE FROM `migrations`;
 INSERT INTO `migrations` (`id`, `migration`, `batch`, `report_id`) VALUES
 	(354, '2014_10_12_000000_create_users_table', 1, 1),
@@ -464,7 +464,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`, `report_id`) VALUES
 	(380, '2025_11_07_000001_create_conversations_table', 1, 1),
 	(381, '2025_11_07_000002_create_messages_table', 1, 1),
 	(382, '2025_11_07_000004_simplify_messages_table', 1, 1),
-	(383, '2026_02_02_094719_add_notification_fields_to_notifications_table', 2, 1);
+	(383, '2026_02_02_094719_add_notification_fields_to_notifications_table', 2, 1),
+	(384, '2026_03_02_100000_harden_auth_security_on_users_table', 3, 1);
 
 -- Dumping structure for table hemaplus-database.notifications
 CREATE TABLE IF NOT EXISTS `notifications` (
@@ -1359,6 +1360,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `img` varchar(1255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fcm_token` varchar(1255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `code` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `verification_code_hash` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `verification_code_expires_at` timestamp NULL DEFAULT NULL,
+  `verification_code_target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `verification_code_channel` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reset_code_hash` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reset_code_expires_at` timestamp NULL DEFAULT NULL,
+  `reset_code_target` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reset_code_channel` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `lang` varchar(25) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_type` tinyint DEFAULT NULL COMMENT '1 => clients, 2 => providers, 3 => logistics',
   `deleted_at` datetime DEFAULT NULL,
@@ -1400,3 +1409,4 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+

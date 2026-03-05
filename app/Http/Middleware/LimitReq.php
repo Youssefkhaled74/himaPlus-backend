@@ -17,9 +17,15 @@ class LimitReq
      */
     public function handle(Request $request, Closure $next)
     {
-
-        $executed = RateLimiter::attempt('send-message:', 100, function() {});
-        if(! $executed){
+        $key = implode('|', [
+            'limitReq',
+            $request->ip(),
+            $request->method(),
+            $request->route()?->uri() ?? 'unknown',
+        ]);
+        $executed = RateLimiter::attempt($key, 300, function (): void {
+        }, 60);
+        if (! $executed) {
             abort(429, 'Too Many Requests');
         }
         return $next($request);

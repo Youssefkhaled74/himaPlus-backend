@@ -29,14 +29,14 @@ Route::group(['middleware' => ['api', 'limitReq']], function ($router) {
 
     Route::group(['prefix' => 'auth'], function ($router) {
         Route::post('register', [AuthController::class, 'register']);
-        Route::post('login', [AuthController::class, 'login']);
-        Route::post('regenerate-code', [AuthController::class, 'regenerateCode']);
+        Route::post('login', [AuthController::class, 'login'])->middleware('throttle:auth-login');
+        Route::post('regenerate-code', [AuthController::class, 'regenerateCode'])->middleware('throttle:auth-otp');
         Route::post('mobile-check', [AuthController::class, 'mobileCheck']);
         Route::get('check-token', [AuthController::class, 'checkToken']);
 
-        Route::post('send-reset-code', [AuthController::class, 'sendResetCodePassword']);
-        Route::post('verify-reset-code', [AuthController::class, 'verifyResetCodePassword']);
-        Route::post('reset', [AuthController::class, 'resetPassword']);
+        Route::post('send-reset-code', [AuthController::class, 'sendResetCodePassword'])->middleware('throttle:auth-reset');
+        Route::post('verify-reset-code', [AuthController::class, 'verifyResetCodePassword'])->middleware('throttle:auth-otp');
+        Route::post('reset', [AuthController::class, 'resetPassword'])->middleware('throttle:auth-reset');
     });
 
     Route::group(['middleware' => 'userActivation'], function ($router) {

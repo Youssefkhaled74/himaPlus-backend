@@ -72,6 +72,10 @@ class OrderController extends Controller
     
     public function randomOrders(Request $request, $offset, $limit)
     {
+        $user = auth()->user();
+        if ((int) $user->user_type !== 2) {
+            return responseJson(403, "forbidden");
+        }
         $orders = $this->order::whereNull('provider_id')
         ->when($request->orders_type, function($q) use($request){
             $q->where('order_type', $request->orders_type);
@@ -98,9 +102,15 @@ class OrderController extends Controller
 
     public function order($id)
     {
-        $order = $this->order->where('id', $id)->with([
+        $user = auth()->user();
+        $order = $this->order->where('id', $id)->where(function ($q) use ($user) {
+            $q->where('user_id', $user->id)->orWhere('provider_id', $user->id);
+        })->with([
             'items.product', 'timeline', 'provider', 'user', 'offer.provider', 'offers.provider', 'partial_receive'
         ])->first();
+        if (is_null($order)) {
+            return responseJson(404, "not found");
+        }
         return responseJson(200, "success", $order);
     }
 
@@ -625,6 +635,9 @@ class OrderController extends Controller
             // 2 => accepted, 3 => rejected
             DB::beginTransaction();
             $offer = $this->offer->where('id', $request->offer_id)->with(['order', 'provider'])->first();
+            if (is_null($offer) || is_null($offer->order) || (int) $offer->order->user_id !== (int) $user->id) {
+                return responseJson(403, "forbidden");
+            }
             if ($offer->status == 1) {
 
                 $action = (int)$request->action;
@@ -696,6 +709,9 @@ class OrderController extends Controller
         }
         try{
             $user = auth()->user();
+            if ((int) $user->user_type !== 2) {
+                return responseJson(403, "forbidden");
+            }
             
             DB::beginTransaction();
             $offer = $this->offer->create([
@@ -740,6 +756,9 @@ class OrderController extends Controller
         }
         try{
             $user = auth()->user();
+            if ((int) $user->user_type !== 2) {
+                return responseJson(403, "forbidden");
+            }
             
             DB::beginTransaction();
             $offer = $this->offer->where('provider_id', $user->id)->where('id', $id)->first();
@@ -766,8 +785,12 @@ class OrderController extends Controller
     public function deleteOffer($id)
     {
         try{
-            
-            $offer = $this->offer->where('provider_id', auth()->user()->id)->where('id', $id)->first();
+            $user = auth()->user();
+            if ((int) $user->user_type !== 2) {
+                return responseJson(403, "forbidden");
+            }
+
+            $offer = $this->offer->where('provider_id', $user->id)->where('id', $id)->first();
             if((int)$offer->status == 1){
                 $offer->delete();
             }else {

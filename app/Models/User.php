@@ -3,13 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -36,6 +37,14 @@ class User extends Authenticatable implements JWTSubject
         'mobile_verified_at',
         'email_verified_at',
         'lang',
+        'verification_code_hash',
+        'verification_code_expires_at',
+        'verification_code_target',
+        'verification_code_channel',
+        'reset_code_hash',
+        'reset_code_expires_at',
+        'reset_code_target',
+        'reset_code_channel',
     ];
 
     /**
@@ -46,6 +55,8 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'verification_code_hash',
+        'reset_code_hash',
     ];
 
     public function getJWTIdentifier()
@@ -65,6 +76,9 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'mobile_verified_at' => 'datetime',
+        'verification_code_expires_at' => 'datetime',
+        'reset_code_expires_at' => 'datetime',
     ];
     
 	public function scopeGetProviders($query){
