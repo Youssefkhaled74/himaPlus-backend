@@ -67,8 +67,9 @@ class Kernel extends HttpKernel
       
         'limitReq' => \App\Http\Middleware\LimitReq::class,
         'adminLogin' => \App\Http\Middleware\AdminLogin::class,
+        'adminSuperOnly' => \App\Http\Middleware\AdminSuperOnly::class,
+        'adminActivityLog' => \App\Http\Middleware\AdminActivityLog::class,
         'userActivation' => \App\Http\Middleware\UserActivation::class,
         'vendorCheck' => \App\Http\Middleware\VendorCheck::class,
     ];
 }
-

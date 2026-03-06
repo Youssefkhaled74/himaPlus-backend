@@ -23,10 +23,19 @@ class UserUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('id'); // get from route
-        // $id = $this->request->get('user_id'); // get from in blade
+        $id = $this->route('id');
         return [
-            'name' => 'required|string|max:254|unique:users,name,' . $id
+            'name' => 'required|string|min:2|max:255',
+            'branch' => 'nullable|string|max:100',
+            'email' => 'required|string|max:255|unique:users,email,' . $id,
+            'mobile' => 'required|string|max:255|unique:users,mobile,' . $id,
+            'file' => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
+            'password' => 'nullable|confirmed|max:30',
+            'tax_number' => 'nullable|string|max:30',
+            'cr_number' => 'nullable|string|max:30',
+            'cr_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'location' => 'nullable|string|max:255',
+            'user_type' => 'required|in:1,2,3',
         ];
     }
 }

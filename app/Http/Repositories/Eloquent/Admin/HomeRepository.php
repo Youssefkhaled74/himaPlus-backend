@@ -3,9 +3,9 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Http\ServicesLayer\Admin\HomeServices\HomeService;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 
-class HomeRepository extends AbstractRepository
+class HomeRepository extends BaseAdminRepository
 {
     protected $homeService;
 

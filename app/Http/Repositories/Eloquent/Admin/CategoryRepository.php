@@ -3,9 +3,9 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\Category;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 
-class CategoryRepository extends AbstractRepository
+class CategoryRepository extends BaseAdminRepository
 {
 
     protected $model;

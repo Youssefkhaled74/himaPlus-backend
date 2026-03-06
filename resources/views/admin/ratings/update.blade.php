@@ -1,11 +1,9 @@
 @extends('layouts.admin.home')
 
-<!-- title page -->
 @section('title')
     <title>Ratings</title>
 @endsection
 
-<!-- custom css -->
 @section('css')
 @endsection
 
@@ -17,8 +15,6 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent" style="direction: ltr;">
-                        {{-- <h4 class="mb-sm-0">Team</h4> --}}
-
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"></li>
@@ -47,26 +43,40 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Rating Update</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">Update Rating</h4>
                         </div>
                         <div class="card-body">
                             @isset($rating)
-                                <form role="form" action="{{url(route('admin/ratings/update', $rating->id))}}" method="post" enctype="multipart/form-data">
-                                    <div class="live-preview">
-                                        @csrf
-                                        <div class="row gy-4">
-
-                                            <!-- <div class="col-xxl-6 col-md-6">
-                                                <div class="form-floating">
-                                                    <input name="name" type="text" class="form-control" id="namefloatingInput" placeholder="name" value="{{$rating->name}}">
-                                                    <label for="namefloatingInput">name <span class="text-danger">*</span></label>
-                                                </div>
-                                            </div> -->
-
-                                            <div class="col-12">
-                                                <button class="btn btn-primary" type="submit">Submit form</button>
+                                <form role="form" action="{{url(route('admin/ratings/update', $rating->id))}}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="user_id" value="{{ $rating->user_id }}">
+                                    <div class="row gy-4">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" value="{{ $rating->user?->name ?? '-' }}" placeholder="user" readonly>
+                                                <label>User</label>
                                             </div>
-
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" value="{{ $rating->for }} - {{ $rating->forable?->name ?? '-' }}" placeholder="for" readonly>
+                                                <label>For</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input name="rating" type="number" step="0.5" min="1" max="5" class="form-control" id="ratingfloatingInput" placeholder="rating" value="{{ old('rating', $rating->rating) }}">
+                                                <label for="ratingfloatingInput">Rating <span class="text-danger">*</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="commentTextarea">Comment</label>
+                                                <textarea name="comment" id="commentTextarea" class="form-control" rows="5">{{ old('comment', $rating->comment) }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button class="btn btn-primary" type="submit">Save Changes</button>
                                         </div>
                                     </div>
                                 </form>
@@ -81,7 +91,6 @@
 
 @endsection
 
-<!-- custom js -->
 @section('script')
 <script>
     (function () {

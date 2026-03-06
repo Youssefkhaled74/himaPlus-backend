@@ -19,7 +19,7 @@
   display:inline-block;
 }
 
-/* تحسين شكل الجدول */
+/* Improve table hover state */
 .table tbody tr:hover { background:#f8fafc; }
 
 </style>
@@ -127,6 +127,11 @@
                                                                             </button>
                                                                             <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
                                                                                 <li>
+                                                                                    <a href="{{ route('admin/users/edit', $record->id) }}" class="dropdown-item edit-item-btn">
+                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li>
                                                                                     <button class="dropdown-item edit-item-btn btn btn-sm btn-outline-primary show-user" data-bs-toggle="modal" data-bs-target="#userShowModal"
                                                                                         data-id="{{ $record->id }}"
                                                                                         data-name="{{ $record->name }}"
@@ -209,7 +214,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/users/delete'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/users/delete'))}}" method="post">
                                                                                                 
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
@@ -234,7 +239,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabel"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/users/activate'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/users/activate'))}}" method="post">
                                                                                                 
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
@@ -265,9 +270,9 @@
                                                                         <img id="uAvatar" class="rounded-circle shadow-sm d-none" style="width:96px;height:96px;object-fit:cover" src="" alt="">
                                                                     </div>
                                                                     <div class="col-md-9">
-                                                                        <div class="text-muted small mt-1">ID: <span id="uId">—</span></div>
+                                                                        <div class="text-muted small mt-1">ID: <span id="uId">-</span></div>
                                                                         <div class="d-flex flex-wrap gap-2 align-items-center">
-                                                                            <h4 class="m-0" id="uName">—</h4>
+                                                                            <h4 class="m-0" id="uName">-</h4>
                                                                             <span id="uTypeBadge" class="badge rounded-pill px-3 py-2"></span>
                                                                         </div>
                                                                     </div>
@@ -277,26 +282,26 @@
                                                                     <div class="col-md-6">
                                                                         <ul class="list-group small shadow-sm rounded-3" style="padding: 0;">
                                                                             <li class="list-group-item d-flex justify-content-between">
-                                                                                <span class="text-muted">Email</span><span id="uEmail" class="fw-semibold">—</span>
+                                                                                <span class="text-muted">Email</span><span id="uEmail" class="fw-semibold">-</span>
                                                                             </li>
                                                                             <li class="list-group-item d-flex justify-content-between">
-                                                                                <span class="text-muted">Mobile</span><span id="uMobile" class="fw-semibold">—</span>
+                                                                                <span class="text-muted">Mobile</span><span id="uMobile" class="fw-semibold">-</span>
                                                                             </li>
                                                                             <li class="list-group-item d-flex justify-content-between">
-                                                                                <span class="text-muted">Branch</span><span id="uBranch" class="fw-semibold">—</span>
+                                                                                <span class="text-muted">Branch</span><span id="uBranch" class="fw-semibold">-</span>
                                                                             </li>
                                                                             <li class="list-group-item d-flex justify-content-between">
-                                                                                <span class="text-muted">Location</span><span id="uLocation" class="fw-semibold">—</span>
+                                                                                <span class="text-muted">Location</span><span id="uLocation" class="fw-semibold">-</span>
                                                                             </li>
                                                                         </ul>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <ul class="list-group small shadow-sm rounded-3" style="padding: 0;">
                                                                             <li class="list-group-item d-flex justify-content-between">
-                                                                                <span class="text-muted">Tax Number</span><span id="uTax" class="fw-semibold">—</span>
+                                                                                <span class="text-muted">Tax Number</span><span id="uTax" class="fw-semibold">-</span>
                                                                             </li>
                                                                             <li class="list-group-item d-flex justify-content-between">
-                                                                                <span class="text-muted">CR Number</span><span id="uCrNumber" class="fw-semibold">—</span>
+                                                                                <span class="text-muted">CR Number</span><span id="uCrNumber" class="fw-semibold">-</span>
                                                                             </li>
                                                                             <li class="list-group-item d-flex justify-content-between">
                                                                                 <span class="text-muted">CR Document</span>
@@ -352,16 +357,16 @@
             var $m   = $(this);
             var $btn = $(e.relatedTarget);
 
-            var id       = $btn.data('id') || '—';
-            var name     = $btn.data('name') || '—';
-            var email    = $btn.data('email') || '—';
-            var mobile   = $btn.data('mobile') || '—';
+            var id       = $btn.data('id') || '-';
+            var name     = $btn.data('name') || '-';
+            var email    = $btn.data('email') || '-';
+            var mobile   = $btn.data('mobile') || '-';
             var type     = String($btn.data('user-type') || '');
-            var tax      = $btn.data('tax') || '—';
-            var branch   = $btn.data('branch') || '—';
-            var crNum    = $btn.data('cr-number') || '—';
+            var tax      = $btn.data('tax') || '-';
+            var branch   = $btn.data('branch') || '-';
+            var crNum    = $btn.data('cr-number') || '-';
             var crDoc    = $btn.data('cr-doc') || '';
-            var location = $btn.data('location') || '—';
+            var location = $btn.data('location') || '-';
             var img      = $btn.data('img') || '';
 
             $m.find('#uId').text(id);
@@ -393,3 +398,4 @@
 
     </script>
 @endsection
+

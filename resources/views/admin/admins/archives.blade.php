@@ -1,4 +1,4 @@
-@extends('layouts.admin.home')
+﻿@extends('layouts.admin.home')
 
 <!-- title page -->
 @section('title')
@@ -61,7 +61,7 @@
                                             <label>
                                                 <div class="form-group">
                                                     <select class="form-control data_search" name="job_id" id="jobs" aria-controls="dataTables-example" style="width: 220px">
-                                                        <option value="">الوظائف</option>
+                                                        <option value="">Ø§Ù„ÙˆØ¸Ø§Ø¦Ù</option>
                                                     </select>
                                                 </div>
                                             </label>
@@ -138,7 +138,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabell">Back Confirmation</h5>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form role="form" action="{{url(route('admin/admins/back'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/admins/back'))}}" method="post">
                                                                     {{ csrf_field() }}
                                                                     <p>Are You Sure To Update This Record ?</p>
                                                                     <input id="back_record_id" name="record_id" type="hidden">
@@ -294,3 +294,4 @@
         }
     </script>
 @endsection
+

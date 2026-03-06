@@ -3,9 +3,10 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\Admin;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
+use Illuminate\Support\Facades\Hash;
 
-class AdminRepository extends AbstractRepository
+class AdminRepository extends BaseAdminRepository
 {
 
     protected $model;
@@ -59,3 +60,4 @@ class AdminRepository extends AbstractRepository
 
 
 }
+

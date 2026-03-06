@@ -3,9 +3,9 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\Contact;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 
-class ContactRepository extends AbstractRepository
+class ContactRepository extends BaseAdminRepository
 {
 
     protected $model;

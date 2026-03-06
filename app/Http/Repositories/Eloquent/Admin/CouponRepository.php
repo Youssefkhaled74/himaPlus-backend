@@ -3,9 +3,9 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\Coupon;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 
-class CouponRepository extends AbstractRepository
+class CouponRepository extends BaseAdminRepository
 {
 
     protected $model;

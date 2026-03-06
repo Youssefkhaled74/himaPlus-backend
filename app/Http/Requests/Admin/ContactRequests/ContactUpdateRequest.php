@@ -23,10 +23,11 @@ class ContactUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('id'); // get from route
-        // $id = $this->request->get('user_id'); // get from in blade
         return [
-            'name' => 'required|string|max:254|unique:contacts,name,' . $id
+            'mobile' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'location' => 'required|string|max:255',
+            'details' => 'nullable|string',
         ];
     }
 }

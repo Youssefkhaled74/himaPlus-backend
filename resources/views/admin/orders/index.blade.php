@@ -1,4 +1,4 @@
-@extends('layouts.admin.home')
+﻿@extends('layouts.admin.home')
 
 <!-- title page -->
 @section('title')
@@ -85,13 +85,13 @@
                                                                     <td class="text-center">
                                                                         @php
                                                                             $orderType = '---';
-                                                                            if ($record->type == 1) {
+                                                                            if ((int) $record->order_type === 1) {
                                                                                 $orderType = 'Order';
-                                                                            }elseif ($record->type == 1) {
+                                                                            } elseif ((int) $record->order_type === 2) {
                                                                                 $orderType = 'Quotation';
-                                                                            }elseif ($record->type == 1) {
+                                                                            } elseif ((int) $record->order_type === 3) {
                                                                                 $orderType = 'Maintenance';
-                                                                            }  
+                                                                            }
                                                                         @endphp
                                                                         {{$orderType}}
                                                                     </td>
@@ -106,20 +106,10 @@
                                                                             </button>
                                                                             <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
                                                                                 <li>
-                                                                                    <button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="{{$record->id}}">
-                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Details
-                                                                                    </button>
-                                                                                </li>
-                                                                                {{-- <li>
                                                                                     <a href="{{route('admin/orders/edit', $record->id)}}" class="dropdown-item edit-item-btn">
-                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> edit
+                                                                                        <i class="ri-eye-line align-bottom me-2 text-muted"></i> Details
                                                                                     </a>
                                                                                 </li>
-                                                                                <li>
-                                                                                    <button class="dropdown-item remove-item-btn openDeleteFrom" data-bs-toggle="modal" data-bs-target="#myModalDelete" data-id="{{$record->id}}">
-                                                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete
-                                                                                    </button>
-                                                                                </li> --}}
                                                                             </ul>
                                                                         </div>
                                                                     </td>
@@ -178,7 +168,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/orders/delete'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/orders/delete'))}}" method="post">
                                                                                                 
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
@@ -203,7 +193,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabel"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/orders/activate'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/orders/activate'))}}" method="post">
                                                                                                 
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
@@ -256,3 +246,4 @@
         });
     </script>
 @endsection
+

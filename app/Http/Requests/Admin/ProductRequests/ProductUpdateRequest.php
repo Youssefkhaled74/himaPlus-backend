@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\ProductRequests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductUpdateRequest extends FormRequest
 {
@@ -27,7 +28,7 @@ class ProductUpdateRequest extends FormRequest
         // $id = $this->request->get('user_id'); // get from in blade
         return [
             'name'           => ["required", "string", "min:2", "unique:products,name,$id", "max:255"],
-            'provider_id'    => ['required', 'integer', 'exists:users,id'],
+            'provider_id'    => ['required', 'integer', Rule::exists('users', 'id')->where(fn ($query) => $query->where('user_type', 2)->whereNull('deleted_at'))],
             'category_id'    => ['required', 'integer', 'exists:categories,id'],
             'desc'           => ['required', 'string', 'max:1255'],
             'price'          => ['required', 'numeric', 'min:0', 'regex:/^\d{1,4}(\.\d{1,2})?$/'],

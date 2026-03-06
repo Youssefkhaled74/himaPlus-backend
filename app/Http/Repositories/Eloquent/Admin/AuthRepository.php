@@ -3,10 +3,10 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\Admin;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 use App\Http\ServicesLayer\Admin\AdminServices\AuthService;
 
-class AuthRepository extends AbstractRepository
+class AuthRepository extends BaseAdminRepository
 {
 
     protected $model;

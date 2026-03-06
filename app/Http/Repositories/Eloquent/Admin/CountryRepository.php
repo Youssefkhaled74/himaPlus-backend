@@ -3,9 +3,9 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\Country;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 
-class CountryRepository extends AbstractRepository
+class CountryRepository extends BaseAdminRepository
 {
 
     protected $model;

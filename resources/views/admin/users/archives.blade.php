@@ -1,4 +1,4 @@
-@extends('layouts.admin.home')
+﻿@extends('layouts.admin.home')
 
 <!-- title page -->
 @section('title')
@@ -122,7 +122,7 @@
                                                 
                                                     <div class="ltn__pagination text-center">
                                                         <div id="load_more">
-                                                            <button type="button" name="load_more_button" style="width: 350px;" class="btn btn-info form-control px-5" data-id="'.$last_id.'" id="load_more_button">عرض المزيد</button>
+                                                            <button type="button" name="load_more_button" style="width: 350px;" class="btn btn-info form-control px-5" data-id="'.$last_id.'" id="load_more_button">Read more</button>
                                                         </div>
                                                     </div>
                                 
@@ -172,7 +172,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/users/back'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/users/back'))}}" method="post">
                                                           
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
@@ -324,3 +324,4 @@
         }
     </script>
 @endsection
+

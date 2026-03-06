@@ -3,9 +3,9 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\Order;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 
-class OrderRepository extends AbstractRepository
+class OrderRepository extends BaseAdminRepository
 {
 
     protected $model;

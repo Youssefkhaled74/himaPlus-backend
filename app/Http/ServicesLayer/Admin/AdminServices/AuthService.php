@@ -23,34 +23,39 @@ class AuthService
     public function check_login($request)
     {
         try{
+            $email = strtolower(trim((string) $request->email));
+            $invalidLoginMessage = "Invalid email or password";
 
-            $admin = $this->model->where('email', strtolower(trim($request->email)))->first();
+            $admin = $this->model->where('email', $email)->first();
             if($admin){
 
                 if(FacadesHash::check($request->password, $admin->password)){
 
                     if($admin->is_activate == 1){
 
-                        if(FacadesAuth::guard('admin')->attempt($request->only('email', 'password'))){
+                        if(FacadesAuth::guard('admin')->attempt([
+                            'email' => $email,
+                            'password' => $request->password,
+                        ])){
 
                             return redirect(route('admin/index'));
                         }else{
-                            flash()->error("There IS Something Worng");
+                            flash()->error($invalidLoginMessage);
                             return back();
                         }
 
                     }else{
-                        flash()->error("You Are Not Activate");
+                        flash()->error($invalidLoginMessage);
                         return back();
                     }
 
                 }else{
-                    flash()->error("There IS Something Worng");
+                    flash()->error($invalidLoginMessage);
                     return back();
                 }
 
             }else{
-                flash()->error("There IS Something Wrong");
+                flash()->error($invalidLoginMessage);
                 return back();
             }
         }catch(\Exception $ex){

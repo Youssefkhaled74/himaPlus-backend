@@ -1,4 +1,4 @@
-@extends('layouts.admin.home')
+﻿@extends('layouts.admin.home')
 
 <!-- title page -->
 @section('title')
@@ -71,6 +71,8 @@
                                                             <th class="text-center">Mobile</th>
                                                             <th class="text-center">Email</th>
                                                             <th class="text-center">Location</th>
+                                                            <th class="text-center">Details</th>
+                                                            <th class="text-center">Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tableShowData">
@@ -82,6 +84,31 @@
                                                                     <td class="text-center">{{$record->mobile}}</td>
                                                                     <td class="text-center">{{$record->email}}</td>
                                                                     <td class="text-center">{{$record->location}}</td>
+                                                                    <td class="text-center">{{ \Illuminate\Support\Str::limit($record->details, 60) ?: '-' }}</td>
+                                                                    <td class="text-center">
+                                                                        <div class="dropdown d-inline-block">
+                                                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                                <i class="ri-more-fill align-middle"></i>
+                                                                            </button>
+                                                                            <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
+                                                                                <li>
+                                                                                    <a href="{{route('admin/contacts/edit', $record->id)}}" class="dropdown-item edit-item-btn">
+                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="{{$record->id}}">
+                                                                                        <i class="ri-check-line align-bottom me-2 text-muted"></i> Activation
+                                                                                    </button>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <button class="dropdown-item remove-item-btn openDeleteFrom" data-bs-toggle="modal" data-bs-target="#myModalDelete" data-id="{{$record->id}}">
+                                                                                        <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete
+                                                                                    </button>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </td>
                                                                 </tr>
                                                             @endforeach
                                                         @endisset
@@ -137,7 +164,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/contacts/delete'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/contacts/delete'))}}" method="post">
                                                                                                 
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
@@ -162,7 +189,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabel"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/contacts/activate'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/contacts/activate'))}}" method="post">
                                                                                                 
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
@@ -215,3 +242,4 @@
         });
     </script>
 @endsection
+

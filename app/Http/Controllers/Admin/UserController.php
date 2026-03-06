@@ -24,7 +24,6 @@ class UserController extends Controller
             $users = $this->users->index($offset, $limit);
             return view('admin.users.index', compact('users'));
         }catch(\Exception $e){
-            dd($e);
             flash()->error('There is something wrong , please contact technical support');
             return back();
         }

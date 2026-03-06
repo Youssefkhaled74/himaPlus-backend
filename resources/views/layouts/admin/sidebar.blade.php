@@ -1,4 +1,10 @@
 
+@php
+    $adminId = (int) optional(auth()->guard('admin')->user())->id;
+    $superAdminIds = array_map('intval', config('auth.admin_super_ids', []));
+    $isSuperAdmin = in_array($adminId, $superAdminIds, true);
+@endphp
+
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
@@ -38,10 +44,13 @@
                 <i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> 
                 <span class="align-middle">Settings</span>
             </a>
-            <a class="dropdown-item" href="{{url(route('admin/logout'))}}">
-                <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> 
-                <span class="align-middle" data-key="t-logout">Logout</span>
-            </a>
+            <form method="POST" action="{{ url(route('admin/logout')) }}">
+                @csrf
+                <button type="submit" class="dropdown-item">
+                    <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> 
+                    <span class="align-middle" data-key="t-logout">Logout</span>
+                </button>
+            </form>
         </div>
     </div>
     <div id="scrollbar">
@@ -51,26 +60,23 @@
             <ul class="navbar-nav" id="navbar-nav">
 
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link sidebaradmins" href="#sidebaradmins" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaradmins">
-                        <i class="ri-apps-2-line"></i> <span data-key="t-admins"> Admins </span>
-                    </a>
-                    <div class="collapse menu-dropdown" id="sidebaradmins">
-                        
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="{{route('admin/admins/index')}}/0/{{PAGINATION_COUNT}}" class="nav-link" data-key="t-admins-list"> Admins </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{route('admin/admins/create')}}" class="nav-link" data-key="t-admins-add"> Add Admin </a>
-                            </li>
-                            <!-- <li class="nav-item">
-                                <a href="{{route('admin/admins/archives')}}/0/{{PAGINATION_COUNT}}" class="nav-link" data-key="t-admins-add"> archives </a>
-                            </li> -->
-                        </ul>
-
-                    </div>
-                </li>
+                @if($isSuperAdmin)
+                    <li class="nav-item">
+                        <a class="nav-link menu-link sidebaradmins" href="#sidebaradmins" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaradmins">
+                            <i class="ri-apps-2-line"></i> <span data-key="t-admins"> Admins </span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sidebaradmins">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a href="{{route('admin/admins/index')}}/0/{{PAGINATION_COUNT}}" class="nav-link" data-key="t-admins-list"> Admins </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('admin/admins/create')}}" class="nav-link" data-key="t-admins-add"> Add Admin </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebarinfo" href="#sidebarinfo" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarinfo">
                         <i class="ri-apps-2-line"></i> <span data-key="t-info"> Info </span>

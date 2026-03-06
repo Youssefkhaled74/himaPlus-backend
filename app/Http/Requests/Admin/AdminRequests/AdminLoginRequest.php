@@ -25,7 +25,7 @@ class AdminLoginRequest extends FormRequest
     {
         return [
             
-            'email' => 'required|exists:admins,email|max:60',
+            'email' => 'required|email|max:60',
             'password' => 'required|max:30'
         ];
     }

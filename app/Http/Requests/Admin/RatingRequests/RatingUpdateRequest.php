@@ -23,10 +23,10 @@ class RatingUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route('id'); // get from route
-        // $id = $this->request->get('user_id'); // get from in blade
         return [
-            'name' => 'required|string|max:254|unique:ratings,name,' . $id
+            'comment' => 'nullable|string|max:2000',
+            'rating' => 'required|numeric|min:1|max:5',
+            'user_id' => 'required|integer|exists:users,id',
         ];
     }
 }

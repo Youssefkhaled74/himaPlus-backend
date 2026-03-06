@@ -7,6 +7,9 @@ use App\Http\Repositories\Eloquent\Admin\CategoryRepository;
 use App\Http\Repositories\Eloquent\Admin\CountryRepository;
 use App\Http\Repositories\Eloquent\Admin\HomeRepository;
 use App\Http\Repositories\Eloquent\Admin\UserRepository;
+use App\Models\Category;
+use App\Models\Country;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -31,17 +34,57 @@ class HomeController extends Controller
 
     public function users(Request $request)
     {
-        return $this->userRepository->search($request);
+        $term = trim((string) ($request->get('q', $request->get('term', ''))));
+
+        return User::query()
+            ->select(['id', 'name'])
+            ->where('user_type', 2)
+            ->whereNull('deleted_at')
+            ->when($term !== '', function ($query) use ($term) {
+                $query->where(function ($innerQuery) use ($term) {
+                    $innerQuery->where('name', 'like', '%' . $term . '%')
+                        ->orWhere('id', 'like', '%' . $term . '%');
+                });
+            })
+            ->orderByDesc('id')
+            ->limit(PAGINATION_COUNT)
+            ->get();
     }
 
     public function countries(Request $request)
     {
-        return $this->countryRepository->search($request);
+        $term = trim((string) ($request->get('q', $request->get('term', ''))));
+
+        return Country::query()
+            ->select(['id', 'name'])
+            ->whereNull('deleted_at')
+            ->when($term !== '', function ($query) use ($term) {
+                $query->where(function ($innerQuery) use ($term) {
+                    $innerQuery->where('name', 'like', '%' . $term . '%')
+                        ->orWhere('id', 'like', '%' . $term . '%');
+                });
+            })
+            ->orderByDesc('id')
+            ->limit(PAGINATION_COUNT)
+            ->get();
     }
 
     public function categories(Request $request)
     {
-        return $this->categoryRepository->search($request);
+        $term = trim((string) ($request->get('q', $request->get('term', ''))));
+
+        return Category::query()
+            ->select(['id', 'name'])
+            ->whereNull('deleted_at')
+            ->when($term !== '', function ($query) use ($term) {
+                $query->where(function ($innerQuery) use ($term) {
+                    $innerQuery->where('name', 'like', '%' . $term . '%')
+                        ->orWhere('id', 'like', '%' . $term . '%');
+                });
+            })
+            ->orderByDesc('id')
+            ->limit(PAGINATION_COUNT)
+            ->get();
     }
 
 }

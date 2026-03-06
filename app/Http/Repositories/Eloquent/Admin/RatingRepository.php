@@ -3,9 +3,9 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\Rating;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 
-class RatingRepository extends AbstractRepository
+class RatingRepository extends BaseAdminRepository
 {
 
     protected $model;

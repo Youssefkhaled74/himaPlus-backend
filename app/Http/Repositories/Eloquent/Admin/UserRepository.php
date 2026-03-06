@@ -3,9 +3,9 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\User;
-use DevxPackage\AbstractRepository;
+use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 
-class UserRepository extends AbstractRepository
+class UserRepository extends BaseAdminRepository
 {
 
     protected $model;
@@ -54,8 +54,11 @@ class UserRepository extends AbstractRepository
             $file = uploadIamge($request->file('file'), $this->crudName()); // function on helper file to upload file
             $request->merge(['img' => $file]);
         }
-        if (!$request->hasFile('cr_file_document') == null) {
-            $file = uploadIamge($request->file('cr_file_document'), $this->crudName()); // function on helper file to upload file
+        if ($request->hasFile('cr_document')) {
+            $file = uploadIamge($request->file('cr_document'), $this->crudName()); // function on helper file to upload file
+            $request->merge(['cr_document' => $file]);
+        } elseif ($request->hasFile('cr_file_document')) {
+            $file = uploadIamge($request->file('cr_file_document'), $this->crudName()); // backward compatibility with old field name
             $request->merge(['cr_document' => $file]);
         }
         if (!$request->hasFile('files') == null) {

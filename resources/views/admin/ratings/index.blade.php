@@ -1,4 +1,4 @@
-@extends('layouts.admin.home')
+﻿@extends('layouts.admin.home')
 
 <!-- title page -->
 @section('title')
@@ -124,6 +124,11 @@
                                                                             </button>
                                                                             <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
                                                                                 <li>
+                                                                                    <a href="{{route('admin/ratings/edit', $record->id)}}" class="dropdown-item edit-item-btn">
+                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li>
                                                                                     <button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="{{$record->id}}">
                                                                                         <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> activation
                                                                                     </button>
@@ -144,7 +149,7 @@
                                                 
                                                     {{-- <div class="ltn__pagination text-center">
                                                         <div id="load_more">
-                                                            <button type="button" name="load_more_button" style="width: 350px;" class="btn btn-info form-control px-5" data-id="'.$last_id.'" id="load_more_button">عرض المزيد</button>
+                                                            <button type="button" name="load_more_button" style="width: 350px;" class="btn btn-info form-control px-5" data-id="'.$last_id.'" id="load_more_button">Read more</button>
                                                         </div>
                                                     </div> --}}
                                 
@@ -195,7 +200,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/ratings/delete'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/ratings/delete'))}}" method="post">
                                                                                                 
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
@@ -220,7 +225,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabel"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/ratings/activate'))}}" method="get">
+                                                                <form role="form" action="{{url(route('admin/ratings/activate'))}}" method="post">
                                                                                                 
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
@@ -271,127 +276,5 @@
             var id = $(this).attr('data-id');
             $('#activation_record_id').val(id);
         });
-    </script>
-    <script>
-        var q = '';
-        var offset = length = limit = `{{ PAGINATION_COUNT }}`;
-        var _token = $('input[name="_token"]').val();
-        let showItems = document.getElementById("showItems");
-        var tableShowData = document.getElementById("tableShowData");
-        showItems.innerHTML = limit;
-
-        $(document).on('click', '#load_more_button', function() {
-            var urlPath = `{{ route("admin/ratings/pagination")}}/${offset}/${limit}`;
-            event.preventDefault();
-            $('#load_more_button').html('<b>Loading... </b>');
-            search_in_data(q, urlPath, 1);
-        });
-
-        $(document).on('keyup', '.data_search', function() {
-            q = $(this).val();
-            var urlPath = "{{ route('admin/ratings/search') }}";
-            event.preventDefault();
-            search_in_data(q, urlPath, 2);
-        });
-
-        // $(document).on('change', '.data_search', function() {
-        //     q = $(this).val();
-        //     var record = $(this).attr('name');
-        //     var urlPath = "{{ route('admin/ratings/search/byColumn') }}";
-        //     event.preventDefault();
-        //     search_in_data(q, urlPath, 2, record);
-        // });
-
-        function search_in_data(q, urlPath, action_type, record = '') {
-            let records = ``;
-            $.ajax({
-                url: urlPath,
-                method: "POST",
-                data: {
-                    q: q,
-                    record: record,
-                    _token: _token
-                },
-                success: function(data) {
-                    if (data.length > 0) {
-                        records = table_records(data, action_type);
-                    } else if (data.length === 0) {
-                        if (action_type == 2) {
-                            length = data.length;
-                            showItems.innerHTML = Number(length);
-                            tableShowData.style.display = 'none';
-                        }
-                        $('#load_more_button').remove();
-                        let btnNoData = `<button type="button" name="load_more_button" style="width: 350px;" class="btn btn-primary form-control px-5" id="load_more_button_remove">No Data</button>`;
-                        document.getElementById("load_more").innerHTML = btnNoData;
-                    }
-                }
-            })
-        }
-
-        // action type => 1 from pagination , 2 from search
-        function table_records(data, action_type)
-        {
-            let records = ``;
-            q == '' && action_type == 2 ? offset = `{{ PAGINATION_COUNT }}` : '';
-            for (let i = 0; i < data.length; i++) {
-
-                image_path =  "{{ asset('') }}" + data[i].img;
-                edit_route =  "{{ route('admin/ratings/edit') }}" + '/' + data[i].id;
-                records += `
-                    <tr class="text-center">
-                        <td class="text-center">${data[i].id}</td>
-                        <td class="text-center">${data[i].name}</td>
-                        <!-- <td class="text-center">
-                            <img src="${image_path}" alt="record image" class="img-fluid img-40 rounded-circle blur-up lazyloaded" width="100">
-                        </td> -->
-                        <td class="text-center">${data[i].is_activate == 1 ? '<span class="badge bg-info-subtle text-info">active</span>' : '<span class="badge bg-info-subtle text-danger">un active</span>'}</td>
-                        <td class="text-center">
-                            <div class="dropdown d-inline-block">
-                                <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="ri-more-fill align-middle"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
-                                    <li>
-                                        <a href="${edit_route}" class="dropdown-item edit-item-btn">
-                                            <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> edit
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="${data[i].id}">
-                                            <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> activation
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button class="dropdown-item remove-item-btn openDeleteFrom" data-bs-toggle="modal" data-bs-target="#myModalDelete" data-id="${data[i].id}">
-                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                `
-            }
-            $('#load_more_button').remove();
-            $('#load_more_button_remove').remove();
-            if (action_type == 1) {
-                tableShowData.innerHTML += records;
-                offset += data.length;
-                length += data.length;
-                showItems.innerHTML = Number(length);
-                let btnData = `<button type="button" name="load_more_button" style="width: 350px;" class="btn btn-info form-control px-5"id="load_more_button">Load More</button>`;
-                document.getElementById("load_more").innerHTML = btnData;
-            }else if (action_type == 2) {
-                tableShowData.style.display = null;
-                tableShowData.innerHTML = records;
-                length = data.length;
-                showItems.innerHTML = Number(length);
-                if (data[0].searchButton == 1) {
-                    let btnData = `<button type="button" name="load_more_button" style="width: 350px;" class="btn btn-info form-control px-5"id="load_more_button">Load More</button>`;
-                    document.getElementById("load_more").innerHTML = btnData;
-                }
-            }
-        }
     </script>
 @endsection

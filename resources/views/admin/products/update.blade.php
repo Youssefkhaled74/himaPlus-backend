@@ -215,6 +215,11 @@
         ajax: {
             url: "{{ route('get/users') }}",
             dataType: 'json',
+            data: function (params) {
+                return {
+                    q: params.term || ''
+                };
+            },
             processResults: function (data) {
                 return {
                     results:  $.map(data, function (item) {
@@ -233,6 +238,11 @@
         ajax: {
             url: "{{ route('get/categories') }}",
             dataType: 'json',
+            data: function (params) {
+                return {
+                    q: params.term || ''
+                };
+            },
             processResults: function (data) {
                 return {
                     results:  $.map(data, function (item) {
@@ -251,6 +261,11 @@
         ajax: {
             url: "{{ route('get/countries') }}",
             dataType: 'json',
+            data: function (params) {
+                return {
+                    q: params.term || ''
+                };
+            },
             processResults: function (data) {
                 return {
                     results:  $.map(data, function (item) {

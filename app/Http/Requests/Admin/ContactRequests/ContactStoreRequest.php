@@ -24,7 +24,10 @@ class ContactStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:254|unique:contacts,name'
+            'mobile' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'location' => 'required|string|max:255',
+            'details' => 'nullable|string',
         ];
     }
 }
