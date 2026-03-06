@@ -56,7 +56,12 @@
                                 <li><a class="dropdown-item" href="{{ route('vendor/profile') }}">{{ __('profile.my_profile') }}</a></li>
                                 <li><a class="dropdown-item" href="{{ route('vendor/notifications') }}">{{ __('nav.notifications') ?? 'Notifications' }}</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="{{ route('vendor/logout') }}">{{ __('profile.logout') }}</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('vendor/logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item text-danger">{{ __('profile.logout') }}</button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </div>

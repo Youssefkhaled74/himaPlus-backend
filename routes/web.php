@@ -165,7 +165,7 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['auth', 'vendorCheck']], fu
     Route::post('/update', [VendorAuthController::class, 'userUpdate'])->name('vendor/update');
     Route::post('/lang/update', [VendorAuthController::class, 'userLang'])->name('vendor/lang/update');
     Route::post('/change-password', [VendorAuthController::class, 'changePassword'])->name('vendor/changePassword');
-    Route::get('/logout', [VendorAuthController::class, 'logout'])->name('vendor/logout');
+    Route::post('/logout', [VendorAuthController::class, 'logout'])->name('vendor/logout');
     
     
     // Products
@@ -175,7 +175,7 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['auth', 'vendorCheck']], fu
     Route::get('/products/{id}', [VendorProductController::class, 'show'])->name('vendor/products/show');
     Route::get('/products/{id}/edit', [VendorProductController::class, 'edit'])->name('vendor/products/edit');
     Route::put('/products/{id}', [VendorProductController::class, 'update'])->name('vendor/products/update');
-    Route::get('/products/{id}/toggle', [VendorProductController::class, 'toggleActivation'])->name('vendor/products/toggle');
+    Route::post('/products/{id}/toggle', [VendorProductController::class, 'toggleActivation'])->name('vendor/products/toggle');
     Route::delete('/products/{id}', [VendorProductController::class, 'destroy'])->name('vendor/products/delete');
     
     // Orders

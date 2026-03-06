@@ -8,45 +8,78 @@ use App\Models\Offer;
 use App\Models\Product;
 use App\Models\Rating;
 use App\Models\Notification;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class VendorDashboardController extends Controller
 {
+    private function relevantOrdersQuery(int $vendorId): Builder
+    {
+        return Order::query()
+            ->whereNull('deleted_at')
+            ->where(function ($query) use ($vendorId) {
+                $query->where('provider_id', $vendorId)
+                    ->orWhereHas('offers', function ($offersQuery) use ($vendorId) {
+                        $offersQuery->where('provider_id', $vendorId);
+                    });
+            });
+    }
+
     private function pendingOfferStatuses(): array
     {
         return [1, '1', 'pending'];
     }
 
+    private function acceptedOfferStatuses(): array
+    {
+        return [2, '2', 'accepted'];
+    }
+
     public function dashboard(Request $request)
     {
         $vendor = auth()->user();
-        
-        // Get vendor's orders
-        $ordersCount = Order::where('provider_id', $vendor->id)
-            ->where('deleted_at', null)
-            ->count();
+
+        $ordersBaseQuery = $this->relevantOrdersQuery((int) $vendor->id);
+
+        $ordersCount = (clone $ordersBaseQuery)->count();
         
         $offersCount = Offer::where('provider_id', $vendor->id)
-            ->where('deleted_at', null)
+            ->whereNull('deleted_at')
             ->count();
+
+        $acceptedOffersCount = Offer::where('provider_id', $vendor->id)
+            ->whereNull('deleted_at')
+            ->whereIn('status', $this->acceptedOfferStatuses())
+            ->count();
+
+        $acceptanceRate = $offersCount > 0 ? round(($acceptedOffersCount / $offersCount) * 100, 1) : 0;
         
         $productsCount = Product::where('provider_id', $vendor->id)
-            ->where('deleted_at', null)
+            ->whereNull('deleted_at')
             ->where('is_activate', 1)
             ->count();
-        
-        // Get scheduled orders count
-        $scheduledOrdersCount = Order::scheduled()
-            ->where(function ($query) use ($vendor) {
-                $query->where('provider_id', $vendor->id)
-                    ->orWhereHas('offers', function ($offersQuery) use ($vendor) {
-                        $offersQuery->where('provider_id', $vendor->id);
-                    });
-            })
-            ->where('deleted_at', null)
+
+        $inactiveProductsCount = Product::where('provider_id', $vendor->id)
+            ->whereNull('deleted_at')
+            ->where('is_activate', 0)
+            ->count();
+
+        $lowStockProductsCount = Product::where('provider_id', $vendor->id)
+            ->whereNull('deleted_at')
+            ->where('is_activate', 1)
+            ->where('stock_quantity', '<=', 5)
             ->count();
         
-        // Get average rating
+        $scheduledOrdersCount = (clone $ordersBaseQuery)
+            ->scheduled()
+            ->count();
+
+        $completedOrdersCount = (clone $ordersBaseQuery)
+            ->whereHas('timeline', function ($timelineQuery) {
+                $timelineQuery->where('timeline_no', 6);
+            })
+            ->count();
+        
         $avgRating = Rating::where('forable_id', $vendor->id)
             ->where('forable_type', 'App\\Models\\User')
             ->avg('rating') ?? 0;
@@ -54,39 +87,47 @@ class VendorDashboardController extends Controller
         $ratingCount = Rating::where('forable_id', $vendor->id)
             ->where('forable_type', 'App\\Models\\User')
             ->count();
-        
-        // Get recent orders
-        $recentOrders = Order::where('provider_id', $vendor->id)
-            ->where('deleted_at', null)
-            ->with(['user:id,name,email,mobile'])
-            ->latest()
-            ->take(3)
-            ->get();
-        
-        // Get recent scheduled orders
-        $recentScheduledOrders = Order::scheduled()
+
+        $estimatedRevenue = Offer::where('provider_id', $vendor->id)
+            ->whereNull('deleted_at')
+            ->whereIn('status', $this->acceptedOfferStatuses())
+            ->sum('cost');
+
+        $newRequestsCount = (clone $ordersBaseQuery)
             ->where(function ($query) use ($vendor) {
-                $query->where('provider_id', $vendor->id)
+                $query->whereNull('provider_id')
                     ->orWhereHas('offers', function ($offersQuery) use ($vendor) {
-                        $offersQuery->where('provider_id', $vendor->id);
+                        $offersQuery->where('provider_id', $vendor->id)
+                            ->whereIn('status', $this->pendingOfferStatuses());
                     });
             })
-            ->where('deleted_at', null)
+            ->count();
+        
+        $recentOrders = (clone $ordersBaseQuery)
             ->with(['user:id,name,email,mobile', 'offers'])
             ->latest()
             ->take(3)
             ->get();
         
-        // Get pending offers
-        $pendingOffers = Offer::where('provider_id', $vendor->id)
-            ->where('deleted_at', null)
-            ->whereIn('status', $this->pendingOfferStatuses())
-            ->with(['order:id,order_type,user_id'])
+        $recentScheduledOrders = (clone $ordersBaseQuery)
+            ->scheduled()
+            ->with(['user:id,name,email,mobile', 'offers'])
             ->latest()
             ->take(3)
             ->get();
         
-        // Get notifications
+        $pendingOffersQuery = Offer::where('provider_id', $vendor->id)
+            ->whereNull('deleted_at')
+            ->whereIn('status', $this->pendingOfferStatuses())
+            ->with(['order:id,order_type,user_id']);
+
+        $pendingOffersCount = (clone $pendingOffersQuery)->count();
+
+        $pendingOffers = $pendingOffersQuery
+            ->latest()
+            ->take(3)
+            ->get();
+        
         $recentNotifications = Notification::where('user_id', $vendor->id)
             ->orderBy('created_at', 'desc')
             ->take(3)
@@ -101,11 +142,19 @@ class VendorDashboardController extends Controller
             'offersCount',
             'productsCount',
             'scheduledOrdersCount',
+            'acceptedOffersCount',
+            'acceptanceRate',
+            'completedOrdersCount',
+            'estimatedRevenue',
+            'inactiveProductsCount',
+            'lowStockProductsCount',
+            'newRequestsCount',
             'avgRating',
             'ratingCount',
             'recentOrders',
             'recentScheduledOrders',
             'pendingOffers',
+            'pendingOffersCount',
             'recentNotifications',
             'unreadNotificationsCount'
         ));

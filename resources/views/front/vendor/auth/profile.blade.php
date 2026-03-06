@@ -47,9 +47,12 @@
                     <a class="btn-tab" section-name="{{ __('profile.language') }}" data-target="#language-pane" href="#language-pane">
                         <i class="bi bi-translate"></i> <span>{{ __('profile.language') }}</span>
                     </a>
-                    <a class="custom-btn-tab" href="{{ route('vendor/logout') }}">
-                        <i class="bi bi-box-arrow-right"></i> <span>{{ __('profile.logout') }}</span>
-                    </a>
+                    <form method="POST" action="{{ route('vendor/logout') }}">
+                        @csrf
+                        <button class="custom-btn-tab" type="submit" style="width:100%;border:0;background:transparent;text-align:inherit;">
+                            <i class="bi bi-box-arrow-right"></i> <span>{{ __('profile.logout') }}</span>
+                        </button>
+                    </form>
                 </div>
             </div>
 
