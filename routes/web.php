@@ -139,8 +139,8 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['limitReq']], function() {
     Route::get('/login', [VendorAuthController::class, 'loginForm'])->name('vendor/login');
     Route::post('/check/login', [VendorAuthController::class, 'login'])->middleware('throttle:auth-login')->name('vendor/check/login');
     
-    // Register
-    Route::get('/register', [VendorAuthController::class, 'registerForm'])->name('vendor/register/form');
+    // Register (GET redirects to login page which embeds the register tab)
+    Route::get('/register', fn() => redirect()->route('vendor/login'))->name('vendor/register/form');
     Route::post('/register', [VendorAuthController::class, 'register'])->name('vendor/register/store');
     
     // Account Verification

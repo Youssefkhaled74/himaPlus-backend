@@ -21,13 +21,13 @@ class AdminActivityLog
             return $response;
         }
 
-        $payload = $this->sanitizePayload($request->except([
-            '_token',
-            'password',
-            'password_confirmation',
-            'old_password',
-            'remember_token',
-        ]));
+        $excluded = ['_token', 'password', 'password_confirmation', 'old_password', 'remember_token'];
+
+        // Use input() instead of all()/except() to avoid touching uploaded-file
+        // temp paths that may already have been moved/deleted by the controller.
+        $raw = array_diff_key($request->input() ?? [], array_flip($excluded));
+
+        $payload = $this->sanitizePayload($raw);
 
         AdminActivityLogModel::create([
             'admin_id' => $admin->id,

@@ -76,7 +76,7 @@ class VendorAuthController extends Controller
             
             // Generate verification code
             $user->update([
-                'code' => rand(1000, 9999),
+                'code' => 1111,
             ]);
             
             $this->notification->create([
@@ -173,7 +173,7 @@ class VendorAuthController extends Controller
         try {
             DB::beginTransaction();
             $user->update([
-                'code' => rand(1000, 9999),
+                'code' => 1111,
                 'mobile_verified_at' =>  null,
                 'email_verified_at' =>  null,
             ]);
@@ -414,7 +414,7 @@ class VendorAuthController extends Controller
         }
 
         try {
-            $user->update(['code' => rand(1000, 9999)]);
+            $user->update(['code' => 1111]);
             $this->notification->create([
                 'title' => 'verified your account',
                 'content' => "your code: #$user->code",

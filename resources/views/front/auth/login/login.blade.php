@@ -15,6 +15,39 @@
             color: #dc3545;
             margin-left: 2px;
         }
+
+        /* Enhanced flash notification */
+        .hp-flash-wrap { padding: 16px 20px 0; }
+        .hp-flash {
+            display: flex; align-items: center; gap: 12px;
+            padding: 14px 18px; border-radius: 14px;
+            font-size: 14px; font-weight: 600; border: none; margin: 0;
+            animation: hp-flash-in .35s cubic-bezier(.22,.68,0,1.2) both;
+        }
+        .hp-flash.alert-success { background: linear-gradient(135deg,#d1fae5,#ecfdf5); color:#065f46; border-left:4px solid #10b981; box-shadow:0 4px 16px rgba(16,185,129,.15); }
+        .hp-flash.alert-danger  { background: linear-gradient(135deg,#fee2e2,#fff5f5); color:#991b1b; border-left:4px solid #ef4444; box-shadow:0 4px 16px rgba(239,68,68,.15); }
+        .hp-flash.alert-warning { background: linear-gradient(135deg,#fef3c7,#fffbeb); color:#92400e; border-left:4px solid #f59e0b; box-shadow:0 4px 16px rgba(245,158,11,.15); }
+        .hp-flash.alert-info    { background: linear-gradient(135deg,#dbeafe,#eff6ff); color:#1e40af; border-left:4px solid #3b82f6; box-shadow:0 4px 16px rgba(59,130,246,.15); }
+        .hp-flash-icon { width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0; }
+        .alert-success .hp-flash-icon { background:rgba(16,185,129,.15); color:#059669; }
+        .alert-danger  .hp-flash-icon { background:rgba(239,68,68,.15);  color:#dc2626; }
+        .alert-warning .hp-flash-icon { background:rgba(245,158,11,.15); color:#d97706; }
+        .alert-info    .hp-flash-icon { background:rgba(59,130,246,.15); color:#2563eb; }
+        .hp-flash-text { flex:1; line-height:1.5; }
+        @keyframes hp-flash-in { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+
+        /* Validation errors block inside card */
+        .hp-errors {
+            margin: 16px 20px 0;
+            padding: 14px 18px;
+            border-radius: 14px;
+            background: linear-gradient(135deg,#fee2e2,#fff5f5);
+            border-left: 4px solid #ef4444;
+            box-shadow: 0 4px 16px rgba(239,68,68,.15);
+            animation: hp-flash-in .35s cubic-bezier(.22,.68,0,1.2) both;
+        }
+        .hp-errors ul { margin: 0; padding: 0 0 0 18px; }
+        .hp-errors li { color: #991b1b; font-size: 13px; font-weight: 600; line-height: 1.8; }
     </style>
 @endsection
 
@@ -25,15 +58,20 @@
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-10 col-lg-6">
                         <div class="hp-card card">
-                            @include('flash::message')
-                            @if ($errors->any())
-                                <div style="text-align: left; margin: 15px;">
-                                    <ul dir="ltr">
-                                        @foreach ($errors->all() as $error)
-                                            <li class="text-danger">{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                            @php
+                                $flashMessages = session('flash_notification', collect())->toArray();
+                            @endphp
+                            @if(!empty($flashMessages))
+                                <div class="hp-flash-wrap">
+                                    @foreach($flashMessages as $msg)
+                                        @php $icons=['success'=>'bi-check-circle-fill','danger'=>'bi-x-circle-fill','warning'=>'bi-exclamation-triangle-fill','info'=>'bi-info-circle-fill']; @endphp
+                                        <div class="hp-flash alert alert-{{ $msg['level'] }}" role="alert">
+                                            <div class="hp-flash-icon"><i class="bi {{ $icons[$msg['level']] ?? 'bi-info-circle-fill' }}"></i></div>
+                                            <div class="hp-flash-text">{!! $msg['message'] !!}</div>
+                                        </div>
+                                    @endforeach
                                 </div>
+                                {{ session()->forget('flash_notification') }}
                             @endif
                             <div class="card-body p-4 p-lg-5">
                                 <div class="hp-tabs d-flex gap-4 justify-content-center mb-4">
@@ -84,6 +122,17 @@
 
                                 <form method="POST" action="{{ route('user/register/store') }}" enctype="multipart/form-data">
                                     @csrf
+
+                                    @if ($errors->any())
+                                        <div class="hp-errors mb-3">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <label class="form-label">User Type Selector <span class="required-star">*</span></label>
@@ -196,11 +245,21 @@
             if (!$target.length) return;
             $('.hp-page').removeClass('active');
             $target.addClass('active');
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+            // Sync all tab links
+            $('.hp-tab').each(function(){
+                $(this).toggleClass('active', $(this).data('target') === target);
             });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Auto-open register tab when there are validation errors or old input
+        $(function() {
+            const hasErrors = {{ $errors->any() ? 'true' : 'false' }};
+            const hasOld    = {{ (old('user_type') || old('email') || old('mobile') || old('name')) ? 'true' : 'false' }};
+            if (hasErrors || hasOld) {
+                switchPage('#page-register');
+            }
+        });
 
         function togglePrimaryButton($context) {
             const isRegister = $context.attr('id') === 'page-register';

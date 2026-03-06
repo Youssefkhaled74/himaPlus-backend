@@ -70,8 +70,7 @@ class AuthController extends Controller
             $request->merge(['user_type' => (int) $request->user_type]);
             $user = $this->userRepository->store($request);
             $user->update([
-                // 'code' => 1111,
-                'code' => rand(1000, 9999),
+                'code' => 1111,
             ]);
             $this->notification->create([
                 'title' => 'verified your account',
@@ -170,8 +169,7 @@ class AuthController extends Controller
         try {
             DB::beginTransaction();
             $user->update([
-                // 'code' => 1111,
-                'code' => rand(1000, 9999),
+                'code' => 1111,
                 'mobile_verified_at' =>  null,
                 'email_verified_at' =>  null,
             ]);
@@ -377,8 +375,7 @@ class AuthController extends Controller
                 'mobile' => $request->mobile,
                 'mobile_verified_at' =>  null,
                 'email_verified_at' =>  null,
-                // 'code' => 1111,
-                'code' => rand(1000, 9999),
+                'code' => 1111,
             ]);
             $this->notification->create([
                 'title' => 'verified your account',
@@ -430,8 +427,7 @@ class AuthController extends Controller
         }
 
         try {
-            // $user->update(['code' => 1111]);
-            $user->update(['code' => rand(1000, 9999)]);
+            $user->update(['code' => 1111]);
             $this->notification->create([
                 'title' => 'verified your account',
                 'content' => "your code: #$user->code",

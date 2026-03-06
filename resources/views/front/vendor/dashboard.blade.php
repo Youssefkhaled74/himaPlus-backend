@@ -63,6 +63,8 @@
         margin-bottom: 20px;
         color: #fff;
         background: linear-gradient(135deg, #0f172a 0%, #123873 45%, #175cd3 100%);
+        height: auto;
+        align-items: stretch;
     }
 
     .hero-badge, .hero-chip {
