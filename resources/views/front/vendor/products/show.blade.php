@@ -14,7 +14,11 @@
         -moz-osx-font-smoothing: grayscale;
     }
 
-    .hp-main{ background:#f7f9fc; }
+    .hp-main{
+        background:#f7f9fc;
+        padding-top: 0 !important;
+        padding-bottom: 40px;
+    }
 
     .hp-wrap{
         max-width: 95%;

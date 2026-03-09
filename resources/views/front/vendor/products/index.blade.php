@@ -17,12 +17,36 @@
 
         .hp-main {
             background: #f7f9fc;
+            padding-top: 0 !important;
+            padding-bottom: 40px;
         }
 
         .vendor-products-wrap {
             max-width: 1320px;
-            padding-top: 10px;
+            padding-top: 20px;
             padding-bottom: 40px;
+        }
+
+        .vendor-products-hero {
+            background: linear-gradient(120deg, #0b3a82 0%, #0e5bd8 55%, #0ea5a4 120%);
+            color: #fff;
+            border-radius: 0 0 22px 22px;
+            padding: 26px 0 30px;
+            box-shadow: 0 10px 26px rgba(11, 58, 130, .18);
+        }
+
+        .vendor-products-hero .hero-title {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .vendor-products-hero .hero-subtitle {
+            margin: 8px 0 0;
+            font-size: 14px;
+            color: rgba(255, 255, 255, .9);
+            max-width: 760px;
         }
 
         .hp-page-head {
@@ -209,6 +233,19 @@
                 padding-top: 16px;
             }
 
+            .vendor-products-hero {
+                border-radius: 0 0 16px 16px;
+                padding: 20px 0 22px;
+            }
+
+            .vendor-products-hero .hero-title {
+                font-size: 24px;
+            }
+
+            .vendor-products-hero .hero-subtitle {
+                font-size: 13px;
+            }
+
             .hp-section-row {
                 flex-direction: column;
                 align-items: stretch;
@@ -236,7 +273,16 @@
 
 @section('content')
     <main class="hp-main">
-        <section id="hero" class="hero-landing hero-home" style="background-image:url({{ asset('front/assets/images/men-girls-are-surfing.png') }});"></section>
+        <section class="vendor-products-hero">
+            <div class="container">
+                <h1 class="hero-title">{{ app()->getLocale() == 'ar' ? 'إدارة المنتجات' : 'Product Management' }}</h1>
+                <p class="hero-subtitle">
+                    {{ app()->getLocale() == 'ar'
+                        ? 'تابع منتجاتك بسهولة، وحدث الأسعار والمخزون بسرعة من لوحة واحدة.'
+                        : 'Manage your catalog efficiently and keep pricing and stock details up to date.' }}
+                </p>
+            </div>
+        </section>
 
         <div class="container vendor-products-wrap">
             @include('flash::message')
@@ -252,16 +298,12 @@
             @endif
 
             <div class="hp-page-head">
-                <h1 class="hp-page-title">{{ app()->getLocale() == 'ar' ? 'إدارة المنتجات' : 'Product Management' }}</h1>
-                <p class="hp-page-subtitle">
-                    {{ app()->getLocale() == 'ar'
-                        ? 'تابع منتجاتك بسهولة، وحدث الأسعار والمخزون بسرعة من لوحة واحدة.'
-                        : 'Manage your catalog efficiently and keep pricing and stock details up to date.' }}
-                </p>
+                <h2 class="hp-page-title">{{ app()->getLocale() == 'ar' ? 'منتجاتنا' : 'Our Products' }}</h2>
+                <p class="hp-page-subtitle">{{ app()->getLocale() == 'ar' ? 'عرض وإدارة جميع منتجاتك من مكان واحد.' : 'Browse and manage all your products from one place.' }}</p>
             </div>
 
             <div class="hp-section-row">
-                <h2 class="hp-section-title">{{ app()->getLocale() == 'ar' ? 'منتجاتنا' : 'Our Products' }}</h2>
+                <div></div>
 
                 <div class="d-flex align-items-center gap-3 flex-wrap">
                     <form method="GET" action="{{ route('vendor/products') }}" class="d-flex align-items-center">
