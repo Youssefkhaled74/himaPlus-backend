@@ -265,6 +265,8 @@ class AuthController extends Controller
             }
 
             if (FacadesAuth::guard('web')->attempt($request->only('email', 'password'))) {
+                $request->session()->regenerate();
+                $request->session()->save();
                 $loggedInUser = auth()->user();
                 Log::info('User login successful', $context + [
                     'user_id' => $loggedInUser?->id,

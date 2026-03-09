@@ -271,6 +271,8 @@ class VendorAuthController extends Controller
             }
 
             if (FacadesAuth::guard('web')->attempt($request->only('email', 'password'))) {
+                $request->session()->regenerate();
+                $request->session()->save();
                 Log::info('Vendor login successful', $context + [
                     'user_id' => auth()->id(),
                 ]);
