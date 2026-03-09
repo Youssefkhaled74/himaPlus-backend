@@ -293,7 +293,21 @@
                             if (!str_starts_with($p, 'http') && !str_contains($p, '/')) {
                                 $p = 'products/' . $p;
                             }
-                            return str_starts_with((string) $path, 'http') ? (string) $path : asset('storage/' . $p);
+                            if (str_starts_with((string) $path, 'http')) {
+                                return (string) $path;
+                            }
+
+                            // Prefer Laravel public disk path
+                            if (file_exists(storage_path('app/public/' . $p))) {
+                                return asset('storage/' . $p);
+                            }
+
+                            // Fallback for hosts storing files directly under public/
+                            if (file_exists(public_path($p))) {
+                                return asset($p);
+                            }
+
+                            return asset('storage/' . $p);
                         };
                         $placeholderImage = asset('front/assets/images/emptyproducts.png');
                     @endphp

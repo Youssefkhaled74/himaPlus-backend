@@ -338,9 +338,15 @@
                                             if (!str_starts_with($imgPath, 'http') && !str_contains($imgPath, '/')) {
                                                 $imgPath = 'products/' . $imgPath;
                                             }
-                                            $imgUrl = str_starts_with((string) $product->img, 'http')
-                                                ? (string) $product->img
-                                                : asset('storage/' . $imgPath);
+                                            if (str_starts_with((string) $product->img, 'http')) {
+                                                $imgUrl = (string) $product->img;
+                                            } elseif (file_exists(storage_path('app/public/' . $imgPath))) {
+                                                $imgUrl = asset('storage/' . $imgPath);
+                                            } elseif (file_exists(public_path($imgPath))) {
+                                                $imgUrl = asset($imgPath);
+                                            } else {
+                                                $imgUrl = asset('storage/' . $imgPath);
+                                            }
                                         @endphp
                                         <img src="{{ $imgUrl }}" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}';">
                                     @else
