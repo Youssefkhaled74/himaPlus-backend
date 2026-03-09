@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Hash as FacadesHash;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Facades\Log;
 use App\Models\Favorite;
 use App\Models\Report;
 
@@ -202,48 +203,105 @@ class AuthController extends Controller
         }
         return view('front.auth.login.login');
     }
-
     public function login(Request $request)
     {
+        $validator = null;
+        $context = [
+            'route' => 'user/check/login',
+            'email' => (string) $request->input('email'),
+            'ip' => $request->ip(),
+            'session_id' => $request->session()->getId(),
+            'has_csrf_token' => !empty($request->input('_token')),
+        ];
+
+        Log::info('User login request received', $context);
+
         try {
             $validator = Validator::make($request->all(), [
                 'email' => 'required|exists:users,email|max:100|min:6',
                 'password' => 'required',
             ]);
+
             if ($validator->fails()) {
+                Log::warning('User login validation failed', $context + [
+                    'errors' => $validator->errors()->toArray(),
+                ]);
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
 
             $user = $this->user->where('email', $request->email)->with(['cart.product', 'favorites.product'])->first();
-            if(!$user || !is_null($user->deleted_at) || (int)$user->is_activate == 0){
+            Log::info('User login account lookup', $context + [
+                'user_found' => (bool) $user,
+                'user_id' => $user?->id,
+                'user_type' => $user?->user_type,
+                'is_activate' => $user?->is_activate,
+                'deleted_at' => (string) $user?->deleted_at,
+                'mobile_verified_at' => (string) $user?->mobile_verified_at,
+                'email_verified_at' => (string) $user?->email_verified_at,
+            ]);
+
+            if (!$user || !is_null($user->deleted_at) || (int) $user->is_activate == 0) {
+                Log::warning('User login blocked: inactive/deleted/not-found', $context + [
+                    'user_id' => $user?->id,
+                ]);
                 flash()->error("هذا الحساب غير مفعل برجاء الاتصال بالاداره");
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
-            if(is_null($user->mobile_verified_at) && is_null($user->email_verified_at)){
+
+            if (is_null($user->mobile_verified_at) && is_null($user->email_verified_at)) {
+                Log::warning('User login blocked: account not verified', $context + [
+                    'user_id' => $user->id,
+                ]);
                 flash()->error("هذا الحساب غير مؤكد برجاء تاكيد الايميل او رقم الجوال");
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
-            if(!FacadesHash::check($request->password, $user->password)){
+
+            if (!FacadesHash::check($request->password, $user->password)) {
+                Log::warning('User login blocked: password mismatch', $context + [
+                    'user_id' => $user->id,
+                ]);
                 flash()->error('خطا في الايميل او الرقم السري');
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
 
-            if(FacadesAuth::guard('web')->attempt($request->only('email', 'password'))){
+            if (FacadesAuth::guard('web')->attempt($request->only('email', 'password'))) {
                 $loggedInUser = auth()->user();
+                Log::info('User login successful', $context + [
+                    'user_id' => $loggedInUser?->id,
+                    'user_type' => $loggedInUser?->user_type,
+                ]);
+
                 if ($loggedInUser && (int) $loggedInUser->user_type === 2) {
+                    Log::info('User login redirect target: vendor/dashboard', $context + [
+                        'user_id' => $loggedInUser->id,
+                    ]);
                     return redirect(route('vendor/dashboard'));
                 }
+
+                Log::info('User login redirect target: user/profile', $context + [
+                    'user_id' => $loggedInUser?->id,
+                ]);
                 return redirect(route('user/profile'));
-            }else{
-                flash()->error("There IS Something Worng");
-                return back();
             }
+
+            Log::error('User login failed: Auth::attempt returned false', $context + [
+                'user_id' => $user?->id,
+            ]);
+            flash()->error("There IS Something Worng");
+            return back();
         } catch (\Exception $e) {
+            Log::error('User login exception', $context + [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
             flash()->error("Internal Server Error");
-            return redirect()->to(url()->previous())->withErrors($validator)->withInput();
+            if ($validator) {
+                return redirect()->to(url()->previous())->withErrors($validator)->withInput();
+            }
+            return redirect()->to(url()->previous())->withInput();
         }
     }
-
     public function profile()
     {
         return view('front.auth.profile');
@@ -485,3 +543,4 @@ class AuthController extends Controller
     }
 
 }
+

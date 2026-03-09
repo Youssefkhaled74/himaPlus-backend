@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Facades\Log;
 
 class VendorAuthController extends Controller
 {
@@ -211,45 +212,89 @@ class VendorAuthController extends Controller
      */
     public function login(Request $request)
     {
+        $validator = null;
+        $context = [
+            'route' => 'vendor/check/login',
+            'email' => (string) $request->input('email'),
+            'ip' => $request->ip(),
+            'session_id' => $request->session()->getId(),
+            'has_csrf_token' => !empty($request->input('_token')),
+        ];
+
+        Log::info('Vendor login request received', $context);
+
         try {
             $validator = Validator::make($request->all(), [
                 'email' => 'required|exists:users,email|max:100|min:6',
                 'password' => 'required',
             ]);
-            
+
             if ($validator->fails()) {
+                Log::warning('Vendor login validation failed', $context + [
+                    'errors' => $validator->errors()->toArray(),
+                ]);
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
 
             $user = $this->user->where('email', $request->email)->where('user_type', 2)->first();
-            
-            if(!$user || !is_null($user->deleted_at) || (int)$user->is_activate == 0){
+            Log::info('Vendor login account lookup', $context + [
+                'user_found' => (bool) $user,
+                'user_id' => $user?->id,
+                'is_activate' => $user?->is_activate,
+                'deleted_at' => (string) $user?->deleted_at,
+                'mobile_verified_at' => (string) $user?->mobile_verified_at,
+                'email_verified_at' => (string) $user?->email_verified_at,
+            ]);
+
+            if (!$user || !is_null($user->deleted_at) || (int) $user->is_activate == 0) {
+                Log::warning('Vendor login blocked: inactive/deleted/not-found', $context + [
+                    'user_id' => $user?->id,
+                ]);
                 flash()->error("This account is not activated. Please contact support.");
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
-            
-            if(is_null($user->mobile_verified_at) && is_null($user->email_verified_at)){
+
+            if (is_null($user->mobile_verified_at) && is_null($user->email_verified_at)) {
+                Log::warning('Vendor login blocked: account not verified', $context + [
+                    'user_id' => $user->id,
+                ]);
                 flash()->error("This account is not verified. Please verify your email or mobile number.");
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
-            
-            if(!Hash::check($request->password, $user->password)){
+
+            if (!Hash::check($request->password, $user->password)) {
+                Log::warning('Vendor login blocked: password mismatch', $context + [
+                    'user_id' => $user->id,
+                ]);
                 flash()->error('Invalid email or password');
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
 
-            if(FacadesAuth::guard('web')->attempt($request->only('email', 'password'))){
+            if (FacadesAuth::guard('web')->attempt($request->only('email', 'password'))) {
+                Log::info('Vendor login successful', $context + [
+                    'user_id' => auth()->id(),
+                ]);
                 return redirect(route('vendor/dashboard'));
-            }else{
-                flash()->error("Login failed. Please try again.");
-                return back();
             }
+
+            Log::error('Vendor login failed: Auth::attempt returned false', $context + [
+                'user_id' => $user?->id,
+            ]);
+            flash()->error("Login failed. Please try again.");
+            return back();
         } catch (\Exception $e) {
+            Log::error('Vendor login exception', $context + [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
             flash()->error("Internal Server Error");
+            if ($validator) {
+                return redirect()->to(url()->previous())->withErrors($validator)->withInput();
+            }
             return back();
         }
     }
-
     /**
      * Show vendor profile
      */
@@ -492,3 +537,4 @@ class VendorAuthController extends Controller
         return redirect(route('vendor/login'));
     }
 }
+
