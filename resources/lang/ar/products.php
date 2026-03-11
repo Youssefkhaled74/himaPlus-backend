@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 return [
     // Categories page
@@ -24,6 +24,12 @@ return [
     'units_available' => 'وحدة متاحة',
     'specifications' => 'المواصفات',
     'ratings_reviews' => 'التقييمات والمراجعات',
+    'reviews_placeholder' => 'سيتم عرض التقييمات والمراجعات هنا.',
+    'manage_images' => 'إدارة الصور (تعديل / حذف صورة بصورة)',
+    'delete_product_confirm' => 'هل تريد حذف هذا المنتج؟',
+    'delete_product_title' => 'حذف المنتج',
+    'delete_product_message' => 'هل أنت متأكد من حذف هذا المنتج؟ لا يمكن التراجع عن هذا الإجراء.',
+    'currency_sar' => 'ر.س',
     'reviews' => 'مراجعات',
     'imaging_type' => 'نوع التصوير',
     'power' => 'الطاقة',

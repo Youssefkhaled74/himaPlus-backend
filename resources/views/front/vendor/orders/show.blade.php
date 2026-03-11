@@ -53,13 +53,14 @@
 
     .vos-alert{border:2px solid #2d67d8;background:#f8fbff;border-radius:12px;padding:12px 14px;color:#214eb5;font-size:15px;font-weight:600;line-height:1.35;}
 
-    .vos-timeline .line{position:relative;padding-left:38px;}
+    .vos-timeline .line{position:relative;padding-left:10px;}
     .vos-timeline .line::before{content:"";position:absolute;left:11px;top:10px;bottom:10px;border-left:2px dashed #d5dae2;}
-    .vos-step{position:relative;padding:10px 0 14px;}
-    .vos-step .dot{position:absolute;left:-2px;top:14px;width:24px;height:24px;border-radius:50%;background:#a3a7af;display:grid;place-items:center;color:#fff;font-size:13px;}
+    .vos-step{position:relative;display:flex;gap:14px;align-items:flex-start;padding:10px 0 14px;}
+    .vos-step .dot{position:relative;z-index:1;flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:#a3a7af;display:grid;place-items:center;color:#fff;font-size:13px;margin-left:-10px;}
     .vos-step.done .dot{background:linear-gradient(90deg,#0f4bbf,#10b981);}
-    .vos-step .name{font-size:15px;font-weight:600;color:#0f3f9f;line-height:1.2;}
-    .vos-step .date{font-size:13px;color:#7a8292;line-height:1.2;}
+    .vos-step-copy{display:flex;flex-direction:column;gap:4px;padding-top:1px;}
+    .vos-step .name{font-size:15px;font-weight:600;color:#0f3f9f;line-height:1.2;margin:0;}
+    .vos-step .date{font-size:13px;color:#7a8292;line-height:1.2;margin:0;}
     .vos-step.pending .name{color:#9aa1af;}
 
     .vos-contact{background:#f0f1f3;border-radius:10px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;}
@@ -316,15 +317,19 @@
                         @endphp
                         <div class="vos-step {{ $done ? 'done' : 'pending' }}">
                             <span class="dot"><i class="bi bi-check"></i></span>
-                            <div class="name">{{ $tr(timelineName($stepNo)) }}</div>
-                            <div class="date">{{ $entry ? $entry->created_at->translatedFormat('M j') : '-' }}</div>
+                            <div class="vos-step-copy">
+                                <div class="name">{{ $tr(timelineName($stepNo)) }}</div>
+                                <div class="date">{{ $entry ? $entry->created_at->translatedFormat('M j') : '-' }}</div>
+                            </div>
                         </div>
                     @endforeach
                     @if($myOffer && in_array(strtolower((string)$myOffer->status), ['3','rejected'], true))
                         <div class="vos-step done">
                             <span class="dot"><i class="bi bi-check"></i></span>
-                            <div class="name">{{ $tr('Offer Rejected') }}</div>
-                            <div class="date">{{ optional($myOffer->updated_at)->translatedFormat('M j') }}</div>
+                            <div class="vos-step-copy">
+                                <div class="name">{{ $tr('Offer Rejected') }}</div>
+                                <div class="date">{{ optional($myOffer->updated_at)->translatedFormat('M j') }}</div>
+                            </div>
                         </div>
                     @endif
                 </div>

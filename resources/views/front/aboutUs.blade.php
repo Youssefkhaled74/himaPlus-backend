@@ -26,22 +26,40 @@
         position: relative;
         z-index: 2;
     }
+    .about-intro-row {
+        align-items: center !important;
+        --bs-gutter-x: 2.5rem;
+    }
     .about-text-col {
         margin-top: 3rem !important;
+        max-width: 540px;
     }
     .about-image-stack {
         margin-top: 3rem;
+        justify-content: flex-end;
+        padding-inline-start: 1.5rem;
     }
     .text-muted-soft {
         color: #6f7d92 !important;
-        font-size: 20px;
-        line-height: 1.55;
+        font-size: 17px;
+        line-height: 1.85;
+        max-width: 520px;
     }
     .hp-img-vert {
-        width: 345px;
-        height: 520px;
+        width: 290px;
+        height: 430px;
         border-radius: 22px;
         object-fit: cover;
+        flex-shrink: 0;
+    }
+    .second-img {
+        margin-top: 70px !important;
+    }
+    .who-title {
+        color: #287d6c;
+        font-size: 36px;
+        line-height: 1.15;
+        display: inline-block;
     }
     .side-img {
         position: absolute;
@@ -103,12 +121,17 @@
         pointer-events: none;
     }
     @media (max-width: 991.98px) {
+        .about-intro-row {
+            --bs-gutter-x: 1.5rem;
+        }
         .about-text-col {
             margin-top: 0 !important;
+            max-width: 100%;
         }
         .about-image-stack {
             margin-top: 0;
             justify-content: center !important;
+            padding-inline-start: 0;
         }
         .hp-img-vert {
             width: 100%;
@@ -117,12 +140,29 @@
         }
         .text-muted-soft {
             font-size: 18px;
+            max-width: 100%;
+        }
+        .second-img {
+            margin-top: 24px !important;
         }
     }
     @media (max-width: 575.98px) {
+        .custom-container {
+            padding-left: 5% !important;
+            padding-right: 5% !important;
+        }
+        .who-title {
+            font-size: 30px;
+        }
         .text-muted-soft {
             font-size: 16px;
             line-height: 1.6;
+        }
+        .about-image-stack {
+            flex-direction: column;
+        }
+        .second-img {
+            margin-top: 0 !important;
         }
     }
 </style>
@@ -148,9 +188,9 @@
         <section class="hp-curves" dir="ltr">
             <div class="custom-container">
                 <div class="row g-4 align-items-start about-intro-row">
-                    <div class="col-lg-6 about-text-col" data-aos-once="false" data-aos-mirror="true" data-aos="fade-right">
+                    <div class="col-lg-5 about-text-col" data-aos-once="false" data-aos-mirror="true" data-aos="fade-right">
                         {{-- <h4 class="fw-bold mb-3"><span class="text-primary">Who</span> we <span class="hp-green">are</span></h4> --}}
-                        <h4 class="fw-bold mb-3"><span class="" style="color: #287d6c; font-size: 36px;">{{ __('about.who_we_are') }}</span></h4>
+                        <h4 class="fw-bold mb-3"><span class="who-title">{{ __('about.who_we_are') }}</span></h4>
                         <p class="text-muted-soft">
                             {{ __('about.who_p1') }}
                         </p>
@@ -161,10 +201,10 @@
                             {{ __('about.who_p3') }}
                         </p>
                     </div>
-                    <div class="col-lg-6" data-aos-once="false" data-aos-mirror="true" data-aos="fade-left">
+                    <div class="col-lg-7" data-aos-once="false" data-aos-mirror="true" data-aos="fade-left">
                         <div class="d-flex gap-3 justify-content-lg-end about-image-stack">
                             <img class="hp-img-vert" src="{{ asset('front/assets/images/close-up-individual-checking-delivery-list 1.png') }}" alt="Medical facility">
-                            <img style="margin-top: 10% !important;" class="hp-img-vert second-img" src="{{ asset('front/assets/images/healthcare-worker-protective-gear-handling-medical-supplies-packaging-healthcare-facility-focus-safety-precision 1.png') }}" alt="Team collaboration">
+                            <img class="hp-img-vert second-img" src="{{ asset('front/assets/images/healthcare-worker-protective-gear-handling-medical-supplies-packaging-healthcare-facility-focus-safety-precision 1.png') }}" alt="Team collaboration">
                         </div>
                     </div>
                 </div>

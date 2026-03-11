@@ -182,7 +182,10 @@
                         
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{route('admin/orders/index')}}/0/{{PAGINATION_COUNT}}" class="nav-link" data-key="t-orders-list"> Orders </a>
+                                <a href="{{route('admin/orders/index')}}/0/{{PAGINATION_COUNT}}?tab=orders" class="nav-link" data-key="t-orders-list"> Orders </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('admin/orders/index')}}/0/{{PAGINATION_COUNT}}?tab=requests" class="nav-link" data-key="t-requests-list"> Requests </a>
                             </li>
                         </ul>
 

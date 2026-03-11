@@ -93,6 +93,7 @@ class VendorProductController extends Controller
                 // Add specification fields
                 'imaging_type' => $request->imaging_type,
                 'manufacture_date' => $request->mfg_date,
+                'production_date' => $request->mfg_date,
                 'expiry_date' => $request->exp_date,
                 'weight' => $request->weight,
                 'dimensions' => $request->dimensions,
@@ -267,7 +268,7 @@ class VendorProductController extends Controller
         $vendor = auth()->user();
         $product = Product::where('id', $id)
             ->where('provider_id', $vendor->id)
-            ->with(['category', 'provider', 'ratings' => function($query) {
+            ->with(['category', 'provider', 'origin', 'ratings' => function($query) {
                 $query->where('is_activate', 1)->latest()->limit(5);
             }])
             ->firstOrFail();
@@ -331,6 +332,7 @@ class VendorProductController extends Controller
                 // Update specification fields
                 'imaging_type' => $request->imaging_type,
                 'manufacture_date' => $request->mfg_date,
+                'production_date' => $request->mfg_date,
                 'expiry_date' => $request->exp_date,
                 'weight' => $request->weight,
                 'dimensions' => $request->dimensions,

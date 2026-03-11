@@ -18,6 +18,7 @@
 
     .hp-main {
         background: #f7f9fc;
+        padding-top: 8px !important;
     }
 
     /* ===== UI Card (like modal) ===== */
@@ -153,7 +154,7 @@
 
 @section('content')
 <main class="hp-main">
-    <div class="container" style="max-width: 95%; padding-top: 24px; padding-bottom: 40px;">
+    <div class="container" style="max-width: 95%; padding-top: 8px; padding-bottom: 40px;">
 
         @include('flash::message')
 
@@ -412,7 +413,7 @@
 </main>
 @endsection
 
-@section('scripts')
+@section('script')
 <script>
     // Image preview
     document.getElementById('images').addEventListener('change', function(e) {

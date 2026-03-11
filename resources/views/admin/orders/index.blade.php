@@ -10,6 +10,11 @@
 @endsection
 
 @section('content')
+    @php
+        $tab = $tab ?? request('tab', 'orders');
+        $isRequestsPage = $tab === 'requests';
+        $pageTitle = $isRequestsPage ? 'Requests' : 'Orders';
+    @endphp
 
     <div class="page-content">
         <div class="container-fluid">
@@ -23,7 +28,7 @@
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"></li>
                                 <li class="breadcrumb-item"><a href="{{route('admin/index')}}">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/orders/index')}}/0/{{PAGINATION_COUNT}}">Orders</a></li>
+                                <li class="breadcrumb-item active"><a href="{{route('admin/orders/index')}}/0/{{PAGINATION_COUNT}}?tab={{ $tab }}">{{ $pageTitle }}</a></li>
                                 <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">Index</li>
                             </ol>
                         </div>
@@ -45,9 +50,15 @@
             
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
+                        <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Orders Viwes</h5>
+                            <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+                                <h5 class="card-title mb-0">{{ $pageTitle }} Views</h5>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders" class="btn btn-sm {{ $isRequestsPage ? 'btn-soft-secondary' : 'btn-primary' }}">Orders</a>
+                                    <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=requests" class="btn btn-sm {{ $isRequestsPage ? 'btn-primary' : 'btn-soft-secondary' }}">Requests</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div id="scroll-horizontal_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
@@ -95,7 +106,11 @@
                                                                         @endphp
                                                                         {{$orderType}}
                                                                     </td>
-                                                                    <td class="text-center">{{$record->user?->name}}</td>
+                                                                    <td class="text-center">
+                                                                        <a href="{{route('admin/orders/edit', $record->id)}}" class="text-reset text-decoration-none fw-medium">
+                                                                            {{$record->user?->name}}
+                                                                        </a>
+                                                                    </td>
                                                                     <td class="text-center">{{$record->provider?->name}}</td>
                                                                     <td class="text-center">{{$record->vat_amount}}</td>
                                                                     <td class="text-center">{{$record->total_cost}}</td>

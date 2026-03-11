@@ -4,7 +4,7 @@
 @endphp
 
 <header class="header landing-header">
-    <nav class="navbar navbar-expand-lg bg-white fixed-top" style="padding: 0;">
+    <nav class="navbar navbar-expand-lg bg-white fixed-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ $isVendorAuthed ? route('vendor/dashboard') : route('home') }}">
                 <img src="{{ asset('front/assets/images/WhatsApp Image 2025-09-06 at 14.00.40_dfdafdc6 2.png') }}" alt="HemaPulse logo">

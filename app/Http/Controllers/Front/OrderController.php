@@ -17,6 +17,7 @@ use App\Models\OrderItem;
 use Illuminate\Validation\Rule;
 use App\Http\ServicesLayer\PaymobServices\PaymobService;
 use App\Traits\PushNotificationsTrait;
+use Illuminate\Support\Facades\Log;
 use ZipArchive;
 
 class OrderController extends Controller
@@ -444,7 +445,25 @@ class OrderController extends Controller
             // 5 => Delivered, 6 => Completed, 7 => Offers Received, 8 => Supplier Selected, 
             // 9 => Converted to Order, 10 => Under Review, 11 => Assigned to Supplier
             DB::beginTransaction();
-            $order = $this->order->where('id', $request->order_id)->whereAny(['user_id', 'provider_id'], $user->id)->with(['timeline', 'user'])->first();
+            $order = $this->order->where('id', $request->order_id)
+                ->where(function ($query) use ($user) {
+                    $query->where('user_id', $user->id)
+                        ->orWhere('provider_id', $user->id);
+
+                    if ((int) $user->user_type === 2) {
+                        $query->orWhereHas('offers', function ($offersQuery) use ($user) {
+                            $offersQuery->where('provider_id', $user->id);
+                        });
+                    }
+                })
+                ->with(['timeline', 'user', 'offers'])
+                ->first();
+
+            if (!$order) {
+                flash()->error('order not found or access denied');
+                return back();
+            }
+
             $timeline_no_arr = array_column($order->timeline->toArray(), 'timeline_no');
             $timeline_no = (int)$request->timeline_no;
             $pre_timeline_no = $timeline_no - 1;
@@ -495,6 +514,12 @@ class OrderController extends Controller
             return back();
         }catch(\Exception $e){
             DB::rollBack();
+            Log::error('Order timeline update failed', [
+                'user_id' => auth()->id(),
+                'order_id' => $request->order_id ?? null,
+                'timeline_no' => $request->timeline_no ?? null,
+                'message' => $e->getMessage(),
+            ]);
             flash()->error("there is something wrong , please contact technical support");
             return back();
         }

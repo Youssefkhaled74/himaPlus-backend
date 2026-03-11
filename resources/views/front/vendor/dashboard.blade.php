@@ -1,885 +1,570 @@
-
 @extends('layouts.front.home')
 
-@php
-    $pageTitle = __('nav.dashboard');
-    $pageTitle = $pageTitle === 'nav.dashboard' ? 'Dashboard' : $pageTitle;
-@endphp
-
 @section('title')
-    <title>{{ $pageTitle }} - Vendor | HemaPulse</title>
+    <title>{{ __('nav.home') }} - Vendor | HemaPulse</title>
 @endsection
 
 @section('css')
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
-
-    :root {
-        --bg: #edf4fb;
-        --surface: rgba(255,255,255,.82);
-        --card: #fff;
-        --border: rgba(15,23,42,.08);
-        --border-strong: rgba(37,99,235,.16);
-        --text: #0f172a;
-        --muted: #64748b;
-        --primary: #175cd3;
-        --shadow: 0 24px 60px rgba(15,23,42,.12);
-        --shadow-sm: 0 12px 28px rgba(15,23,42,.08);
+    .vendor-home,
+    .vendor-home * {
+        font-family: "Poppins", "Tajawal", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
-    body, .vendor-dashboard, .vendor-dashboard * {
-        font-family: "Tajawal", system-ui, sans-serif;
+    .vendor-home {
+        background: #f6f8fb;
+        color: #1f2a37;
     }
 
-    .vendor-dashboard {
-        min-height: 100vh;
-        padding: 28px 18px 42px;
-        background:
-            radial-gradient(circle at top right, rgba(37,99,235,.18), transparent 22%),
-            linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+    .vh-container {
+        width: min(1160px, calc(100% - 32px));
+        margin-inline: auto;
     }
 
-    .dashboard-shell {
-        max-width: 1360px;
-        margin: 0 auto;
-        padding: 24px;
-        border-radius: 30px;
-        background: var(--surface);
-        backdrop-filter: blur(18px);
-        box-shadow: var(--shadow);
-    }
-
-    .vendor-dashboard.rtl {
-        direction: rtl;
-        text-align: right;
-    }
-
-    .hero {
+    .vh-hero {
+        min-height: 430px;
         display: grid;
-        grid-template-columns: 1.4fr .8fr;
-        gap: 16px;
-        padding: 28px;
-        border-radius: 28px;
-        margin-bottom: 20px;
+        place-items: center;
+        text-align: center;
         color: #fff;
-        background: linear-gradient(135deg, #0f172a 0%, #123873 45%, #175cd3 100%);
-        height: auto;
-        align-items: stretch;
+        background: linear-gradient(180deg, rgba(8, 20, 42, .45), rgba(8, 20, 42, .45)),
+                    url('{{ asset('front/assets/images/still-life-ophthalmologist-s-office1.png') }}') center/cover no-repeat;
     }
 
-    .hero-badge, .hero-chip {
+    .vh-hero h1 {
+        margin: 0;
+        font-size: clamp(32px, 4.5vw, 52px);
+        font-weight: 700;
+        line-height: 1.15;
+    }
+
+    .vh-hero p {
+        margin: 12px auto 0;
+        max-width: 760px;
+        font-size: 16px;
+        line-height: 1.7;
+        color: rgba(255,255,255,.92);
+    }
+
+    .btn-gradient {
+        margin-top: 20px;
+        min-width: 190px;
+        height: 48px;
+        border: 0;
+        border-radius: 10px;
+        font-weight: 600;
+        color: #fff;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 10px 14px;
-        border-radius: 999px;
-        background: rgba(255,255,255,.1);
-        border: 1px solid rgba(255,255,255,.14);
+        justify-content: center;
+        text-decoration: none;
+        background: linear-gradient(90deg, #0a46a3 0%, #08c49a 100%);
+    }
+
+    .btn-gradient:hover { color: #fff; filter: brightness(.98); }
+
+    .vh-section {
+        padding: 72px 0;
+    }
+
+    .vh-title {
+        margin: 0 0 28px;
+        text-align: center;
+        color: #0b847d;
+        font-size: clamp(28px, 4vw, 40px);
         font-weight: 700;
-        font-size: 14px;
     }
 
-    .hero h1 {
-        margin: 16px 0 10px;
-        font-size: 42px;
-        line-height: 1.08;
-        font-weight: 800;
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
     }
 
-    .vendor-dashboard.rtl .hero {
-        grid-template-columns: .8fr 1.4fr;
-    }
-
-    .hero p {
-        margin: 0;
-        color: rgba(255,255,255,.82);
-        line-height: 1.8;
-        font-size: 15px;
-    }
-
-    .hero-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 18px;
-    }
-
-    .vendor-dashboard.rtl .hero-pills {
-        justify-content: flex-start;
-    }
-
-    .hero-stat {
-        min-width: 150px;
-        padding: 14px 16px;
+    .service-card {
+        background: #fff;
+        border: 1px solid #e6edf8;
         border-radius: 18px;
-        background: rgba(255,255,255,.1);
-        border: 1px solid rgba(255,255,255,.14);
+        padding: 24px 20px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(22, 38, 74, .06);
     }
 
-    .hero-stat span {
+    .service-card img {
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+        margin-bottom: 14px;
+    }
+
+    .service-card h3 {
+        margin: 0 0 10px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #153a8a;
+    }
+
+    .service-card p {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .work-grid {
+        display: grid;
+        grid-template-columns: 1.1fr .9fr;
+        gap: 26px;
+        align-items: center;
+    }
+
+    .work-list {
+        display: grid;
+        gap: 14px;
+    }
+
+    .work-item {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .work-badge {
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        color: #fff;
+        font-size: 13px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #0a4aa8 0%, #08c59b 100%);
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .work-item h4 {
+        margin: 0;
+        color: #123c91;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .work-item p {
+        margin: 5px 0 0;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.75;
+    }
+
+    .work-media {
+        border-radius: 18px;
+        overflow: hidden;
+        min-height: 350px;
+    }
+
+    .work-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
         display: block;
     }
 
-    .hero-stat .label {
-        color: rgba(255,255,255,.72);
-        font-size: 13px;
-        margin-bottom: 6px;
+    .cta-banner {
+        padding: 70px 0;
+        color: #fff;
+        text-align: center;
+        background: linear-gradient(180deg, rgba(9, 16, 31, .46), rgba(9, 16, 31, .46)),
+                    url('{{ asset('front/assets/images/healthcare-worker-protective-gear-handling-medical-supplies-packaging-healthcare-facility-focus-safety-precision 1.png') }}') center/cover no-repeat;
     }
 
-    .hero-stat .value, .hero-side .value {
-        font-size: 28px;
-        font-weight: 800;
+    .cta-banner h2 {
+        margin: 0;
+        font-size: clamp(30px, 4vw, 48px);
+        font-weight: 700;
     }
 
-    .hero-side {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 14px;
-        padding: 22px;
-        border-radius: 24px;
-        background: rgba(255,255,255,.08);
-        border: 1px solid rgba(255,255,255,.14);
+    .cta-banner p {
+        margin: 10px 0 0;
+        color: rgba(255,255,255,.9);
     }
 
-    .hero-side .label, .hero-side .meta {
-        color: rgba(255,255,255,.78);
-        font-size: 14px;
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
     }
 
-    .section-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
+    .product-card {
+        background: #fff;
+        border: 1px solid #e6edf8;
+        border-radius: 14px;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 10px 26px rgba(22, 38, 74, .06);
+    }
+
+    .product-card:hover { color: inherit; }
+
+    .product-card .thumb {
+        height: 210px;
+        background: #ecf2fb;
+    }
+
+    .product-card .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .product-card .body {
+        padding: 14px 14px 16px;
+    }
+
+    .product-card h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .product-card p {
+        margin: 8px 0 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #0a46a3;
+    }
+
+    .faq-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .faq-wrap .accordion-item {
+        border: 1px solid #d9e4f4;
+        border-radius: 12px;
+        overflow: hidden;
         margin-bottom: 12px;
     }
 
-    .section-head h2, .panel-head h5 {
-        margin: 0;
-        font-size: 22px;
-        font-weight: 800;
-        color: var(--text);
+    .faq-wrap .accordion-button {
+        font-weight: 600;
+        font-size: 16px;
+        color: #193e91;
     }
 
-    .section-head p, .panel-head p {
-        margin: 4px 0 0;
-        color: var(--muted);
-        font-size: 14px;
+    .faq-wrap .accordion-button:not(.collapsed) {
+        color: #fff;
+        background: linear-gradient(90deg, #0a46a3 0%, #08c49a 100%);
     }
 
-    .stats-grid, .attention-grid, .actions-grid, .content-grid {
+    .testimonials {
         display: grid;
-        gap: 14px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
     }
 
-    .stats-grid { grid-template-columns: repeat(4, minmax(0,1fr)); margin-bottom: 18px; }
-    .attention-grid { grid-template-columns: repeat(4, minmax(0,1fr)); padding: 18px; }
-    .actions-grid { grid-template-columns: repeat(4, minmax(0,1fr)); padding: 18px; }
-    .content-grid { grid-template-columns: repeat(2, minmax(0,1fr)); margin-bottom: 18px; }
-
-    .stat-card, .panel, .attention-card, .action-card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .stat-card {
-        position: relative;
-        padding: 18px;
-        min-height: 158px;
-        border-radius: 22px;
-        overflow: hidden;
-        transition: .18s ease;
-    }
-
-    .stat-card:hover, .attention-card:hover, .action-card:hover {
-        transform: translateY(-3px);
-        border-color: var(--border-strong);
-    }
-
-    .stat-card::before {
-        content: "";
-        position: absolute;
-        top: 0; right: 0; left: 0;
-        height: 4px;
-        background: var(--accent, #175cd3);
-    }
-
-    .stat-top, .attention-top {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 12px;
-    }
-
-    .stat-chip {
-        display: inline-flex;
-        gap: 6px;
-        align-items: center;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: rgba(15,23,42,.04);
-        color: var(--muted);
-        font-size: 12px;
-        font-weight: 700;
-    }
-
-    .stat-icon, .attention-icon, .action-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 15px;
-        display: grid;
-        place-items: center;
-        font-size: 18px;
-        color: var(--icon-color, #175cd3);
-        background: var(--icon-bg, rgba(23,92,211,.12));
-    }
-    .stat-value, .attention-value {
-        margin: 18px 0 8px;
-        font-size: 34px;
-        line-height: 1;
-        font-weight: 800;
-        color: var(--text);
-    }
-
-    .stat-label, .attention-label, .action-title {
-        color: var(--text);
-        font-size: 15px;
-        font-weight: 800;
-        margin-bottom: 6px;
-    }
-
-    .stat-meta, .attention-desc, .action-desc, .list-sub, .list-time {
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.7;
-    }
-
-    .stat-orders { --accent:#175cd3; --icon-bg:rgba(23,92,211,.12); --icon-color:#175cd3; }
-    .stat-offers { --accent:#9333ea; --icon-bg:rgba(147,51,234,.12); --icon-color:#9333ea; }
-    .stat-products { --accent:#0891b2; --icon-bg:rgba(8,145,178,.12); --icon-color:#0891b2; }
-    .stat-rating { --accent:#16a34a; --icon-bg:rgba(22,163,74,.12); --icon-color:#16a34a; }
-    .stat-scheduled { --accent:#ea580c; --icon-bg:rgba(234,88,12,.12); --icon-color:#ea580c; }
-    .stat-completed { --accent:#059669; --icon-bg:rgba(5,150,105,.12); --icon-color:#059669; }
-    .stat-acceptance { --accent:#0284c7; --icon-bg:rgba(2,132,199,.12); --icon-color:#0284c7; }
-    .stat-revenue { --accent:#0f172a; --icon-bg:rgba(15,23,42,.08); --icon-color:#0f172a; }
-
-    .panel {
-        border-radius: 22px;
-        overflow: hidden;
-        margin-bottom: 18px;
-    }
-
-    .panel-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 18px 20px;
-        border-bottom: 1px solid rgba(15,23,42,.06);
-    }
-
-    .panel-link {
-        text-decoration: none;
-        color: var(--primary);
-        font-weight: 700;
-        font-size: 14px;
-    }
-
-    .vendor-dashboard.rtl .section-head,
-    .vendor-dashboard.rtl .panel-head,
-    .vendor-dashboard.rtl .list-item,
-    .vendor-dashboard.rtl .stat-top,
-    .vendor-dashboard.rtl .attention-top {
-        text-align: right;
-    }
-
-    .vendor-dashboard.rtl .action-card,
-    .vendor-dashboard.rtl .tip-card {
-        flex-direction: row-reverse;
-        text-align: right;
-    }
-
-    .vendor-dashboard.rtl .hero-badge,
-    .vendor-dashboard.rtl .hero-chip,
-    .vendor-dashboard.rtl .stat-chip {
-        flex-direction: row-reverse;
-    }
-
-    .vendor-dashboard.rtl .panel-link,
-    .vendor-dashboard.rtl .list-time,
-    .vendor-dashboard.rtl .stat-meta,
-    .vendor-dashboard.rtl .action-desc {
-        text-align: right;
-    }
-
-    .attention-card, .action-card {
-        display: block;
-        text-decoration: none;
-        color: inherit;
-        border-radius: 18px;
-        padding: 18px;
-        transition: .18s ease;
-    }
-
-    .attention-card {
-        background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
-    }
-
-    .action-card {
-        display: flex;
-        gap: 14px;
-        align-items: flex-start;
-    }
-
-    .attention-alert {
-        margin: 0 18px 18px;
-        padding: 14px 16px;
+    .test-card {
+        background: #fff;
+        border: 1px solid #e6edf8;
         border-radius: 16px;
-        border: 1px solid rgba(217,119,6,.16);
-        background: rgba(251,191,36,.12);
-        color: #92400e;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(22, 38, 74, .06);
+    }
+
+    .test-stars {
+        color: #f4b400;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+    }
+
+    .test-card p {
+        color: #475569;
+        margin: 0 0 14px;
+        line-height: 1.75;
+    }
+
+    .test-user {
+        font-weight: 700;
+        color: #123c91;
+        margin: 0;
+    }
+
+    .mobile-card {
+        background: linear-gradient(100deg, #eafaf6 0%, #f3f8ff 100%);
+        border: 1px solid #d8e7f9;
+        border-radius: 18px;
+        padding: 24px;
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+    }
+
+    .mobile-card h3 {
+        margin: 0 0 10px;
+        color: #0d3e8f;
+        font-size: clamp(24px, 3vw, 34px);
         font-weight: 700;
     }
 
-    .list-wrap { padding: 6px 0; }
-
-    .list-item {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 14px;
-        padding: 16px 20px;
-        border-top: 1px solid rgba(15,23,42,.06);
+    .mobile-card p {
+        margin: 0;
+        color: #475569;
+        line-height: 1.8;
     }
 
-    .list-item:first-child { border-top: 0; }
-    .list-title { margin: 0; color: var(--text); font-size: 15px; font-weight: 800; }
-    .list-time { white-space: nowrap; font-weight: 700; }
-
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 7px 11px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 800;
-        border: 1px solid transparent;
-    }
-
-    .status-pending { background: rgba(245,158,11,.12); color: #92400e; border-color: rgba(245,158,11,.22); }
-    .status-accepted { background: rgba(34,197,94,.12); color: #166534; border-color: rgba(34,197,94,.22); }
-    .status-rejected { background: rgba(239,68,68,.12); color: #991b1b; border-color: rgba(239,68,68,.22); }
-
-    .empty-state {
-        padding: 34px 20px;
+    .mobile-img {
         text-align: center;
-        color: var(--muted);
     }
 
-    .empty-state i {
-        display: block;
-        font-size: 24px;
-        margin-bottom: 8px;
-        color: #94a3b8;
+    .mobile-img img {
+        max-width: 100%;
+        height: auto;
     }
 
-    .tip-card {
+    .stores {
         display: flex;
-        gap: 14px;
-        align-items: flex-start;
-        padding: 18px 20px;
-        border-radius: 22px;
-        border: 1px solid rgba(23,92,211,.12);
-        background: linear-gradient(135deg, rgba(23,92,211,.08), rgba(8,145,178,.05));
+        gap: 10px;
+        margin-top: 14px;
+        flex-wrap: wrap;
     }
 
-    @media (max-width: 1199px) {
-        .stats-grid, .attention-grid, .actions-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
-    }
+    .stores img { height: 40px; width: auto; }
 
-    @media (max-width: 991px) {
-        .dashboard-shell { padding: 18px; }
-        .hero, .content-grid { grid-template-columns: 1fr; }
-        .hero h1 { font-size: 34px; }
-    }
-
-    @media (max-width: 767px) {
-        .vendor-dashboard { padding: 18px 10px 32px; }
-        .dashboard-shell { padding: 14px; border-radius: 22px; }
-        .hero { padding: 20px; border-radius: 22px; }
-        .hero h1 { font-size: 28px; }
-        .stats-grid, .attention-grid, .actions-grid, .content-grid { grid-template-columns: 1fr; }
-        .panel-head, .list-item, .section-head { flex-direction: column; align-items: flex-start; }
-        .list-time { white-space: normal; }
+    @media (max-width: 991.98px) {
+        .vh-section { padding: 48px 0; }
+        .services-grid, .products-grid, .testimonials { grid-template-columns: 1fr; }
+        .work-grid, .mobile-card { grid-template-columns: 1fr; }
+        .work-media { min-height: 250px; }
     }
 </style>
 @endsection
 
 @section('content')
 @php
-    $isRtl = app()->getLocale() === 'ar';
-    $copy = $isRtl ? [
-        'nav.vendor_portal' => 'بوابة الموردين',
-        'nav.welcome' => 'مرحبًا',
-        'nav.dashboard_description' => 'إدارة أعمالك وعرض التحليلات',
-        'nav.relevant_orders' => 'الطلبات المرتبطة بك',
-        'nav.active_products' => 'المنتجات النشطة',
-        'nav.unread_notifications' => 'الإشعارات غير المقروءة',
-        'nav.estimated_revenue' => 'الإيراد التقديري',
-        'nav.acceptance_rate' => 'معدل قبول العروض',
-        'nav.completed_orders' => 'الطلبات المكتملة',
-        'nav.dashboard_overview' => 'نظرة سريعة',
-        'nav.dashboard_overview_desc' => 'ملخص مباشر لأهم المؤشرات التي تهمك في إدارة نشاطك اليومي.',
-        'nav.live_data' => 'بيانات مباشرة',
-        'nav.orders_received' => 'الطلبات المستلمة',
-        'nav.orders_received_desc' => 'يشمل الطلبات المسندة لك أو الطلبات التي شاركت فيها بعرض.',
-        'nav.pipeline' => 'قيد المتابعة',
-        'nav.offers_made' => 'العروض المقدمة',
-        'nav.offers_made_desc' => 'جميع العروض التي قدمتها داخل المنصة حتى الآن.',
-        'nav.catalog' => 'الكتالوج',
-        'nav.active_products_desc' => 'المنتجات الظاهرة والمتاحة حاليًا للعملاء.',
-        'nav.customer_feedback' => 'تقييم العملاء',
-        'nav.average_rating' => 'متوسط التقييم',
-        'nav.review_count' => 'تقييمًا مسجلًا حتى الآن',
-        'nav.recurring' => 'متابعة دورية',
-        'nav.scheduled_orders' => 'الطلبات المجدولة',
-        'nav.scheduled_orders_desc' => 'طلبات تحتاج متابعة متكررة حسب الجدولة.',
-        'nav.fulfillment' => 'التنفيذ',
-        'nav.completed_orders_desc' => 'طلبات وصلت إلى مرحلة الإكمال داخل دورة العمل.',
-        'nav.performance' => 'الأداء',
-        'nav.accepted_offers' => 'عرضًا مقبولًا من إجمالي عروضك',
-        'nav.finance' => 'الجانب المالي',
-        'nav.estimated_revenue_desc' => 'إجمالي قيمة العروض المقبولة حتى الآن.',
-        'nav.requires_attention' => 'يحتاج متابعة',
-        'nav.priority_actions' => 'هذه العناصر تستحق أولويتك الآن.',
-        'nav.new_requests' => 'طلبات تحتاج مراجعة',
-        'nav.new_requests_desc' => 'طلبات جديدة أو مفتوحة قد تحتاج عرضًا أو متابعة سريعة.',
-        'nav.pending_offers' => 'العروض المعلقة',
-        'nav.pending_offers_desc' => 'عروض لا تزال بانتظار رد أو حسم نهائي.',
-        'nav.inactive_products' => 'منتجات غير نشطة',
-        'nav.inactive_products_desc' => 'منتجاتك المخفية حاليًا والتي لا تظهر للعملاء.',
-        'nav.unread_notifications_desc' => 'تنبيهات مهمة داخل لوحة المورد لم تتم مراجعتها بعد.',
-        'nav.low_stock_warning' => 'تنبيه مخزون منخفض',
-        'nav.products_need_restock' => 'منتج قد يحتاج إلى إعادة تزويد قريبًا.',
-        'nav.quick_actions' => 'الإجراءات السريعة',
-        'nav.shortcuts' => 'اختصارات مباشرة للمهام الأكثر استخدامًا.',
-        'nav.add_product' => 'إضافة منتج',
-        'nav.add_product_desc' => 'أنشئ منتجًا جديدًا وابدأ عرضه بسرعة داخل المنصة.',
-        'nav.view_products' => 'إدارة المنتجات',
-        'nav.view_products_desc' => 'راجع الأسعار والمخزون والتفاصيل من مكان واحد.',
-        'nav.view_orders' => 'إدارة الطلبات',
-        'nav.view_orders_desc' => 'تابع الطلبات الجديدة والتسليمات وحركة التنفيذ.',
-        'nav.view_offers' => 'إدارة العروض',
-        'nav.view_offers_desc' => 'راجع العروض المعلقة والمقبولة والمرفوضة.',
-        'nav.ratings' => 'التقييمات',
-        'nav.ratings_desc' => 'اطلع على تقييمات العملاء وما تعكسه عن الأداء.',
-        'profile.profile' => 'الملف الشخصي',
-        'nav.profile_desc' => 'حدّث بيانات نشاطك والمعلومات التي تبني الثقة.',
-        'nav.analytics' => 'التحليلات',
-        'nav.analytics_desc' => 'راجع الاتجاهات والمؤشرات الأعمق للأداء.',
-        'nav.recent_orders' => 'أحدث الطلبات',
-        'nav.recent_orders_desc' => 'آخر الطلبات المرتبطة بحسابك داخل المنصة.',
-        'nav.view_all' => 'عرض الكل',
-        'nav.order' => 'طلب',
-        'nav.unknown' => 'غير معروف',
-        'nav.no_orders' => 'لا توجد طلبات حتى الآن.',
-        'nav.pending_offers_panel_desc' => 'العروض التي لا تزال بانتظار الرد النهائي.',
-        'nav.offer' => 'عرض',
-        'nav.purchase_order' => 'طلب شراء',
-        'nav.maintenance_request' => 'طلب صيانة',
-        'nav.quotation_request' => 'طلب تسعير',
-        'nav.no_pending_offers' => 'لا توجد عروض معلقة حاليًا.',
-        'nav.recent_scheduled_orders' => 'أحدث الطلبات المجدولة',
-        'nav.recent_scheduled_orders_desc' => 'أقرب الطلبات المتكررة ضمن جدول التنفيذ.',
-        'nav.scheduled_order' => 'طلب مجدول',
-        'nav.no_scheduled_orders' => 'لا توجد طلبات مجدولة حاليًا.',
-        'nav.recent_notifications' => 'أحدث الإشعارات',
-        'nav.recent_notifications_desc' => 'آخر التنبيهات والتحديثات التي وصلت إلى حسابك.',
-        'nav.notification' => 'إشعار',
-        'nav.new' => 'جديد',
-        'nav.no_notifications' => 'لا توجد إشعارات حتى الآن.',
-        'nav.dashboard_tip_title' => 'نصيحة سريعة',
-        'nav.dashboard_info' => 'احرص على تحديث بياناتك والرد السريع على الطلبات والعروض المعلقة لرفع فرص القبول وزيادة العائد.',
-    ] : [];
-
-    $t = function ($key, $fallback = null) use ($copy) {
-        $value = __($key);
-        $broken = $value === $key || str_contains($value, 'Ø') || str_contains($value, 'Ù') || str_contains($value, 'Â');
-        return $broken ? ($copy[$key] ?? $fallback ?? $key) : $value;
-    };
-
-    $pendingOffersTotal = $pendingOffersCount ?? ($pendingOffers->count() ?? 0);
+    $isAr = app()->getLocale() === 'ar';
 @endphp
 
-<main class="vendor-dashboard{{ $isRtl ? ' rtl' : '' }}" dir="{{ $isRtl ? 'rtl' : 'ltr' }}">
+<main class="vendor-home">
     @include('flash::message')
 
-    <div class="dashboard-shell">
-        <section class="hero">
-            <div>
-                <span class="hero-badge">
-                    <i class="bi bi-shield-check"></i>
-                    {{ $t('nav.vendor_portal', 'Vendor Portal') }}
-                </span>
-                <h1>{{ $t('nav.welcome', 'Welcome') }}, {{ auth()->user()->name }}</h1>
-                <p>{{ $t('nav.dashboard_description', 'Track store performance, monitor key requests, and move quickly on the actions that need your attention today.') }}</p>
+    <section class="vh-hero">
+        <div class="vh-container">
+            <h1>{{ $isAr ? 'مرحبًا، موردي الأجهزة الطبية' : 'Welcome, Medical Suppliers' }}</h1>
+            <p>
+                {{ $isAr ? 'أدر منتجاتك الطبية وتابع طلبات المستشفيات والعيادات في مكان واحد بكل سهولة.' : 'Track your medical products and connect directly with hospitals and clinics looking for verified suppliers.' }}
+            </p>
+            <a href="{{ route('vendor/products/create') }}" class="btn-gradient">
+                {{ $isAr ? 'إضافة منتج جديد' : 'Add New Product' }}
+            </a>
+        </div>
+    </section>
 
-                <div class="hero-pills">
-                    <div class="hero-stat">
-                        <span class="label">{{ $t('nav.relevant_orders', 'Relevant Orders') }}</span>
-                        <span class="value">{{ number_format($ordersCount) }}</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="label">{{ $t('nav.active_products', 'Active Products') }}</span>
-                        <span class="value">{{ number_format($productsCount) }}</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="label">{{ $t('nav.unread_notifications', 'Unread Notifications') }}</span>
-                        <span class="value">{{ number_format($unreadNotificationsCount) }}</span>
-                    </div>
-                </div>
-            </div>
+    <section class="vh-section">
+        <div class="vh-container">
+            <h2 class="vh-title">{{ $isAr ? 'خدماتنا' : 'Our Services' }}</h2>
 
-            <div class="hero-side">
-                <div>
-                    <div class="label">{{ $t('nav.estimated_revenue', 'Estimated Revenue') }}</div>
-                    <div class="value">{{ number_format((float) $estimatedRevenue, 0) }}</div>
-                </div>
-                <div class="hero-chip"><i class="bi bi-graph-up-arrow"></i>{{ $t('nav.acceptance_rate', 'Acceptance Rate') }}: {{ $acceptanceRate }}%</div>
-                <div class="meta"><i class="bi bi-check2-circle me-1"></i>{{ $t('nav.completed_orders', 'Completed Orders') }}: {{ number_format($completedOrdersCount) }}</div>
-            </div>
-        </section>
+            <div class="services-grid">
+                <article class="service-card">
+                    <img src="{{ asset('front/assets/images/icon1_transparent.png') }}" alt="Service 1">
+                    <h3>{{ $isAr ? 'عرض المنتجات' : 'Product Listing' }}</h3>
+                    <p>{{ $isAr ? 'أضف منتجاتك الطبية واعرضها بطريقة احترافية لتصل للمشترين بسرعة.' : 'List your products with complete details and clear pricing for buyers.' }}</p>
+                </article>
 
-        <div class="section-head">
-            <div>
-                <h2>{{ $t('nav.dashboard_overview', 'Quick Overview') }}</h2>
-                <p>{{ $t('nav.dashboard_overview_desc', 'A direct summary of the metrics that matter most for your daily workflow.') }}</p>
+                <article class="service-card">
+                    <img src="{{ asset('front/assets/images/icon2_transparent.png') }}" alt="Service 2">
+                    <h3>{{ $isAr ? 'استقبال الطلبات' : 'Receive Requests' }}</h3>
+                    <p>{{ $isAr ? 'استقبل طلبات الشراء والتسعير من الجهات الصحية مباشرة من لوحة المورد.' : 'Receive order and quotation requests directly from healthcare buyers.' }}</p>
+                </article>
+
+                <article class="service-card">
+                    <img src="{{ asset('front/assets/images/icon3_transparent.png') }}" alt="Service 3">
+                    <h3>{{ $isAr ? 'دفع آمن' : 'Secure Payments' }}</h3>
+                    <p>{{ $isAr ? 'تعاملات مالية موثوقة وآمنة مع متابعة كاملة لحالة الطلب.' : 'Reliable and secure payment flow with transparent order tracking.' }}</p>
+                </article>
             </div>
         </div>
+    </section>
 
-        <section class="stats-grid">
-            <article class="stat-card stat-orders">
-                <div class="stat-top">
-                    <div class="stat-chip"><i class="bi bi-arrow-repeat"></i>{{ $t('nav.live_data', 'Live Data') }}</div>
-                    <div class="stat-icon"><i class="bi bi-bag"></i></div>
+    <section class="vh-section pt-0">
+        <div class="vh-container">
+            <h2 class="vh-title">{{ $isAr ? 'كيف تعمل المنصة' : 'How It Works' }}</h2>
+
+            <div class="work-grid">
+                <div class="work-list">
+                    <div class="work-item">
+                        <div class="work-badge"><i class="bi bi-check-lg"></i></div>
+                        <div>
+                            <h4>{{ $isAr ? 'التسجيل كمورد' : 'Register as a Supplier' }}</h4>
+                            <p>{{ $isAr ? 'أنشئ حسابك واملأ بيانات النشاط التجاري لبدء العمل.' : 'Create your account and complete your company details.' }}</p>
+                        </div>
+                    </div>
+                    <div class="work-item">
+                        <div class="work-badge"><i class="bi bi-check-lg"></i></div>
+                        <div>
+                            <h4>{{ $isAr ? 'اعتماد الحساب' : 'Get Approved' }}</h4>
+                            <p>{{ $isAr ? 'بعد مراجعة البيانات يتم تفعيل حسابك كمورد موثوق.' : 'Your account is reviewed and approved for trusted selling.' }}</p>
+                        </div>
+                    </div>
+                    <div class="work-item">
+                        <div class="work-badge"><i class="bi bi-check-lg"></i></div>
+                        <div>
+                            <h4>{{ $isAr ? 'استلام الطلبات' : 'Receive Requests' }}</h4>
+                            <p>{{ $isAr ? 'تابع طلبات المنتجات من المستشفيات والعيادات مباشرة.' : 'Receive incoming product requests from hospitals and clinics.' }}</p>
+                        </div>
+                    </div>
+                    <div class="work-item">
+                        <div class="work-badge"><i class="bi bi-check-lg"></i></div>
+                        <div>
+                            <h4>{{ $isAr ? 'تقديم العروض والتسليم' : 'Submit Offers & Deliver' }}</h4>
+                            <p>{{ $isAr ? 'أرسل عروضك، اتفق على الأسعار، وأدر عمليات التسليم.' : 'Send quotations, finalize deals, and complete delivery.' }}</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-value">{{ number_format($ordersCount) }}</div>
-                <div class="stat-label">{{ $t('nav.orders_received', 'Orders Related To You') }}</div>
-                <div class="stat-meta">{{ $t('nav.orders_received_desc', 'Includes orders assigned to you or orders where you submitted an offer.') }}</div>
-            </article>
 
-            <article class="stat-card stat-offers">
-                <div class="stat-top">
-                    <div class="stat-chip"><i class="bi bi-chat-dots"></i>{{ $t('nav.pipeline', 'In Progress') }}</div>
-                    <div class="stat-icon"><i class="bi bi-chat-left-text"></i></div>
+                <div class="work-media">
+                    <img src="{{ asset('front/assets/images/image.png') }}" alt="How It Works">
                 </div>
-                <div class="stat-value">{{ number_format($offersCount) }}</div>
-                <div class="stat-label">{{ $t('nav.offers_made', 'Submitted Offers') }}</div>
-                <div class="stat-meta">{{ $t('nav.offers_made_desc', 'All offers you have submitted across the platform so far.') }}</div>
-            </article>
+            </div>
+        </div>
+    </section>
 
-            <article class="stat-card stat-products">
-                <div class="stat-top">
-                    <div class="stat-chip"><i class="bi bi-box-seam"></i>{{ $t('nav.catalog', 'Catalog') }}</div>
-                    <div class="stat-icon"><i class="bi bi-box"></i></div>
-                </div>
-                <div class="stat-value">{{ number_format($productsCount) }}</div>
-                <div class="stat-label">{{ $t('nav.active_products', 'Active Products') }}</div>
-                <div class="stat-meta">{{ $t('nav.active_products_desc', 'Products currently visible and available to customers.') }}</div>
-            </article>
+    <section class="cta-banner">
+        <div class="vh-container">
+            <h2>{{ $isAr ? 'نمِّ مبيعاتك مع HemaPulse' : 'Grow Your Sales with Hemapulse' }}</h2>
+            <p>{{ $isAr ? 'تواصل مع الجهات الصحية الباحثة عن موردين مثلك.' : 'Connect with hospitals actively looking for suppliers like you.' }}</p>
+            <a href="{{ route('vendor/products') }}" class="btn-gradient">
+                {{ $isAr ? 'إدارة المنتجات' : 'Join as a Supplier' }}
+            </a>
+        </div>
+    </section>
 
-            <article class="stat-card stat-rating">
-                <div class="stat-top">
-                    <div class="stat-chip"><i class="bi bi-star-fill"></i>{{ $t('nav.customer_feedback', 'Customer Rating') }}</div>
-                    <div class="stat-icon"><i class="bi bi-award"></i></div>
-                </div>
-                <div class="stat-value">{{ number_format($avgRating, 1) }}</div>
-                <div class="stat-label">{{ $t('nav.average_rating', 'Average Rating') }}</div>
-                <div class="stat-meta">{{ $ratingCount }} {{ $t('nav.review_count', 'reviews recorded so far') }}</div>
-            </article>
+    <section class="vh-section">
+        <div class="vh-container">
+            <h2 class="vh-title">{{ $isAr ? 'الأكثر طلبًا' : 'Most Requested Products' }}</h2>
 
-            <article class="stat-card stat-scheduled">
-                <div class="stat-top">
-                    <div class="stat-chip"><i class="bi bi-calendar-check"></i>{{ $t('nav.recurring', 'Recurring') }}</div>
-                    <div class="stat-icon"><i class="bi bi-calendar-event"></i></div>
-                </div>
-                <div class="stat-value">{{ number_format($scheduledOrdersCount ?? 0) }}</div>
-                <div class="stat-label">{{ $t('nav.scheduled_orders', 'Scheduled Orders') }}</div>
-                <div class="stat-meta">{{ $t('nav.scheduled_orders_desc', 'Requests that need recurring follow-up on scheduled dates.') }}</div>
-            </article>
+            <div class="products-grid">
+                @forelse($featuredProducts as $product)
+                    @php
+                        $imgUrl = asset('front/assets/images/emptyproducts.png');
+                        if (!empty($product->img)) {
+                            $imgPath = ltrim((string) $product->img, '/');
+                            if (!str_starts_with($imgPath, 'http') && !str_contains($imgPath, '/')) {
+                                $imgPath = 'products/' . $imgPath;
+                            }
+                            if (str_starts_with((string) $product->img, 'http')) {
+                                $imgUrl = (string) $product->img;
+                            } elseif (file_exists(storage_path('app/public/' . $imgPath))) {
+                                $imgUrl = asset('storage/' . $imgPath);
+                            } elseif (file_exists(public_path($imgPath))) {
+                                $imgUrl = asset($imgPath);
+                            } else {
+                                $imgUrl = asset('storage/' . $imgPath);
+                            }
+                        }
+                    @endphp
+                    <a href="{{ route('vendor/products/show', $product->id) }}" class="product-card">
+                        <div class="thumb">
+                            <img src="{{ $imgUrl }}" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}';">
+                        </div>
+                        <div class="body">
+                            <h3>{{ $product->name }}</h3>
+                            <p>{{ number_format((float) $product->price, 2) }} {{ __('products.currency_sar') ?: 'SAR' }}</p>
+                        </div>
+                    </a>
+                @empty
+                    <article class="service-card" style="grid-column: 1/-1;">
+                        <h3>{{ $isAr ? 'لا توجد منتجات بعد' : 'No products yet' }}</h3>
+                        <p>{{ $isAr ? 'ابدأ بإضافة أول منتج لعرضه هنا.' : 'Add your first product to show it here.' }}</p>
+                        <a href="{{ route('vendor/products/create') }}" class="btn-gradient">{{ $isAr ? 'إضافة منتج' : 'Add Product' }}</a>
+                    </article>
+                @endforelse
+            </div>
+        </div>
+    </section>
 
-            <article class="stat-card stat-completed">
-                <div class="stat-top">
-                    <div class="stat-chip"><i class="bi bi-check2-circle"></i>{{ $t('nav.fulfillment', 'Fulfillment') }}</div>
-                    <div class="stat-icon"><i class="bi bi-check2-square"></i></div>
-                </div>
-                <div class="stat-value">{{ number_format($completedOrdersCount) }}</div>
-                <div class="stat-label">{{ $t('nav.completed_orders', 'Completed Orders') }}</div>
-                <div class="stat-meta">{{ $t('nav.completed_orders_desc', 'Orders that reached the completed phase in the workflow.') }}</div>
-            </article>
-
-            <article class="stat-card stat-acceptance">
-                <div class="stat-top">
-                    <div class="stat-chip"><i class="bi bi-graph-up-arrow"></i>{{ $t('nav.performance', 'Performance') }}</div>
-                    <div class="stat-icon"><i class="bi bi-bar-chart-line"></i></div>
-                </div>
-                <div class="stat-value">{{ $acceptanceRate }}%</div>
-                <div class="stat-label">{{ $t('nav.acceptance_rate', 'Acceptance Rate') }}</div>
-                <div class="stat-meta">{{ $acceptedOffersCount }} {{ $t('nav.accepted_offers', 'accepted offers from your total offers') }}</div>
-            </article>
-
-            <article class="stat-card stat-revenue">
-                <div class="stat-top">
-                    <div class="stat-chip"><i class="bi bi-cash-coin"></i>{{ $t('nav.finance', 'Financials') }}</div>
-                    <div class="stat-icon"><i class="bi bi-wallet2"></i></div>
-                </div>
-                <div class="stat-value">{{ number_format((float) $estimatedRevenue, 0) }}</div>
-                <div class="stat-label">{{ $t('nav.estimated_revenue', 'Estimated Revenue') }}</div>
-                <div class="stat-meta">{{ $t('nav.estimated_revenue_desc', 'Total value of accepted offers so far.') }}</div>
-            </article>
-        </section>
-
-        <section class="panel">
-            <div class="panel-head">
+    <section class="vh-section pt-0">
+        <div class="vh-container">
+            <div class="mobile-card">
                 <div>
-                    <h5>{{ $t('nav.requires_attention', 'Requires Attention') }}</h5>
-                    <p>{{ $t('nav.priority_actions', 'These items deserve your focus right now.') }}</p>
+                    <h3>{{ $isAr ? 'إدارة الطلبات أثناء التنقل' : 'Manage Requests On the Go' }}</h3>
+                    <p>{{ $isAr ? 'تابع الطلبات والعروض بسرعة من خلال تطبيق HemaPulse على هاتفك.' : 'Monitor requests and offers from your phone with the HemaPulse app.' }}</p>
+                    <div class="stores">
+                        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+                    </div>
+                </div>
+                <div class="mobile-img">
+                    <img src="{{ asset('front/assets/images/Group 1171275716.png') }}" alt="Mobile App">
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="attention-grid">
-                <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="attention-card">
-                    <div class="attention-top">
-                        <div class="attention-icon"><i class="bi bi-clipboard-check"></i></div>
-                        <div class="attention-value">{{ number_format($newRequestsCount) }}</div>
-                    </div>
-                    <div class="attention-label">{{ $t('nav.new_requests', 'Requests To Review') }}</div>
-                    <div class="attention-desc">{{ $t('nav.new_requests_desc', 'New or open requests that may need a quick quotation or follow-up.') }}</div>
-                </a>
-
-                <a href="{{ route('vendor/orders/my-offers') }}" class="attention-card">
-                    <div class="attention-top">
-                        <div class="attention-icon"><i class="bi bi-hourglass-split"></i></div>
-                        <div class="attention-value">{{ number_format($pendingOffersTotal) }}</div>
-                    </div>
-                    <div class="attention-label">{{ $t('nav.pending_offers', 'Pending Offers') }}</div>
-                    <div class="attention-desc">{{ $t('nav.pending_offers_desc', 'Offers that still need a response or decision.') }}</div>
-                </a>
-
-                <a href="{{ route('vendor/products', ['status' => 'inactive']) }}" class="attention-card">
-                    <div class="attention-top">
-                        <div class="attention-icon"><i class="bi bi-eye-slash"></i></div>
-                        <div class="attention-value">{{ number_format($inactiveProductsCount) }}</div>
-                    </div>
-                    <div class="attention-label">{{ $t('nav.inactive_products', 'Inactive Products') }}</div>
-                    <div class="attention-desc">{{ $t('nav.inactive_products_desc', 'Hidden products that are not currently visible to customers.') }}</div>
-                </a>
-
-                <a href="{{ route('vendor/notifications', ['filter' => 'unread']) }}" class="attention-card">
-                    <div class="attention-top">
-                        <div class="attention-icon"><i class="bi bi-bell"></i></div>
-                        <div class="attention-value">{{ number_format($unreadNotificationsCount) }}</div>
-                    </div>
-                    <div class="attention-label">{{ $t('nav.unread_notifications', 'Unread Notifications') }}</div>
-                    <div class="attention-desc">{{ $t('nav.unread_notifications_desc', 'Important updates inside your vendor panel that still need review.') }}</div>
-                </a>
-            </div>
-
-            @if($lowStockProductsCount > 0)
-                <div class="attention-alert">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    {{ $t('nav.low_stock_warning', 'Low Stock Warning') }}:
-                    {{ number_format($lowStockProductsCount) }}
-                    {{ $t('nav.products_need_restock', 'products may need restocking soon.') }}
-                </div>
-            @endif
-        </section>
-
-        <section class="panel">
-            <div class="panel-head">
-                <div>
-                    <h5>{{ $t('nav.quick_actions', 'Quick Actions') }}</h5>
-                    <p>{{ $t('nav.shortcuts', 'Direct shortcuts to the tasks you use most.') }}</p>
-                </div>
-            </div>
-
-            <div class="actions-grid">
-                <a href="{{ route('vendor/products/create') }}" class="action-card">
-                    <div class="action-icon" style="background: rgba(23,92,211,.12); color:#175cd3;"><i class="bi bi-plus-lg"></i></div>
-                    <div><div class="action-title">{{ $t('nav.add_product', 'Add Product') }}</div><div class="action-desc">{{ $t('nav.add_product_desc', 'Create a new product and publish it quickly.') }}</div></div>
-                </a>
-                <a href="{{ route('vendor/products') }}" class="action-card">
-                    <div class="action-icon" style="background: rgba(2,132,199,.12); color:#0284c7;"><i class="bi bi-box-seam"></i></div>
-                    <div><div class="action-title">{{ $t('nav.view_products', 'Manage Products') }}</div><div class="action-desc">{{ $t('nav.view_products_desc', 'Review prices, inventory, and product details from one place.') }}</div></div>
-                </a>
-                <a href="{{ route('vendor/orders') }}" class="action-card">
-                    <div class="action-icon" style="background: rgba(234,88,12,.12); color:#ea580c;"><i class="bi bi-receipt"></i></div>
-                    <div><div class="action-title">{{ $t('nav.view_orders', 'Manage Orders') }}</div><div class="action-desc">{{ $t('nav.view_orders_desc', 'Follow new requests, deliveries, and active order flow.') }}</div></div>
-                </a>
-                <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="action-card">
-                    <div class="action-icon" style="background: rgba(245,158,11,.12); color:#d97706;"><i class="bi bi-calendar-check"></i></div>
-                    <div><div class="action-title">{{ $t('nav.scheduled_orders', 'Scheduled Orders') }}</div><div class="action-desc">{{ $t('nav.scheduled_orders_desc', 'Track recurring orders and their upcoming execution dates.') }}</div></div>
-                </a>
-                <a href="{{ route('vendor/orders/my-offers') }}" class="action-card">
-                    <div class="action-icon" style="background: rgba(147,51,234,.12); color:#9333ea;"><i class="bi bi-chat-quote"></i></div>
-                    <div><div class="action-title">{{ $t('nav.view_offers', 'Manage Offers') }}</div><div class="action-desc">{{ $t('nav.view_offers_desc', 'Review pending, accepted, and rejected offers.') }}</div></div>
-                </a>
-                <a href="{{ route('vendor/ratings') }}" class="action-card">
-                    <div class="action-icon" style="background: rgba(22,163,74,.12); color:#16a34a;"><i class="bi bi-star-fill"></i></div>
-                    <div><div class="action-title">{{ $t('nav.ratings', 'Ratings') }}</div><div class="action-desc">{{ $t('nav.ratings_desc', 'Check customer ratings and what they reflect about performance.') }}</div></div>
-                </a>
-                <a href="{{ route('vendor/profile') }}" class="action-card">
-                    <div class="action-icon" style="background: rgba(15,23,42,.08); color:#0f172a;"><i class="bi bi-person-circle"></i></div>
-                    <div><div class="action-title">{{ $t('profile.profile', 'Profile') }}</div><div class="action-desc">{{ $t('nav.profile_desc', 'Keep your business information and trust details updated.') }}</div></div>
-                </a>
-                <a href="{{ route('vendor/analytics') }}" class="action-card">
-                    <div class="action-icon" style="background: rgba(236,72,153,.1); color:#db2777;"><i class="bi bi-graph-up"></i></div>
-                    <div><div class="action-title">{{ $t('nav.analytics', 'Analytics') }}</div><div class="action-desc">{{ $t('nav.analytics_desc', 'Review deeper trends and performance insights.') }}</div></div>
-                </a>
-            </div>
-        </section>
-
-        <section class="content-grid">
-            <div class="panel">
-                <div class="panel-head">
-                    <div>
-                        <h5>{{ $t('nav.recent_orders', 'Recent Orders') }}</h5>
-                        <p>{{ $t('nav.recent_orders_desc', 'Latest orders related to your account in the platform.') }}</p>
-                    </div>
-                    <a href="{{ route('vendor/orders') }}" class="panel-link">{{ $t('nav.view_all', 'View All') }}</a>
-                </div>
-                <div class="list-wrap">
-                    @forelse($recentOrders as $order)
-                        <div class="list-item">
-                            <div>
-                                <p class="list-title">{{ $t('nav.order', 'Order') }} #{{ $order->id }}</p>
-                                <div class="list-sub"><i class="bi bi-person me-1"></i>{{ $order->user->name ?? $t('nav.unknown', 'Unknown') }}</div>
+    <section class="vh-section pt-0">
+        <div class="vh-container">
+            <h2 class="vh-title">FAQ</h2>
+            <div class="faq-wrap">
+                <div class="accordion" id="dashboardFaq">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                {{ $isAr ? 'كيف أضيف منتجًا جديدًا؟' : 'How do I add a new product?' }}
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#dashboardFaq">
+                            <div class="accordion-body">
+                                {{ $isAr ? 'اذهب إلى صفحة المنتجات ثم اضغط إضافة منتج وأدخل البيانات المطلوبة.' : 'Open Products, click Add Product, then fill all required details.' }}
                             </div>
-                            <div class="list-time"><i class="bi bi-clock me-1"></i>{{ $order->created_at->diffForHumans() }}</div>
                         </div>
-                    @empty
-                        <div class="empty-state"><i class="bi bi-inbox"></i>{{ $t('nav.no_orders', 'No orders yet.') }}</div>
-                    @endforelse
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-head">
-                    <div>
-                        <h5>{{ $t('nav.pending_offers', 'Pending Offers') }}</h5>
-                        <p>{{ $t('nav.pending_offers_panel_desc', 'Offers that are still waiting for a final response.') }}</p>
                     </div>
-                    <a href="{{ route('vendor/orders/my-offers') }}" class="panel-link">{{ $t('nav.view_all', 'View All') }}</a>
-                </div>
-                <div class="list-wrap">
-                    @forelse($pendingOffers as $offer)
-                        @php
-                            $offerStatus = (string) $offer->status;
-                            $offerStatusLabel = ($offerStatus === '2' || strtolower($offerStatus) === 'accepted') ? 'accepted' : (($offerStatus === '3' || strtolower($offerStatus) === 'rejected') ? 'rejected' : 'pending');
-                        @endphp
-                        <div class="list-item">
-                            <div>
-                                <p class="list-title">{{ $t('nav.offer', 'Offer') }} #{{ $offer->id }}</p>
-                                <div class="list-sub">
-                                    <i class="bi bi-tag me-1"></i>
-                                    @if((int) ($offer->order->order_type ?? 0) === 1)
-                                        {{ $t('nav.purchase_order', 'Purchase Order') }}
-                                    @elseif((int) ($offer->order->order_type ?? 0) === 3)
-                                        {{ $t('nav.maintenance_request', 'Maintenance Request') }}
-                                    @else
-                                        {{ $t('nav.quotation_request', 'Quotation Request') }}
-                                    @endif
-                                </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                {{ $isAr ? 'هل يمكن تعديل المنتج بعد حفظه؟' : 'Can I edit a product after saving?' }}
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#dashboardFaq">
+                            <div class="accordion-body">
+                                {{ $isAr ? 'نعم، يمكنك تعديل كل تفاصيل المنتج من صفحة عرض المنتج.' : 'Yes, you can edit all product details from the product page.' }}
                             </div>
-                            <span class="status-badge status-{{ $offerStatusLabel }}">{{ ucfirst($offerStatusLabel) }}</span>
                         </div>
-                    @empty
-                        <div class="empty-state"><i class="bi bi-check2-circle"></i>{{ $t('nav.no_pending_offers', 'No pending offers right now.') }}</div>
-                    @endforelse
-                </div>
-            </div>
-        </section>
-        <section class="content-grid">
-            <div class="panel">
-                <div class="panel-head">
-                    <div>
-                        <h5>{{ $t('nav.recent_scheduled_orders', 'Recent Scheduled Orders') }}</h5>
-                        <p>{{ $t('nav.recent_scheduled_orders_desc', 'The nearest recurring tasks in your execution schedule.') }}</p>
                     </div>
-                    <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="panel-link">{{ $t('nav.view_all', 'View All') }}</a>
-                </div>
-                <div class="list-wrap">
-                    @forelse($recentScheduledOrders ?? [] as $order)
-                        <div class="list-item">
-                            <div>
-                                <p class="list-title">{{ $t('nav.scheduled_order', 'Scheduled Order') }} #{{ $order->id }}</p>
-                                <div class="list-sub">
-                                    <i class="bi bi-calendar me-1"></i>
-                                    @if($order->schedule_start_date)
-                                        {{ \Carbon\Carbon::parse($order->schedule_start_date)->format('M d, Y') }}
-                                    @endif
-                                    @if($order->frequency)
-                                        - {{ $order->frequency }}
-                                    @endif
-                                </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                {{ $isAr ? 'كيف أتابع الطلبات الواردة؟' : 'How can I track incoming requests?' }}
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#dashboardFaq">
+                            <div class="accordion-body">
+                                {{ $isAr ? 'يمكنك متابعة كل الطلبات والعروض من صفحة الطلبات داخل لوحة المورد.' : 'You can track all requests and offers from the Orders section.' }}
                             </div>
-                            @php $colors = $order->scheduled_status_color; @endphp
-                            <span class="status-badge" style="background:{{ $colors['bg'] }};color:{{ $colors['text'] }};border-color:{{ $colors['border'] }};">
-                                {{ $t('nav.' . strtolower($order->scheduled_status), ucfirst($order->scheduled_status)) }}
-                            </span>
                         </div>
-                    @empty
-                        <div class="empty-state"><i class="bi bi-calendar-x"></i>{{ $t('nav.no_scheduled_orders', 'No scheduled orders right now.') }}</div>
-                    @endforelse
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-head">
-                    <div>
-                        <h5>{{ $t('nav.recent_notifications', 'Recent Notifications') }}</h5>
-                        <p>{{ $t('nav.recent_notifications_desc', 'The latest alerts and updates delivered to your account.') }}</p>
                     </div>
-                    <a href="{{ route('vendor/notifications') }}" class="panel-link">{{ $t('nav.view_all', 'View All') }}</a>
-                </div>
-                <div class="list-wrap">
-                    @forelse($recentNotifications ?? [] as $notification)
-                        <div class="list-item">
-                            <div>
-                                <p class="list-title">
-                                    {{ $notification->title ?? $t('nav.notification', 'Notification') }}
-                                    @if(is_null($notification->read_at))
-                                        <span class="badge bg-warning text-dark ms-2">{{ $t('nav.new', 'New') }}</span>
-                                    @endif
-                                </p>
-                                <div class="list-sub">{{ Str::limit($notification->message ?? $notification->content ?? '', 90) }}</div>
-                            </div>
-                            <div class="list-time"><i class="bi bi-clock me-1"></i>{{ $notification->created_at->diffForHumans() }}</div>
-                        </div>
-                    @empty
-                        <div class="empty-state"><i class="bi bi-bell-slash"></i>{{ $t('nav.no_notifications', 'No notifications yet.') }}</div>
-                    @endforelse
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="tip-card">
-            <div class="action-icon"><i class="bi bi-lightbulb"></i></div>
-            <div>
-                <div class="action-title">{{ $t('nav.dashboard_tip_title', 'Quick Tip') }}</div>
-                <div class="action-desc">{{ $t('nav.dashboard_info', 'Keep your profile updated and respond quickly to orders and pending offers to improve acceptance and grow revenue.') }}</div>
+    <section class="vh-section pt-0">
+        <div class="vh-container">
+            <h2 class="vh-title">{{ $isAr ? 'ماذا يقول عملاؤنا؟' : 'What Our Clients Say?' }}</h2>
+            <div class="testimonials">
+                <article class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p>{{ $isAr ? 'المنصة سهلت علينا الوصول لموردين موثوقين بسرعة وجودة عالية.' : 'This platform made it easy to find reliable suppliers quickly.' }}</p>
+                    <p class="test-user">{{ $isAr ? 'د. فاطمة العتيبي' : 'Dr. Fatima Al-Otaibi' }}</p>
+                </article>
+                <article class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p>{{ $isAr ? 'تجربة ممتازة في إدارة الطلبات وتقديم العروض بطريقة احترافية.' : 'Excellent experience for managing requests and sending offers.' }}</p>
+                    <p class="test-user">{{ $isAr ? 'د. سامي ناصر' : 'Dr. Sami Nasser' }}</p>
+                </article>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 </main>
 @endsection
-
-
-
-
-
-
-
-

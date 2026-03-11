@@ -196,7 +196,7 @@
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label fw-semibold">{{ app()->getLocale() == 'ar' ? 'تاريخ الإنتاج (MFG Date)' : 'Production Date (MFG Date)' }} <span class="text-muted">(option)</span></label>
                                     <div class="input-group">
-                                        <input type="date" name="mfg_date" value="{{ old('mfg_date', $product->manufacture_date) }}" class="form-control hp-input">
+                                        <input type="date" name="mfg_date" value="{{ old('mfg_date', $product->manufacture_date ?? $product->production_date) }}" class="form-control hp-input">
                                         <span class="input-group-text bg-white"><i class="bi bi-calendar"></i></span>
                                     </div>
                                 </div>

@@ -20,14 +20,24 @@ class OrderRepository extends BaseAdminRepository
         return 'orders';
     }
 
-    public function index($offset, $limit)
+    public function index($offset, $limit, $tab = 'orders')
     {
-        return $this->pagination($offset, $limit);
+        return $this->pagination($offset, $limit, $tab);
     }
 
-    public function pagination($offset, $limit)
+    public function pagination($offset, $limit, $tab = 'orders')
     {
-        return $this->model->with($this->model->model_relations())->withCount($this->model->model_relations_counts())->unArchive()->orderBy('id', 'DESC')->paginate(PAGINATION_COUNT);
+        return $this->model
+            ->with($this->model->model_relations())
+            ->withCount($this->model->model_relations_counts())
+            ->unArchive()
+            ->when($tab === 'requests', function ($query) {
+                $query->where('order_type', 2);
+            }, function ($query) {
+                $query->where('order_type', '!=', 2);
+            })
+            ->orderBy('id', 'DESC')
+            ->paginate(PAGINATION_COUNT);
     }
 
     public function create(){}

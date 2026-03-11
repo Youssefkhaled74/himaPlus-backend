@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 return [
     // Categories page
@@ -24,6 +24,12 @@ return [
     'units_available' => 'units available',
     'specifications' => 'Specifications',
     'ratings_reviews' => 'Ratings & Reviews',
+    'reviews_placeholder' => 'Ratings & Reviews will appear here.',
+    'manage_images' => 'Manage images (update/remove one by one)',
+    'delete_product_confirm' => 'Delete this product?',
+    'delete_product_title' => 'Delete Product',
+    'delete_product_message' => 'Are you sure you want to delete this product? This action cannot be undone.',
+    'currency_sar' => 'SAR',
     'reviews' => 'Reviews',
     'imaging_type' => 'Imaging Type',
     'power' => 'Power',

@@ -18,11 +18,12 @@ class OrderController extends Controller
         $this->orders = $orders;
     }
 
-    public function index($offset, $limit)
+    public function index(Request $request, $offset, $limit)
     {
         try{
-            $orders = $this->orders->index($offset, $limit);
-            return view('admin.orders.index', compact('orders'));
+            $tab = $request->get('tab', 'orders');
+            $orders = $this->orders->index($offset, $limit, $tab);
+            return view('admin.orders.index', compact('orders', 'tab'));
         }catch(\Exception $e){
             flash()->error('There is something wrong , please contact technical support');
             return back();

@@ -1,7 +1,7 @@
-﻿@extends('layouts.front.home')
+@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.view_products') ?? 'My Products' }} - Vendor | HemaPulse</title>
+    <title>{{ __('nav.view_products') ?? 'Products' }} - Vendor | HemaPulse</title>
 @endsection
 
 @section('css')
@@ -11,280 +11,265 @@
         .hp-main,
         .hp-main * {
             font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         .hp-main {
-            background: #f7f9fc;
+            background: #f7f8fa;
             padding-top: 0 !important;
-            padding-bottom: 40px;
+            padding-bottom: 0;
         }
 
-        .vendor-products-wrap {
-            max-width: 1320px;
-            padding-top: 20px;
-            padding-bottom: 40px;
-        }
-
-        .vendor-products-hero {
-            background: linear-gradient(120deg, #0b3a82 0%, #0e5bd8 55%, #0ea5a4 120%);
-            color: #fff;
-            border-radius: 0 0 22px 22px;
-            padding: 26px 0 30px;
-            box-shadow: 0 10px 26px rgba(11, 58, 130, .18);
-        }
-
-        .vendor-products-hero .hero-title {
-            margin: 0;
-            font-size: 30px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
-
-        .vendor-products-hero .hero-subtitle {
-            margin: 8px 0 0;
-            font-size: 14px;
-            color: rgba(255, 255, 255, .9);
-            max-width: 760px;
-        }
-
-        .hp-page-head {
-            margin-bottom: 16px;
-        }
-
-        .hp-page-title {
-            margin: 0;
-            font-size: 30px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: #0f172a;
-        }
-
-        .hp-page-subtitle {
-            margin: 6px 0 0;
-            font-size: 14px;
-            color: #64748b;
-        }
-
-        .hp-section-row {
+        .vendor-hero {
+            min-height: 350px;
+            background: linear-gradient(0deg, rgba(9, 16, 31, .58), rgba(9, 16, 31, .58)),
+                url('{{ asset('front/assets/images/men-girls-are-surfing.png') }}') center/cover no-repeat;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 14px;
+            text-align: center;
+            color: #fff;
         }
 
-        .hp-section-title {
+        .vendor-hero__title {
+            margin: 0;
+            font-size: 52px;
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -.02em;
+        }
+
+        .vendor-hero__sub {
+            margin: 18px auto 0;
+            max-width: 840px;
+            font-size: 18px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, .92);
+        }
+
+        .vendor-products {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 74px 12px 72px;
+        }
+
+        .vendor-products__bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 36px;
+        }
+
+        .vendor-products__title {
+            margin: 0;
             font-size: 28px;
             font-weight: 700;
-            color: #0b3a82;
-            margin: 0;
+            color: #123C91;
         }
 
-        .hp-search {
+        .vendor-tools {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .vendor-search {
             position: relative;
-            width: 100%;
-            max-width: 320px;
+            width: 420px;
         }
 
-        .hp-search .hp-search-icon {
+        .vendor-search i {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            color: #9aa4b2;
-            font-size: 14px;
+            left: 16px;
+            color: #b3bcc8;
         }
 
-        html[dir="rtl"] .hp-search .hp-search-icon {
-            right: 12px;
+        [dir="rtl"] .vendor-search i {
+            left: auto;
+            right: 16px;
         }
 
-        html:not([dir="rtl"]) .hp-search .hp-search-icon {
-            left: 12px;
-        }
-
-        .hp-search input {
-            height: 40px;
-            border-radius: 8px;
-            border: 1px solid #dfe6f1;
+        .vendor-search input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #DCE4F0;
+            border-radius: 12px;
             background: #fff;
-            padding-inline: 36px 12px;
-            font-size: 13px;
+            padding: 0 14px 0 44px;
+            font-size: 16px;
+            color: #1f2937;
+            outline: none;
             box-shadow: none;
         }
 
-        .hp-search input::placeholder {
-            color: #a8b2bf;
+        [dir="rtl"] .vendor-search input {
+            padding: 0 44px 0 14px;
         }
 
-        .hp-search input:focus {
-            border-color: rgba(13, 110, 253, .35);
-            box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .10);
+        .vendor-search input::placeholder {
+            color: #a8b2c1;
         }
 
-        .hp-btn-gradient {
-            height: 38px;
-            border-radius: 7px;
-            font-weight: 700;
-            font-size: 12px;
+        .btn-add-product {
+            height: 50px;
+            min-width: 186px;
+            border: 0;
+            border-radius: 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 0 14px;
-            border: 0;
-            color: #fff !important;
-            background: linear-gradient(90deg, #0b3a82 0%, #0e5bd8 52%, #0ea5a4 110%);
+            padding: 0 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
             text-decoration: none;
-            white-space: nowrap;
-            transition: filter .15s ease;
+            background: linear-gradient(90deg, #133F9B 0%, #0DC79C 100%);
         }
 
-        .hp-btn-gradient:hover {
-            filter: brightness(1.04);
-            color: #fff !important;
+        .btn-add-product:hover {
+            color: #fff;
+            filter: brightness(.98);
+        }
+
+        .product-grid .col {
+            margin-bottom: 24px;
         }
 
         .product-card {
-            border: 1px solid #e9eef6;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #fff;
-            transition: transform .15s ease;
-            height: 100%;
-            text-decoration: none;
             display: block;
+            text-decoration: none;
+            border: 1px solid #E4E9F1;
+            border-radius: 16px;
+            background: #fff;
+            overflow: hidden;
+            height: 100%;
+            transition: transform .15s ease, box-shadow .15s ease;
         }
 
         .product-card:hover {
             transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(15, 23, 42, .08);
         }
 
         .product-thumb {
-            position: relative;
-            height: 150px;
-            background: #f3f4f6;
-            overflow: hidden;
             width: 100%;
+            height: 250px;
+            background: #eff3f9;
         }
 
         .product-thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         .product-body {
-            padding: 10px 10px 12px;
+            padding: 18px 16px 16px;
         }
 
         .product-name {
-            font-size: 12px;
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.3;
             font-weight: 600;
-            color: #111827;
-            margin: 0 0 4px;
-            line-height: 1.35;
-        }
-
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            color: #1f2937;
         }
 
         .product-price {
-            font-size: 12px;
+            margin: 12px 0 0;
+            font-size: 15px;
             font-weight: 700;
-            color: #0b55c6;
-            margin: 0;
+            color: #0A42A5;
+        }
+
+        .vendor-pagination {
+            margin-top: 24px;
+        }
+
+        .vendor-pagination .pagination {
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .vendor-pagination .page-link {
+            min-width: 36px;
+            height: 36px;
+            border: 1px solid #dce6f5;
+            border-radius: 8px !important;
+            font-size: 14px;
+            color: #173f8f;
+            display: grid;
+            place-items: center;
+        }
+
+        .vendor-pagination .page-item.active .page-link {
+            border-color: transparent;
+            background: linear-gradient(90deg, #133F9B 0%, #0DC79C 100%);
+            color: #fff;
         }
 
         .empty-wrap {
-            border: 1px solid #eef0f3;
-            border-radius: 16px;
+            border: 1px solid #E4E9F1;
+            border-radius: 18px;
             background: #fff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
-            padding: 44px 18px;
+            padding: 56px 24px;
             text-align: center;
         }
 
-        .empty-img {
-            max-height: 260px;
-            width: auto;
+        .empty-wrap img {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
         }
 
-        .pagination .page-link {
-            border-radius: 6px !important;
-            margin: 0 3px;
-            font-size: 12px;
-            color: #3f4f63;
+        @media (max-width: 1399.98px) {
+            .vendor-hero__title { font-size: 46px; }
+            .vendor-hero__sub { font-size: 17px; }
+            .vendor-products__title { font-size: 26px; }
+            .product-name { font-size: 15px; }
+            .product-price { font-size: 14px; }
         }
 
         @media (max-width: 991.98px) {
-            .hp-section-title {
-                font-size: 24px;
-            }
+            .vendor-hero { min-height: 260px; }
+            .vendor-hero__title { font-size: 34px; }
+            .vendor-hero__sub { font-size: 15px; margin-top: 10px; }
+            .vendor-products { padding: 36px 12px 48px; }
+            .vendor-products__bar { flex-direction: column; align-items: stretch; margin-bottom: 24px; }
+            .vendor-products__title { font-size: 24px; }
+            .vendor-tools { flex-direction: column; align-items: stretch; }
+            .vendor-search { width: 100%; }
+            .btn-add-product { width: 100%; font-size: 16px; }
+            .product-thumb { height: 220px; }
+            .product-name { font-size: 15px; }
+            .product-price { font-size: 14px; }
         }
 
-        @media (max-width: 767.98px) {
-            .vendor-products-wrap {
-                padding-top: 16px;
-            }
-
-            .vendor-products-hero {
-                border-radius: 0 0 16px 16px;
-                padding: 20px 0 22px;
-            }
-
-            .vendor-products-hero .hero-title {
-                font-size: 24px;
-            }
-
-            .vendor-products-hero .hero-subtitle {
-                font-size: 13px;
-            }
-
-            .hp-section-row {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-
-            .hp-section-title {
-                font-size: 21px;
-            }
-
-            .hp-page-title {
-                font-size: 24px;
-            }
-
-            .hp-page-subtitle {
-                font-size: 13px;
-            }
-
-            .hp-search {
-                max-width: 100%;
-            }
+        @media (max-width: 575.98px) {
+            .vendor-hero__title { font-size: 28px; }
+            .vendor-hero__sub { font-size: 14px; }
+            .product-thumb { height: 200px; }
+            .product-name { font-size: 14px; }
+            .product-price { font-size: 13px; }
         }
     </style>
 @endsection
 
 @section('content')
     <main class="hp-main">
-        <section class="vendor-products-hero">
+        <section class="vendor-hero">
             <div class="container">
-                <h1 class="hero-title">{{ app()->getLocale() == 'ar' ? 'إدارة المنتجات' : 'Product Management' }}</h1>
-                <p class="hero-subtitle">
-                    {{ app()->getLocale() == 'ar'
-                        ? 'تابع منتجاتك بسهولة، وحدث الأسعار والمخزون بسرعة من لوحة واحدة.'
-                        : 'Manage your catalog efficiently and keep pricing and stock details up to date.' }}
+                <h1 class="vendor-hero__title">{{ __('nav.products') ?? 'Products' }}</h1>
+                <p class="vendor-hero__sub">
+                    {{ __('products.products_desc') ?? 'Find high-quality medical devices, consumables, and equipment from verified suppliers - compare, request quotations, or shop directly with ease.' }}
                 </p>
             </div>
         </section>
 
-        <div class="container vendor-products-wrap">
+        <section class="vendor-products">
             @include('flash::message')
 
             @if ($errors->any())
@@ -297,39 +282,33 @@
                 </div>
             @endif
 
-            <div class="hp-page-head">
-                <h2 class="hp-page-title">{{ app()->getLocale() == 'ar' ? 'منتجاتنا' : 'Our Products' }}</h2>
-                <p class="hp-page-subtitle">{{ app()->getLocale() == 'ar' ? 'عرض وإدارة جميع منتجاتك من مكان واحد.' : 'Browse and manage all your products from one place.' }}</p>
-            </div>
+            <div class="vendor-products__bar">
+                <h2 class="vendor-products__title">{{ __('products.products_heading') ?? 'Our Products' }}</h2>
 
-            <div class="hp-section-row">
-                <div></div>
-
-                <div class="d-flex align-items-center gap-3 flex-wrap">
-                    <form method="GET" action="{{ route('vendor/products') }}" class="d-flex align-items-center">
-                        <div class="hp-search">
-                            <i class="bi bi-search hp-search-icon"></i>
+                <div class="vendor-tools">
+                    <form method="GET" action="{{ route('vendor/products') }}">
+                        <div class="vendor-search">
+                            <i class="bi bi-search"></i>
                             <input
                                 type="text"
                                 name="search"
                                 value="{{ request('search', $search ?? '') }}"
-                                placeholder="{{ app()->getLocale() == 'ar' ? 'بحث...' : 'Search...' }}"
-                                class="form-control"
-                            />
+                                placeholder="Search..."
+                            >
                         </div>
                     </form>
 
-                    <a href="{{ route('vendor/products/create') }}" class="hp-btn-gradient">
+                    <a href="{{ route('vendor/products/create') }}" class="btn-add-product">
                         <i class="bi bi-plus-lg"></i>
                         {{ __('nav.add_product') ?? 'Add Product' }}
                     </a>
                 </div>
             </div>
 
-            @if(isset($products) && $products->count() > 0)
-                <div class="row g-4">
+            @if (isset($products) && $products->count() > 0)
+                <div class="row product-grid row-cols-1 row-cols-md-2 row-cols-xl-3">
                     @foreach($products as $product)
-                        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                        <div class="col">
                             <a href="{{ route('vendor/products/show', $product->id) }}" class="product-card">
                                 <div class="product-thumb">
                                     @if(!empty($product->img))
@@ -357,10 +336,10 @@
                                 </div>
 
                                 <div class="product-body">
-                                    <h3 class="product-name line-clamp-2">{{ $product->name }}</h3>
-                                    <p class="product-price mb-0">
+                                    <h3 class="product-name">{{ $product->name }}</h3>
+                                    <p class="product-price">
                                         {{ number_format((float) $product->price, 2) }}
-                                        {{ app()->getLocale() == 'ar' ? 'ر.س' : 'SAR' }}
+                                        SAR
                                     </p>
                                 </div>
                             </a>
@@ -368,23 +347,20 @@
                     @endforeach
                 </div>
 
-                <div class="d-flex justify-content-center mt-4">
+                <div class="vendor-pagination">
                     {{ $products->appends(request()->query())->links('pagination::bootstrap-5') }}
                 </div>
             @else
-                <div class="empty-wrap mt-4">
-                    <div class="mb-3">
-                        <img src="{{ asset('front/assets/images/emptyproducts.png') }}" alt="Empty Products" class="img-fluid empty-img" />
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="{{ route('vendor/products/create') }}" class="hp-btn-gradient">
+                <div class="empty-wrap">
+                    <img src="{{ asset('front/assets/images/emptyproducts.png') }}" alt="Empty Products" class="img-fluid mb-4" />
+                    <div>
+                        <a href="{{ route('vendor/products/create') }}" class="btn-add-product">
                             <i class="bi bi-plus-lg"></i>
                             {{ __('nav.add_product') ?? 'Add Product' }}
                         </a>
                     </div>
                 </div>
             @endif
-        </div>
+        </section>
     </main>
 @endsection

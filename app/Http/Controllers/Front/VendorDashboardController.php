@@ -136,6 +136,13 @@ class VendorDashboardController extends Controller
         $unreadNotificationsCount = Notification::where('user_id', $vendor->id)
             ->unread()
             ->count();
+
+        $featuredProducts = Product::query()
+            ->whereNull('deleted_at')
+            ->where('is_activate', 1)
+            ->latest()
+            ->take(6)
+            ->get();
         
         return view('front.vendor.dashboard', compact(
             'ordersCount',
@@ -156,7 +163,8 @@ class VendorDashboardController extends Controller
             'pendingOffers',
             'pendingOffersCount',
             'recentNotifications',
-            'unreadNotificationsCount'
+            'unreadNotificationsCount',
+            'featuredProducts'
         ));
     }
 }
