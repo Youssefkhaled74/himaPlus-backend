@@ -44,6 +44,24 @@ class AdminController extends Controller
             return back();
         }
     }
+
+    public function edit($id)
+    {
+        $admin = $this->admins->findOne($id);
+        return view('admin.admins.update', compact('admin'));
+    }
+
+    public function update(AdminUpdateRequest $request, $id)
+    {
+        try{
+            $this->admins->update($request, $id);
+            flash()->success('Success');
+            return back();
+        }catch(\Exception $e){
+            flash()->error('There is something wrong , please contact technical support');
+            return back();
+        }
+    }
     public function activate(Request $request)
     {
         try{

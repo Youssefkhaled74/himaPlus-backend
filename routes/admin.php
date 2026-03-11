@@ -39,6 +39,8 @@ Route::group([ 'namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin-p
               Route::get('admins/index/{offset?}/{limit?}', 'AdminController@index')->name('admin/admins/index');
               Route::get('admins/create', 'AdminController@create')->name('admin/admins/create');
               Route::post('admins/create', 'AdminController@store')->name('admin/admins/store');
+              Route::get('admins/edit/{id}', 'AdminController@edit')->name('admin/admins/edit');
+              Route::post('admins/edit/{id}', 'AdminController@update')->name('admin/admins/update');
               Route::post('admins/activate', 'AdminController@activate')->name('admin/admins/activate');
               Route::post('admins/delete', 'AdminController@delete')->name('admin/admins/delete');
               Route::post('admins/pagination/{offset?}/{limit?}', 'AdminController@pagination')->name('admin/admins/pagination');

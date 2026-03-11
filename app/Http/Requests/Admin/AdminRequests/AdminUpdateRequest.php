@@ -23,13 +23,14 @@ class AdminUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $user = auth()->guard('admin')->user();
+        $authAdmin = auth()->guard('admin')->user();
+        $targetId = (int) ($this->route('id') ?? ($authAdmin->id ?? 0));
         return [
             'name' => 'nullable|string|max:60',
             'password' => 'nullable|confirmed|max:30',
             'file' => 'nullable|mimes:jpeg,png,jpg,webp,webm|max:2048',
-            'email' => 'nullable|string|max:60|unique:admins,email,' . $user->id,
-            'phone' => 'nullable|max:60|unique:admins,phone,' . $user->id,
+            'email' => 'nullable|string|max:60|unique:admins,email,' . $targetId,
+            'phone' => 'nullable|max:60|unique:admins,phone,' . $targetId,
         ];
     }
 }

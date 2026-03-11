@@ -47,7 +47,12 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Admins Viwes</h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Admins Viwes</h5>
+                                <a href="{{ route('admin/admins/create') }}" class="btn btn-primary btn-sm">
+                                    <i class="ri-add-line align-middle me-1"></i> Add Admin
+                                </a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div id="scroll-horizontal_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
@@ -98,6 +103,11 @@
                                                                                 <i class="ri-more-fill align-middle"></i>
                                                                             </button>
                                                                             <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
+                                                                                <li>
+                                                                                    <a class="dropdown-item" href="{{ route('admin/admins/edit', $record->id) }}">
+                                                                                        <i class="ri-edit-2-fill align-bottom me-2 text-muted"></i> Edit
+                                                                                    </a>
+                                                                                </li>
                                                                                 <li>
                                                                                     <button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="{{$record->id}}">
                                                                                         <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> activation
@@ -255,6 +265,7 @@
     <script>
         var q = '';
         var offset = length = limit = `{{ PAGINATION_COUNT }}`;
+        var adminEditBase = `{{ url('admin-panel/admins/edit') }}`;
         // var offset = `{{ PAGINATION_COUNT }}`;
         var _token = $('input[name="_token"]').val();
         let showItems = document.getElementById("showItems");
@@ -338,6 +349,11 @@
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
                                     <li>
+                                        <a class="dropdown-item" href="${adminEditBase}/${data[i].id}">
+                                            <i class="ri-edit-2-fill align-bottom me-2 text-muted"></i> Edit
+                                        </a>
+                                    </li>
+                                    <li>
                                         <button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="${data[i].id}">
                                             <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> activation
                                         </button>
@@ -375,4 +391,3 @@
         }
     </script>
 @endsection
-
