@@ -164,9 +164,13 @@ class OrderController extends Controller
             $discount = 0;
             $coupon = null;
             $coupon_id = null;
+            $orderItems = [];
             $user = auth()->user();
             $info = $this->infoRepository->getfirst();
             $cartItems = $user->cart()->with('product')->get();
+            if ($cartItems->isEmpty()) {
+                return responseJson(400, "Bad Request", "cart is empty");
+            }
             $byProviders = $cartItems->groupBy(fn ($row) => optional($row->product)->provider_id);
             if (isset($request->coupon) && !is_null($request->coupon)) {
                 $coupon = $this->coupon->where('name', $request->coupon)->active()->unArchive()->first();
@@ -246,10 +250,14 @@ class OrderController extends Controller
                 }
                 $this->notification->query()->insert($notificationArr);
                 
-                // $this->targetNewOrderMailJob($user?->email, $order->id);
-                // $this->targetFairbaseServicePushNotification(
-                //     $user?->fcm_token, $notificationArr[0]['title'], $notificationArr[0]['content'], 1, $order->id
-                // );
+                try {
+                    $this->targetNewOrderMailJob($user?->email, $order->id);
+                    // $this->targetFairbaseServicePushNotification(
+                    //     $user?->fcm_token, $notificationArr[0]['title'], $notificationArr[0]['content'], 1, $order->id
+                    // );
+                } catch (\Throwable $notificationEx) {
+                    report($notificationEx);
+                }
 
             }
             if (count($orderItems) > 0) {
@@ -259,6 +267,7 @@ class OrderController extends Controller
             return responseJson(200, "success");
         }catch(\Exception $e){
             DB::rollBack();
+            report($e);
             return responseJson(500, "there is some thing wrong , please contact technical support");
         }
     }
@@ -348,7 +357,7 @@ class OrderController extends Controller
             'device_name' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:1255',
             'serial_number' => 'nullable|string|max:255',
-            'issue_description' => 'nullable|string|max:1255',
+            'issue_description' => 'nullable|string|max:255',
             'preferred_service_time' => 'nullable|date_format:Y-m-d H:i:s',
         ]);
         if ($validator->fails()) {
@@ -394,21 +403,20 @@ class OrderController extends Controller
             }
             $this->notification->query()->insert($notificationArr);
             
-            $this->targetNewOrderMailJob($user?->email, $order->id);
-            // $this->targetFairbaseServicePushNotification(
-            //     $user?->fcm_token, $notificationArr[0]['title'], $notificationArr[0]['content'], 1, $order->id
-            // );
-            // try {
-            //     $ddd = $this->targetFairbaseServicePushNotification(
-            //         $user?->fcm_token, $notificationArr[0]['title'], $notificationArr[0]['content'], 1, $order->id
-            //     );
-            //     dd($ddd);
-            // } catch (\Exception $e) { dd($e); }
+            try {
+                $this->targetNewOrderMailJob($user?->email, $order->id);
+                // $this->targetFairbaseServicePushNotification(
+                //     $user?->fcm_token, $notificationArr[0]['title'], $notificationArr[0]['content'], 1, $order->id
+                // );
+            } catch (\Throwable $notificationEx) {
+                report($notificationEx);
+            }
 
             DB::commit();
             return responseJson(200, "success");
         }catch(\Exception $e){
             DB::rollBack();
+            report($e);
             return responseJson(500, "there is some thing wrong , please contact technical support");
         }
     }
