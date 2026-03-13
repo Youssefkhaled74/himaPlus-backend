@@ -57,6 +57,13 @@ class OrderController extends Controller
         $this->middleware('auth:api', ['except' => []]);
     }
 
+    private function resolveVatRate($info): int
+    {
+        // VAT is a percentage; keep it in a safe DB range.
+        $rawVat = (int)($info?->vat ?? 10);
+        return max(0, min(100, $rawVat));
+    }
+
     public function myOrders(Request $request, $offset, $limit)
     {
         $user = auth()->user();
@@ -167,6 +174,7 @@ class OrderController extends Controller
             $orderItems = [];
             $user = auth()->user();
             $info = $this->infoRepository->getfirst();
+            $vatRate = $this->resolveVatRate($info);
             $cartItems = $user->cart()->with('product')->get();
             if ($cartItems->isEmpty()) {
                 return responseJson(400, "Bad Request", "cart is empty");
@@ -194,7 +202,7 @@ class OrderController extends Controller
                     $itemsCost [] = $itemCost;
                 }
                 $grandTotal = array_sum($itemsCost);
-                $vatAmount = $grandTotal * (((int)$info?->vat ?? 10) / 100);
+                $vatAmount = $grandTotal * ($vatRate / 100);
 
                 if (!is_null($coupon)) {
                     if ($coupon && !is_null($coupon)) {
@@ -215,7 +223,7 @@ class OrderController extends Controller
                     'provider_id' => $provider_id ?? null, 
                     'order_type' => 1, 
                     'address' => $request->address, 
-                    'vat' => (int)$info->vat, 
+                    'vat' => $vatRate, 
                     'vat_amount' => $vatAmount, 
                     'items_cost' => $grandTotal, 
                     'total_before_discount' => $grandTotal + ($vatAmount), 
@@ -657,10 +665,11 @@ class OrderController extends Controller
                 if ($offer->order && !is_null($offer->order) && $action == 2) {
                     
                     $info = $this->infoRepository->getfirst();
+                    $vatRate = $this->resolveVatRate($info);
                     $grandTotal = $offer->cost;
-                    $vatAmount = $grandTotal * (((int)$info?->vat ?? 10) / 100);
+                    $vatAmount = $grandTotal * ($vatRate / 100);
                     $offer->order->update([
-                        'vat' => (int)$info->vat, 
+                        'vat' => $vatRate, 
                         'vat_amount' => $vatAmount, 
                         'items_cost' => $grandTotal, 
                         'total_before_discount' => $grandTotal + ($vatAmount), 

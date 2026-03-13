@@ -30,7 +30,14 @@ class SendUserCodeMailJob implements ShouldQueue
 
     public function handle()
     {
-        Mail::to($this->email)->send(new UserCodeMail($this->code));
+        try {
+            Mail::to($this->email)->send(new UserCodeMail($this->code));
+        } catch (\Throwable $e) {
+            Log::error('SendUserCodeMailJob send failed', [
+                'email' => $this->email,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     public function failed(\Throwable $e): void

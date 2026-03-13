@@ -38,6 +38,35 @@ trait AuthSecurityTrait
         ];
     }
 
+    protected function strongPasswordRulesWithoutCompromised(): array
+    {
+        $commonPasswords = [
+            '123456',
+            '12345678',
+            'password',
+            'qwerty',
+            '111111',
+            '123123',
+            'admin123',
+            'password123',
+        ];
+
+        return [
+            'required',
+            'confirmed',
+            Password::min(10)
+                ->letters()
+                ->mixedCase()
+                ->numbers()
+                ->symbols(),
+            function (string $attribute, mixed $value, \Closure $fail) use ($commonPasswords): void {
+                if (in_array(strtolower((string) $value), $commonPasswords, true)) {
+                    $fail('The selected password is too common.');
+                }
+            },
+        ];
+    }
+
     protected function issueVerificationCode(User $user, string $target, string $channel = 'email'): string
     {
         $code = (string) random_int(1000, 9999);
