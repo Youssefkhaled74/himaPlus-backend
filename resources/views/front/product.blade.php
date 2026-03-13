@@ -171,10 +171,10 @@
                                 <a href="#" class="hp-link">{{ $product->stock_quantity }} {{ __('products.units_available') }}</a>
                             </div>
                             <div class="d-flex align-items-center gap-2 mb-4">
-                                <img src="{{ $product?->provider->img && !is_null($product?->provider->img) ? $product?->provider->img : 'https://i.pravatar.cc/44?img=13' }}" class="rounded-circle" width="44" height="44" alt="Supplier avatar">
+                                <img src="{{ $product?->provider?->img ?: 'https://i.pravatar.cc/44?img=13' }}" class="rounded-circle" width="44" height="44" alt="Supplier avatar">
                                 <div class="small">
-                                    <div class="fw-semibold">{{ $product?->provider->name }}</div>
-                                    <div class="text-muted-soft">{{ $product?->provider->location }}</div>
+                                    <div class="fw-semibold">{{ $product?->provider?->name }}</div>
+                                    <div class="text-muted-soft">{{ $product?->provider?->location }}</div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center justify-content-between">
@@ -332,10 +332,10 @@
                                                             {{-- <h6 class="mb-2">{{ $rating?->user->name }}</h6> --}}
                                                             <p class="mb-3">{{ $rating->comment }}</p>
                                                             <div class="person">
-                                                                <img src="{{ $user->img ? asset($user->img) : 'https://i.pravatar.cc/80?img=12' }}" alt="avatar">
+                                                                <img src="{{ $user?->img ? asset($user->img) : 'https://i.pravatar.cc/80?img=12' }}" alt="avatar">
                                                                 <div>
-                                                                    <strong>{{ $user->name }}</strong>
-                                                                    <small>{{ $user->location }}</small>
+                                                                    <strong>{{ $user?->name }}</strong>
+                                                                    <small>{{ $user?->location }}</small>
                                                                 </div>
                                                             </div>
                                                         </div>

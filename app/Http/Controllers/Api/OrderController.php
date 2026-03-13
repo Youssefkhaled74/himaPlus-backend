@@ -168,7 +168,6 @@ class OrderController extends Controller
             return responseJson(400, "Bad Request", $validator->errors()->first());
         }
         try{
-            $discount = 0;
             $coupon = null;
             $coupon_id = null;
             $orderItems = [];
@@ -203,6 +202,8 @@ class OrderController extends Controller
                 }
                 $grandTotal = array_sum($itemsCost);
                 $vatAmount = $grandTotal * ($vatRate / 100);
+                $discount = 0;
+                $totalBeforeDiscount = $grandTotal + $vatAmount;
 
                 if (!is_null($coupon)) {
                     if ($coupon && !is_null($coupon)) {
@@ -215,6 +216,7 @@ class OrderController extends Controller
                         }
                     }
                 }
+                $discount = max(0, min((float)$discount, (float)$totalBeforeDiscount));
                 
                 $order = $this->order->create([
                     'user_id' => $user->id, 
@@ -226,8 +228,8 @@ class OrderController extends Controller
                     'vat' => $vatRate, 
                     'vat_amount' => $vatAmount, 
                     'items_cost' => $grandTotal, 
-                    'total_before_discount' => $grandTotal + ($vatAmount), 
-                    'total_cost' => ($grandTotal + ($vatAmount)) - $discount, 
+                    'total_before_discount' => $totalBeforeDiscount, 
+                    'total_cost' => $totalBeforeDiscount - $discount, 
                 ]);
                 $order->timeline()->create([
                     'timeline_no' => 1,
@@ -273,7 +275,7 @@ class OrderController extends Controller
             }
             DB::commit();
             return responseJson(200, "success");
-        }catch(\Exception $e){
+        }catch(\Throwable $e){
             DB::rollBack();
             report($e);
             return responseJson(500, "there is some thing wrong , please contact technical support");
