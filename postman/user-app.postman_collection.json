@@ -1,0 +1,276 @@
+{
+  "info": {
+    "_postman_id": "9cc8786e-8f38-4eab-bbf9-9bb7e467bc75",
+    "name": "HimaPlus User App API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "User/mobile app API collection generated from routes/api.php."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const expectedHttpStatus = Number(pm.variables.get('expected_http_status') || 200);",
+          "pm.test('HTTP status matches expected', function () {",
+          "  pm.expect(pm.response.code).to.eql(expectedHttpStatus);",
+          "});",
+          "try {",
+          "  const json = pm.response.json();",
+          "  pm.collectionVariables.set('last_response_json', JSON.stringify(json));",
+          "  if (pm.variables.get('assert_response_wrapper') !== 'false' && typeof json.status === 'number') {",
+          "    const expectedBodyStatus = Number(pm.variables.get('expected_body_status') || expectedHttpStatus);",
+          "    pm.test('Response body status matches expected', function () {",
+          "      pm.expect(json.status).to.eql(expectedBodyStatus);",
+          "    });",
+          "  }",
+          "} catch (error) {}",
+          "pm.variables.unset('expected_http_status');",
+          "pm.variables.unset('expected_body_status');",
+          "pm.variables.unset('assert_response_wrapper');"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000" },
+    { "key": "token", "value": "" },
+    { "key": "offset", "value": "0" },
+    { "key": "limit", "value": "10" },
+    { "key": "quantity", "value": "2" },
+    { "key": "user_email", "value": "user@example.com" },
+    { "key": "user_password", "value": "Password123!" },
+    { "key": "new_password", "value": "Password123!A" },
+    { "key": "user_mobile", "value": "01000000000" },
+    { "key": "user_name", "value": "Codex User" },
+    { "key": "user_type", "value": "1" },
+    { "key": "iban", "value": "SA0000000000000000000000" },
+    { "key": "verification_code", "value": "1111" },
+    { "key": "reset_code", "value": "1111" },
+    { "key": "product_id", "value": "1" },
+    { "key": "category_id", "value": "1" },
+    { "key": "provider_id", "value": "1" },
+    { "key": "receiver_id", "value": "1" },
+    { "key": "order_id", "value": "1" },
+    { "key": "offer_id", "value": "1" },
+    { "key": "conversation_id", "value": "1" },
+    { "key": "message_id", "value": "1" },
+    { "key": "coupon_name", "value": "" },
+    { "key": "sample_file", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Public Bootstrap",
+      "item": [
+        { "name": "Home", "request": { "method": "GET", "url": "{{base_url}}/api/home" } },
+        { "name": "Info", "request": { "method": "GET", "url": "{{base_url}}/api/info" } },
+        { "name": "Countries", "request": { "method": "GET", "url": "{{base_url}}/api/countries" } },
+        { "name": "Categories", "request": { "method": "GET", "url": "{{base_url}}/api/categories/{{offset}}/{{limit}}" } },
+        { "name": "Providers", "request": { "method": "GET", "url": "{{base_url}}/api/get/providers/{{offset}}/{{limit}}" } },
+        { "name": "Ratings List", "request": { "method": "GET", "url": "{{base_url}}/api/get/ratings/{{offset}}/{{limit}}" } },
+        { "name": "Products", "request": { "method": "GET", "url": "{{base_url}}/api/products/{{offset}}/{{limit}}" }, "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["try { const json = pm.response.json(); const first = json?.data?.[0]; if (first?.id) pm.collectionVariables.set('product_id', String(first.id)); if (first?.category_id) pm.collectionVariables.set('category_id', String(first.category_id)); if (first?.provider_id) { pm.collectionVariables.set('provider_id', String(first.provider_id)); pm.collectionVariables.set('receiver_id', String(first.provider_id)); } } catch (error) {}"] } }] },
+        { "name": "Product Details", "request": { "method": "GET", "url": "{{base_url}}/api/products/details/{{product_id}}" } },
+        {
+          "name": "Contact Us",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"mobile\": \"{{user_mobile}}\",\n  \"email\": \"{{user_email}}\",\n  \"location\": \"Cairo\",\n  \"details\": \"Postman smoke test\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/contact-us"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth Flow",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "{{user_name}}", "type": "text" },
+                { "key": "email", "value": "{{user_email}}", "type": "text" },
+                { "key": "mobile", "value": "{{user_mobile}}", "type": "text" },
+                { "key": "iban", "value": "{{iban}}", "type": "text" },
+                { "key": "password", "value": "{{user_password}}", "type": "text" },
+                { "key": "user_type", "value": "{{user_type}}", "type": "text" },
+                { "key": "branch", "value": "Main Branch", "type": "text" },
+                { "key": "location", "value": "Cairo", "type": "text" },
+                { "key": "tax_number", "value": "123456789", "type": "text" },
+                { "key": "cr_number", "value": "987654321", "type": "text" },
+                { "key": "fcm_token", "value": "postman-fcm-token", "type": "text" },
+                { "key": "file", "src": "{{sample_file}}", "type": "file", "disabled": true },
+                { "key": "cr_file_document", "src": "{{sample_file}}", "type": "file", "disabled": true }
+              ]
+            },
+            "url": "{{base_url}}/api/auth/register"
+          }
+        },
+        {
+          "name": "Mobile Check",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"code\": \"{{verification_code}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/auth/mobile-check"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["try { const json = pm.response.json(); const token = json?.data?.token; if (token) pm.collectionVariables.set('token', token); } catch (error) {}"] } }]
+        },
+        {
+          "name": "Regenerate Code",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{user_email}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/auth/regenerate-code"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\",\n  \"fcm_token\": \"postman-fcm-token\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/auth/login"
+          },
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["try { const json = pm.response.json(); const user = json?.data; if (user?.token) pm.collectionVariables.set('token', user.token); } catch (error) {}"] } }]
+        },
+        { "name": "Check Token", "request": { "method": "GET", "url": "{{base_url}}/api/auth/check-token" } },
+        {
+          "name": "Send Reset Code",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{user_email}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/auth/send-reset-code"
+          }
+        },
+        {
+          "name": "Verify Reset Code",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"code\": \"{{reset_code}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/auth/verify-reset-code"
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"{{user_email}}\",\n  \"code\": \"{{reset_code}}\",\n  \"password\": \"{{new_password}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/auth/reset"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authenticated Profile",
+      "item": [
+        { "name": "Me", "request": { "method": "GET", "url": "{{base_url}}/api/auth" } },
+        { "name": "Refresh", "request": { "method": "GET", "url": "{{base_url}}/api/auth/refresh" }, "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["try { const json = pm.response.json(); const token = json?.data; if (typeof token === 'string' && token) pm.collectionVariables.set('token', token); } catch (error) {}"] } }] },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"old_password\": \"{{user_password}}\",\n  \"new_password\": \"{{new_password}}\"\n}", "options": { "raw": { "language": "json" } } },
+            "url": "{{base_url}}/api/auth/change-password"
+          }
+        },
+        { "name": "Change Mobile Number", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"mobile\": \"01111111111\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/auth/change-mobile-number" } },
+        { "name": "Update Profile", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "name", "value": "{{user_name}}", "type": "text" }, { "key": "email", "value": "{{user_email}}", "type": "text" }, { "key": "iban", "value": "{{iban}}", "type": "text" }, { "key": "branch", "value": "Main Branch", "type": "text" }, { "key": "location", "value": "Cairo", "type": "text" }, { "key": "tax_number", "value": "123456789", "type": "text" }, { "key": "cr_number", "value": "987654321", "type": "text" }, { "key": "file", "src": "{{sample_file}}", "type": "file", "disabled": true }, { "key": "cr_file_document", "src": "{{sample_file}}", "type": "file", "disabled": true }] }, "url": "{{base_url}}/api/auth/update" } },
+        { "name": "Guide Album", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "files[]", "src": "{{sample_file}}", "type": "file", "disabled": true }] }, "url": "{{base_url}}/api/auth/guide/album" } },
+        { "name": "Statistics", "request": { "method": "GET", "url": "{{base_url}}/api/auth/statistics" } },
+        { "name": "Auth Cart", "request": { "method": "GET", "url": "{{base_url}}/api/auth/cart" } },
+        { "name": "Notifications", "request": { "method": "GET", "url": "{{base_url}}/api/auth/notifications/{{offset}}/{{limit}}" } },
+        { "name": "Auth Favorites", "request": { "method": "GET", "url": "{{base_url}}/api/auth/favorites/{{offset}}/{{limit}}" } },
+        { "name": "Auth Favorites Remove", "request": { "method": "GET", "url": "{{base_url}}/api/auth/favorites/remove?product_id={{product_id}}" } },
+        { "name": "Logout", "request": { "method": "POST", "url": "{{base_url}}/api/auth/logout" } },
+        { "name": "Delete Account", "request": { "method": "GET", "url": "{{base_url}}/api/auth/delete-account" } }
+      ]
+    },
+    {
+      "name": "Favorites Flow",
+      "item": [
+        { "name": "Toggle Favorite", "request": { "method": "GET", "url": "{{base_url}}/api/favorites/toggle/{{product_id}}" } },
+        { "name": "Remove Favorite", "request": { "method": "GET", "url": "{{base_url}}/api/favorites/remove/{{product_id}}" } },
+        { "name": "Remove All Favorites", "request": { "method": "GET", "url": "{{base_url}}/api/favorites/remove/all/products" } }
+      ]
+    },
+    {
+      "name": "Cart Flow",
+      "item": [
+        { "name": "Toggle Cart", "request": { "method": "GET", "url": "{{base_url}}/api/cart/toggle/{{product_id}}" } },
+        { "name": "Add To Cart", "request": { "method": "GET", "url": "{{base_url}}/api/cart/add/{{product_id}}" } },
+        { "name": "Update Quantity", "request": { "method": "GET", "url": "{{base_url}}/api/cart/update/quantity/{{product_id}}?quantity={{quantity}}" } },
+        { "name": "Remove From Cart", "request": { "method": "GET", "url": "{{base_url}}/api/cart/remove/{{product_id}}" } },
+        { "name": "Remove All Cart Products", "request": { "method": "GET", "url": "{{base_url}}/api/cart/remove/all/products" } }
+      ]
+    },
+    {
+      "name": "Provider Products",
+      "item": [
+        { "name": "Provider Products List", "request": { "method": "GET", "url": "{{base_url}}/api/products/{{offset}}/{{limit}}?provider_id={{provider_id}}" } },
+        { "name": "Store Product", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "name", "value": "Postman Product", "type": "text" }, { "key": "category_id", "value": "{{category_id}}", "type": "text" }, { "key": "desc", "value": "Product created from Postman", "type": "text" }, { "key": "price", "value": "99.99", "type": "text" }, { "key": "stock_quantity", "value": "10", "type": "text" }, { "key": "origin_id", "value": "1", "type": "text" }, { "key": "is_offer", "value": "0", "type": "text" }, { "key": "is_special", "value": "0", "type": "text" }, { "key": "file", "src": "{{sample_file}}", "type": "file" }] }, "url": "{{base_url}}/api/products/store" } },
+        { "name": "Update Product", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "name", "value": "Postman Product Updated", "type": "text" }, { "key": "category_id", "value": "{{category_id}}", "type": "text" }, { "key": "desc", "value": "Updated from Postman", "type": "text" }, { "key": "price", "value": "109.99", "type": "text" }, { "key": "stock_quantity", "value": "15", "type": "text" }, { "key": "is_offer", "value": "1", "type": "text" }, { "key": "is_special", "value": "0", "type": "text" }, { "key": "file", "src": "{{sample_file}}", "type": "file", "disabled": true }] }, "url": "{{base_url}}/api/products/update/{{product_id}}" } },
+        { "name": "Activate Product", "request": { "method": "GET", "url": "{{base_url}}/api/products/activate/{{product_id}}" } }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        { "name": "My Orders", "request": { "method": "GET", "url": "{{base_url}}/api/orders/get/{{offset}}/{{limit}}" }, "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["try { const json = pm.response.json(); const first = json?.data?.[0]; if (first?.id) pm.collectionVariables.set('order_id', String(first.id)); const offerId = first?.offer?.id || first?.offers?.[0]?.id; if (offerId) pm.collectionVariables.set('offer_id', String(offerId)); } catch (error) {}"] } }] },
+        { "name": "Random Orders", "request": { "method": "GET", "url": "{{base_url}}/api/orders/get/random/{{offset}}/{{limit}}" } },
+        { "name": "Provider Orders", "request": { "method": "GET", "url": "{{base_url}}/api/orders/get/provider/orders/{{offset}}/{{limit}}" } },
+        { "name": "Order Details", "request": { "method": "GET", "url": "{{base_url}}/api/orders/order/{{order_id}}" } },
+        { "name": "Update Order", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"issue\": \"Smoke test order update\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/order/update/{{order_id}}" } },
+        { "name": "Check Coupon", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"coupon\": \"{{coupon_name}}\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/check/coupon" } },
+        { "name": "Make Purchase Order", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"address\": \"Cairo Test Address\",\n  \"coupon\": \"{{coupon_name}}\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders" } },
+        { "name": "Make Quotation", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "address", "value": "Cairo", "type": "text" }, { "key": "provider_id", "value": "{{provider_id}}", "type": "text" }, { "key": "request_type", "value": "1", "type": "text" }, { "key": "notes", "value": "Quotation from Postman", "type": "text" }, { "key": "budget", "value": "5000", "type": "text" }, { "key": "date_time_picker", "value": "2026-03-13 12:00:00", "type": "text" }, { "key": "files[]", "src": "{{sample_file}}", "type": "file", "disabled": true }] }, "url": "{{base_url}}/api/orders/quotations" } },
+        { "name": "Make Maintenance", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "device_category_id", "value": "{{category_id}}", "type": "text" }, { "key": "provider_id", "value": "{{provider_id}}", "type": "text" }, { "key": "device_name", "value": "Scanner", "type": "text" }, { "key": "address", "value": "Cairo", "type": "text" }, { "key": "serial_number", "value": "SN-12345", "type": "text" }, { "key": "issue_description", "value": "Maintenance smoke test", "type": "text" }, { "key": "preferred_service_time", "value": "2026-03-13 12:00:00", "type": "text" }, { "key": "files[]", "src": "{{sample_file}}", "type": "file", "disabled": true }] }, "url": "{{base_url}}/api/orders/maintenances" } },
+        { "name": "Order Timeline", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"order_type\": 1,\n  \"timeline_no\": 2,\n  \"order_id\": {{order_id}},\n  \"delivery_fee\": 20\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/order/change/timeline" } },
+        { "name": "Order Partial Receive", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "order_id", "value": "{{order_id}}", "type": "text" }, { "key": "offer_id", "value": "{{offer_id}}", "type": "text" }, { "key": "received_quantity", "value": "1", "type": "text" }, { "key": "received_all_quantity", "value": "0", "type": "text" }, { "key": "reason_for_partial", "value": "Partial receive smoke test", "type": "text" }, { "key": "files[]", "src": "{{sample_file}}", "type": "file", "disabled": true }] }, "url": "{{base_url}}/api/orders/order/partial/receive" } },
+        { "name": "Offer Actions", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"action\": 2,\n  \"offer_id\": {{offer_id}}\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/orders/offer/actions" } },
+        { "name": "Make Offer", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "cost", "value": "250", "type": "text" }, { "key": "delivery_time", "value": "3 days", "type": "text" }, { "key": "warranty", "value": "30 days", "type": "text" }, { "key": "order_id", "value": "{{order_id}}", "type": "text" }, { "key": "notes", "value": "Offer from Postman", "type": "text" }, { "key": "files[]", "src": "{{sample_file}}", "type": "file" }] }, "url": "{{base_url}}/api/orders/offers" } },
+        { "name": "Edit Offer", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "cost", "value": "300", "type": "text" }, { "key": "delivery_time", "value": "4 days", "type": "text" }, { "key": "warranty", "value": "60 days", "type": "text" }, { "key": "notes", "value": "Offer updated from Postman", "type": "text" }, { "key": "files[]", "src": "{{sample_file}}", "type": "file", "disabled": true }] }, "url": "{{base_url}}/api/orders/offers/update/{{offer_id}}" } },
+        { "name": "Delete Offer", "request": { "method": "GET", "url": "{{base_url}}/api/orders/offers/delete/{{offer_id}}" } },
+        { "name": "Cancel Order", "request": { "method": "GET", "url": "{{base_url}}/api/orders/order/cancel/{{order_id}}" } },
+        { "name": "Online Payment Link", "request": { "method": "GET", "url": "{{base_url}}/api/orders/get-link/online-payment/{{order_id}}" } }
+      ]
+    },
+    {
+      "name": "Chat",
+      "item": [
+        { "name": "Conversations", "request": { "method": "GET", "url": "{{base_url}}/api/chat/conversations" }, "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["try { const json = pm.response.json(); const first = json?.data?.[0]; if (first?.id) pm.collectionVariables.set('conversation_id', String(first.id)); if (first?.other_user?.id) pm.collectionVariables.set('receiver_id', String(first.other_user.id)); } catch (error) {}"] } }] },
+        { "name": "Get Or Create Conversation", "request": { "method": "GET", "url": "{{base_url}}/api/chat/conversation?receiver_id={{receiver_id}}" }, "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["try { const json = pm.response.json(); const conversation = json?.data; if (conversation?.id) pm.collectionVariables.set('conversation_id', String(conversation.id)); } catch (error) {}"] } }] },
+        { "name": "Messages", "request": { "method": "GET", "url": "{{base_url}}/api/chat/conversation/{{conversation_id}}/{{offset}}/{{limit}}" }, "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["try { const json = pm.response.json(); const first = json?.data?.messages?.[0]; if (first?.id) pm.collectionVariables.set('message_id', String(first.id)); } catch (error) {}"] } }] },
+        { "name": "Send Message", "request": { "method": "POST", "body": { "mode": "formdata", "formdata": [{ "key": "receiver_id", "value": "{{receiver_id}}", "type": "text" }, { "key": "message", "value": "Hello from Postman", "type": "text" }, { "key": "file", "src": "{{sample_file}}", "type": "file", "disabled": true }] }, "url": "{{base_url}}/api/chat/messages/send" }, "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["try { const json = pm.response.json(); const message = json?.data; if (message?.id) pm.collectionVariables.set('message_id', String(message.id)); if (message?.conversation_id) pm.collectionVariables.set('conversation_id', String(message.conversation_id)); } catch (error) {}"] } }] },
+        { "name": "Mark As Read", "request": { "method": "GET", "url": "{{base_url}}/api/chat/messages/mark-as-read/{{conversation_id}}" } },
+        { "name": "Delete Message", "request": { "method": "GET", "url": "{{base_url}}/api/chat/messages/delete/{{message_id}}" } },
+        { "name": "Unread Count", "request": { "method": "GET", "url": "{{base_url}}/api/chat/unread-count/{{conversation_id}}" } },
+        { "name": "Toggle Block Conversation", "request": { "method": "POST", "url": "{{base_url}}/api/chat/conversations/{{conversation_id}}/toggle-block" }, "event": [{ "listen": "prerequest", "script": { "type": "text/javascript", "exec": ["pm.variables.set('assert_response_wrapper', 'false');"] } }] }
+      ]
+    },
+    {
+      "name": "Ratings",
+      "item": [
+        { "name": "Create Rating", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Smoke test rating\",\n  \"for_id\": {{product_id}},\n  \"for_type\": \"Product\"\n}", "options": { "raw": { "language": "json" } } }, "url": "{{base_url}}/api/ratings" } }
+      ]
+    }
+  ]
+}
