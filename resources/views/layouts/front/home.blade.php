@@ -31,10 +31,10 @@
                 line-height: 1 !important;
             }
             html, body { overflow-x: hidden; }
-            body.landing-page { padding-top: 110px !important; }
+            body.landing-page { padding-top: 0 !important; }
             .landing-page .alert { position: relative; z-index: 1040; }
             @media (max-width: 991.98px) {
-                body.landing-page { padding-top: 96px !important; }
+                body.landing-page { padding-top: 0 !important; }
             }
 
         </style>
