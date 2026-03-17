@@ -17,6 +17,7 @@
         ['label' => __('admin.dashboard.manage_ratings'), 'icon' => 'ri-star-line', 'route' => route('admin/ratings/index') . '/0/' . PAGINATION_COUNT],
         ['label' => __('admin.dashboard.view_contacts'), 'icon' => 'ri-mail-line', 'route' => route('admin/contacts/index') . '/0/' . PAGINATION_COUNT],
         ['label' => __('admin.dashboard.manage_countries'), 'icon' => 'ri-global-line', 'route' => route('admin/countries/index') . '/0/' . PAGINATION_COUNT],
+        ['label' => __('admin.dashboard.manage_admins'), 'icon' => 'ri-shield-user-line', 'route' => route('admin/admins/index') . '/0/' . PAGINATION_COUNT],
     ];
     $stats = [
         [
@@ -66,6 +67,30 @@
             'icon' => 'ri-coupon-2-line',
             'softClass' => 'bg-secondary-subtle text-secondary',
             'link' => route('admin/coupons/index') . '/0/' . PAGINATION_COUNT,
+        ],
+        [
+            'label' => __('admin.dashboard.manage_ratings'),
+            'value' => number_format($dashboard['totals']['ratings'] ?? 0),
+            'growth' => 0,
+            'icon' => 'ri-star-line',
+            'softClass' => 'bg-warning-subtle text-warning',
+            'link' => route('admin/ratings/index') . '/0/' . PAGINATION_COUNT,
+        ],
+        [
+            'label' => __('admin.dashboard.view_contacts'),
+            'value' => number_format($dashboard['totals']['contacts'] ?? 0),
+            'growth' => 0,
+            'icon' => 'ri-mail-line',
+            'softClass' => 'bg-info-subtle text-info',
+            'link' => route('admin/contacts/index') . '/0/' . PAGINATION_COUNT,
+        ],
+        [
+            'label' => __('admin.dashboard.manage_countries'),
+            'value' => number_format($dashboard['totals']['countries'] ?? 0),
+            'growth' => 0,
+            'icon' => 'ri-global-line',
+            'softClass' => 'bg-primary-subtle text-primary',
+            'link' => route('admin/countries/index') . '/0/' . PAGINATION_COUNT,
         ],
     ];
 @endphp
@@ -317,6 +342,36 @@
                     <h4 class="mb-2" style="color: white;">{{ __('admin.dashboard.low_stock_items', ['count' => number_format($dashboard['totals']['low_stock'] ?? 0)]) }}</h4>
                     <p class="mb-3" style="color: rgba(255,255,255,0.8);">{{ __('admin.dashboard.inventory_alert_text') }}</p>
                     <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
+                </article>
+
+                <article class="dashboard-entity-card is-blue">
+                    <div class="dashboard-entity-meta">
+                        <i class="ri-star-line text-warning"></i>
+                        <span>{{ __('admin.dashboard.ratings_snapshot') }}</span>
+                    </div>
+                    <h4 class="mb-2">{{ number_format($dashboard['totals']['ratings'] ?? 0) }}</h4>
+                    <p class="text-muted mb-3">{{ __('admin.dashboard.ratings_snapshot_text') }}</p>
+                    <a href="{{ route('admin/ratings/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_ratings') }}</a>
+                </article>
+
+                <article class="dashboard-entity-card is-green">
+                    <div class="dashboard-entity-meta">
+                        <i class="ri-mail-line text-info"></i>
+                        <span>{{ __('admin.dashboard.contacts_snapshot') }}</span>
+                    </div>
+                    <h4 class="mb-2">{{ number_format($dashboard['totals']['contacts'] ?? 0) }}</h4>
+                    <p class="text-muted mb-3">{{ __('admin.dashboard.contacts_snapshot_text') }}</p>
+                    <a href="{{ route('admin/contacts/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_contacts') }}</a>
+                </article>
+
+                <article class="dashboard-entity-card is-amber">
+                    <div class="dashboard-entity-meta">
+                        <i class="ri-global-line text-primary"></i>
+                        <span>{{ __('admin.dashboard.countries_snapshot') }}</span>
+                    </div>
+                    <h4 class="mb-2">{{ number_format($dashboard['totals']['countries'] ?? 0) }}</h4>
+                    <p class="text-muted mb-3">{{ __('admin.dashboard.countries_snapshot_text') }}</p>
+                    <a href="{{ route('admin/countries/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_countries') }}</a>
                 </article>
             </section>
 

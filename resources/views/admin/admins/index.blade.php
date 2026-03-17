@@ -1,30 +1,308 @@
 @extends('layouts.admin.home')
 
 @section('title')
-    <title>Admins</title>
+    <title>{{ __('admin.pages.admins.title') }}</title>
 @endsection
 
 @section('content')
-<div class="page-content"><div class="container-fluid"><div class="page-title-box d-sm-flex align-items-center justify-content-between"><div><span class="badge bg-primary-subtle text-primary mb-3">Admins Module</span><h3 class="mb-2">Admins Management</h3><p class="text-muted mb-0">Review admin team members with clearer profile rows, status badges, and existing AJAX pagination intact.</p></div><div class="page-title-right"><ol class="breadcrumb m-0"><li class="breadcrumb-item"><a href="{{ route('admin/index') }}">Home</a></li><li class="breadcrumb-item"><a href="{{ route('admin/admins/index') }}/0/{{ PAGINATION_COUNT }}">Admins</a></li><li class="breadcrumb-item active">Index</li></ol></div></div>@include('flash::message') @if ($errors->any())<div class="card mb-4"><div class="card-body"><ul class="mb-0" dir="ltr">@foreach ($errors->all() as $error)<li class="text-danger">{{ $error }}</li>@endforeach</ul></div></div>@endif <div class="card"><div class="card-header"><div class="d-flex justify-content-between align-items-center gap-3 flex-wrap"><div><h5 class="card-title mb-1">Admins Overview</h5><p class="text-muted mb-0">Team visibility with preserved search and load-more logic.</p></div><a href="{{ route('admin/admins/create') }}" class="btn btn-primary btn-sm"><i class="ri-add-line align-middle me-1"></i> Add Admin</a></div></div><div class="card-body"><div class="row g-3 mb-3"><div class="col-md-6 col-lg-4"><input type="search" class="form-control data_search" placeholder="Search admins..." aria-controls="scroll-horizontal" /></div></div><div class="table-responsive"><table id="scroll-horizontal" class="table nowrap align-middle dataTable no-footer" style="width: 100%" aria-describedby="scroll-horizontal_info"><thead><tr><th class="text-center">ID</th><th class="text-center">Img</th><th class="text-center">Name</th><th class="text-center">Email</th><th class="text-center">Phone</th><th class="text-center">Activation</th><th class="text-center">Actions</th></tr></thead><tbody id="tableShowData">@isset($admins) @foreach($admins as $record) @php $activationClass = $record->is_activate == 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'; $activationLabel = $record->is_activate == 1 ? 'Active' : 'Inactive'; @endphp <tr class="text-center"><td class="fw-semibold">#{{ $record->id }}</td><td><img src="{{ asset($record->img) }}" alt="record image" class="img-fluid rounded-4" width="72" style="height:72px; object-fit:cover;"></td><td class="fw-semibold">{{ $record->name }}</td><td>{{ $record->email }}</td><td>{{ $record->phone }}</td><td><span class="badge {{ $activationClass }}">{{ $activationLabel }}</span></td><td><div class="dropdown d-inline-block"><button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill align-middle"></i></button><ul class="dropdown-menu dropdown-menu-end" style="text-align: end;"><li><a class="dropdown-item" href="{{ route('admin/admins/edit', $record->id) }}"><i class="ri-edit-2-fill align-bottom me-2 text-muted"></i> Edit</a></li><li><button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="{{ $record->id }}"><i class="ri-loop-left-line align-bottom me-2 text-muted"></i> Activation</button></li><li><button class="dropdown-item remove-item-btn openDeleteFrom" data-bs-toggle="modal" data-bs-target="#myModalDelete" data-id="{{ $record->id }}"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</button></li></ul></div></td></tr> @endforeach @endisset</tbody></table></div><div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4"><div class="text-muted fw-semibold">Showing 1 to <span id="showItems"></span> of <span>{{ App\Models\Admin::unArchive()->count() }}</span> entries</div><div id="load_more"><button type="button" name="load_more_button" class="btn btn-info px-5" data-id="'.$last_id.'" id="load_more_button">Load More</button></div></div><div class="modal fade" id="myModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabell" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title f-w-600" id="exampleModalLabell"></h5></div><div class="modal-body text-center p-5"><form role="form" action="{{url(route('admin/admins/delete'))}}" method="post">{{ csrf_field() }}<lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon><div class="mt-4 pt-4"><h4>Delete Confirmation</h4><p class="text-muted">Are You Sure To Update This Record.</p><input id="delete_record_id" name="record_id" type="hidden"><button type="submit" class="btn btn-warning">Continue</button></div></form></div></div></div></div><div class="modal fade" id="myModalActivation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title f-w-600" id="exampleModalLabel"></h5></div><div class="modal-body text-center p-5"><form role="form" action="{{url(route('admin/admins/activate'))}}" method="post">{{ csrf_field() }}<lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon><div class="mt-4 pt-4"><h4>Activation Confirmation</h4><p class="text-muted">Are You Sure To Update This Record.</p><input id="activation_record_id" name="record_id" type="hidden"><button type="submit" class="btn btn-warning">Continue</button></div></form></div></div></div></div></div></div></div>
+    <div class="page-content">
+        <div class="container-fluid">
+            <x-admin.page-header
+                :badge="__('admin.pages.admins.module_label')"
+                :title="__('admin.pages.admins.title')"
+                :description="__('admin.pages.admins.description')"
+                :breadcrumbs="[
+                    ['label' => __('admin.pages.common.home'), 'href' => route('admin/index')],
+                    ['label' => __('admin.nav.admins'), 'href' => route('admin/admins/index') . '/0/' . PAGINATION_COUNT],
+                    ['label' => __('admin.pages.common.index'), 'active' => true],
+                ]"
+            >
+                <x-slot:actions>
+                    <a href="{{ route('admin/admins/archives') . '/0/' . PAGINATION_COUNT }}" class="btn btn-light">
+                        <i class="ri-archive-line align-bottom"></i>
+                        <span>{{ __('admin.pages.common.archives') }}</span>
+                    </a>
+                    <a href="{{ route('admin/admins/create') }}" class="btn btn-primary">
+                        <i class="ri-add-line align-bottom"></i>
+                        <span>{{ __('admin.pages.admins.add_admin') }}</span>
+                    </a>
+                </x-slot:actions>
+            </x-admin.page-header>
+
+            @include('flash::message')
+
+            @if ($errors->any())
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <ul class="mb-0" dir="ltr">
+                            @foreach ($errors->all() as $error)
+                                <li class="text-danger">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
+            <div class="card admin-content-card">
+                <div class="card-header">
+                    <div class="admin-card-head">
+                        <div class="admin-card-head__copy">
+                            <span class="admin-card-head__eyebrow">{{ __('admin.pages.admins.module_label') }}</span>
+                            <h5 class="admin-card-head__title">{{ __('admin.pages.admins.overview') }}</h5>
+                            <p class="admin-card-head__text">{{ __('admin.pages.admins.overview_subtitle') }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6 col-lg-4">
+                            <input
+                                type="search"
+                                class="form-control data_search"
+                                placeholder="{{ __('admin.pages.common.search_in', ['label' => __('admin.nav.admins')]) }}"
+                                aria-controls="scroll-horizontal"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="scroll-horizontal" class="table nowrap align-middle dataTable no-footer" style="width: 100%" aria-describedby="scroll-horizontal_info">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">{{ __('admin.pages.common.id') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.image') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.name') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.email') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.phone') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.activation') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableShowData">
+                                @isset($admins)
+                                    @foreach ($admins as $record)
+                                        @php
+                                            $activationClass = $record->is_activate == 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
+                                            $activationLabel = $record->is_activate == 1 ? __('admin.pages.common.active') : __('admin.pages.common.inactive');
+                                        @endphp
+                                        <tr class="text-center">
+                                            <td class="fw-semibold">#{{ $record->id }}</td>
+                                            <td>
+                                                <img src="{{ asset($record->img) }}" alt="record image" class="img-fluid rounded-4" width="72" style="height:72px; object-fit:cover;">
+                                            </td>
+                                            <td class="fw-semibold">{{ $record->name }}</td>
+                                            <td>{{ $record->email }}</td>
+                                            <td>{{ $record->phone }}</td>
+                                            <td><span class="badge {{ $activationClass }}">{{ $activationLabel }}</span></td>
+                                            <td>
+                                                <div class="dropdown d-inline-block">
+                                                    <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="ri-more-fill align-middle"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('admin/admins/edit', $record->id) }}">
+                                                                <i class="ri-edit-2-fill align-bottom me-2 text-muted"></i> {{ __('admin.pages.common.edit') }}
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="{{ $record->id }}">
+                                                                <i class="ri-loop-left-line align-bottom me-2 text-muted"></i> {{ __('admin.pages.common.activation') }}
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button class="dropdown-item remove-item-btn openDeleteFrom" data-bs-toggle="modal" data-bs-target="#myModalDelete" data-id="{{ $record->id }}">
+                                                                <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> {{ __('admin.pages.common.delete') }}
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endisset
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
+                        <div class="text-muted fw-semibold">
+                            <span>{{ __('admin.pages.common.showing') }}</span>
+                            <span>1</span>
+                            <span>{{ __('admin.pages.common.to') }}</span>
+                            <span id="showItems">{{ PAGINATION_COUNT }}</span>
+                            <span>{{ __('admin.pages.common.of') }}</span>
+                            <span>{{ App\Models\Admin::unArchive()->count() }}</span>
+                            <span>{{ __('admin.pages.common.entries') }}</span>
+                        </div>
+                        <div id="load_more">
+                            <button type="button" name="load_more_button" class="btn btn-info px-5" id="load_more_button">
+                                {{ __('admin.pages.common.load_more') }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="myModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabell" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
+                                </div>
+                                <div class="modal-body text-center p-5">
+                                    <form role="form" action="{{ url(route('admin/admins/delete')) }}" method="post">
+                                        {{ csrf_field() }}
+                                        <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
+                                        <div class="mt-4 pt-4">
+                                            <h4>{{ __('admin.pages.common.confirm_delete') }}</h4>
+                                            <p class="text-muted">{{ __('admin.pages.common.confirm_delete_message') }}</p>
+                                            <input id="delete_record_id" name="record_id" type="hidden">
+                                            <button type="submit" class="btn btn-warning">{{ __('admin.pages.common.continue') }}</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="myModalActivation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title f-w-600" id="exampleModalLabel"></h5>
+                                </div>
+                                <div class="modal-body text-center p-5">
+                                    <form role="form" action="{{ url(route('admin/admins/activate')) }}" method="post">
+                                        {{ csrf_field() }}
+                                        <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
+                                        <div class="mt-4 pt-4">
+                                            <h4>{{ __('admin.pages.common.confirm_activate') }}</h4>
+                                            <p class="text-muted">{{ __('admin.pages.common.confirm_activate_message') }}</p>
+                                            <input id="activation_record_id" name="record_id" type="hidden">
+                                            <button type="submit" class="btn btn-warning">{{ __('admin.pages.common.continue') }}</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
-<script>
-    (function () { $('.nav-link.menu-link').removeClass('active'); $('.menu-dropdown').removeClass('show'); $('.sidebaradmins').addClass('active'); var target = $('.sidebaradmins').attr('href'); $(target).addClass('show'); })();
-    $(document).on('click', '.openDeleteFrom', function() { $('#delete_record_id').val($(this).attr('data-id')); });
-    $(document).on('click', '.openActivationFrom', function() { $('#activation_record_id').val($(this).attr('data-id')); });
-</script>
-<script>
-    var q = '';
-    var offset = length = limit = `{{ PAGINATION_COUNT }}`;
-    var adminEditBase = `{{ url('admin-panel/admins/edit') }}`;
-    var _token = $('input[name="_token"]').val();
-    let showItems = document.getElementById("showItems");
-    var tableShowData = document.getElementById("tableShowData");
-    showItems.innerHTML = limit;
-    $(document).on('click', '#load_more_button', function(event) { var urlPath = `{{ route("admin/admins/pagination") }}/${offset}/${limit}`; event.preventDefault(); $('#load_more_button').html('<b>Loading... </b>'); search_in_data(q, urlPath, 1); });
-    $(document).on('keyup', '.data_search', function(event) { q = $(this).val(); var urlPath = "{{ route('admin/admins/search') }}"; event.preventDefault(); search_in_data(q, urlPath, 2); });
-    function search_in_data(q, urlPath, action_type, record = '') { $.ajax({ url: urlPath, method: "POST", data: { q: q, record: record, _token: _token }, success: function(data) { if (data.length > 0) { table_records(data, action_type); } else if (data.length === 0) { if (action_type == 2) { length = data.length; showItems.innerHTML = Number(length); tableShowData.style.display = 'none'; } $('#load_more_button').remove(); document.getElementById("load_more").innerHTML = `<button type="button" name="load_more_button" class="btn btn-primary px-5" id="load_more_button_remove">No Data</button>`; } } }) }
-    function table_records(data, action_type) { let records = ``; q == '' && action_type == 2 ? offset = `{{ PAGINATION_COUNT }}` : ''; for (let i = 0; i < data.length; i++) { image_path = "{{ asset('') }}" + data[i].img; records += `<tr class="text-center"><td class="fw-semibold">#${data[i].id}</td><td><img src="${image_path}" alt="record image" class="img-fluid rounded-4" width="72" style="height:72px; object-fit:cover;"></td><td class="fw-semibold">${data[i].name ?? ''}</td><td>${data[i].email ?? ''}</td><td>${data[i].phone ?? ''}</td><td>${data[i].is_activate == 1 ? '<span class="badge bg-success-subtle text-success">Active</span>' : '<span class="badge bg-danger-subtle text-danger">Inactive</span>'}</td><td><div class="dropdown d-inline-block"><button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-more-fill align-middle"></i></button><ul class="dropdown-menu dropdown-menu-end" style="text-align: end;"><li><a class="dropdown-item" href="${adminEditBase}/${data[i].id}"><i class="ri-edit-2-fill align-bottom me-2 text-muted"></i> Edit</a></li><li><button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="${data[i].id}"><i class="ri-loop-left-line align-bottom me-2 text-muted"></i> Activation</button></li><li><button class="dropdown-item remove-item-btn openDeleteFrom" data-bs-toggle="modal" data-bs-target="#myModalDelete" data-id="${data[i].id}"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</button></li></ul></div></td></tr>`; } $('#load_more_button').remove(); $('#load_more_button_remove').remove(); if (action_type == 1) { tableShowData.innerHTML += records; offset += data.length; length += data.length; showItems.innerHTML = Number(length); document.getElementById("load_more").innerHTML = `<button type="button" name="load_more_button" class="btn btn-info px-5" id="load_more_button">Load More</button>`; } else if (action_type == 2) { tableShowData.style.display = null; tableShowData.innerHTML = records; length = data.length; showItems.innerHTML = Number(length); if (data[0].searchButton == 1) { document.getElementById("load_more").innerHTML = `<button type="button" name="load_more_button" class="btn btn-info px-5" id="load_more_button">Load More</button>`; } } }
-</script>
+    <script>
+        $(document).on('click', '.openDeleteFrom', function() {
+            $('#delete_record_id').val($(this).attr('data-id'));
+        });
+
+        $(document).on('click', '.openActivationFrom', function() {
+            $('#activation_record_id').val($(this).attr('data-id'));
+        });
+    </script>
+    <script>
+        var q = '';
+        var offset = length = limit = `{{ PAGINATION_COUNT }}`;
+        var adminEditBase = `{{ url('admin-panel/admins/edit') }}`;
+        var _token = $('input[name="_token"]').val();
+        let showItems = document.getElementById("showItems");
+        var tableShowData = document.getElementById("tableShowData");
+        var activeLabel = @json(__('admin.pages.common.active'));
+        var inactiveLabel = @json(__('admin.pages.common.inactive'));
+        var editLabel = @json(__('admin.pages.common.edit'));
+        var activationLabel = @json(__('admin.pages.common.activation'));
+        var deleteLabel = @json(__('admin.pages.common.delete'));
+        var loadMoreLabel = @json(__('admin.pages.common.load_more'));
+        var noDataLabel = @json(__('admin.pages.common.no_data'));
+
+        showItems.innerHTML = limit;
+
+        $(document).on('click', '#load_more_button', function(event) {
+            var urlPath = `{{ route('admin/admins/pagination') }}/${offset}/${limit}`;
+            event.preventDefault();
+            $('#load_more_button').html('<b>Loading... </b>');
+            search_in_data(q, urlPath, 1);
+        });
+
+        $(document).on('keyup', '.data_search', function(event) {
+            q = $(this).val();
+            var urlPath = "{{ route('admin/admins/search') }}";
+            event.preventDefault();
+            search_in_data(q, urlPath, 2);
+        });
+
+        function search_in_data(q, urlPath, action_type, record = '') {
+            $.ajax({
+                url: urlPath,
+                method: "POST",
+                data: {
+                    q: q,
+                    record: record,
+                    _token: _token
+                },
+                success: function(data) {
+                    if (data.length > 0) {
+                        table_records(data, action_type);
+                    } else if (data.length === 0) {
+                        if (action_type == 2) {
+                            length = data.length;
+                            showItems.innerHTML = Number(length);
+                            tableShowData.style.display = 'none';
+                        }
+                        $('#load_more_button').remove();
+                        document.getElementById("load_more").innerHTML = `<button type="button" name="load_more_button" class="btn btn-primary px-5" id="load_more_button_remove">${noDataLabel}</button>`;
+                    }
+                }
+            })
+        }
+
+        function table_records(data, action_type) {
+            let records = ``;
+            q == '' && action_type == 2 ? offset = `{{ PAGINATION_COUNT }}` : '';
+            for (let i = 0; i < data.length; i++) {
+                image_path = "{{ asset('') }}" + data[i].img;
+                records += `<tr class="text-center">
+                    <td class="fw-semibold">#${data[i].id}</td>
+                    <td><img src="${image_path}" alt="record image" class="img-fluid rounded-4" width="72" style="height:72px; object-fit:cover;"></td>
+                    <td class="fw-semibold">${data[i].name ?? ''}</td>
+                    <td>${data[i].email ?? ''}</td>
+                    <td>${data[i].phone ?? ''}</td>
+                    <td>${data[i].is_activate == 1 ? '<span class="badge bg-success-subtle text-success">' + activeLabel + '</span>' : '<span class="badge bg-danger-subtle text-danger">' + inactiveLabel + '</span>'}</td>
+                    <td>
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="ri-more-fill align-middle"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
+                                <li><a class="dropdown-item" href="${adminEditBase}/${data[i].id}"><i class="ri-edit-2-fill align-bottom me-2 text-muted"></i> ${editLabel}</a></li>
+                                <li><button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="${data[i].id}"><i class="ri-loop-left-line align-bottom me-2 text-muted"></i> ${activationLabel}</button></li>
+                                <li><button class="dropdown-item remove-item-btn openDeleteFrom" data-bs-toggle="modal" data-bs-target="#myModalDelete" data-id="${data[i].id}"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> ${deleteLabel}</button></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>`;
+            }
+
+            $('#load_more_button').remove();
+            $('#load_more_button_remove').remove();
+
+            if (action_type == 1) {
+                tableShowData.innerHTML += records;
+                offset += data.length;
+                length += data.length;
+                showItems.innerHTML = Number(length);
+                document.getElementById("load_more").innerHTML = `<button type="button" name="load_more_button" class="btn btn-info px-5" id="load_more_button">${loadMoreLabel}</button>`;
+            } else if (action_type == 2) {
+                tableShowData.style.display = null;
+                tableShowData.innerHTML = records;
+                length = data.length;
+                showItems.innerHTML = Number(length);
+                if (data[0].searchButton == 1) {
+                    document.getElementById("load_more").innerHTML = `<button type="button" name="load_more_button" class="btn btn-info px-5" id="load_more_button">${loadMoreLabel}</button>`;
+                }
+            }
+        }
+    </script>
 @endsection

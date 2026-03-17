@@ -7,20 +7,16 @@
 @section('content')
 <div class="page-content">
     <div class="container-fluid">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <div>
-                <span class="badge bg-primary-subtle text-primary mb-3">Users Module</span>
-                <h3 class="mb-2">Create User</h3>
-                <p class="text-muted mb-0">Add a new customer or provider profile while keeping the existing registration and provider fields untouched.</p>
-            </div>
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="{{ route('admin/index') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}">Users</a></li>
-                    <li class="breadcrumb-item active">Create</li>
-                </ol>
-            </div>
-        </div>
+        <x-admin.page-header
+            badge="Users Module"
+            title="Create User"
+            description="Add a new customer or provider profile while keeping the existing registration and provider fields untouched."
+            :breadcrumbs="[
+                ['label' => 'Home', 'href' => route('admin/index')],
+                ['label' => 'Users', 'href' => route('admin/users/index') . '/0/' . PAGINATION_COUNT],
+                ['label' => 'Create', 'active' => true],
+            ]"
+        />
 
         @include('flash::message')
         @if ($errors->any())
@@ -57,7 +53,7 @@
 
 @section('script')
 <script>
-    (function () { $('.nav-link.menu-link').removeClass('active'); $('.menu-dropdown').removeClass('show'); $('.sidebarusers').addClass('active'); var target = $('.sidebarusers').attr('href'); $(target).addClass('show'); var userTypeSelect = document.getElementById('user_typefloatingInput'); if (userTypeSelect) { onUserTypeChange(userTypeSelect); } })();
+    (function () { var userTypeSelect = document.getElementById('user_typefloatingInput'); if (userTypeSelect) { onUserTypeChange(userTypeSelect); } })();
     function onUserTypeChange(selectEl) { var isProvider = (selectEl.value === '2' || selectEl.value === 'provider'); var area = document.getElementById('providerArea'); area.classList.toggle('d-none', !isProvider); }
 </script>
 @endsection

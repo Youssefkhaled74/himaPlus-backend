@@ -4,6 +4,7 @@ namespace App\Http\ServicesLayer\Admin\HomeServices;
 
 use App\Models\Category;
 use App\Models\Contact;
+use App\Models\Country;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
@@ -109,6 +110,7 @@ class HomeService
                 'coupons' => Coupon::whereNull('deleted_at')->count(),
                 'ratings' => Rating::whereNull('deleted_at')->count(),
                 'contacts' => Contact::whereNull('deleted_at')->count(),
+                'countries' => Country::whereNull('deleted_at')->count(),
                 'low_stock' => (clone $productsBase)->where('stock_quantity', '<', 20)->count(),
             ],
             'growth' => [

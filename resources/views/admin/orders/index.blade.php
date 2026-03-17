@@ -13,21 +13,23 @@
 
     <div class="page-content">
         <div class="container-fluid">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <div>
-                    <span class="badge bg-primary-subtle text-primary mb-3">{{ __('admin.pages.orders.module_label') }}</span>
-                    <h3 class="mb-2">{{ __('admin.pages.orders.title') }}</h3>
-                    <p class="text-muted mb-0">{{ __('admin.pages.orders.description') }}</p>
-                </div>
-
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('admin/index') }}">{{ __('admin.pages.common.home') }}</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}">{{ __('admin.nav.orders') }}</a></li>
-                        <li class="breadcrumb-item active">{{ __('admin.pages.common.index') }}</li>
-                    </ol>
-                </div>
-            </div>
+            <x-admin.page-header
+                :badge="__('admin.pages.orders.module_label')"
+                :title="__('admin.pages.orders.title')"
+                :description="__('admin.pages.orders.description')"
+                :breadcrumbs="[
+                    ['label' => __('admin.pages.common.home'), 'href' => route('admin/index')],
+                    ['label' => __('admin.nav.orders'), 'href' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?tab=' . $tab],
+                    ['label' => __('admin.pages.common.index'), 'active' => true],
+                ]"
+            >
+                <x-slot:actions>
+                    <a href="{{ route('admin/orders/archives') . '/0/' . PAGINATION_COUNT }}" class="btn btn-light">
+                        <i class="ri-archive-line align-bottom"></i>
+                        <span>{{ __('admin.pages.common.archives') }}</span>
+                    </a>
+                </x-slot:actions>
+            </x-admin.page-header>
 
             @include('flash::message')
             @if ($errors->any())
@@ -42,16 +44,17 @@
                 </div>
             @endif
 
-            <div class="card">
+            <div class="card admin-content-card">
                 <div class="card-header">
-                    <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                        <div>
-                            <h5 class="card-title mb-1">{{ __('admin.pages.orders.overview') }}</h5>
-                            <p class="text-muted mb-0">{{ __('admin.pages.orders.overview_subtitle') }}</p>
+                    <div class="admin-card-head">
+                        <div class="admin-card-head__copy">
+                            <span class="admin-card-head__eyebrow">{{ __('admin.pages.orders.module_label') }}</span>
+                            <h5 class="admin-card-head__title">{{ __('admin.pages.orders.overview') }}</h5>
+                            <p class="admin-card-head__text">{{ __('admin.pages.orders.overview_subtitle') }}</p>
                         </div>
-                        <div class="d-flex gap-2 flex-wrap">
-                            <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders" class="btn btn-sm {{ $isRequestsPage ? 'btn-soft-secondary' : 'btn-primary' }}">Orders</a>
-                            <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=requests" class="btn btn-sm {{ $isRequestsPage ? 'btn-primary' : 'btn-soft-secondary' }}">Requests</a>
+                        <div class="admin-card-head__actions">
+                            <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders" class="btn btn-sm {{ $isRequestsPage ? 'btn-soft-secondary' : 'btn-primary' }}">{{ __('admin.nav.orders') }}</a>
+                            <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=requests" class="btn btn-sm {{ $isRequestsPage ? 'btn-primary' : 'btn-soft-secondary' }}">{{ __('admin.pages.common.requests') }}</a>
                         </div>
                     </div>
                 </div>
@@ -60,13 +63,13 @@
                         <table id="scroll-horizontal" class="table nowrap align-middle dataTable no-footer" style="width: 100%" aria-describedby="scroll-horizontal_info">
                             <thead>
                                 <tr>
-                                    <th class="text-center">ID</th>
-                                    <th class="text-center">Order Type</th>
-                                    <th class="text-center">User</th>
-                                    <th class="text-center">Provider</th>
-                                    <th class="text-center">Vat Amount</th>
-                                    <th class="text-center">Total Cost</th>
-                                    <th class="text-center">Actions</th>
+                                    <th class="text-center">{{ __('admin.pages.common.id') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.order_type') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.customer') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.provider') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.vat_amount') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.total_cost') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody id="tableShowData">
@@ -76,13 +79,13 @@
                                             $orderType = '---';
                                             $orderBadge = 'bg-info-subtle text-info';
                                             if ((int) $record->order_type === 1) {
-                                                $orderType = 'Order';
+                                                $orderType = __('admin.pages.common.order');
                                                 $orderBadge = 'bg-primary-subtle text-primary';
                                             } elseif ((int) $record->order_type === 2) {
-                                                $orderType = 'Quotation';
+                                                $orderType = __('admin.pages.common.quotation');
                                                 $orderBadge = 'bg-warning-subtle text-warning';
                                             } elseif ((int) $record->order_type === 3) {
-                                                $orderType = 'Maintenance';
+                                                $orderType = __('admin.pages.common.maintenance');
                                                 $orderBadge = 'bg-success-subtle text-success';
                                             }
                                         @endphp
@@ -105,7 +108,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
                                                         <li>
                                                             <a href="{{ route('admin/orders/edit', $record->id) }}" class="dropdown-item edit-item-btn">
-                                                                <i class="ri-eye-line align-bottom me-2 text-muted"></i> Details
+                                                                <i class="ri-eye-line align-bottom me-2 text-muted"></i> {{ __('admin.pages.common.details') }}
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -159,11 +162,11 @@
                                         {{ csrf_field() }}
                                         <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
                                         <div class="mt-4 pt-4">
-                                            <h4>Delete Confirmation</h4>
-                                            <p class="text-muted">Are You Sure To Update This Record.</p>
+                                            <h4>{{ __('admin.pages.common.confirm_delete') }}</h4>
+                                            <p class="text-muted">{{ __('admin.pages.common.confirm_delete_message') }}</p>
                                             <input id="delete_record_id" name="record_id" type="hidden">
                                             <button type="submit" class="btn btn-warning">
-                                                Continue
+                                                {{ __('admin.pages.common.continue') }}
                                             </button>
                                         </div>
                                     </form>
@@ -183,11 +186,11 @@
                                         {{ csrf_field() }}
                                         <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
                                         <div class="mt-4 pt-4">
-                                            <h4>Activation Confirmation</h4>
-                                            <p class="text-muted">Are You Sure To Update This Record.</p>
+                                            <h4>{{ __('admin.pages.common.confirm_activate') }}</h4>
+                                            <p class="text-muted">{{ __('admin.pages.common.confirm_activate_message') }}</p>
                                             <input id="activation_record_id" name="record_id" type="hidden">
                                             <button type="submit" class="btn btn-warning">
-                                                Continue
+                                                {{ __('admin.pages.common.continue') }}
                                             </button>
                                         </div>
                                     </form>
@@ -203,13 +206,6 @@
 
 @section('script')
     <script>
-        (function () {
-            $('.nav-link.menu-link').removeClass('active');
-            $('.menu-dropdown').removeClass('show');
-            $('.sidebarorders').addClass('active');
-            var target = $('.sidebarorders').attr('href');
-            $(target).addClass('show');
-        })();
         $(document).on('click', '.openDeleteFrom', function() {
             var id = $(this).attr('data-id');
             $('#delete_record_id').val(id);
