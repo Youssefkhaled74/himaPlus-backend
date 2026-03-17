@@ -50,7 +50,7 @@
             
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card" style="margin-left: 1rem; margin-right: 1rem;">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Ratings Viwes</h5>
                         </div>

@@ -4,99 +4,12 @@
     <title>Contacts</title>
 @endsection
 
-@section('css')
-@endsection
-
 @section('content')
-
-    <div class="page-content">
-        <div class="container-fluid">
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent" style="direction: ltr;">
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"></li>
-                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/contacts/index')}}/0/{{PAGINATION_COUNT}}">Contacts</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">Create</li>
-                            </ol>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            @include('flash::message')
-            @if ($errors->any())
-                <div style="text-align: left; margin: 15px;">
-                    <ul dir="ltr">
-                        @foreach ($errors->all() as $error)
-                            <li class="text-danger">{{$error}}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Create Contact</h4>
-                        </div>
-                        <div class="card-body">
-                            <form role="form" action="{{url(route('admin/contacts/create'))}}" method="post">
-                                @csrf
-                                <div class="row gy-4">
-                                    <div class="col-xxl-6 col-md-6">
-                                        <div class="form-floating">
-                                            <input name="mobile" type="text" class="form-control" id="mobilefloatingInput" placeholder="mobile" value="{{ old('mobile') }}">
-                                            <label for="mobilefloatingInput">Mobile <span class="text-danger">*</span></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-xxl-6 col-md-6">
-                                        <div class="form-floating">
-                                            <input name="email" type="email" class="form-control" id="emailfloatingInput" placeholder="email" value="{{ old('email') }}">
-                                            <label for="emailfloatingInput">Email <span class="text-danger">*</span></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-xxl-6 col-md-6">
-                                        <div class="form-floating">
-                                            <input name="location" type="text" class="form-control" id="locationfloatingInput" placeholder="location" value="{{ old('location') }}">
-                                            <label for="locationfloatingInput">Location <span class="text-danger">*</span></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label for="detailsTextarea">Details</label>
-                                            <textarea name="details" id="detailsTextarea" class="form-control" rows="5">{{ old('details') }}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <button class="btn btn-primary" type="submit">Create Contact</button>
-                                        <button class="btn btn-success" type="reset">Reset</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
+<div class="page-content"><div class="container-fluid"><div class="page-title-box d-sm-flex align-items-center justify-content-between"><div><span class="badge bg-primary-subtle text-primary mb-3">Contacts Module</span><h3 class="mb-2">Create Contact</h3><p class="text-muted mb-0">Add a new contact record without changing the current backend save behavior.</p></div><div class="page-title-right"><ol class="breadcrumb m-0"><li class="breadcrumb-item"><a href="{{ route('admin/index') }}">Home</a></li><li class="breadcrumb-item"><a href="{{ route('admin/contacts/index') }}/0/{{ PAGINATION_COUNT }}">Contacts</a></li><li class="breadcrumb-item active">Create</li></ol></div></div>@include('flash::message') @if ($errors->any())<div class="card mb-4"><div class="card-body"><ul class="mb-0" dir="ltr">@foreach ($errors->all() as $error)<li class="text-danger">{{ $error }}</li>@endforeach</ul></div></div>@endif <div class="admin-form-shell"><div class="admin-form-main"><div class="card admin-form-card"><div class="card-header"><h4 class="card-title">Contact Details</h4><p class="card-subtitle mb-0">Capture mobile, email, location, and notes in a cleaner card layout.</p></div><div class="card-body"><form role="form" action="{{url(route('admin/contacts/create'))}}" method="post">@csrf<div class="row gy-4"><div class="col-xxl-6 col-md-6"><div class="form-floating"><input name="mobile" type="text" class="form-control" id="mobilefloatingInput" placeholder="mobile" value="{{ old('mobile') }}"><label for="mobilefloatingInput">Mobile <span class="text-danger">*</span></label></div></div><div class="col-xxl-6 col-md-6"><div class="form-floating"><input name="email" type="email" class="form-control" id="emailfloatingInput" placeholder="email" value="{{ old('email') }}"><label for="emailfloatingInput">Email <span class="text-danger">*</span></label></div></div><div class="col-xxl-6 col-md-6"><div class="form-floating"><input name="location" type="text" class="form-control" id="locationfloatingInput" placeholder="location" value="{{ old('location') }}"><label for="locationfloatingInput">Location <span class="text-danger">*</span></label></div></div><div class="col-12"><label for="detailsTextarea" class="form-label">Details</label><textarea name="details" id="detailsTextarea" class="form-control" rows="5">{{ old('details') }}</textarea></div><div class="col-12 admin-form-actions"><button class="btn btn-primary" type="submit">Create Contact</button><button class="btn btn-light" type="reset">Reset</button></div></div></form></div></div></div><div class="admin-form-side"><div class="admin-side-note"><h5 class="mb-3">Notes</h5><ul><li>This screen keeps the same route and field names.</li><li>Textarea content still posts through `details`.</li></ul></div></div></div></div></div>
 @endsection
 
 @section('script')
 <script>
-    (function () {
-        $('.nav-link.menu-link').removeClass('active');
-        $('.menu-dropdown').removeClass('show');
-        $('.sidebarcontacts').addClass('active');
-        var target = $('.sidebarcontacts').attr('href');
-        $(target).addClass('show');
-    })();
+    (function () { $('.nav-link.menu-link').removeClass('active'); $('.menu-dropdown').removeClass('show'); $('.sidebarcontacts').addClass('active'); var target = $('.sidebarcontacts').attr('href'); $(target).addClass('show'); })();
 </script>
 @endsection

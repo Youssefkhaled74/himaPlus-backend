@@ -3,8 +3,10 @@
 namespace App\Http\ServicesLayer\Admin\AdminServices;
 
 use App\Models\Admin;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Hash as FacadesHash;
+use Illuminate\Support\Facades\Log;
 
 class AuthService
 {
@@ -59,6 +61,16 @@ class AuthService
                 return back();
             }
         }catch(\Exception $ex){
+            Log::error('Admin login failed unexpectedly', [
+                'email' => $request->email ?? null,
+                'message' => $ex->getMessage(),
+            ]);
+
+            if ($ex instanceof QueryException || str_contains(strtolower($ex->getMessage()), 'sqlstate')) {
+                flash()->error("Database connection failed. Please make sure MySQL is running.");
+                return back();
+            }
+
             flash()->error("There IS Something Wrong , Please Contact Technical Support");
             return back();
         }

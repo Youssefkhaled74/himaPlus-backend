@@ -1,11 +1,16 @@
-﻿<footer class="footer">
+<footer class="footer">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <script>document.write(new Date().getFullYear())</script>
+        <div class="row align-items-center g-3">
+            <div class="col-md-6">
+                <div class="admin-footer-brand">
+                    <span class="admin-footer-dot"></span>
+                    <span>HimaPlus Admin</span>
+                </div>
+                <div class="text-muted small mt-2">Professional control panel for healthcare supply and operations.</div>
             </div>
-            <div class="col-sm-6">
-                <div class="text-sm-end d-none d-sm-block"></div>
+            <div class="col-md-6 text-md-end">
+                <div class="fw-semibold">&copy; <script>document.write(new Date().getFullYear())</script> HimaPlus</div>
+                <div class="text-muted small">Built for a cleaner, faster admin workflow.</div>
             </div>
         </div>
     </div>

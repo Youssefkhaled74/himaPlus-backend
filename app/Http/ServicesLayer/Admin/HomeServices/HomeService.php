@@ -3,8 +3,11 @@
 namespace App\Http\ServicesLayer\Admin\HomeServices;
 
 use App\Models\Category;
+use App\Models\Contact;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Rating;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -54,10 +57,20 @@ class HomeService
                 ->sum('total_cost');
         }
 
+        $totalOrders = (clone $ordersBase)->count();
+        $paidOrders = (clone $ordersBase)->where('payment_status', 1)->count();
+        $unpaidOrders = (clone $ordersBase)->where('payment_status', 0)->count();
+
         $recentOrders = (clone $ordersBase)
             ->with(['user:id,name,email', 'provider:id,name,email'])
             ->orderByDesc('id')
             ->limit(10)
+            ->get();
+
+        $recentUsers = (clone $usersBase)
+            ->select(['id', 'name', 'email', 'created_at'])
+            ->orderByDesc('id')
+            ->limit(8)
             ->get();
 
         $topCategories = Category::query()
@@ -69,9 +82,20 @@ class HomeService
             ->limit(5)
             ->get();
 
-        $totalOrders = (clone $ordersBase)->count();
-        $paidOrders = (clone $ordersBase)->where('payment_status', 1)->count();
-        $unpaidOrders = (clone $ordersBase)->where('payment_status', 0)->count();
+        $topProducts = Product::query()
+            ->whereNull('deleted_at')
+            ->select(['id', 'name', 'price', 'stock_quantity'])
+            ->orderByDesc('id')
+            ->limit(8)
+            ->get();
+
+        $lowStockProducts = Product::query()
+            ->whereNull('deleted_at')
+            ->where('stock_quantity', '<', 20)
+            ->select(['id', 'name', 'stock_quantity', 'price'])
+            ->orderBy('stock_quantity')
+            ->limit(6)
+            ->get();
 
         $dashboard = [
             'totals' => [
@@ -81,6 +105,11 @@ class HomeService
                 'revenue' => (float) (clone $ordersBase)->where('payment_status', 1)->sum('total_cost'),
                 'paid_orders' => $paidOrders,
                 'unpaid_orders' => $unpaidOrders,
+                'categories' => Category::whereNull('deleted_at')->count(),
+                'coupons' => Coupon::whereNull('deleted_at')->count(),
+                'ratings' => Rating::whereNull('deleted_at')->count(),
+                'contacts' => Contact::whereNull('deleted_at')->count(),
+                'low_stock' => (clone $productsBase)->where('stock_quantity', '<', 20)->count(),
             ],
             'growth' => [
                 'orders' => $this->growthRate($ordersCurrentMonth, $ordersPreviousMonth),
@@ -94,6 +123,9 @@ class HomeService
                 'revenue' => $revenueSeries,
             ],
             'recent_orders' => $recentOrders,
+            'recent_users' => $recentUsers,
+            'top_products' => $topProducts,
+            'low_stock_products' => $lowStockProducts,
             'top_categories' => $topCategories,
         ];
 
