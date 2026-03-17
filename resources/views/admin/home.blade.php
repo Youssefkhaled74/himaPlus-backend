@@ -8,6 +8,16 @@
 @php
     $paidTotal = max(1, (int) ($dashboard['totals']['orders'] ?? 0));
     $paidPercent = round((((int) ($dashboard['totals']['paid_orders'] ?? 0)) / $paidTotal) * 100, 1);
+    $quickActions = [
+        ['label' => __('admin.dashboard.manage_orders'), 'icon' => 'ri-shopping-bag-line', 'route' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT],
+        ['label' => __('admin.dashboard.manage_users'), 'icon' => 'ri-user-3-line', 'route' => route('admin/users/index') . '/0/' . PAGINATION_COUNT],
+        ['label' => __('admin.dashboard.manage_products'), 'icon' => 'ri-capsule-line', 'route' => route('admin/products/index') . '/0/' . PAGINATION_COUNT],
+        ['label' => __('admin.dashboard.manage_categories'), 'icon' => 'ri-layout-grid-line', 'route' => route('admin/categories/index') . '/0/' . PAGINATION_COUNT],
+        ['label' => __('admin.dashboard.manage_coupons'), 'icon' => 'ri-coupon-2-line', 'route' => route('admin/coupons/index') . '/0/' . PAGINATION_COUNT],
+        ['label' => __('admin.dashboard.manage_ratings'), 'icon' => 'ri-star-line', 'route' => route('admin/ratings/index') . '/0/' . PAGINATION_COUNT],
+        ['label' => __('admin.dashboard.view_contacts'), 'icon' => 'ri-mail-line', 'route' => route('admin/contacts/index') . '/0/' . PAGINATION_COUNT],
+        ['label' => __('admin.dashboard.manage_countries'), 'icon' => 'ri-global-line', 'route' => route('admin/countries/index') . '/0/' . PAGINATION_COUNT],
+    ];
     $stats = [
         [
             'label' => __('admin.dashboard.stats.orders'),
@@ -42,7 +52,7 @@
             'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
         [
-            'label' => 'Categories',
+            'label' => __('admin.dashboard.stats.categories'),
             'value' => number_format($dashboard['totals']['categories'] ?? 0),
             'growth' => 0,
             'icon' => 'ri-layout-grid-line',
@@ -50,7 +60,7 @@
             'link' => route('admin/categories/index') . '/0/' . PAGINATION_COUNT,
         ],
         [
-            'label' => 'Coupons',
+            'label' => __('admin.dashboard.stats.coupons'),
             'value' => number_format($dashboard['totals']['coupons'] ?? 0),
             'growth' => 0,
             'icon' => 'ri-coupon-2-line',
@@ -256,38 +266,12 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-quick-actions">
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-quick-link">
-                                    <span><i class="ri-shopping-bag-line me-2"></i>Manage Orders</span>
-                                    <i class="ri-arrow-left-up-line"></i>
-                                </a>
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-quick-link">
-                                    <span><i class="ri-user-3-line me-2"></i>Manage Users</span>
-                                    <i class="ri-arrow-left-up-line"></i>
-                                </a>
-                                <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-quick-link">
-                                    <span><i class="ri-capsule-line me-2"></i>Manage Products</span>
-                                    <i class="ri-arrow-left-up-line"></i>
-                                </a>
-                                <a href="{{ route('admin/categories/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-quick-link">
-                                    <span><i class="ri-layout-grid-line me-2"></i>Manage Categories</span>
-                                    <i class="ri-arrow-left-up-line"></i>
-                                </a>
-                                <a href="{{ route('admin/coupons/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-quick-link">
-                                    <span><i class="ri-coupon-2-line me-2"></i>Manage Coupons</span>
-                                    <i class="ri-arrow-left-up-line"></i>
-                                </a>
-                                <a href="{{ route('admin/ratings/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-quick-link">
-                                    <span><i class="ri-star-line me-2"></i>Manage Ratings</span>
-                                    <i class="ri-arrow-left-up-line"></i>
-                                </a>
-                                <a href="{{ route('admin/contacts/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-quick-link">
-                                    <span><i class="ri-mail-line me-2"></i>View Contacts</span>
-                                    <i class="ri-arrow-left-up-line"></i>
-                                </a>
-                                <a href="{{ route('admin/countries/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-quick-link">
-                                    <span><i class="ri-global-line me-2"></i>Manage Countries</span>
-                                    <i class="ri-arrow-left-up-line"></i>
-                                </a>
+                                @foreach ($quickActions as $action)
+                                    <a href="{{ $action['route'] }}" class="dashboard-quick-link">
+                                        <span><i class="{{ $action['icon'] }} me-2"></i>{{ $action['label'] }}</span>
+                                        <i class="ri-arrow-left-up-line"></i>
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -328,10 +312,10 @@
                 <article class="dashboard-entity-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
                     <div class="dashboard-entity-meta" style="color: rgba(255,255,255,0.8);">
                         <i class="ri-alert-line"></i>
-                        <span>Inventory Alert</span>
+                        <span>{{ __('admin.dashboard.inventory_alert') }}</span>
                     </div>
-                    <h4 class="mb-2" style="color: white;">{{ number_format($dashboard['totals']['low_stock'] ?? 0) }} Low Stock Items</h4>
-                    <p class="mb-3" style="color: rgba(255,255,255,0.8);">Products with stock below 20 units</p>
+                    <h4 class="mb-2" style="color: white;">{{ __('admin.dashboard.low_stock_items', ['count' => number_format($dashboard['totals']['low_stock'] ?? 0)]) }}</h4>
+                    <p class="mb-3" style="color: rgba(255,255,255,0.8);">{{ __('admin.dashboard.inventory_alert_text') }}</p>
                     <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
                 </article>
             </section>
@@ -343,10 +327,10 @@
                         <div class="card-header">
                             <div class="dashboard-section-heading mb-0">
                                 <div>
-                                    <h5 class="card-title mb-1">Recent Users</h5>
-                                    <p class="text-muted mb-0">Latest registered customers</p>
+                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.recent_users') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.recent_users_subtitle') }}</p>
                                 </div>
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">View All</a>
+                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -354,10 +338,10 @@
                                 <table class="table align-middle mb-0">
                                     <thead>
                                         <tr>
-                                            <th>User ID</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Joined</th>
+                                            <th>{{ __('admin.dashboard.user_id') }}</th>
+                                            <th>{{ __('admin.pages.common.name') }}</th>
+                                            <th>{{ __('admin.pages.common.email') }}</th>
+                                            <th>{{ __('admin.dashboard.joined') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -370,7 +354,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center text-muted">No recent users</td>
+                                                <td colspan="4" class="text-center text-muted">{{ __('admin.dashboard.no_recent_users') }}</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -385,8 +369,8 @@
                         <div class="card-header">
                             <div class="dashboard-section-heading mb-0">
                                 <div>
-                                    <h5 class="card-title mb-1">⚠️ Low Stock Alerts</h5>
-                                    <p class="text-muted mb-0">Products with less than 20 units</p>
+                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.alerts') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.alerts_subtitle') }}</p>
                                 </div>
                                 <span class="badge bg-danger-subtle text-danger">{{ count($dashboard['low_stock_products'] ?? []) }}</span>
                             </div>
@@ -394,15 +378,15 @@
                         <div class="card-body">
                             <div class="dashboard-mini-list">
                                 @forelse($dashboard['low_stock_products'] as $product)
-                                    <div class="dashboard-mini-item" style="border-left: 3px solid #dc3545;">
+                                    <div class="dashboard-mini-item" style="border-inline-start: 3px solid #dc3545;">
                                         <div>
                                             <div class="fw-semibold">{{ $product->name }}</div>
-                                            <div class="text-muted small">Price: {{ number_format($product->price, 2) }}</div>
+                                            <div class="text-muted small">{{ __('admin.dashboard.low_stock_alerts') }}</div>
                                         </div>
-                                        <span class="badge bg-danger text-white">{{ $product->stock_quantity }} left</span>
+                                        <span class="badge bg-danger text-white">{{ __('admin.dashboard.stock_left', ['count' => $product->stock_quantity]) }}</span>
                                     </div>
                                 @empty
-                                    <p class="text-muted mb-0">✓ All products well stocked</p>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.all_stocked') }}</p>
                                 @endforelse
                             </div>
                         </div>
@@ -412,8 +396,8 @@
                         <div class="card-header">
                             <div class="dashboard-section-heading mb-0">
                                 <div>
-                                    <h5 class="card-title mb-1">Payment Status</h5>
-                                    <p class="text-muted mb-0">Order payment breakdown</p>
+                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.payment_status') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.payment_status_subtitle') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -421,22 +405,22 @@
                             <div class="dashboard-mini-list">
                                 <div class="dashboard-mini-item">
                                     <div>
-                                        <div class="fw-semibold">Paid Orders</div>
-                                        <div class="text-muted small">Completed payments</div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.paid_orders_label') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.paid_badge') }}</div>
                                     </div>
                                     <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['paid_orders'] ?? 0) }}</span>
                                 </div>
                                 <div class="dashboard-mini-item">
                                     <div>
-                                        <div class="fw-semibold">Pending Payments</div>
-                                        <div class="text-muted small">Awaiting payment</div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.pending_payments_label') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.pending_badge') }}</div>
                                     </div>
                                     <span class="badge bg-warning-subtle text-warning">{{ number_format($dashboard['totals']['unpaid_orders'] ?? 0) }}</span>
                                 </div>
                                 <div class="dashboard-mini-item">
                                     <div>
-                                        <div class="fw-semibold">Collection Rate</div>
-                                        <div class="text-muted small">Payment success ratio</div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.collection_rate_label') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.live_status') }}</div>
                                     </div>
                                     <span class="badge bg-primary-subtle text-primary">{{ $paidPercent }}%</span>
                                 </div>
@@ -453,6 +437,7 @@
 @section('script')
 <script>
     (function () {
+        const isRtl = @json(app()->getLocale() === 'ar');
         const months = @json($dashboard['charts']['months']);
         const orders = @json($dashboard['charts']['orders']);
         const revenue = @json($dashboard['charts']['revenue']);
@@ -466,7 +451,7 @@
                 height: 360,
                 type: 'line',
                 toolbar: { show: false },
-                fontFamily: 'Manrope, Tajawal, sans-serif'
+                fontFamily: isRtl ? 'Almarai, sans-serif' : 'Manrope, sans-serif'
             },
             stroke: {
                 width: [0, 4],
@@ -505,7 +490,7 @@
             },
             legend: {
                 position: 'top',
-                horizontalAlign: 'left'
+                horizontalAlign: isRtl ? 'right' : 'left'
             }
         };
 

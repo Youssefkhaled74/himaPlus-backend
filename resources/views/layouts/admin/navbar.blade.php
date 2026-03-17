@@ -4,6 +4,10 @@
     $adminId = (int) optional($admin)->id;
     $superAdminIds = array_map('intval', config('auth.admin_super_ids', []));
     $isSuperAdmin = in_array($adminId, $superAdminIds, true);
+    $pendingOrdersCount = \App\Models\Order::query()->whereNull('deleted_at')->where('payment_status', 0)->count();
+    $lowStockCount = \App\Models\Product::query()->whereNull('deleted_at')->where('stock_quantity', '<', 20)->count();
+    $newUsersTodayCount = \App\Models\User::query()->whereNull('deleted_at')->whereDate('created_at', now()->toDateString())->count();
+    $notificationCount = $pendingOrdersCount + $lowStockCount + $newUsersTodayCount;
     $navGroups = [
         [
             'label' => __('admin.nav.home'),
@@ -91,7 +95,7 @@
             </div>
 
             <div class="admin-navbar-tools">
-                <div class="admin-search-shell d-none d-lg-block">
+                <div class="admin-search-shell">
                     <form class="app-search">
                         <div class="position-relative">
                             <input type="text" class="form-control admin-search-input" placeholder="{{ __('admin.nav.search_placeholder') }}" autocomplete="off" id="search-options" value="">
@@ -115,7 +119,9 @@
                 <div class="dropdown topbar-head-dropdown header-item" id="notificationDropdown">
                     <button type="button" class="btn btn-icon btn-topbar material-shadow-none rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                         <i class='bx bx-bell fs-22'></i>
-                        <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">3</span>
+                        @if ($notificationCount > 0)
+                            <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">{{ $notificationCount > 99 ? '99+' : $notificationCount }}</span>
+                        @endif
                     </button>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
                         <div class="p-3 border-bottom">
@@ -124,19 +130,22 @@
                         </div>
                         <div class="p-2">
                             <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dropdown-item rounded-3">
-                                {{ __('admin.notifications.orders') }}
+                                <div class="fw-semibold">{{ __('admin.notifications.orders') }}</div>
+                                <div class="small text-muted">{{ __('admin.notifications.pending_orders', ['count' => number_format($pendingOrdersCount)]) }}</div>
                             </a>
                             <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="dropdown-item rounded-3">
-                                {{ __('admin.notifications.products') }}
+                                <div class="fw-semibold">{{ __('admin.notifications.products') }}</div>
+                                <div class="small text-muted">{{ __('admin.notifications.low_stock', ['count' => number_format($lowStockCount)]) }}</div>
                             </a>
                             <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dropdown-item rounded-3">
-                                {{ __('admin.notifications.users') }}
+                                <div class="fw-semibold">{{ __('admin.notifications.users') }}</div>
+                                <div class="small text-muted">{{ __('admin.notifications.new_users', ['count' => number_format($newUsersTodayCount)]) }}</div>
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <form method="POST" action="{{ url(route('admin/logout')) }}" class="d-none d-xl-block">
+                <form method="POST" action="{{ url(route('admin/logout')) }}">
                     @csrf
                     <button type="submit" class="btn admin-logout-button">
                         <i class="mdi mdi-logout"></i>
