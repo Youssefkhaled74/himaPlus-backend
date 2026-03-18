@@ -278,7 +278,12 @@ class OrderController extends Controller
         }catch(\Throwable $e){
             DB::rollBack();
             report($e);
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            $errorMessage = $e->getMessage() ?: 'Unknown error';
+            $errorDetails = [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ];
+            return responseJson(500, $errorMessage, $errorDetails);
         }
     }
 

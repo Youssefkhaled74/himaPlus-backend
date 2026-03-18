@@ -41,8 +41,9 @@ class OrderController extends Controller
             $this->orders->store($request);
             flash()->success('Success');
             return back();
-        }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+        }catch(\Throwable $e){
+            report($e);
+            flash()->error($e->getMessage());
             return back();
         }
     }
