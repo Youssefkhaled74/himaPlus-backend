@@ -642,7 +642,13 @@ class OrderController extends Controller
             }
             $device_type = 'pc';
             $total_cost = $order->total_cost + $order->delivery_fee;
-            $data['paymob_url'] = $this->paymobService->generatePaymentUrl($total_cost, $order->id, $user, $device_type);
+            $errorDetails = null;
+            $data['paymob_url'] = $this->paymobService->generatePaymentUrl($total_cost, $order->id, $user, $device_type, $errorDetails);
+            if (!$data['paymob_url']) {
+                flash()->error("paymob link generation failed");
+                report($errorDetails);
+                return back();
+            }
             return redirect()->away($data['paymob_url']);
         } catch (\Exception $ex) {
             flash()->error("there is something wrong , please contact technical support");

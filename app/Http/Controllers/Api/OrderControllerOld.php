@@ -594,7 +594,11 @@ class OrderController extends Controller
             }
             $device_type = 'mobile';
             $total_cost = $order->total_cost + $order->delivery_fee;
-            $data['paymob_url'] = $this->paymobService->generatePaymentUrl($total_cost ?? 0, $order->id, $user, $device_type);
+            $errorDetails = null;
+            $data['paymob_url'] = $this->paymobService->generatePaymentUrl($total_cost ?? 0, $order->id, $user, $device_type, $errorDetails);
+            if (!$data['paymob_url']) {
+                return responseJson(500, "paymob link generation failed", $errorDetails);
+            }
             return responseJson(200, "success", $data);
         } catch (\Exception $ex) {
             return responseJson(500, "there is something wrong , please contact technical support");

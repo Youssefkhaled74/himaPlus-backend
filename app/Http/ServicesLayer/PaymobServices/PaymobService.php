@@ -45,10 +45,22 @@ class PaymobService
         $this->notification = new Notification();
     }
 
-    public function generatePaymentUrl(int $amountCents = 0, int $orderID, $user, $device_type)
+    public function generatePaymentUrl(int $amountCents, int $orderID, $user, $device_type, &$errorDetails = null)
     {
-        
+        $errorDetails = null;
+        if ($amountCents <= 0) {
+            $errorDetails = [
+                'source' => 'paymob_service',
+                'reason' => 'invalid_amount',
+                'amount' => $amountCents,
+            ];
+            return 0;
+        }
+
         $specialReference = Str::upper(Str::random(5)) .'-'. $orderID .'-'. $device_type;
+        $userPhone = (string) ($user->mobile ?? $user->phone ?? '966500000000');
+        $userPhone = preg_replace('/\D+/', '', $userPhone) ?: '966500000000';
+
         $payload = [
             "amount"          => $amountCents * 100,
             "currency"        => "SAR",
@@ -65,11 +77,11 @@ class PaymobService
                 "first_name"  => $user->name ?? 'guest',
                 "last_name"   => $user->name ?? 'guest',
                 "email"       => $user->email ?? 'guest@example.com',
-                "phone_number"=> $user->phone ?? '0000000000',
+                "phone_number"=> $userPhone,
                 "apartment"   => "",
                 "street"      => "",
                 "building"    => "",
-                "country"     => "",
+                "country"     => "SA",
                 "floor"       => "",
                 "state"       => "",
             ],
@@ -94,17 +106,40 @@ class PaymobService
             // ])->post('https://accept.paymob.com/v1/intention/', $payload);
 
             if (!$res->successful()) {
-                throw new \RuntimeException('Paymob intention failed: ' . $res->body());
+                $errorDetails = [
+                    'source' => 'paymob_api',
+                    'reason' => 'intention_failed',
+                    'http_status' => $res->status(),
+                    'response_body' => $res->body(),
+                    'order_id' => $orderID,
+                    'amount' => $amountCents,
+                ];
+                return 0;
             }
 
             $clientSecret = $res->json('client_secret');
             if (!$clientSecret) {
-                throw new \RuntimeException('Missing client_secret in intentions response');
+                $errorDetails = [
+                    'source' => 'paymob_api',
+                    'reason' => 'missing_client_secret',
+                    'http_status' => $res->status(),
+                    'response_body' => $res->body(),
+                    'order_id' => $orderID,
+                ];
+                return 0;
             }
 
             return "https://ksa.paymob.com/unifiedcheckout/?publicKey={$this->publicKey}&clientSecret={$clientSecret}";
         } catch (\Exception $e) {
-            report("generatePaymentUrl issue ======> $e");
+            report($e);
+            $errorDetails = [
+                'source' => 'paymob_service',
+                'reason' => 'exception',
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'order_id' => $orderID,
+            ];
             return 0;
         }
     }
