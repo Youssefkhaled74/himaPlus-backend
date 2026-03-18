@@ -117,6 +117,7 @@
             $lastTimelineNo = optional($order->timeline->sortByDesc('timeline_no')->first())->timeline_no;
             $lastTimelineLabel = strtolower(trim((string) timelineName((int) $lastTimelineNo)));
             $myOffer = $order->offers->where('provider_id', auth()->id())->first();
+            $orderFiles = collect(is_array($order->files) ? $order->files : [])->filter()->values();
 
             if ((int) $order->request_type === 2) {
                 $statusText = ucfirst($order->scheduled_status);
@@ -185,7 +186,12 @@
                         <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '-' }}</p>
                         <p class="vo-meta">{{ __('Assigned To') ?? 'Assigned To' }}: {{ __('Technician who finished the job') }}</p>
                     @else
-                        <p class="vo-meta">{{ __('Product') ?? 'Product' }}: {{ optional($order->items->first())->product->name ?? ($order->device_name ?: '-') }} @if($order->items->count()) - {{ $order->items->sum('quantity') }} {{ __('Units') ?? 'Units' }} @endif</p>
+                        @if((int)$order->order_type === 2)
+                            <p class="vo-meta">{{ __('Attachments') ?? 'Attachments' }}: {{ $orderFiles->count() }} {{ __('Files') ?? 'Files' }}</p>
+                            <p class="vo-meta">{{ __('First File') ?? 'First File' }}: {{ $orderFiles->count() ? basename((string)$orderFiles->first()) : '-' }}</p>
+                        @else
+                            <p class="vo-meta">{{ __('Product') ?? 'Product' }}: {{ optional($order->items->first())->product->name ?? ($order->device_name ?: '-') }} @if($order->items->count()) - {{ $order->items->sum('quantity') }} {{ __('Units') ?? 'Units' }} @endif</p>
+                        @endif
                         <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '-' }}</p>
                         <p class="vo-meta">{{ __('Total') ?? 'Total' }}: {{ number_format((float)($order->total_cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</p>
                     @endif

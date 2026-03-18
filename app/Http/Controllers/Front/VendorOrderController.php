@@ -47,7 +47,7 @@ class VendorOrderController extends Controller
         $status = $request->get('status', '');
         $search = $request->get('search', '');
         
-        $query = Order::with(['user:id,name,email,mobile', 'offers', 'timeline'])
+        $query = Order::with(['user:id,name,email,mobile', 'items.product', 'offers', 'timeline'])
             ->where(function ($builder) use ($vendor) {
                 $builder->where('provider_id', $vendor->id)
                     ->orWhereHas('offers', function ($offersQuery) use ($vendor) {

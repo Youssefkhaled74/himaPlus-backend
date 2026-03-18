@@ -50,6 +50,8 @@
     .btn-vos-main{background:linear-gradient(90deg,#0f4bbf 0%, #10b981 100%);color:#fff;}
     .btn-vos-main:hover{color:#fff;filter:brightness(.98);}
     .btn-vos-outline{background:#fff;color:#0f3f9f;border-color:#0f4bbf;}
+    .btn-vos-danger{background:#fff;color:#d14343;border-color:#e8a4a4;}
+    .btn-vos-danger:hover{color:#be2f2f;border-color:#d98282;background:#fff5f5;}
 
     .vos-alert{border:2px solid #2d67d8;background:#f8fbff;border-radius:12px;padding:12px 14px;color:#214eb5;font-size:15px;font-weight:600;line-height:1.35;}
 
@@ -221,6 +223,8 @@
         '0' => $isAr ? 'غير مدفوع' : 'Unpaid',
     ];
     $paymentDisplay = $paymentMap[$paymentKey] ?? $paymentRaw;
+    $orderFiles = collect(is_array($order->files) ? $order->files : [])->filter()->values();
+    $imageExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'];
 @endphp
 
 <main class="vendor-order-show">
@@ -273,10 +277,36 @@
                     <div class="vos-offer-line">{{ $order->notes ?: $tr('No notes provided.') }}</div>
                 </div>
             @endif
-
             <div class="vos-card" style="margin-top:14px;">
-                <h5>{{ $isAr ? 'المنتجات المطلوبة' : 'Products Requested' }}</h5>
-                @if($order->items && $order->items->count())
+                <h5>{{ ($isQuotation || (int)$order->order_type === 3 || $isScheduled) ? (__('Request Attachments') ?? 'Request Attachments') : (__('Products Requested') ?? 'Products Requested') }}</h5>
+                @if($isQuotation || (int)$order->order_type === 3 || $isScheduled)
+                    @if($orderFiles->count() > 0)
+                        <div class="row g-3">
+                            @foreach($orderFiles as $f)
+                                @php
+                                    $ext = strtolower(pathinfo((string) $f, PATHINFO_EXTENSION));
+                                    $isImage = in_array($ext, $imageExtensions, true);
+                                @endphp
+                                <div class="col-md-4 col-6">
+                                    <a href="{{ asset($f) }}" target="_blank" style="text-decoration:none;">
+                                        @if($isImage)
+                                            <img src="{{ asset($f) }}" alt="attachment" style="width:100%;height:140px;object-fit:cover;border-radius:10px;border:1px solid #e6e8ed;">
+                                        @else
+                                            <div style="height:140px;border:1px solid #e6e8ed;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#f8fafc;color:#334155;font-weight:600;padding:10px;text-align:center;">
+                                                <span><i class="bi bi-file-earmark-text"></i> {{ strtoupper($ext ?: 'FILE') }}</span>
+                                            </div>
+                                        @endif
+                                        <div style="margin-top:8px;font-size:13px;color:#6b7280;word-break:break-all;">{{ basename((string)$f) }}</div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="vos-rows">
+                            <div class="vos-row"><span class="vos-key">-</span><span class="vos-val">-</span></div>
+                        </div>
+                    @endif
+                @elseif($order->items && $order->items->count())
                     <div class="vos-rows">
                         @foreach($order->items as $item)
                             <div class="vos-row">
@@ -288,21 +318,6 @@
                 @else
                     <div class="vos-rows">
                         <div class="vos-row"><span class="vos-key">{{ $order->device_name ?: '-' }}</span><span class="vos-val">-</span></div>
-                    </div>
-                @endif
-
-                @if($isScheduled && is_array($order->files) && count(array_filter($order->files)) > 0)
-                    <div class="vos-offer" style="margin-top:14px;">
-                        <div class="vos-offer-body">
-                            @foreach($order->files as $f)
-                                @if($f)
-                                    <div class="vos-file">
-                                        <a href="{{ asset($f) }}" target="_blank"><i class="bi bi-file-earmark-text"></i> {{ basename($f) }}</a>
-                                        <i class="bi bi-download"></i>
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
                     </div>
                 @endif
             </div>
@@ -405,13 +420,13 @@
                         <form method="POST" action="{{ route('vendor/orders/offer-delete', $myOffer->id) }}" style="flex:1;" onsubmit="return confirm('{{ $tr('Delete this offer?') }}')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn-vos btn-vos-outline" style="width:100%;">{{ $tr('Cancel Offer') }}</button>
+                            <button type="submit" class="btn-vos btn-vos-danger" style="width:100%;">{{ $tr('Cancel Offer') }}</button>
                         </form>
                         <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn-vos btn-vos-main" style="flex:1;">{{ $tr('Edit Offer') }}</a>
                     </div>
                 @elseif($showPendingConfirmActions)
                     <div class="vos-actions">
-                        <button type="button" class="btn-vos btn-vos-outline" style="flex:1;">{{ $isAr ? 'إلغاء الطلب' : 'Cancel Order' }}</button>
+                        <button type="button" class="btn-vos btn-vos-danger" style="flex:1;">{{ $isAr ? 'إلغاء الطلب' : 'Cancel Order' }}</button>
                         <form method="POST" action="{{ route('user/order-timeline') }}" style="flex:1;">
                             @csrf
                             <input type="hidden" name="order_type" value="{{ encrypt((int)$order->order_type) }}">

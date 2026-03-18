@@ -6,25 +6,53 @@
 
 @section('css')
     <style>
-        .form-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #007bff;
+        .vendor-offer-form{max-width:95%;margin-top:8%!important;}
+        .vendor-offer-form .card{border:1px solid #e3e7ee;border-radius:18px;overflow:hidden;box-shadow:none;}
+        .vendor-offer-form .card-header.bg-gradient{
+            background:#fff !important;
+            border-bottom:1px solid #edf1f5;
+            text-align:center;
+            padding:20px 18px;
         }
-        .info-box {
-            background: #e3f2fd;
-            border-left: 4px solid #007bff;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
+        .vendor-offer-form .card-header h4{font-size:30px;font-weight:700;color:#111827;}
+        .vendor-offer-form .info-box{
+            background:#f8fbff;border:1px solid #e3edf9;border-radius:14px;padding:14px 16px;margin-bottom:18px;
+        }
+        .vendor-offer-form .form-section{
+            background:#fff;border:1px solid #e8ecf2;border-radius:16px;padding:16px;margin-bottom:16px;
+        }
+        .vendor-offer-form .form-section h5{font-size:20px;font-weight:700;margin-bottom:12px;}
+        .vendor-offer-form .form-label{font-weight:600;color:#6b7280;font-size:15px;}
+        .vendor-offer-form .form-control,
+        .vendor-offer-form .input-group-text{
+            border:1px solid #d8dde6;border-radius:14px;min-height:56px;background:#fff;color:#111827;
+            box-shadow:none;
+        }
+        .vendor-offer-form .input-group .form-control{border-end-end-radius:0;border-start-end-radius:0;}
+        .vendor-offer-form .input-group .input-group-text{
+            border-start-start-radius:0;border-end-start-radius:0;background:#f9fafb;color:#6b7280;font-weight:600;
+        }
+        .vendor-offer-form textarea.form-control{min-height:120px;resize:vertical;padding-top:12px;}
+        .vendor-offer-form .form-control:focus{border-color:#0ea5a4;box-shadow:0 0 0 3px rgba(16,185,129,.12);}
+        .vendor-offer-form #attachment.form-control{padding:14px;}
+        .vendor-offer-form .btn-gradient{
+            background:linear-gradient(90deg,#0f4bbf 0%, #10c7a5 100%);
+            border:0;color:#fff;border-radius:16px;min-height:56px;padding:0 26px;font-weight:700;
+        }
+        .vendor-offer-form .btn-secondary{
+            background:#fff;border:1px solid #e5a0a0;color:#d14343;border-radius:16px;min-height:56px;padding:0 26px;font-weight:700;
+        }
+        .vendor-offer-form .btn-secondary:hover{background:#fff5f5;color:#b91c1c;border-color:#dc8a8a;}
+        @media (max-width: 992px){
+            .vendor-offer-form .card-header h4{font-size:28px;}
+            .vendor-offer-form .d-flex.justify-content-between{gap:10px;flex-direction:row-reverse;}
+            .vendor-offer-form .d-flex.justify-content-between .btn{flex:1;}
         }
     </style>
 @endsection
 
 @section('content')
-    <main class="container my-4" style="max-width: 95%; margin-top: 8% !important;">
+    <main class="container my-4 vendor-offer-form">
         @include('flash::message')
         @if ($errors->any())
             <div class="alert alert-danger">
