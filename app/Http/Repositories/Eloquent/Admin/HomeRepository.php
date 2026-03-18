@@ -4,6 +4,7 @@ namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Http\ServicesLayer\Admin\HomeServices\HomeService;
 use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
+use Illuminate\Http\Request;
 
 class HomeRepository extends BaseAdminRepository
 {

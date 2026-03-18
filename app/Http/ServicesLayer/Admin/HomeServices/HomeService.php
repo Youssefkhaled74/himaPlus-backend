@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Contact;
 use App\Models\Country;
 use App\Models\Coupon;
+use App\Models\Notification;
+use App\Models\Offer;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
@@ -14,6 +16,8 @@ use Carbon\Carbon;
 
 class HomeService
 {
+    private const LOW_STOCK_THRESHOLD = 20;
+
     public function home()
     {
         $now = now();
@@ -24,6 +28,14 @@ class HomeService
         $ordersBase = Order::query()->whereNull('deleted_at');
         $usersBase = User::query()->whereNull('deleted_at');
         $productsBase = Product::query()->whereNull('deleted_at');
+        $offersBase = Offer::query()->whereNull('deleted_at');
+        $notificationsBase = Notification::query()->whereNull('deleted_at');
+
+        $customersBase = (clone $usersBase)->where('user_type', 1);
+        $vendorsBase = (clone $usersBase)->where('user_type', 2);
+
+        $acceptedOfferStatuses = $this->acceptedOfferStatuses();
+        $pendingOfferStatuses = $this->pendingOfferStatuses();
 
         $ordersCurrentMonth = (clone $ordersBase)->whereBetween('created_at', [$startCurrentMonth, $now])->count();
         $ordersPreviousMonth = (clone $ordersBase)->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
@@ -39,6 +51,21 @@ class HomeService
 
         $usersCurrentMonth = (clone $usersBase)->whereBetween('created_at', [$startCurrentMonth, $now])->count();
         $usersPreviousMonth = (clone $usersBase)->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
+
+        $categoriesCurrentMonth = Category::query()->whereNull('deleted_at')->whereBetween('created_at', [$startCurrentMonth, $now])->count();
+        $categoriesPreviousMonth = Category::query()->whereNull('deleted_at')->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
+
+        $couponsCurrentMonth = Coupon::query()->whereNull('deleted_at')->whereBetween('created_at', [$startCurrentMonth, $now])->count();
+        $couponsPreviousMonth = Coupon::query()->whereNull('deleted_at')->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
+
+        $ratingsCurrentMonth = Rating::query()->whereNull('deleted_at')->whereBetween('created_at', [$startCurrentMonth, $now])->count();
+        $ratingsPreviousMonth = Rating::query()->whereNull('deleted_at')->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
+
+        $contactsCurrentMonth = Contact::query()->whereNull('deleted_at')->whereBetween('created_at', [$startCurrentMonth, $now])->count();
+        $contactsPreviousMonth = Contact::query()->whereNull('deleted_at')->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
+
+        $countriesCurrentMonth = Country::query()->whereNull('deleted_at')->whereBetween('created_at', [$startCurrentMonth, $now])->count();
+        $countriesPreviousMonth = Country::query()->whereNull('deleted_at')->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
 
         $productsCurrentMonth = (clone $productsBase)->whereBetween('created_at', [$startCurrentMonth, $now])->count();
         $productsPreviousMonth = (clone $productsBase)->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
@@ -61,6 +88,19 @@ class HomeService
         $totalOrders = (clone $ordersBase)->count();
         $paidOrders = (clone $ordersBase)->where('payment_status', 1)->count();
         $unpaidOrders = (clone $ordersBase)->where('payment_status', 0)->count();
+
+        $totalOffers = (clone $offersBase)->count();
+        $pendingOffers = (clone $offersBase)->whereIn('status', $pendingOfferStatuses)->count();
+        $acceptedOffers = (clone $offersBase)->whereIn('status', $acceptedOfferStatuses)->count();
+
+        $scheduledOrders = (clone $ordersBase)->scheduled()->count();
+        $completedScheduledOrders = (clone $ordersBase)
+            ->scheduled()
+            ->whereHas('timeline', function ($timelineQuery) {
+                $timelineQuery->where('timeline_no', 6);
+            })
+            ->count();
+        $activeScheduledOrders = max(0, $scheduledOrders - $completedScheduledOrders);
 
         $recentOrders = (clone $ordersBase)
             ->with(['user:id,name,email', 'provider:id,name,email'])
@@ -92,16 +132,35 @@ class HomeService
 
         $lowStockProducts = Product::query()
             ->whereNull('deleted_at')
-            ->where('stock_quantity', '<', 20)
+            ->where('stock_quantity', '<', self::LOW_STOCK_THRESHOLD)
             ->select(['id', 'name', 'stock_quantity', 'price'])
             ->orderBy('stock_quantity')
             ->limit(6)
             ->get();
 
+        $vendorsWithLowStockProducts = Product::query()
+            ->whereNull('deleted_at')
+            ->where('stock_quantity', '<', self::LOW_STOCK_THRESHOLD)
+            ->whereNotNull('provider_id')
+            ->distinct('provider_id')
+            ->count('provider_id');
+
+        $totalUnreadNotifications = (clone $notificationsBase)->unread()->count();
+        $vendorUnreadNotifications = Notification::query()
+            ->whereNull('deleted_at')
+            ->whereNull('read_at')
+            ->whereHas('user', function ($query) {
+                $query->where('user_type', 2)
+                    ->whereNull('deleted_at');
+            })
+            ->count();
+
         $dashboard = [
             'totals' => [
                 'orders' => $totalOrders,
                 'users' => (clone $usersBase)->count(),
+                'customers_count' => (clone $customersBase)->count(),
+                'vendors_count' => (clone $vendorsBase)->count(),
                 'products' => (clone $productsBase)->count(),
                 'revenue' => (float) (clone $ordersBase)->where('payment_status', 1)->sum('total_cost'),
                 'paid_orders' => $paidOrders,
@@ -111,13 +170,30 @@ class HomeService
                 'ratings' => Rating::whereNull('deleted_at')->count(),
                 'contacts' => Contact::whereNull('deleted_at')->count(),
                 'countries' => Country::whereNull('deleted_at')->count(),
-                'low_stock' => (clone $productsBase)->where('stock_quantity', '<', 20)->count(),
+                'low_stock' => (clone $productsBase)->where('stock_quantity', '<', self::LOW_STOCK_THRESHOLD)->count(),
+                'total_offers' => $totalOffers,
+                'pending_offers' => $pendingOffers,
+                'accepted_offers' => $acceptedOffers,
+                'acceptance_rate' => $this->safeRate($acceptedOffers, $totalOffers),
+                'active_vendors' => (clone $vendorsBase)->where('is_activate', 1)->count(),
+                'inactive_vendors' => (clone $vendorsBase)->where('is_activate', 0)->count(),
+                'vendors_with_low_stock_products' => $vendorsWithLowStockProducts,
+                'scheduled_orders' => $scheduledOrders,
+                'active_scheduled_orders' => $activeScheduledOrders,
+                'completed_scheduled_orders' => $completedScheduledOrders,
+                'total_unread_notifications' => $totalUnreadNotifications,
+                'vendor_unread_notifications' => $vendorUnreadNotifications,
             ],
             'growth' => [
                 'orders' => $this->growthRate($ordersCurrentMonth, $ordersPreviousMonth),
                 'revenue' => $this->growthRate((float) $revenueCurrentMonth, (float) $revenuePreviousMonth),
                 'users' => $this->growthRate($usersCurrentMonth, $usersPreviousMonth),
                 'products' => $this->growthRate($productsCurrentMonth, $productsPreviousMonth),
+                'categories' => $this->growthRate($categoriesCurrentMonth, $categoriesPreviousMonth),
+                'coupons' => $this->growthRate($couponsCurrentMonth, $couponsPreviousMonth),
+                'ratings' => $this->growthRate($ratingsCurrentMonth, $ratingsPreviousMonth),
+                'contacts' => $this->growthRate($contactsCurrentMonth, $contactsPreviousMonth),
+                'countries' => $this->growthRate($countriesCurrentMonth, $countriesPreviousMonth),
             ],
             'charts' => [
                 'months' => $chartMonths,
@@ -141,6 +217,25 @@ class HomeService
         }
 
         return round(((($current - $previous) / $previous) * 100), 2);
+    }
+
+    private function safeRate(int $numerator, int $denominator): float
+    {
+        if ($denominator <= 0) {
+            return 0.0;
+        }
+
+        return round(($numerator / $denominator) * 100, 2);
+    }
+
+    private function pendingOfferStatuses(): array
+    {
+        return [1, '1', 'pending'];
+    }
+
+    private function acceptedOfferStatuses(): array
+    {
+        return [2, '2', 'accepted'];
     }
 
 }

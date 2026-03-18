@@ -269,3 +269,86 @@ The following index pages were refactored to use the shared header pattern, clea
 - A full notifications/work-queue backend was not added.
 - No database schema changes were introduced.
 - No controller or route renaming was performed.
+
+## 11. Re-Audit (User/Vendor Logic + Dashboard Data Integrity)
+
+### What is confirmed DB-driven in admin dashboard
+
+- `totals.orders`, `totals.users`, `totals.products`, `totals.revenue`, `paid_orders`, `unpaid_orders`
+- `totals.categories`, `totals.coupons`, `totals.ratings`, `totals.contacts`, `totals.countries`, `totals.low_stock`
+- `recent_orders` (with `user` and `provider` relations)
+- `recent_users`
+- `top_categories` (using `withCount(products)`)
+- `low_stock_products`
+- monthly chart series for orders and revenue
+
+All of the above are computed from Eloquent queries in:
+- `app/Http/ServicesLayer/Admin/HomeServices/HomeService.php`
+
+### Items in dashboard that are not direct DB stats
+
+- `updated` chip: uses `now()->format(...)` (system time, not persisted DB metric)
+- growth for some cards is currently fixed at `0` in the view for:
+  - categories
+  - coupons
+  - ratings
+  - contacts
+  - countries
+- quick actions are route shortcuts (UI actions), not data metrics
+
+### User/Vendor logic signals already available in application but not surfaced in admin dashboard
+
+From vendor controllers (`VendorDashboardController`, `VendorAnalyticsController`, `VendorOrderController`), these metrics are already computed elsewhere and can be safely surfaced in admin:
+
+- vendors count (`users.user_type = 2`)
+- vendor active/inactive accounts
+- accepted offers count
+- pending offers count
+- offer acceptance rate
+- vendor low-stock products
+- vendor estimated revenue from accepted offers
+- scheduled orders count and completed scheduled orders count
+- unread vendor notifications count
+
+### Recommended additions to admin dashboard (query-backed, no schema change)
+
+1. Split users KPI into:
+   - customers count (`user_type = 1`)
+   - vendors count (`user_type = 2`)
+2. Add Offers panel:
+   - total offers
+   - pending offers
+   - accepted offers
+   - acceptance rate
+3. Add Vendor health panel:
+   - active vendors
+   - inactive vendors
+   - vendors with low-stock products
+4. Add Scheduled/maintenance operations panel:
+   - scheduled orders
+   - active scheduled orders
+   - completed scheduled orders
+5. Add Notifications summary panel:
+   - total unread notifications
+   - vendor unread notifications
+
+### Logic consistency notes
+
+- Revenue is currently based on paid orders `sum(total_cost)`; this is valid but should be labeled as "paid revenue".
+- Orders and offers are both part of core business flow; dashboard currently focuses more on orders than offers.
+- Existing vendor analytics logic can be reused in admin service layer to avoid duplicated formulas.
+
+### Server-only error note (Linux case sensitivity)
+
+The error seen on server:
+- `Class "App\Models\user" not found`
+
+is typically a case-sensitivity deployment issue (Linux), even if local Windows works. Current local code references `User::class` correctly in `Order` model. If server still throws it:
+
+1. search on server for lowercase references:
+   - `App\Models\user`
+   - `user::class`
+2. run:
+   - `composer dump-autoload -o`
+   - `php artisan optimize:clear`
+3. redeploy updated files and warm cache again.
