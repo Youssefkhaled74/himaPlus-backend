@@ -23,6 +23,61 @@
             right: var(--bs-body-font-size);
             left: auto;
         }
+        
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+        
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            background-color: #fff;
+            cursor: pointer;
+            text-align: right;
+        }
+        
+        .file-input-label:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .file-input-name {
+            flex: 1;
+            margin-right: 1rem;
+            color: #6c757d;
+        }
+        
+        .file-input-name.active {
+            color: #212529;
+        }
+        
+        .file-input-btn {
+            padding: 0.375rem 0.75rem;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+        
+        .file-input-btn:hover {
+            background-color: #0b5ed7;
+        }
+        
+        .form-control[type="text"] {
+            text-align: right;
+        }
     </style>
 @endsection
 
@@ -77,8 +132,14 @@
                                         </div>
                                     </div>
                                     <div class="col-xxl-6 col-md-6">
-                                        <label for="filefloatingInput" class="form-label">{{ __('admin.pages.common.logo') }}</label>
-                                        <input name="file" type="file" id="filefloatingInput" class="form-control no-min-height admin-file-input" placeholder="Upload Image">
+                                        <label class="form-label d-block">{{ __('admin.pages.common.logo') }}</label>
+                                        <div class="file-input-wrapper">
+                                            <input type="file" id="filefloatingInput" name="file" class="form-control no-min-height admin-file-input" accept="image/*">
+                                            <label for="filefloatingInput" class="file-input-label">
+                                                <span class="file-input-name" id="fileName">{{ __('admin.pages.common.no_file_chosen') }}</span>
+                                                <span class="file-input-btn">{{ __('admin.pages.common.choose_file') }}</span>
+                                            </label>
+                                        </div>
                                     </div>
                                     <div class="col-12 admin-form-actions">
                                         <button class="btn btn-primary" type="submit">{{ __('admin.pages.common.save_changes') }}</button>
@@ -105,6 +166,22 @@
 
 @section('script')
 <script>
-    (function () { $('.nav-link.menu-link').removeClass('active'); $('.menu-dropdown').removeClass('show'); $('.sidebarcategories').addClass('active'); var target = $('.sidebarcategories').attr('href'); $(target).addClass('show'); })();
+    (function () { 
+        $('.nav-link.menu-link').removeClass('active'); 
+        $('.menu-dropdown').removeClass('show'); 
+        $('.sidebarcategories').addClass('active'); 
+        var target = $('.sidebarcategories').attr('href'); 
+        $(target).addClass('show');
+        
+        // Handle file input change
+        $('#filefloatingInput').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            if (fileName) {
+                $('#fileName').text(fileName).addClass('active');
+            } else {
+                $('#fileName').text('{{ __("admin.pages.common.no_file_chosen") }}').removeClass('active');
+            }
+        });
+    })();
 </script>
 @endsection

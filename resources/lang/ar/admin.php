@@ -354,6 +354,9 @@ return [
             'logo' => 'الشعار',
             'save_changes' => 'حفظ التغييرات',
             'current' => 'الحالي',
+            'choose_file' => 'اختر ملف',
+            'no_file_chosen' => 'لم يتم اختيار ملف',
+            'upload_image' => 'تحميل صورة',
         ],
     ],
 ];
