@@ -285,6 +285,13 @@ return [
             'add_admin' => 'إضافة مشرف',
             'archives' => 'المشرفون المؤرشفون',
             'back_to_admins' => 'العودة إلى المشرفين',
+            'update_admin' => 'تحديث المشرف',
+            'profile_image' => 'صورة الملف الشخصي',
+            'open_current_image' => 'فتح الصورة الحالية',
+            'password' => 'كلمة المرور',
+            'password_confirmation' => 'تأكيد كلمة المرور',
+            'phone' => 'رقم الهاتف',
+            'back' => 'رجوع',
         ],
         'common' => [
             'id' => 'المعرف',
