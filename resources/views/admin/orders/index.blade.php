@@ -4,6 +4,74 @@
     <title>{{ __('admin.pages.orders.title') }}</title>
 @endsection
 
+@section('css')
+    <style>
+        .admin-orders-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border: 1px solid rgba(216, 227, 240, 0.98);
+            border-radius: 22px;
+            background: linear-gradient(180deg, #ffffff, #f6faff);
+            box-shadow: 0 12px 28px rgba(16, 32, 58, 0.06);
+        }
+
+        .admin-orders-toggle__link {
+            min-height: 50px;
+            min-width: 170px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 22px;
+            border: 1px solid rgba(216, 227, 240, 0.98);
+            border-radius: 16px;
+            background: #fff;
+            color: #274066;
+            font-weight: 800;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .admin-orders-toggle__link:hover {
+            color: #10203a;
+            border-color: rgba(15, 75, 191, 0.28);
+            background: #f4f8ff;
+            transform: translateY(-1px);
+        }
+
+        .admin-orders-toggle__link.is-active {
+            border-color: transparent;
+            background: linear-gradient(135deg, #18326f, #0f4bbf);
+            color: #fff;
+            box-shadow: 0 14px 26px rgba(15, 75, 191, 0.24);
+        }
+
+        .admin-orders-toggle__link.is-active:hover {
+            color: #fff;
+        }
+
+        .admin-orders-toggle__link i {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 767.98px) {
+            .admin-orders-toggle {
+                width: 100%;
+                display: grid;
+                grid-template-columns: 1fr;
+            }
+
+            .admin-orders-toggle__link {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+    </style>
+@endsection
+
 @section('content')
     @php
         $tab = $tab ?? request('tab', 'orders');
@@ -53,17 +121,17 @@
                             <p class="admin-card-head__text">{{ __('admin.pages.orders.overview_subtitle') }}</p>
                         </div>
                         <div class="admin-card-head__actions">
-                            <div class="admin-segmented-control" role="tablist" aria-label="Orders tabs">
+                            <div class="admin-orders-toggle" role="tablist" aria-label="Orders tabs">
                                 <a
                                     href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders"
-                                    class="admin-segmented-control__item {{ $isRequestsPage ? '' : 'is-active' }}"
+                                    class="admin-orders-toggle__link {{ $isRequestsPage ? '' : 'is-active' }}"
                                     aria-selected="{{ $isRequestsPage ? 'false' : 'true' }}">
                                     <i class="ri-shopping-bag-3-line"></i>
                                     <span>{{ __('admin.nav.orders') }}</span>
                                 </a>
                                 <a
                                     href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=requests"
-                                    class="admin-segmented-control__item {{ $isRequestsPage ? 'is-active' : '' }}"
+                                    class="admin-orders-toggle__link {{ $isRequestsPage ? 'is-active' : '' }}"
                                     aria-selected="{{ $isRequestsPage ? 'true' : 'false' }}">
                                     <i class="ri-inbox-archive-line"></i>
                                     <span>{{ __('admin.pages.common.requests') }}</span>

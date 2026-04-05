@@ -16,7 +16,6 @@
         ['label' => __('admin.dashboard.manage_coupons'), 'icon' => 'ri-coupon-2-line', 'route' => route('admin/coupons/index') . '/0/' . PAGINATION_COUNT],
         ['label' => __('admin.dashboard.manage_ratings'), 'icon' => 'ri-star-line', 'route' => route('admin/ratings/index') . '/0/' . PAGINATION_COUNT],
         ['label' => __('admin.dashboard.view_contacts'), 'icon' => 'ri-mail-line', 'route' => route('admin/contacts/index') . '/0/' . PAGINATION_COUNT],
-        ['label' => __('admin.dashboard.manage_countries'), 'icon' => 'ri-global-line', 'route' => route('admin/countries/index') . '/0/' . PAGINATION_COUNT],
         ['label' => __('admin.dashboard.manage_admins'), 'icon' => 'ri-shield-user-line', 'route' => route('admin/admins/index') . '/0/' . PAGINATION_COUNT],
     ];
     $stats = [
@@ -83,14 +82,6 @@
             'icon' => 'ri-mail-line',
             'softClass' => 'bg-info-subtle text-info',
             'link' => route('admin/contacts/index') . '/0/' . PAGINATION_COUNT,
-        ],
-        [
-            'label' => __('admin.dashboard.manage_countries'),
-            'value' => number_format($dashboard['totals']['countries'] ?? 0),
-            'growth' => $dashboard['growth']['countries'] ?? 0,
-            'icon' => 'ri-global-line',
-            'softClass' => 'bg-primary-subtle text-primary',
-            'link' => route('admin/countries/index') . '/0/' . PAGINATION_COUNT,
         ],
     ];
 @endphp

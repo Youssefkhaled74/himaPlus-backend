@@ -93,14 +93,17 @@ class HomeService
         $pendingOffers = (clone $offersBase)->whereIn('status', $pendingOfferStatuses)->count();
         $acceptedOffers = (clone $offersBase)->whereIn('status', $acceptedOfferStatuses)->count();
 
-        $scheduledOrders = (clone $ordersBase)->scheduled()->count();
-        $completedScheduledOrders = (clone $ordersBase)
+        $scheduledOrdersCollection = (clone $ordersBase)
             ->scheduled()
-            ->whereHas('timeline', function ($timelineQuery) {
-                $timelineQuery->where('timeline_no', 6);
-            })
+            ->with(['offers', 'timeline'])
+            ->get();
+        $scheduledOrders = $scheduledOrdersCollection->count();
+        $activeScheduledOrders = $scheduledOrdersCollection
+            ->filter(fn (Order $order) => $order->scheduled_status === 'active')
             ->count();
-        $activeScheduledOrders = max(0, $scheduledOrders - $completedScheduledOrders);
+        $completedScheduledOrders = $scheduledOrdersCollection
+            ->filter(fn (Order $order) => $order->scheduled_status === 'completed')
+            ->count();
 
         $recentOrders = (clone $ordersBase)
             ->with(['user:id,name,email', 'provider:id,name,email'])
