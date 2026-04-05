@@ -28,7 +28,11 @@ class InfoRepository extends BaseAdminRepository
 
     public function getfirst()
     {
-        return $this->model->first();
+        return $this->model
+            ->whereNull('deleted_at')
+            ->where('id', 1)
+            ->first()
+            ?? $this->model->whereNull('deleted_at')->orderBy('id')->first();
     }
 
     public function pagination($offset, $limit)

@@ -18,10 +18,6 @@
                 ]"
             >
                 <x-slot:actions>
-                    <a href="{{ route('admin/categories/archives') . '/0/' . PAGINATION_COUNT }}" class="btn btn-light">
-                        <i class="ri-archive-line align-bottom"></i>
-                        <span>{{ __('admin.pages.common.archives') }}</span>
-                    </a>
                     <a href="{{ route('admin/categories/create') }}" class="btn btn-primary">
                         <i class="ri-add-line align-bottom"></i>
                         <span>{{ __('admin.pages.categories.add_category') }}</span>

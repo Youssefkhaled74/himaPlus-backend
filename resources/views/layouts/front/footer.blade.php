@@ -1,5 +1,14 @@
 @php
     $isVendorAuthed = auth()->check() && (int) auth()->user()->user_type === 2;
+    $contactMobile = $siteInfo?->mobile ?: '+966 1760 2222';
+    $contactEmail = $siteInfo?->email ?: 'support@hemapulse.com';
+    $socialLinks = [
+        ['icon' => 'bi-facebook', 'url' => $siteInfo?->facebook],
+        ['icon' => 'bi-twitter-x', 'url' => $siteInfo?->twitter],
+        ['icon' => 'bi-instagram', 'url' => $siteInfo?->instagram],
+        ['icon' => 'bi-snapchat', 'url' => $siteInfo?->snapchat],
+        ['icon' => 'bi-tiktok', 'url' => $siteInfo?->tiktok],
+    ];
 @endphp
 
 <footer class="footer">
@@ -34,13 +43,22 @@
 
             <div class="col-6 col-md-3">
                 <h6>{{ __('nav.contact_us') }}</h6>
-                <p class="mb-1"><i class="bi bi-telephone me-2"></i>+966 1760 2222</p>
-                <p class="mb-1"><i class="bi bi-envelope me-2"></i>support@hemapulse.com</p>
+                <p class="mb-1">
+                    <i class="bi bi-telephone me-2"></i>
+                    <a href="tel:{{ preg_replace('/[^0-9+]/', '', $contactMobile) }}" class="text-reset text-decoration-none">{{ $contactMobile }}</a>
+                </p>
+                <p class="mb-1">
+                    <i class="bi bi-envelope me-2"></i>
+                    <a href="mailto:{{ $contactEmail }}" class="text-reset text-decoration-none">{{ $contactEmail }}</a>
+                </p>
                 <div class="social">
-                    <i class="bi bi-facebook"></i>
-                    <i class="bi bi-twitter-x"></i>
-                    <i class="bi bi-linkedin"></i>
-                    <i class="bi bi-instagram"></i>
+                    @foreach($socialLinks as $social)
+                        @if(!empty($social['url']))
+                            <a href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer" class="text-reset text-decoration-none">
+                                <i class="bi {{ $social['icon'] }}"></i>
+                            </a>
+                        @endif
+                    @endforeach
                 </div>
             </div>
 
