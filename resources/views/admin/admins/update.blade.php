@@ -200,8 +200,8 @@
 
         @include('flash::message')
         @if ($errors->any())
-            <div style="text-align: left; margin: 15px;">
-                <ul dir="ltr">
+            <div style="text-align: right; margin: 15px;" dir="rtl">
+                <ul dir="rtl">
                     @foreach ($errors->all() as $error)
                         <li class="text-danger">{{ $error }}</li>
                     @endforeach
@@ -213,11 +213,11 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Update Admin</h4>
+                        <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.admins.update_admin') }}</h4>
                     </div>
                     <div class="card-body">
                         @isset($admin)
-                            <form role="form" action="{{ url(route('admin/admins/update', $admin->id)) }}" method="post" enctype="multipart/form-data">
+                            <form role="form" action="{{ url(route('admin/admins/update', $admin->id)) }}" method="post" enctype="multipart/form-data" dir="rtl">
                                 <div class="live-preview">
                                     @csrf
                                     <div class="row gy-4">
@@ -225,48 +225,52 @@
                                         <div class="col-xxl-6 col-md-6">
                                             <div class="form-floating">
                                                 <input name="name" type="text" class="form-control" id="namefloatingInput" placeholder="Enter your name" value="{{ old('name', $admin->name) }}">
-                                                <label for="namefloatingInput">name</label>
+                                                <label for="namefloatingInput">{{ __('admin.pages.common.name') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-xxl-6 col-md-6">
                                             <div class="form-floating">
                                                 <input name="email" type="email" class="form-control" id="emailfloatingInput" placeholder="Enter your email" value="{{ old('email', $admin->email) }}">
-                                                <label for="emailfloatingInput">email</label>
+                                                <label for="emailfloatingInput">{{ __('admin.pages.common.email') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-xxl-6 col-md-6">
                                             <div class="form-floating">
                                                 <input name="phone" type="text" class="form-control" id="phonefloatingInput" placeholder="Enter your phone" value="{{ old('phone', $admin->phone) }}">
-                                                <label for="phonefloatingInput">phone</label>
+                                                <label for="phonefloatingInput">{{ __('admin.pages.admins.phone') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-xxl-6 col-md-6">
-                                            <label for="filefloatingInput">Profile Image</label>
-                                            <div class="form-floating">
-                                                <input name="file" type="file" id="filefloatingInput" class="form-control no-min-height" placeholder="Upload Image">
+                                            <label class="form-label d-block">{{ __('admin.pages.admins.profile_image') }}</label>
+                                            <div class="file-input-wrapper">
+                                                <input type="file" id="filefloatingInput" name="file" class="form-control no-min-height admin-file-input" accept="image/*">
+                                                <label for="filefloatingInput" class="file-input-label">
+                                                    <span class="file-input-name" id="fileName">{{ __('admin.pages.common.no_file_chosen') }}</span>
+                                                    <span class="file-input-btn">{{ __('admin.pages.common.choose_file') }}</span>
+                                                </label>
                                             </div>
                                             @if($admin->img)
                                                 <small class="d-block mt-2">
-                                                    <a href="{{ asset($admin->img) }}" target="_blank">Open current image</a>
+                                                    <a href="{{ asset($admin->img) }}" target="_blank">{{ __('admin.pages.admins.open_current_image') }}</a>
                                                 </small>
                                             @endif
                                         </div>
                                         <div class="col-xxl-6 col-md-6">
                                             <div class="form-floating">
                                                 <input name="password" type="password" class="form-control" id="passwordfloatingInput" placeholder="Enter new password">
-                                                <label for="passwordfloatingInput">password</label>
+                                                <label for="passwordfloatingInput">{{ __('admin.pages.admins.password') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-xxl-6 col-md-6">
                                             <div class="form-floating">
                                                 <input name="password_confirmation" type="password" class="form-control" id="passwordconfirmationfloatingInput" placeholder="Confirm password">
-                                                <label for="passwordconfirmationfloatingInput">password confirmation</label>
+                                                <label for="passwordconfirmationfloatingInput">{{ __('admin.pages.admins.password_confirmation') }}</label>
                                             </div>
                                         </div>
 
                                         <div class="col-12">
-                                            <button class="btn btn-primary" type="submit">Save Changes</button>
-                                            <a href="{{ route('admin/admins/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-success">Back</a>
+                                            <button class="btn btn-primary" type="submit">{{ __('admin.pages.common.save_changes') }}</button>
+                                            <a href="{{ route('admin/admins/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-success">{{ __('admin.pages.admins.back') }}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -290,6 +294,30 @@
         $('.sidebaradmins').addClass('active');
         var target = $('.sidebaradmins').attr('href');
         $(target).addClass('show');
+        
+        // Handle file input change
+        $('#filefloatingInput').on('change', function() {
+            var fileName = $(this).val().split('\\').pop();
+            if (fileName) {
+                $('#fileName').text(fileName).addClass('active');
+            } else {
+                $('#fileName').text('{{ __("admin.pages.common.no_file_chosen") }}').removeClass('active');
+            }
+        });
+        
+        // Auto-hide success/info alerts after 5 seconds
+        setTimeout(function() {
+            $('.alert-success, .alert-info').fadeOut('slow', function() {
+                $(this).remove();
+            });
+        }, 5000);
+        
+        // Add close button handler
+        $(document).on('click', '.alert .close', function() {
+            $(this).closest('.alert').fadeOut('slow', function() {
+                $(this).remove();
+            });
+        });
     })();
 </script>
 @endsection
