@@ -230,6 +230,11 @@ return [
             'add_category' => 'إضافة تصنيف',
             'archives' => 'الأقسام المؤرشفة',
             'back_to_categories' => 'العودة إلى الأقسام',
+            'update_title' => 'تحديث القسم',
+            'update_description' => 'قم بتحديث اسم القسم أو الشعار دون تغيير سلوك التحديث في الخادم.',
+            'details' => 'تفاصيل القسم',
+            'details_description' => 'قم بتحديث عرض القسم مع الحفاظ على نفس حقول النموذج والمسار.',
+            'current_category' => 'القسم الحالي',
         ],
         'coupons' => [
             'title' => 'إدارة الكوبونات',
@@ -346,6 +351,9 @@ return [
             'confirm_delete_message' => 'هل تريد بالفعل حذف هذا السجل؟',
             'confirm_activate' => 'تأكيد التفعيل',
             'confirm_activate_message' => 'هل تريد بالفعل تحديث هذا السجل؟',
+            'logo' => 'الشعار',
+            'save_changes' => 'حفظ التغييرات',
+            'current' => 'الحالي',
         ],
     ],
 ];
