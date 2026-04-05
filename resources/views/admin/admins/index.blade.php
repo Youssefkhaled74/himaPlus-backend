@@ -4,6 +4,62 @@
     <title>{{ __('admin.pages.admins.title') }}</title>
 @endsection
 
+@section('css')
+    <style>
+        .admin-activation-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #f8fbff;
+            border: 1px solid #dbe7f3;
+        }
+
+        .admin-activation-toggle__text {
+            min-width: 64px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+        }
+
+        .admin-activation-toggle__text.is-active {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .admin-activation-toggle__text.is-inactive {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .admin-activation-toggle .form-check.form-switch {
+            margin: 0;
+            padding: 0;
+            min-height: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .admin-activation-toggle .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+            margin: 0;
+            cursor: pointer;
+            border-color: #b8cbe0;
+            background-color: #d9e6f3;
+            box-shadow: none;
+        }
+
+        .admin-activation-toggle .form-check-input:checked {
+            background-color: #16a34a;
+            border-color: #16a34a;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
@@ -94,7 +150,16 @@
                                             <td class="fw-semibold">{{ $record->name }}</td>
                                             <td>{{ $record->email }}</td>
                                             <td>{{ $record->phone }}</td>
-                                            <td><span class="badge {{ $activationClass }}">{{ $activationLabel }}</span></td>
+                                            <td>
+                                                <div class="admin-activation-toggle">
+                                                    <span class="admin-activation-toggle__text {{ $record->is_activate == 1 ? 'is-active' : 'is-inactive' }} admin-status-text-{{ $record->id }}">
+                                                        {{ $record->is_activate == 1 ? __('admin.pages.common.active') : __('admin.pages.common.inactive') }}
+                                                    </span>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input admin-toggle-activation" type="checkbox" id="activation{{ $record->id }}" {{ $record->is_activate == 1 ? 'checked' : '' }} data-id="{{ $record->id }}" />
+                                                    </div>
+                                                </div>
+                                            </td>
                                             <td>
                                                 <div class="dropdown d-inline-block">
                                                     <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -201,6 +266,73 @@
         $(document).on('click', '.openActivationFrom', function() {
             $('#activation_record_id').val($(this).attr('data-id'));
         });
+        
+        // Handle admin activation toggle
+        $(document).on('change', '.admin-toggle-activation', function() {
+            const checkbox = $(this);
+            const adminId = checkbox.data('id');
+            const isActive = checkbox.is(':checked') ? 1 : 0;
+            const statusText = checkbox.is(':checked') ? '{{ __("admin.pages.common.active") }}' : '{{ __("admin.pages.common.inactive") }}';
+            const statusElement = $('.admin-status-text-' + adminId);
+            
+            $.ajax({
+                url: '{{ route("admin/admins/activate") }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    record_id: adminId
+                },
+                success: function(response) {
+                    // Update text and classes
+                    statusElement.text(statusText);
+                    if (isActive) {
+                        statusElement.removeClass('is-inactive').addClass('is-active');
+                    } else {
+                        statusElement.removeClass('is-active').addClass('is-inactive');
+                    }
+                    // Show success message
+                    showSuccessAlert('{{ __("admin.pages.common.success_message") }}');
+                },
+                error: function(error) {
+                    checkbox.prop('checked', !checkbox.is(':checked'));
+                    showErrorAlert('{{ __("admin.pages.common.error_message") }}');
+                }
+            });
+        });
+        
+        function showSuccessAlert(message) {
+            const alertHtml = `
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>${message}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `;
+            $('.page-content').prepend(alertHtml);
+            setTimeout(() => {
+                $('.alert').fadeOut('slow', function() {
+                    $(this).remove();
+                });
+            }, 5000);
+        }
+        
+        function showErrorAlert(message) {
+            const alertHtml = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>${message}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `;
+            $('.page-content').prepend(alertHtml);
+            setTimeout(() => {
+                $('.alert').fadeOut('slow', function() {
+                    $(this).remove();
+                });
+            }, 5000);
+        }
     </script>
     <script>
         var q = '';
