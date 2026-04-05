@@ -4,6 +4,28 @@
     <title>{{ __('admin.pages.categories.title') }}</title>
 @endsection
 
+@section('css')
+    <style>
+        .category-status-toggle-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-status-toggle-wrap .form-check-input {
+            width: 2.45rem;
+            height: 1.35rem;
+            cursor: pointer;
+        }
+
+        .category-status-toggle-wrap .status-text {
+            min-width: 62px;
+            font-weight: 700;
+            font-size: 0.82rem;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="page-content">
         <div class="container-fluid">
@@ -66,7 +88,6 @@
                                 @isset($categories)
                                     @foreach ($categories as $record)
                                         @php
-                                            $activationClass = $record->is_activate == 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
                                             $activationLabel = $record->is_activate == 1 ? __('admin.pages.common.active') : __('admin.pages.common.inactive');
                                         @endphp
                                         <tr class="text-center">
@@ -75,7 +96,26 @@
                                             <td>
                                                 <img src="{{ asset($record->img) }}" alt="record image" class="img-fluid rounded-4" width="72" style="height:72px; object-fit:cover;">
                                             </td>
-                                            <td><span class="badge {{ $activationClass }}">{{ $activationLabel }}</span></td>
+                                            <td>
+                                                <form method="post" action="{{ url(route('admin/categories/activate')) }}" class="d-inline-block category-status-toggle-form">
+                                                    @csrf
+                                                    <input type="hidden" name="record_id" value="{{ $record->id }}">
+                                                    <div class="category-status-toggle-wrap">
+                                                        <div class="form-check form-switch m-0">
+                                                            <input
+                                                                class="form-check-input category-status-toggle"
+                                                                type="checkbox"
+                                                                role="switch"
+                                                                aria-label="{{ __('admin.pages.common.toggle_activation') }}"
+                                                                {{ $record->is_activate == 1 ? 'checked' : '' }}
+                                                            >
+                                                        </div>
+                                                        <span class="status-text {{ $record->is_activate == 1 ? 'text-success' : 'text-danger' }}">
+                                                            {{ $activationLabel }}
+                                                        </span>
+                                                    </div>
+                                                </form>
+                                            </td>
                                             <td>
                                                 <div class="dropdown d-inline-block">
                                                     <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -86,11 +126,6 @@
                                                             <a href="{{ route('admin/categories/edit', $record->id) }}" class="dropdown-item edit-item-btn">
                                                                 <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> {{ __('admin.pages.common.edit') }}
                                                             </a>
-                                                        </li>
-                                                        <li>
-                                                            <button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="{{ $record->id }}">
-                                                                <i class="ri-loop-left-line align-bottom me-2 text-muted"></i> {{ __('admin.pages.common.activation') }}
-                                                            </button>
                                                         </li>
                                                         <li>
                                                             <button class="dropdown-item remove-item-btn openDeleteFrom" data-bs-toggle="modal" data-bs-target="#myModalDelete" data-id="{{ $record->id }}">
@@ -158,28 +193,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="modal fade" id="myModalActivation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title f-w-600" id="exampleModalLabel"></h5>
-                                </div>
-                                <div class="modal-body text-center p-5">
-                                    <form role="form" action="{{ url(route('admin/categories/activate')) }}" method="post">
-                                        {{ csrf_field() }}
-                                        <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
-                                        <div class="mt-4 pt-4">
-                                            <h4>{{ __('admin.pages.common.confirm_activate') }}</h4>
-                                            <p class="text-muted">{{ __('admin.pages.common.confirm_activate_message') }}</p>
-                                            <input id="activation_record_id" name="record_id" type="hidden">
-                                            <button type="submit" class="btn btn-warning">{{ __('admin.pages.common.continue') }}</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -192,8 +205,8 @@
             $('#delete_record_id').val($(this).attr('data-id'));
         });
 
-        $(document).on('click', '.openActivationFrom', function() {
-            $('#activation_record_id').val($(this).attr('data-id'));
+        $(document).on('change', '.category-status-toggle', function() {
+            $(this).closest('form.category-status-toggle-form').submit();
         });
     </script>
 @endsection

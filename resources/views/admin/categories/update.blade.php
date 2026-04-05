@@ -228,21 +228,6 @@
 @section('content')
 <div class="page-content">
     <div class="container-fluid">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between" dir="rtl">
-            <div>
-                <span class="badge bg-primary-subtle text-primary mb-3">{{ __('admin.pages.categories.module_label') }}</span>
-                <h3 class="mb-2">{{ __('admin.pages.categories.update_title') }}</h3>
-                <p class="text-muted mb-0">{{ __('admin.pages.categories.update_description') }}</p>
-            </div>
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="{{ route('admin/index') }}">{{ __('admin.pages.common.home') }}</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('admin/categories/index') }}/0/{{ PAGINATION_COUNT }}">{{ __('admin.nav.categories') }}</a></li>
-                    <li class="breadcrumb-item active">{{ __('admin.pages.common.update') }}</li>
-                </ol>
-            </div>
-        </div>
-        
         @include('flash::message')
         
         @if ($errors->any())
