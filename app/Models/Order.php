@@ -163,7 +163,92 @@ class Order extends Model
 			'cancelled' => ['bg' => 'rgba(239,68,68,.12)', 'text' => '#991b1b', 'border' => 'rgba(239,68,68,.20)'],
 		][$this->scheduled_status] ?? ['bg' => '#f3f4f6', 'text' => '#6b7280', 'border' => '#e5e7eb'];
 	}
-	
+
+	public function resolveAdminStatus(?int $providerId = null): array
+	{
+		$statusClasses = [
+			'pending' => 'bg-warning-subtle text-warning',
+			'confirmed' => 'bg-success-subtle text-success',
+			'processing' => 'bg-primary-subtle text-primary',
+			'shipped' => 'bg-info-subtle text-info',
+			'delivered' => 'bg-success-subtle text-success',
+			'completed' => 'bg-success-subtle text-success',
+			'canceled' => 'bg-danger-subtle text-danger',
+			'cancelled' => 'bg-danger-subtle text-danger',
+			'under review' => 'bg-secondary-subtle text-secondary',
+			'assigned to supplier' => 'bg-primary-subtle text-primary',
+			'converted to order' => 'bg-primary-subtle text-primary',
+			'offers received' => 'bg-info-subtle text-info',
+			'upcoming' => 'bg-secondary-subtle text-secondary',
+			'active' => 'bg-primary-subtle text-primary',
+			'paused' => 'bg-warning-subtle text-warning',
+			'rejected' => 'bg-danger-subtle text-danger',
+		];
+
+		$timeline = $this->relationLoaded('timeline') ? $this->timeline : $this->timeline()->get();
+		$offers = $this->relationLoaded('offers') ? $this->offers : $this->offers()->get();
+		$lastTimelineNo = optional($timeline->sortByDesc('timeline_no')->first())->timeline_no;
+		$lastTimelineLabel = strtolower(trim((string) timelineName((int) $lastTimelineNo)));
+
+		if ((int) $this->request_type === 2) {
+			$statusText = ucfirst((string) $this->scheduled_status);
+			$statusKey = strtolower((string) $this->scheduled_status);
+
+			return [
+				'text' => $statusText,
+				'key' => $statusKey,
+				'class' => $statusClasses[$statusKey] ?? 'bg-warning-subtle text-warning',
+			];
+		}
+
+		if ($providerId) {
+			$myOffer = $offers->where('provider_id', (int) $providerId)->first();
+			if ($myOffer) {
+				$offerStatus = strtolower((string) $myOffer->status);
+				if ($offerStatus === '2' || $offerStatus === 'accepted') {
+					$statusText = 'Confirmed';
+					$statusKey = 'confirmed';
+				} elseif ($offerStatus === '3' || $offerStatus === 'rejected') {
+					$statusText = 'Rejected';
+					$statusKey = 'rejected';
+				} else {
+					$statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
+					$statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
+				}
+			} else {
+				$statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
+				$statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
+			}
+		} else {
+			$acceptedOffer = $offers->first(function ($offer) {
+				$status = strtolower((string) $offer->status);
+				return $status === '2' || $status === 'accepted';
+			});
+
+			$rejectedOffersCount = $offers->filter(function ($offer) {
+				$status = strtolower((string) $offer->status);
+				return $status === '3' || $status === 'rejected';
+			})->count();
+
+			if ($acceptedOffer) {
+				$statusText = 'Confirmed';
+				$statusKey = 'confirmed';
+			} elseif ($offers->count() > 0 && $rejectedOffersCount === $offers->count()) {
+				$statusText = 'Rejected';
+				$statusKey = 'rejected';
+			} else {
+				$statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
+				$statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
+			}
+		}
+
+		return [
+			'text' => $statusText,
+			'key' => $statusKey,
+			'class' => $statusClasses[$statusKey] ?? 'bg-warning-subtle text-warning',
+		];
+	}
+		
 	public function fildes(){
 		return [
 			'user_id' => '', 

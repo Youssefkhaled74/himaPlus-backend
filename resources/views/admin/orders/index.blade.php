@@ -149,6 +149,7 @@
                                     <th class="text-center">{{ __('admin.pages.common.order_type') }}</th>
                                     <th class="text-center">{{ __('admin.pages.common.customer') }}</th>
                                     <th class="text-center">{{ __('admin.pages.common.provider') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.status') }}</th>
                                     <th class="text-center">{{ __('admin.pages.common.vat_amount') }}</th>
                                     <th class="text-center">{{ __('admin.pages.common.total_cost') }}</th>
                                     <th class="text-center">{{ __('admin.pages.common.actions') }}</th>
@@ -160,6 +161,7 @@
                                         @php
                                             $orderType = '---';
                                             $orderBadge = 'bg-info-subtle text-info';
+                                            $status = $record->resolveAdminStatus((int) ($record->provider_id ?? 0) ?: null);
                                             if ((int) $record->order_type === 1) {
                                                 $orderType = __('admin.pages.common.order');
                                                 $orderBadge = 'bg-primary-subtle text-primary';
@@ -180,6 +182,7 @@
                                                 </a>
                                             </td>
                                             <td>{{ $record->provider?->name }}</td>
+                                            <td><span class="badge {{ $status['class'] }}">{{ $status['text'] }}</span></td>
                                             <td>{{ $record->vat_amount }}</td>
                                             <td class="fw-semibold">{{ $record->total_cost }}</td>
                                             <td>

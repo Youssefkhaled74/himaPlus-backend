@@ -28,13 +28,17 @@ class OrderRepository extends BaseAdminRepository
     public function pagination($offset, $limit, $tab = 'orders')
     {
         return $this->model
-            ->with($this->model->model_relations())
+            ->with(array_merge($this->model->model_relations(), ['timeline', 'offers']))
             ->withCount($this->model->model_relations_counts())
             ->unArchive()
             ->when($tab === 'requests', function ($query) {
-                $query->where('order_type', 2);
+                $query->whereIn('order_type', [2, 3])
+                    ->whereNull('offer_id');
             }, function ($query) {
-                $query->where('order_type', '!=', 2);
+                $query->where(function ($businessQuery) {
+                    $businessQuery->where('order_type', 1)
+                        ->orWhereNotNull('offer_id');
+                });
             })
             ->orderBy('id', 'DESC')
             ->paginate(PAGINATION_COUNT);

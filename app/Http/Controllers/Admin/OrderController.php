@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Repositories\Eloquent\Admin\OrderRepository;
 use App\Http\Requests\Admin\OrderRequests\OrderStoreRequest;
 use App\Http\Requests\Admin\OrderRequests\OrderUpdateRequest;
+use App\Models\Order;
 
 class OrderController extends Controller
 {
@@ -50,7 +51,20 @@ class OrderController extends Controller
 
     public function edit($id)
     {
-        $order = $this->orders->findOne($id);
+        $order = Order::query()
+            ->with([
+                'user',
+                'provider',
+                'device_category',
+                'coupon',
+                'items.product',
+                'timeline.user',
+                'offers.provider',
+                'offer.provider',
+                'partial_receive',
+            ])
+            ->findOrFail($id);
+
         return view('admin.orders.update', compact('order'));
     }
 
