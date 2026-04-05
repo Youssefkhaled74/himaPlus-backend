@@ -4,8 +4,103 @@
     <title>{{ __('admin.pages.categories.title') }}</title>
 @endsection
 
+@section('css')
+    <style>
+        .page-title-box {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .page-title-box .page-title-right {
+            flex-direction: row-reverse;
+        }
+        
+        .admin-form-shell {
+            direction: rtl;
+        }
+        
+        .admin-form-card .form-floating > label {
+            right: var(--bs-body-font-size);
+            left: auto;
+        }
+    </style>
+@endsection
+
 @section('content')
-<div class="page-content"><div class="container-fluid"><div class="page-title-box d-sm-flex align-items-center justify-content-between"><div><span class="badge bg-primary-subtle text-primary mb-3">{{ __('admin.pages.categories.module_label') }}</span><h3 class="mb-2">{{ __('admin.pages.categories.update_title') }}</h3><p class="text-muted mb-0">{{ __('admin.pages.categories.update_description') }}</p></div><div class="page-title-right"><ol class="breadcrumb m-0"><li class="breadcrumb-item"><a href="{{ route('admin/index') }}">{{ __('admin.pages.common.home') }}</a></li><li class="breadcrumb-item"><a href="{{ route('admin/categories/index') }}/0/{{ PAGINATION_COUNT }}">{{ __('admin.nav.categories') }}</a></li><li class="breadcrumb-item active">{{ __('admin.pages.common.update') }}</li></ol></div></div>@include('flash::message') @if ($errors->any())<div class="card mb-4"><div class="card-body"><ul class="mb-0" dir="ltr">@foreach ($errors->all() as $error)<li class="text-danger">{{ $error }}</li>@endforeach</ul></div></div>@endif @isset($category)<div class="admin-form-shell"><div class="admin-form-main"><div class="card admin-form-card"><div class="card-header"><h4 class="card-title">{{ __('admin.pages.categories.details') }}</h4><p class="card-subtitle mb-0">{{ __('admin.pages.categories.details_description') }}</p></div><div class="card-body"><form role="form" action="{{url(route('admin/categories/update', $category->id))}}" method="post" enctype="multipart/form-data">@csrf<div class="row gy-4"><div class="col-xxl-6 col-md-6"><div class="form-floating"><input name="name" type="text" class="form-control" id="namefloatingInput" placeholder="name" value="{{ $category->name }}"><label for="namefloatingInput">{{ __('admin.pages.common.name') }} <span class="text-danger">*</span></label></div></div><div class="col-xxl-6 col-md-6"><label for="filefloatingInput" class="form-label">{{ __('admin.pages.common.logo') }}</label><input name="file" type="file" id="filefloatingInput" class="form-control no-min-height admin-file-input" placeholder="Upload Image"></div><div class="col-12 admin-form-actions"><button class="btn btn-primary" type="submit">{{ __('admin.pages.common.save_changes') }}</button></div></div></form></div></div></div><div class="admin-form-side"><div class="admin-side-note"><h5 class="mb-3">{{ __('admin.pages.categories.current_category') }}</h5><ul><li>{{ __('admin.pages.common.name') }}: {{ $category->name }}</li><li>{{ __('admin.pages.common.id') }}: {{ $category->id }}</li></ul></div></div></div>@endisset</div></div>
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between" dir="rtl">
+            <div>
+                <span class="badge bg-primary-subtle text-primary mb-3">{{ __('admin.pages.categories.module_label') }}</span>
+                <h3 class="mb-2">{{ __('admin.pages.categories.update_title') }}</h3>
+                <p class="text-muted mb-0">{{ __('admin.pages.categories.update_description') }}</p>
+            </div>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin/index') }}">{{ __('admin.pages.common.home') }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin/categories/index') }}/0/{{ PAGINATION_COUNT }}">{{ __('admin.nav.categories') }}</a></li>
+                    <li class="breadcrumb-item active">{{ __('admin.pages.common.update') }}</li>
+                </ol>
+            </div>
+        </div>
+        
+        @include('flash::message')
+        
+        @if ($errors->any())
+            <div class="card mb-4">
+                <div class="card-body">
+                    <ul class="mb-0" dir="ltr">
+                        @foreach ($errors->all() as $error)
+                            <li class="text-danger">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+        
+        @isset($category)
+            <div class="admin-form-shell" dir="rtl">
+                <div class="admin-form-main">
+                    <div class="card admin-form-card">
+                        <div class="card-header">
+                            <h4 class="card-title">{{ __('admin.pages.categories.details') }}</h4>
+                            <p class="card-subtitle mb-0">{{ __('admin.pages.categories.details_description') }}</p>
+                        </div>
+                        <div class="card-body">
+                            <form role="form" action="{{url(route('admin/categories/update', $category->id))}}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <div class="row gy-4">
+                                    <div class="col-xxl-6 col-md-6">
+                                        <div class="form-floating">
+                                            <input name="name" type="text" class="form-control" id="namefloatingInput" placeholder="name" value="{{ $category->name }}">
+                                            <label for="namefloatingInput">{{ __('admin.pages.common.name') }} <span class="text-danger">*</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-6 col-md-6">
+                                        <label for="filefloatingInput" class="form-label">{{ __('admin.pages.common.logo') }}</label>
+                                        <input name="file" type="file" id="filefloatingInput" class="form-control no-min-height admin-file-input" placeholder="Upload Image">
+                                    </div>
+                                    <div class="col-12 admin-form-actions">
+                                        <button class="btn btn-primary" type="submit">{{ __('admin.pages.common.save_changes') }}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-form-side">
+                    <div class="admin-side-note">
+                        <h5 class="mb-3">{{ __('admin.pages.categories.current_category') }}</h5>
+                        <ul>
+                            <li>{{ __('admin.pages.common.name') }}: {{ $category->name }}</li>
+                            <li>{{ __('admin.pages.common.id') }}: {{ $category->id }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        @endisset
+    </div>
+</div>
 @endsection
 
 @section('script')
