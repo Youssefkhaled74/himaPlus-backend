@@ -53,8 +53,22 @@
                             <p class="admin-card-head__text">{{ __('admin.pages.orders.overview_subtitle') }}</p>
                         </div>
                         <div class="admin-card-head__actions">
-                            <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders" class="btn btn-sm {{ $isRequestsPage ? 'btn-soft-secondary' : 'btn-primary' }}">{{ __('admin.nav.orders') }}</a>
-                            <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=requests" class="btn btn-sm {{ $isRequestsPage ? 'btn-primary' : 'btn-soft-secondary' }}">{{ __('admin.pages.common.requests') }}</a>
+                            <div class="admin-segmented-control" role="tablist" aria-label="Orders tabs">
+                                <a
+                                    href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders"
+                                    class="admin-segmented-control__item {{ $isRequestsPage ? '' : 'is-active' }}"
+                                    aria-selected="{{ $isRequestsPage ? 'false' : 'true' }}">
+                                    <i class="ri-shopping-bag-3-line"></i>
+                                    <span>{{ __('admin.nav.orders') }}</span>
+                                </a>
+                                <a
+                                    href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=requests"
+                                    class="admin-segmented-control__item {{ $isRequestsPage ? 'is-active' : '' }}"
+                                    aria-selected="{{ $isRequestsPage ? 'true' : 'false' }}">
+                                    <i class="ri-inbox-archive-line"></i>
+                                    <span>{{ __('admin.pages.common.requests') }}</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

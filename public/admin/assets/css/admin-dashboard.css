@@ -337,6 +337,52 @@ html[dir='rtl'] h6 {
     padding-inline: 16px;
 }
 
+.admin-segmented-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px;
+    border: 1px solid rgba(216, 227, 240, 0.98);
+    border-radius: 20px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 255, 0.94));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+.admin-segmented-control__item {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 20px;
+    border-radius: 15px;
+    color: #5f728f;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.admin-segmented-control__item:hover {
+    color: var(--admin-text);
+    background: rgba(15, 75, 191, 0.05);
+}
+
+.admin-segmented-control__item.is-active {
+    background: linear-gradient(135deg, #18326f, #0f4bbf);
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(15, 75, 191, 0.18);
+}
+
+.admin-segmented-control__item.is-active:hover {
+    color: #fff;
+}
+
+.admin-segmented-control__item i {
+    font-size: 1rem;
+}
+
 html[dir='rtl'] .admin-page-header__copy,
 html[dir='rtl'] .admin-card-head {
     text-align: right;
@@ -1586,6 +1632,16 @@ textarea.form-control {
     .admin-card-head__actions .btn {
         width: 100%;
         justify-content: center;
+    }
+
+    .admin-segmented-control {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .admin-segmented-control__item {
+        width: 100%;
     }
 
     .admin-page-header__title {
