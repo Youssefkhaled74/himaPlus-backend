@@ -93,10 +93,6 @@
                 <div class="dashboard-hero-grid">
                     <div class="dashboard-hero-copy">
                         <span class="badge bg-primary-subtle text-primary align-self-start">{{ __('admin.dashboard.eyebrow') }}</span>
-                        <h1 class="dashboard-hero-title">{{ __('admin.dashboard.hero_title') }}</h1>
-                        <p class="dashboard-hero-text">
-                            {{ __('admin.dashboard.hero_text', ['name' => auth()->guard('admin')->user()->name]) }}
-                        </p>
 
                         <div class="dashboard-chip-row">
                             <div class="dashboard-chip">
