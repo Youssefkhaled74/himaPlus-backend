@@ -611,15 +611,18 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="dashboard-mini-list">
+                            <div class="dashboard-alert-list">
                                 @forelse($dashboard['low_stock_products'] as $product)
-                                    <div class="dashboard-mini-item" style="border-inline-start: 3px solid #dc3545;">
-                                        <div>
-                                            <div class="fw-semibold">{{ $product->name }}</div>
-                                            <div class="text-muted small">{{ __('admin.dashboard.low_stock_alerts') }}</div>
+                                    <a href="{{ route('admin/products/edit', $product->id) }}" class="dashboard-alert-item text-decoration-none">
+                                        <span class="dashboard-alert-item__count">
+                                            {{ __('admin.dashboard.stock_left', ['count' => $product->stock_quantity]) }}
+                                        </span>
+                                        <div class="dashboard-alert-item__content">
+                                            <div class="dashboard-alert-item__title">{{ $product->name }}</div>
+                                            <div class="dashboard-alert-item__meta">{{ __('admin.dashboard.low_stock_alerts') }}</div>
                                         </div>
-                                        <span class="badge bg-danger text-white">{{ __('admin.dashboard.stock_left', ['count' => $product->stock_quantity]) }}</span>
-                                    </div>
+                                        <span class="dashboard-alert-item__accent" aria-hidden="true"></span>
+                                    </a>
                                 @empty
                                     <p class="text-muted mb-0">{{ __('admin.dashboard.all_stocked') }}</p>
                                 @endforelse
