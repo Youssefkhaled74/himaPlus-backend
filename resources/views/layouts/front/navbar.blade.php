@@ -7,7 +7,7 @@
     <nav class="navbar navbar-expand-lg bg-white">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ $isVendorAuthed ? route('vendor/dashboard') : route('home') }}">
-                <img src="{{ asset('front/assets/images/WhatsApp Image 2025-09-06 at 14.00.40_dfdafdc6 2.png') }}" alt="HemaPulse logo">
+                <img src="{{ asset('front/assets/images/newLogo.png') }}" alt="Hema logo">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">

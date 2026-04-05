@@ -7,7 +7,7 @@
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="logo mb-3">
-                    <img src="{{ asset('front/assets/images/WhatsApp Image 2025-09-06 at 14.00.40_dfdafdc6 2.png') }}" alt="HemaPulse">
+                    <img src="{{ asset('front/assets/images/newLogo.png') }}" alt="Hema logo">
                 </div>
                 <p>{{ __('nav.footer_desc') }}</p>
             </div>
