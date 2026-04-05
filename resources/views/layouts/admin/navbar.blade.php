@@ -61,10 +61,10 @@
             <div class="admin-navbar-brand">
                 <a href="{{ route('admin/index') }}" class="admin-brand-link">
                     <span class="admin-brand-mark">
-                        <img src="{{ asset('front/assets/images/newLogo.png') }}" alt="HimaPlus logo">
+                        <img src="{{ asset('front/assets/images/newLogo.png') }}" alt="Hema logo">
                     </span>
                     <span class="admin-brand-copy">
-                        <span class="admin-brand-title">HimaPlus</span>
+                        <span class="admin-brand-title">Hema</span>
                         <span class="admin-brand-subtitle">{{ __('admin.brand.control_center') }}</span>
                     </span>
                 </a>

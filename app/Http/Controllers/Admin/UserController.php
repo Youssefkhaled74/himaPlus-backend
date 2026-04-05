@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Repositories\Eloquent\Admin\UserRepository;
 use App\Http\Requests\Admin\UserRequests\UserStoreRequest;
 use App\Http\Requests\Admin\UserRequests\UserUpdateRequest;
+use App\Models\Order;
+use App\Models\Product;
 
 class UserController extends Controller
 {
@@ -50,6 +52,66 @@ class UserController extends Controller
     {
         $user = $this->users->findOne($id);
         return view('admin.users.update', compact('user'));
+    }
+
+    public function show(Request $request, $id)
+    {
+        $user = $this->users->findOne($id);
+        if (!$user) {
+            abort(404);
+        }
+
+        $customerOrdersCount = Order::query()
+            ->whereNull('deleted_at')
+            ->where('user_id', $user->id)
+            ->count();
+
+        $vendorOrdersCount = Order::query()
+            ->whereNull('deleted_at')
+            ->where('provider_id', $user->id)
+            ->count();
+
+        $productsCount = Product::query()
+            ->whereNull('deleted_at')
+            ->where('provider_id', $user->id)
+            ->count();
+
+        $customerOrders = Order::query()
+            ->with(['provider:id,name', 'timeline', 'offers'])
+            ->whereNull('deleted_at')
+            ->where('user_id', $user->id)
+            ->latest()
+            ->paginate(15, ['*'], 'customer_orders_page')
+            ->appends($request->query());
+
+        $vendorOrders = Order::query()
+            ->with(['user:id,name', 'timeline', 'offers'])
+            ->whereNull('deleted_at')
+            ->where('provider_id', $user->id)
+            ->latest()
+            ->paginate(15, ['*'], 'vendor_orders_page')
+            ->appends($request->query());
+
+        $products = Product::query()
+            ->with(['category:id,name'])
+            ->whereNull('deleted_at')
+            ->where('provider_id', $user->id)
+            ->latest()
+            ->paginate(15, ['*'], 'products_page')
+            ->appends($request->query());
+
+        $activeTab = $request->query('tab', 'account');
+
+        return view('admin.users.show', compact(
+            'user',
+            'customerOrdersCount',
+            'vendorOrdersCount',
+            'productsCount',
+            'customerOrders',
+            'vendorOrders',
+            'products',
+            'activeTab'
+        ));
     }
 
     public function update(UserUpdateRequest $request, $id)

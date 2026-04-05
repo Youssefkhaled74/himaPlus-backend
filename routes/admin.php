@@ -60,6 +60,7 @@ Route::group([ 'namespace' => 'App\Http\Controllers\Admin', 'prefix' => 'admin-p
           Route::get('users/create', 'UserController@create')->name('admin/users/create');
           Route::post('users/create', 'UserController@store')->name('admin/users/store');
           Route::get('users/edit/{id?}', 'UserController@edit')->name('admin/users/edit');
+          Route::get('users/show/{id}', 'UserController@show')->name('admin/users/show');
           Route::post('users/edit/{id}', 'UserController@update')->name('admin/users/update');
           Route::post('users/activate', 'UserController@activate')->name('admin/users/activate');
           Route::post('users/delete', 'UserController@delete')->name('admin/users/delete');

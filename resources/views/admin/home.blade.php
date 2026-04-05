@@ -532,7 +532,7 @@
                     <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
                 </article>
 
-                <article class="dashboard-entity-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <article class="dashboard-entity-card" style="background: linear-gradient(135deg, #0f4bbf 0%, #10c7a5 100%); color: white;">
                     <div class="dashboard-entity-meta" style="color: rgba(255,255,255,0.8);">
                         <i class="ri-alert-line"></i>
                         <span>{{ __('admin.dashboard.inventory_alert') }}</span>
@@ -562,15 +562,6 @@
                     <a href="{{ route('admin/contacts/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_contacts') }}</a>
                 </article>
 
-                <article class="dashboard-entity-card is-amber">
-                    <div class="dashboard-entity-meta">
-                        <i class="ri-global-line text-primary"></i>
-                        <span>{{ __('admin.dashboard.countries_snapshot') }}</span>
-                    </div>
-                    <h4 class="mb-2">{{ number_format($dashboard['totals']['countries'] ?? 0) }}</h4>
-                    <p class="text-muted mb-3">{{ __('admin.dashboard.countries_snapshot_text') }}</p>
-                    <a href="{{ route('admin/countries/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_countries') }}</a>
-                </article>
             </section>
 
             <!-- Recent Users & Low Stock Grid -->
@@ -734,7 +725,7 @@
                     title: { text: @json(__('admin.dashboard.chart_revenue')) }
                 }
             ],
-            colors: ['#2f6fed', '#1f9d67'],
+            colors: ['#0f4bbf', '#10c7a5'],
             dataLabels: {
                 enabled: false
             },

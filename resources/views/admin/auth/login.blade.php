@@ -9,7 +9,7 @@
     <title>{{ __('admin.auth.title') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Admin authentication" name="description" />
-    <meta content="HimaPlus" name="author" />
+    <meta content="Hema" name="author" />
     <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon.ico') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,10 +30,10 @@
                 <span class="admin-auth-eyebrow">{{ __('admin.auth.eyebrow') }}</span>
                 <a href="{{ url('/') }}" class="admin-auth-brand">
                     <span class="admin-brand-mark">
-                        <img src="{{ asset('front/assets/images/newLogo.png') }}" alt="HimaPlus logo">
+                        <img src="{{ asset('front/assets/images/newLogo.png') }}" alt="Hema logo">
                     </span>
                     <span class="admin-brand-copy">
-                        <span class="admin-brand-title">HimaPlus</span>
+                        <span class="admin-brand-title">Hema</span>
                         <span class="admin-brand-subtitle">{{ __('admin.brand.control_center') }}</span>
                     </span>
                 </a>
