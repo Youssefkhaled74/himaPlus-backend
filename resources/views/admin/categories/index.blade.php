@@ -117,7 +117,12 @@
                                                 </form>
                                             </td>
                                             <td>
-                                                <div class="dropdown d-inline-block">
+                                                <div class="d-inline-flex align-items-center gap-2">
+                                                    <a href="{{ route('admin/categories/edit', $record->id) }}" class="btn btn-light btn-sm" title="{{ __('admin.pages.common.edit') }}">
+                                                        <i class="ri-pencil-line align-middle"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="dropdown d-inline-block ms-1">
                                                     <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <i class="ri-more-fill align-middle"></i>
                                                     </button>
