@@ -174,11 +174,11 @@ class Order extends Model
 			'delivered' => 'bg-success-subtle text-success',
 			'completed' => 'bg-success-subtle text-success',
 			'canceled' => 'bg-danger-subtle text-danger',
-			'cancelled' => 'bg-danger-subtle text-danger',
-			'under review' => 'bg-secondary-subtle text-secondary',
-			'assigned to supplier' => 'bg-primary-subtle text-primary',
-			'converted to order' => 'bg-primary-subtle text-primary',
-			'offers received' => 'bg-info-subtle text-info',
+			'under_review' => 'bg-secondary-subtle text-secondary',
+			'assigned_to_supplier' => 'bg-primary-subtle text-primary',
+			'converted_to_order' => 'bg-primary-subtle text-primary',
+			'offers_received' => 'bg-info-subtle text-info',
+			'supplier_selected' => 'bg-secondary-subtle text-secondary',
 			'upcoming' => 'bg-secondary-subtle text-secondary',
 			'active' => 'bg-primary-subtle text-primary',
 			'paused' => 'bg-warning-subtle text-warning',
@@ -188,11 +188,11 @@ class Order extends Model
 		$timeline = $this->relationLoaded('timeline') ? $this->timeline : $this->timeline()->get();
 		$offers = $this->relationLoaded('offers') ? $this->offers : $this->offers()->get();
 		$lastTimelineNo = optional($timeline->sortByDesc('timeline_no')->first())->timeline_no;
-		$lastTimelineLabel = strtolower(trim((string) timelineName((int) $lastTimelineNo)));
+		$timelineStatusKey = $this->timelineStatusKey((int) $lastTimelineNo);
 
 		if ((int) $this->request_type === 2) {
-			$statusText = ucfirst((string) $this->scheduled_status);
-			$statusKey = strtolower((string) $this->scheduled_status);
+			$statusKey = $this->normalizeStatusKey((string) $this->scheduled_status);
+			$statusText = $this->translatedAdminStatus($statusKey);
 
 			return [
 				'text' => $statusText,
@@ -206,18 +206,14 @@ class Order extends Model
 			if ($myOffer) {
 				$offerStatus = strtolower((string) $myOffer->status);
 				if ($offerStatus === '2' || $offerStatus === 'accepted') {
-					$statusText = 'Confirmed';
 					$statusKey = 'confirmed';
 				} elseif ($offerStatus === '3' || $offerStatus === 'rejected') {
-					$statusText = 'Rejected';
 					$statusKey = 'rejected';
 				} else {
-					$statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
-					$statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
+					$statusKey = $timelineStatusKey;
 				}
 			} else {
-				$statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
-				$statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
+				$statusKey = $timelineStatusKey;
 			}
 		} else {
 			$acceptedOffer = $offers->first(function ($offer) {
@@ -231,22 +227,64 @@ class Order extends Model
 			})->count();
 
 			if ($acceptedOffer) {
-				$statusText = 'Confirmed';
 				$statusKey = 'confirmed';
 			} elseif ($offers->count() > 0 && $rejectedOffersCount === $offers->count()) {
-				$statusText = 'Rejected';
 				$statusKey = 'rejected';
 			} else {
-				$statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
-				$statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
+				$statusKey = $timelineStatusKey;
 			}
 		}
+
+		$statusText = $this->translatedAdminStatus($statusKey);
 
 		return [
 			'text' => $statusText,
 			'key' => $statusKey,
 			'class' => $statusClasses[$statusKey] ?? 'bg-warning-subtle text-warning',
 		];
+	}
+
+	private function normalizeStatusKey(string $status): string
+	{
+		$key = strtolower(trim($status));
+		$key = str_replace(' ', '_', $key);
+
+		return match ($key) {
+			'cancelled' => 'canceled',
+			default => $key !== '' ? $key : 'pending',
+		};
+	}
+
+	private function timelineStatusKey(int $timelineNo): string
+	{
+		return match ($timelineNo) {
+			1 => 'order_created',
+			2 => 'confirmed',
+			3 => 'processing',
+			4 => 'shipped',
+			5 => 'delivered',
+			6 => 'completed',
+			7 => 'offers_received',
+			8 => 'supplier_selected',
+			9 => 'converted_to_order',
+			10 => 'under_review',
+			11 => 'assigned_to_supplier',
+			12 => 'canceled',
+			default => 'pending',
+		};
+	}
+
+	private function translatedAdminStatus(string $statusKey): string
+	{
+		$key = $this->normalizeStatusKey($statusKey);
+		$translationKey = 'admin.pages.orders.statuses.' . $key;
+		$translated = __($translationKey);
+
+		if ($translated !== $translationKey) {
+			return $translated;
+		}
+
+		return ucwords(str_replace('_', ' ', $key));
 	}
 		
 	public function fildes(){

@@ -76,29 +76,10 @@
     @php
         $tab = $tab ?? request('tab', 'orders');
         $isRequestsPage = $tab === 'requests';
-        $pageTitle = $isRequestsPage ? __('admin.nav.orders') : __('admin.pages.orders.title');
     @endphp
 
     <div class="page-content">
         <div class="container-fluid">
-            <x-admin.page-header
-                :badge="__('admin.pages.orders.module_label')"
-                :title="__('admin.pages.orders.title')"
-                :description="__('admin.pages.orders.description')"
-                :breadcrumbs="[
-                    ['label' => __('admin.pages.common.home'), 'href' => route('admin/index')],
-                    ['label' => __('admin.nav.orders'), 'href' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?tab=' . $tab],
-                    ['label' => __('admin.pages.common.index'), 'active' => true],
-                ]"
-            >
-                <x-slot:actions>
-                    <a href="{{ route('admin/orders/archives') . '/0/' . PAGINATION_COUNT }}" class="btn btn-light">
-                        <i class="ri-archive-line align-bottom"></i>
-                        <span>{{ __('admin.pages.common.archives') }}</span>
-                    </a>
-                </x-slot:actions>
-            </x-admin.page-header>
-
             @include('flash::message')
             @if ($errors->any())
                 <div class="card mb-4">
