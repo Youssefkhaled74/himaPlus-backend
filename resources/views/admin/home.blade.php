@@ -169,8 +169,8 @@
                         <div class="card-header">
                             <div class="dashboard-section-heading mb-0">
                                 <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.user_split') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.user_split_subtitle') }}</p>
+                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.guidance_metrics_title') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.guidance_metrics_subtitle') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -178,17 +178,38 @@
                             <div class="dashboard-mini-list">
                                 <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.customers_count') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.user_type_customer') }}</div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.vendors_count') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.vendor_orders_summary_hint') }}</div>
                                     </div>
-                                    <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['customers_count'] ?? 0) }}</span>
+                                    <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['vendors_count'] ?? 0) }}</span>
                                 </a>
                                 <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.vendors_count') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.user_type_vendor') }}</div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.customers_count') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.orders_rate_per_customer_hint') }}</div>
                                     </div>
-                                    <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['vendors_count'] ?? 0) }}</span>
+                                    <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['customers_count'] ?? 0) }}</span>
+                                </a>
+                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                    <div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.avg_orders_per_customer') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.orders_rate_per_customer_hint') }}</div>
+                                    </div>
+                                    <span class="badge bg-warning-subtle text-warning">{{ number_format((float) ($dashboard['totals']['avg_orders_per_customer'] ?? 0), 2) }}</span>
+                                </a>
+                                <a href="{{ route('admin/contacts/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                    <div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.contact_numbers_summary') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.contacts_snapshot') }}</div>
+                                    </div>
+                                    <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['contacts'] ?? 0) }}</span>
+                                </a>
+                                <a href="{{ route('admin/ratings/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                    <div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.ratings_summary') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.ratings_snapshot') }}</div>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['ratings'] ?? 0) }}</span>
                                 </a>
                             </div>
                         </div>
@@ -229,8 +250,8 @@
                         <div class="card-header">
                             <div class="dashboard-section-heading mb-0">
                                 <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.vendor_health') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.vendor_health_subtitle') }}</p>
+                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.user_guidance_title') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.user_guidance_subtitle') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -238,21 +259,21 @@
                             <div class="dashboard-mini-list">
                                 <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.active_vendors') }}</div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.active_users_label') }}</div>
                                     </div>
-                                    <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['active_vendors'] ?? 0) }}</span>
+                                    <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['active_users'] ?? 0) }}</span>
                                 </a>
                                 <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.inactive_vendors') }}</div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.inactive_users_label') }}</div>
                                     </div>
-                                    <span class="badge bg-danger-subtle text-danger">{{ number_format($dashboard['totals']['inactive_vendors'] ?? 0) }}</span>
+                                    <span class="badge bg-danger-subtle text-danger">{{ number_format($dashboard['totals']['inactive_users'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.vendors_with_low_stock_products') }}</div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.new_users_label') }}</div>
                                     </div>
-                                    <span class="badge bg-warning-subtle text-warning">{{ number_format($dashboard['totals']['vendors_with_low_stock_products'] ?? 0) }}</span>
+                                    <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['new_users_today'] ?? 0) }}</span>
                                 </a>
                             </div>
                         </div>

@@ -33,6 +33,9 @@ class HomeService
 
         $customersBase = (clone $usersBase)->where('user_type', 1);
         $vendorsBase = (clone $usersBase)->where('user_type', 2);
+        $customersCount = (clone $customersBase)->count();
+        $vendorsCount = (clone $vendorsBase)->count();
+        $usersCount = (clone $usersBase)->count();
 
         $acceptedOfferStatuses = $this->acceptedOfferStatuses();
         $pendingOfferStatuses = $this->pendingOfferStatuses();
@@ -88,6 +91,7 @@ class HomeService
         $totalOrders = (clone $ordersBase)->count();
         $paidOrders = (clone $ordersBase)->where('payment_status', 1)->count();
         $unpaidOrders = (clone $ordersBase)->where('payment_status', 0)->count();
+        $avgOrdersPerCustomer = round($totalOrders / max(1, $customersCount), 2);
 
         $ordersWithStatusCollection = (clone $ordersBase)
             ->with([
@@ -184,6 +188,9 @@ class HomeService
             ->count('provider_id');
 
         $totalUnreadNotifications = (clone $notificationsBase)->unread()->count();
+        $activeUsers = (clone $usersBase)->where('is_activate', 1)->count();
+        $inactiveUsers = (clone $usersBase)->where('is_activate', 0)->count();
+        $newUsersToday = (clone $usersBase)->whereDate('created_at', $now->toDateString())->count();
         $vendorUnreadNotifications = Notification::query()
             ->whereNull('deleted_at')
             ->whereNull('read_at')
@@ -196,9 +203,10 @@ class HomeService
         $dashboard = [
             'totals' => [
                 'orders' => $totalOrders,
-                'users' => (clone $usersBase)->count(),
-                'customers_count' => (clone $customersBase)->count(),
-                'vendors_count' => (clone $vendorsBase)->count(),
+                'users' => $usersCount,
+                'customers_count' => $customersCount,
+                'vendors_count' => $vendorsCount,
+                'avg_orders_per_customer' => $avgOrdersPerCustomer,
                 'products' => (clone $productsBase)->count(),
                 'revenue' => (float) (clone $ordersBase)->where('payment_status', 1)->sum('total_cost'),
                 'paid_orders' => $paidOrders,
@@ -221,6 +229,9 @@ class HomeService
                 'acceptance_rate' => $this->safeRate($acceptedOffers, $totalOffers),
                 'active_vendors' => (clone $vendorsBase)->where('is_activate', 1)->count(),
                 'inactive_vendors' => (clone $vendorsBase)->where('is_activate', 0)->count(),
+                'active_users' => $activeUsers,
+                'inactive_users' => $inactiveUsers,
+                'new_users_today' => $newUsersToday,
                 'vendors_with_low_stock_products' => $vendorsWithLowStockProducts,
                 'scheduled_orders' => $scheduledOrders,
                 'active_scheduled_orders' => $activeScheduledOrders,
