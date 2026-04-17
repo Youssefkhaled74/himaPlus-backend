@@ -25,46 +25,47 @@
             'growth' => $dashboard['growth']['orders'] ?? 0,
             'icon' => 'ri-shopping-bag-3-line',
             'softClass' => 'bg-primary-subtle text-primary',
+            'showIcon' => true,
             'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
         [
-            'label' => __('admin.dashboard.paid_orders_label'),
-            'value' => number_format($dashboard['totals']['paid_orders'] ?? 0),
+            'label' => __('admin.dashboard.accepted_orders'),
+            'value' => number_format($dashboard['totals']['accepted_orders'] ?? 0),
             'growth' => 0,
-            'icon' => 'ri-checkbox-circle-line',
-            'softClass' => 'bg-success-subtle text-success',
+            'icon' => null,
+            'softClass' => '',
+            'showIcon' => false,
+            'meta' => __('admin.dashboard.accepted_payment_breakdown', [
+                'paid' => number_format($dashboard['totals']['accepted_paid_orders'] ?? 0),
+                'unpaid' => number_format($dashboard['totals']['accepted_unpaid_orders'] ?? 0),
+            ]),
             'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
         [
-            'label' => __('admin.dashboard.pending_payments_label'),
-            'value' => number_format($dashboard['totals']['unpaid_orders'] ?? 0),
+            'label' => __('admin.dashboard.rejected_orders'),
+            'value' => number_format($dashboard['totals']['rejected_orders'] ?? 0),
             'growth' => 0,
-            'icon' => 'ri-error-warning-line',
-            'softClass' => 'bg-warning-subtle text-warning',
+            'icon' => null,
+            'softClass' => '',
+            'showIcon' => false,
             'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
         [
-            'label' => __('admin.dashboard.scheduled_orders'),
-            'value' => number_format($dashboard['totals']['scheduled_orders'] ?? 0),
+            'label' => __('admin.dashboard.in_progress_orders'),
+            'value' => number_format($dashboard['totals']['processing_orders'] ?? 0),
             'growth' => 0,
-            'icon' => 'ri-calendar-check-line',
-            'softClass' => 'bg-info-subtle text-info',
+            'icon' => null,
+            'softClass' => '',
+            'showIcon' => false,
             'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
         [
-            'label' => __('admin.dashboard.active_scheduled_orders'),
-            'value' => number_format($dashboard['totals']['active_scheduled_orders'] ?? 0),
+            'label' => __('admin.dashboard.executed_orders'),
+            'value' => number_format($dashboard['totals']['executed_orders'] ?? 0),
             'growth' => 0,
-            'icon' => 'ri-timer-flash-line',
-            'softClass' => 'bg-primary-subtle text-primary',
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
-        ],
-        [
-            'label' => __('admin.dashboard.completed_scheduled_orders'),
-            'value' => number_format($dashboard['totals']['completed_scheduled_orders'] ?? 0),
-            'growth' => 0,
-            'icon' => 'ri-check-double-line',
-            'softClass' => 'bg-success-subtle text-success',
+            'icon' => null,
+            'softClass' => '',
+            'showIcon' => false,
             'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
     ];
@@ -146,10 +147,17 @@
                                         {{ __('admin.dashboard.stats.vs_last_month', ['value' => ($stat['growth'] >= 0 ? '+' : '') . $stat['growth']]) }}
                                     </div>
                                 @endif
+                                @if(!empty($stat['meta']))
+                                    <div class="dashboard-stat-growth text-muted">
+                                        {{ $stat['meta'] }}
+                                    </div>
+                                @endif
                             </div>
-                            <span class="dashboard-stat-icon {{ $stat['softClass'] }}">
-                                <i class="{{ $stat['icon'] }}"></i>
-                            </span>
+                            @if(!empty($stat['showIcon']) && !empty($stat['icon']))
+                                <span class="dashboard-stat-icon {{ $stat['softClass'] }}">
+                                    <i class="{{ $stat['icon'] }}"></i>
+                                </span>
+                            @endif
                         </div>
                     </a>
                 @endforeach
@@ -434,6 +442,20 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
+                                <a href="{{ route('admin/categories/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                    <div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.total_categories_label') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.stats.categories') }}</div>
+                                    </div>
+                                    <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['categories'] ?? 0) }}</span>
+                                </a>
+                                <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                    <div>
+                                        <div class="fw-semibold">{{ __('admin.dashboard.total_products_label') }}</div>
+                                        <div class="text-muted small">{{ __('admin.dashboard.stats.products') }}</div>
+                                    </div>
+                                    <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['products'] ?? 0) }}</span>
+                                </a>
                                 @forelse($dashboard['top_categories'] as $category)
                                     <div class="dashboard-mini-item">
                                         <div>
@@ -584,8 +606,8 @@
                         <div class="card-header">
                             <div class="dashboard-section-heading mb-0">
                                 <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.alerts') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.alerts_subtitle') }}</p>
+                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.low_stock_alerts') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.low_stock_threshold_hint') }}</p>
                                 </div>
                                 <span class="badge bg-danger-subtle text-danger">{{ count($dashboard['low_stock_products'] ?? []) }}</span>
                             </div>
@@ -599,7 +621,14 @@
                                         </span>
                                         <div class="dashboard-alert-item__content">
                                             <div class="dashboard-alert-item__title">{{ $product->name }}</div>
-                                            <div class="dashboard-alert-item__meta">{{ __('admin.dashboard.low_stock_alerts') }}</div>
+                                            <div class="dashboard-alert-item__meta">
+                                                {{ __('admin.dashboard.supplier_label') }}: {{ optional($product->provider)->name ?? '-' }}
+                                            </div>
+                                            @if(!empty($product->provider_id))
+                                                <a href="{{ route('admin/users/show', $product->provider_id) }}" class="btn btn-light btn-sm mt-2">
+                                                    {{ __('admin.dashboard.open_supplier_profile') }}
+                                                </a>
+                                            @endif
                                         </div>
                                         <span class="dashboard-alert-item__accent" aria-hidden="true"></span>
                                     </a>

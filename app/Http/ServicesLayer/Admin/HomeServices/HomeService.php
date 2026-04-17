@@ -89,6 +89,40 @@ class HomeService
         $paidOrders = (clone $ordersBase)->where('payment_status', 1)->count();
         $unpaidOrders = (clone $ordersBase)->where('payment_status', 0)->count();
 
+        $ordersWithStatusCollection = (clone $ordersBase)
+            ->with([
+                'offers:id,order_id,status,provider_id',
+                'timeline:id,order_id,timeline_no',
+            ])
+            ->get();
+
+        $acceptedOrders = 0;
+        $rejectedOrders = 0;
+        $processingOrders = 0;
+        $executedOrders = 0;
+        $acceptedPaidOrders = 0;
+        $acceptedUnpaidOrders = 0;
+
+        foreach ($ordersWithStatusCollection as $order) {
+            $status = $order->resolveAdminStatus();
+            $statusKey = strtolower((string) ($status['key'] ?? ''));
+
+            if ($statusKey === 'confirmed') {
+                $acceptedOrders++;
+                if ((int) ($order->payment_status ?? 0) === 1) {
+                    $acceptedPaidOrders++;
+                } else {
+                    $acceptedUnpaidOrders++;
+                }
+            } elseif ($statusKey === 'rejected') {
+                $rejectedOrders++;
+            } elseif ($statusKey === 'processing') {
+                $processingOrders++;
+            } elseif ($statusKey === 'completed') {
+                $executedOrders++;
+            }
+        }
+
         $totalOffers = (clone $offersBase)->count();
         $pendingOffers = (clone $offersBase)->whereIn('status', $pendingOfferStatuses)->count();
         $acceptedOffers = (clone $offersBase)->whereIn('status', $acceptedOfferStatuses)->count();
@@ -136,7 +170,8 @@ class HomeService
         $lowStockProducts = Product::query()
             ->whereNull('deleted_at')
             ->where('stock_quantity', '<', self::LOW_STOCK_THRESHOLD)
-            ->select(['id', 'name', 'stock_quantity', 'price'])
+            ->with(['provider:id,name,email,mobile'])
+            ->select(['id', 'name', 'stock_quantity', 'price', 'provider_id'])
             ->orderBy('stock_quantity')
             ->limit(6)
             ->get();
@@ -168,6 +203,12 @@ class HomeService
                 'revenue' => (float) (clone $ordersBase)->where('payment_status', 1)->sum('total_cost'),
                 'paid_orders' => $paidOrders,
                 'unpaid_orders' => $unpaidOrders,
+                'accepted_orders' => $acceptedOrders,
+                'rejected_orders' => $rejectedOrders,
+                'processing_orders' => $processingOrders,
+                'executed_orders' => $executedOrders,
+                'accepted_paid_orders' => $acceptedPaidOrders,
+                'accepted_unpaid_orders' => $acceptedUnpaidOrders,
                 'categories' => Category::whereNull('deleted_at')->count(),
                 'coupons' => Coupon::whereNull('deleted_at')->count(),
                 'ratings' => Rating::whereNull('deleted_at')->count(),
