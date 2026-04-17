@@ -72,18 +72,7 @@
                     ['label' => __('admin.nav.admins'), 'href' => route('admin/admins/index') . '/0/' . PAGINATION_COUNT],
                     ['label' => __('admin.pages.common.index'), 'active' => true],
                 ]"
-            >
-                <x-slot:actions>
-                    <a href="{{ route('admin/admins/archives') . '/0/' . PAGINATION_COUNT }}" class="btn btn-light">
-                        <i class="ri-archive-line align-bottom"></i>
-                        <span>{{ __('admin.pages.common.archives') }}</span>
-                    </a>
-                    <a href="{{ route('admin/admins/create') }}" class="btn btn-primary">
-                        <i class="ri-add-line align-bottom"></i>
-                        <span>{{ __('admin.pages.admins.add_admin') }}</span>
-                    </a>
-                </x-slot:actions>
-            </x-admin.page-header>
+            />
 
             @include('flash::message')
 
