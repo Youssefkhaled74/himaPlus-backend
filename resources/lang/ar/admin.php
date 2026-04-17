@@ -220,6 +220,25 @@ return [
             'add_order' => 'إضافة طلب',
             'archives' => 'الطلبات المؤرشفة',
             'back_to_orders' => 'العودة إلى الطلبات',
+            'statuses' => [
+                'pending' => 'قيد الانتظار',
+                'order_created' => 'تم إنشاء الطلب',
+                'confirmed' => 'مؤكد',
+                'processing' => 'قيد المعالجة',
+                'shipped' => 'تم الشحن',
+                'delivered' => 'تم التسليم',
+                'completed' => 'مكتمل',
+                'canceled' => 'ملغي',
+                'rejected' => 'مرفوض',
+                'offers_received' => 'تم استلام العروض',
+                'supplier_selected' => 'تم اختيار المورد',
+                'converted_to_order' => 'تم التحويل إلى طلب',
+                'under_review' => 'قيد المراجعة',
+                'assigned_to_supplier' => 'تم إسناده إلى المورد',
+                'upcoming' => 'قادم',
+                'active' => 'نشط',
+                'paused' => 'متوقف مؤقتًا',
+            ],
         ],
         'categories' => [
             'title' => 'إدارة الأقسام',
@@ -382,4 +401,3 @@ return [
         ],
     ],
 ];
-
