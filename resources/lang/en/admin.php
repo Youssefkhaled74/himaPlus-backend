@@ -47,6 +47,13 @@ return [
         'low_stock' => ':count low stock products',
         'new_users' => ':count new users today',
     ],
+    'footer' => [
+        'brand' => 'Hema Admin',
+        'subtitle' => 'Professional control panel for healthcare supply and operations.',
+        'status' => 'System online',
+        'copyright' => 'Hema :year ©',
+        'workflow' => 'Built for a cleaner, faster admin workflow.',
+    ],
     'dashboard' => [
         'title' => 'Dashboard',
         'eyebrow' => 'Healthcare Supply Dashboard',
