@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Ratings</title>
+    <title>{{ __('admin.pages.ratings.title') }}</title>
 @endsection
 
 <!-- custom css -->
@@ -19,24 +19,6 @@
     <div class="page-content">
         <div class="container-fluid">
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent" style="direction: ltr;">
-                        {{-- <h4 class="mb-sm-0">Team</h4> --}}
-
-                        <div class="page-title-right">
-                            <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"></li>
-                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/ratings/index')}}/0/{{PAGINATION_COUNT}}">Ratings</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">Index</li>
-                            </ol>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
             @include('flash::message')
             @if ($errors->any())
                 <div style="text-align: left; margin: 15px;">
@@ -52,7 +34,7 @@
                 <div class="col-lg-12">
                     <div class="card" style="margin-left: 1rem; margin-right: 1rem;">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Ratings Viwes</h5>
+                            <h5 class="card-title mb-0">{{ __('admin.pages.ratings.overview') }}</h5>
                         </div>
                         <div class="card-body">
                             <div id="scroll-horizontal_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
@@ -72,14 +54,14 @@
                                                 <table id="scroll-horizontal" class="table nowrap align-middle dataTable no-footer" style="width: 100%" aria-describedby="scroll-horizontal_info">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">ID</th>
-                                                            <th class="text-center">User</th>
-                                                            <th class="text-center">Rating</th>
-                                                            <th class="text-center">Comment</th>
-                                                            <th class="text-center">For</th>
-                                                            <th class="text-center">Service</th>
-                                                            <th class="text-center">Activation</th>
-                                                            <th class="text-center">Actions</th>
+                                                            <th class="text-center">{{ __('admin.pages.common.id') }}</th>
+                                                            <th class="text-center">{{ __('admin.pages.common.user') }}</th>
+                                                            <th class="text-center">{{ __('admin.pages.common.rating') }}</th>
+                                                            <th class="text-center">{{ __('admin.pages.common.comment') }}</th>
+                                                            <th class="text-center">{{ __('admin.pages.common.for') }}</th>
+                                                            <th class="text-center">{{ __('admin.pages.common.service') }}</th>
+                                                            <th class="text-center">{{ __('admin.pages.common.activation') }}</th>
+                                                            <th class="text-center">{{ __('admin.pages.common.actions') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tableShowData">
@@ -108,13 +90,17 @@
                                                                     <td class="text-center">{{$record->comment}}</td>
                                                                     <td class="text-center">
                                                                         <span class="badge bg-info-subtle @if($record->for == "Provider") text-info @else text-primary @endif">
-                                                                            {{$record->for}}
+                                                                            @if(strtolower((string) $record->for) === 'provider')
+                                                                                {{ __('admin.pages.ratings.provider_target') }}
+                                                                            @else
+                                                                                {{ __('admin.pages.ratings.product_target') }}
+                                                                            @endif
                                                                         </span>
                                                                     </td>
                                                                     <td class="text-center">{{$record->forable?->name}}</td>
                                                                     <?php
-                                                                        if($record->is_activate == 1){$activate = '<span class="badge bg-info-subtle text-info">active</span>';}
-                                                                        else{$activate = '<span class="badge bg-info-subtle text-danger">un active</span>';}
+                                                                        if($record->is_activate == 1){$activate = '<span class="badge bg-info-subtle text-info">' . __('admin.pages.common.active') . '</span>';}
+                                                                        else{$activate = '<span class="badge bg-info-subtle text-danger">' . __('admin.pages.common.inactive') . '</span>';}
                                                                     ?>
                                                                     <td class="text-center">{!! $activate !!}</td>
                                                                     <td class="text-center">
@@ -125,12 +111,12 @@
                                                                             <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
                                                                                 <li>
                                                                                     <a href="{{route('admin/ratings/edit', $record->id)}}" class="dropdown-item edit-item-btn">
-                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit
+                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> {{ __('admin.pages.common.edit') }}
                                                                                     </a>
                                                                                 </li>
                                                                                 <li>
                                                                                     <button class="dropdown-item edit-item-btn openActivationFrom" data-bs-toggle="modal" data-bs-target="#myModalActivation" data-id="{{$record->id}}">
-                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> activation
+                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> {{ __('admin.pages.common.activation') }}
                                                                                     </button>
                                                                                 </li>
                                                                             </ul>
@@ -205,11 +191,11 @@
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
                                                                     <div class="mt-4 pt-4">
-                                                                        <h4>! Delete Confirmation</h4>
-                                                                        <p class="text-muted">Are You Sure To Update This Record.</p>
+                                                                        <h4>{{ __('admin.pages.common.confirm_delete') }}</h4>
+                                                                        <p class="text-muted">{{ __('admin.pages.common.confirm_delete_message') }}</p>
                                                                         <input id="delete_record_id" name="record_id" type="hidden">
                                                                         <button type="submit" class="btn btn-warning">
-                                                                            Continue
+                                                                            {{ __('admin.pages.common.continue') }}
                                                                         </button>
                                                                     </div>
                                                                                                 
@@ -230,11 +216,11 @@
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
                                                                     <div class="mt-4 pt-4">
-                                                                        <h4>! Activation Confirmation</h4>
-                                                                        <p class="text-muted">Are You Sure To Update This Record.</p>
+                                                                        <h4>{{ __('admin.pages.common.confirm_activate') }}</h4>
+                                                                        <p class="text-muted">{{ __('admin.pages.common.confirm_activate_message') }}</p>
                                                                         <input id="activation_record_id" name="record_id" type="hidden">
                                                                         <button type="submit" class="btn btn-warning">
-                                                                            Continue
+                                                                            {{ __('admin.pages.common.continue') }}
                                                                         </button>
                                                                     </div>
                                                                                                 
