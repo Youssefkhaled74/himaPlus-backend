@@ -467,7 +467,7 @@ html[dir='rtl'] .admin-card-head {
 
 .admin-topnav-menu {
     min-width: 240px;
-    padding: 10px;
+    padding: 8px;
     margin-top: 12px;
     z-index: 1105;
 }
@@ -486,7 +486,12 @@ html[dir='rtl'] .admin-card-head {
     align-items: center;
     gap: 10px;
     border-radius: 14px;
-    padding: 0.8rem 0.95rem;
+    padding: 0.58rem 0.85rem;
+    line-height: 1.25;
+}
+
+.admin-topnav-menu .dropdown-item + .dropdown-item {
+    margin-top: 6px;
 }
 
 .admin-topnav-menu .dropdown-item.active {
@@ -2180,6 +2185,17 @@ textarea.form-control {
         min-width: 100%;
         margin-top: 8px;
         border-radius: 16px;
+        padding: 6px;
+    }
+
+    .admin-topnav-menu .dropdown-item {
+        border-radius: 12px;
+        padding: 0.52rem 0.72rem;
+        line-height: 1.2;
+    }
+
+    .admin-topnav-menu .dropdown-item + .dropdown-item {
+        margin-top: 4px;
     }
 
     .admin-topnav-item .dropdown-menu,
