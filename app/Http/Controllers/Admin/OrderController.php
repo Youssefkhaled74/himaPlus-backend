@@ -23,8 +23,9 @@ class OrderController extends Controller
     {
         try{
             $tab = $request->get('tab', 'orders');
-            $orders = $this->orders->index($offset, $limit, $tab);
-            return view('admin.orders.index', compact('orders', 'tab'));
+            $orderNo = trim((string) $request->get('order_no', ''));
+            $orders = $this->orders->index($offset, $limit, $tab, $orderNo);
+            return view('admin.orders.index', compact('orders', 'tab', 'orderNo'));
         }catch(\Exception $e){
             flash()->error('There is something wrong , please contact technical support');
             return back();

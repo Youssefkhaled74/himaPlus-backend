@@ -246,6 +246,7 @@ return [
             'module_label' => 'وحدة الطلبات',
             'overview' => 'عرض عام للطلبات',
             'overview_subtitle' => 'عرض تشغيلي أنظف لجميع الطلبات الحالية.',
+            'search_by_order_no' => 'البحث برقم الطلب',
             'add_order' => 'إضافة طلب',
             'archives' => 'الطلبات المؤرشفة',
             'back_to_orders' => 'العودة إلى الطلبات',

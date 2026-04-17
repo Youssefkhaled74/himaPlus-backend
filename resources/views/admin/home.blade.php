@@ -169,6 +169,27 @@
                         <div class="card-header">
                             <div class="dashboard-section-heading mb-0">
                                 <div>
+                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.quick_actions') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.quick_actions_subtitle') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-quick-actions">
+                                @foreach ($quickActions as $action)
+                                    <a href="{{ $action['route'] }}" class="dashboard-quick-link">
+                                        <span><i class="{{ $action['icon'] }} me-2"></i>{{ $action['label'] }}</span>
+                                        <i class="ri-arrow-left-up-line"></i>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card dashboard-panel">
+                        <div class="card-header">
+                            <div class="dashboard-section-heading mb-0">
+                                <div>
                                     <h5 class="card-title mb-1">{{ __('admin.dashboard.guidance_metrics_title') }}</h5>
                                     <p class="text-muted mb-0">{{ __('admin.dashboard.guidance_metrics_subtitle') }}</p>
                                 </div>
@@ -492,26 +513,6 @@
                         </div>
                     </div>
 
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.quick_actions') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.quick_actions_subtitle') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-quick-actions">
-                                @foreach ($quickActions as $action)
-                                    <a href="{{ $action['route'] }}" class="dashboard-quick-link">
-                                        <span><i class="{{ $action['icon'] }} me-2"></i>{{ $action['label'] }}</span>
-                                        <i class="ri-arrow-left-up-line"></i>
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 

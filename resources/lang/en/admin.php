@@ -246,6 +246,7 @@ return [
             'module_label' => 'Orders Module',
             'overview' => 'Orders Overview',
             'overview_subtitle' => 'A cleaner operational view for all current orders.',
+            'search_by_order_no' => 'Search by order number',
             'add_order' => 'Add Order',
             'archives' => 'Archived Orders',
             'back_to_orders' => 'Back to Orders',

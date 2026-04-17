@@ -76,6 +76,7 @@
     @php
         $tab = $tab ?? request('tab', 'orders');
         $isRequestsPage = $tab === 'requests';
+        $orderNo = $orderNo ?? request('order_no', '');
     @endphp
 
     <div class="page-content">
@@ -102,6 +103,26 @@
                             <p class="admin-card-head__text">{{ __('admin.pages.orders.overview_subtitle') }}</p>
                         </div>
                         <div class="admin-card-head__actions">
+                            <form method="GET" action="{{ route('admin/orders/index', ['offset' => 0, 'limit' => PAGINATION_COUNT]) }}" class="d-flex align-items-center gap-2">
+                                <input type="hidden" name="tab" value="{{ $tab }}">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent">
+                                        <i class="ri-search-line"></i>
+                                    </span>
+                                    <input
+                                        type="text"
+                                        name="order_no"
+                                        value="{{ $orderNo }}"
+                                        inputmode="numeric"
+                                        pattern="[0-9]*"
+                                        class="form-control"
+                                        placeholder="{{ __('admin.pages.orders.search_by_order_no') }}">
+                                </div>
+                                <button type="submit" class="btn btn-light">
+                                    <i class="ri-search-line align-bottom"></i>
+                                </button>
+                            </form>
+
                             <div class="admin-orders-toggle" role="tablist" aria-label="Orders tabs">
                                 <a
                                     href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders"
