@@ -28,60 +28,44 @@
             'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
         [
-            'label' => __('admin.dashboard.stats.users'),
-            'value' => number_format($dashboard['totals']['users'] ?? 0),
-            'growth' => $dashboard['growth']['users'] ?? 0,
-            'icon' => 'ri-user-3-line',
-            'softClass' => 'bg-info-subtle text-info',
-            'link' => route('admin/users/index') . '/0/' . PAGINATION_COUNT,
-        ],
-        [
-            'label' => __('admin.dashboard.stats.products'),
-            'value' => number_format($dashboard['totals']['products'] ?? 0),
-            'growth' => $dashboard['growth']['products'] ?? 0,
-            'icon' => 'ri-capsule-line',
-            'softClass' => 'bg-warning-subtle text-warning',
-            'link' => route('admin/products/index') . '/0/' . PAGINATION_COUNT,
-        ],
-        [
-            'label' => __('admin.dashboard.stats.revenue'),
-            'value' => number_format((float) ($dashboard['totals']['revenue'] ?? 0), 2),
-            'growth' => $dashboard['growth']['revenue'] ?? 0,
-            'icon' => 'ri-line-chart-line',
+            'label' => __('admin.dashboard.paid_orders_label'),
+            'value' => number_format($dashboard['totals']['paid_orders'] ?? 0),
+            'growth' => 0,
+            'icon' => 'ri-checkbox-circle-line',
             'softClass' => 'bg-success-subtle text-success',
             'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
         [
-            'label' => __('admin.dashboard.stats.categories'),
-            'value' => number_format($dashboard['totals']['categories'] ?? 0),
-            'growth' => $dashboard['growth']['categories'] ?? 0,
-            'icon' => 'ri-layout-grid-line',
-            'softClass' => 'bg-danger-subtle text-danger',
-            'link' => route('admin/categories/index') . '/0/' . PAGINATION_COUNT,
-        ],
-        [
-            'label' => __('admin.dashboard.stats.coupons'),
-            'value' => number_format($dashboard['totals']['coupons'] ?? 0),
-            'growth' => $dashboard['growth']['coupons'] ?? 0,
-            'icon' => 'ri-coupon-2-line',
-            'softClass' => 'bg-secondary-subtle text-secondary',
-            'link' => route('admin/coupons/index') . '/0/' . PAGINATION_COUNT,
-        ],
-        [
-            'label' => __('admin.dashboard.manage_ratings'),
-            'value' => number_format($dashboard['totals']['ratings'] ?? 0),
-            'growth' => $dashboard['growth']['ratings'] ?? 0,
-            'icon' => 'ri-star-line',
+            'label' => __('admin.dashboard.pending_payments_label'),
+            'value' => number_format($dashboard['totals']['unpaid_orders'] ?? 0),
+            'growth' => 0,
+            'icon' => 'ri-error-warning-line',
             'softClass' => 'bg-warning-subtle text-warning',
-            'link' => route('admin/ratings/index') . '/0/' . PAGINATION_COUNT,
+            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
         [
-            'label' => __('admin.dashboard.view_contacts'),
-            'value' => number_format($dashboard['totals']['contacts'] ?? 0),
-            'growth' => $dashboard['growth']['contacts'] ?? 0,
-            'icon' => 'ri-mail-line',
+            'label' => __('admin.dashboard.scheduled_orders'),
+            'value' => number_format($dashboard['totals']['scheduled_orders'] ?? 0),
+            'growth' => 0,
+            'icon' => 'ri-calendar-check-line',
             'softClass' => 'bg-info-subtle text-info',
-            'link' => route('admin/contacts/index') . '/0/' . PAGINATION_COUNT,
+            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
+        ],
+        [
+            'label' => __('admin.dashboard.active_scheduled_orders'),
+            'value' => number_format($dashboard['totals']['active_scheduled_orders'] ?? 0),
+            'growth' => 0,
+            'icon' => 'ri-timer-flash-line',
+            'softClass' => 'bg-primary-subtle text-primary',
+            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
+        ],
+        [
+            'label' => __('admin.dashboard.completed_scheduled_orders'),
+            'value' => number_format($dashboard['totals']['completed_scheduled_orders'] ?? 0),
+            'growth' => 0,
+            'icon' => 'ri-check-double-line',
+            'softClass' => 'bg-success-subtle text-success',
+            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
         ],
     ];
 @endphp
@@ -581,7 +565,7 @@
                                                 <td class="fw-semibold">#{{ $user->id }}</td>
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
-                                                <td>{{ $user->created_at->format('M d, Y') }}</td>
+                                                <td>{{ $user->created_at->locale(app()->getLocale())->translatedFormat('d M Y') }}</td>
                                             </tr>
                                         @empty
                                             <tr>

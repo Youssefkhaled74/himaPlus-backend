@@ -77,7 +77,7 @@ class HomeService
             $monthStart = Carbon::now()->subMonths($i)->startOfMonth();
             $monthEnd = $monthStart->copy()->endOfMonth();
 
-            $chartMonths[] = $monthStart->format('M Y');
+            $chartMonths[] = $monthStart->locale(app()->getLocale())->translatedFormat('M Y');
             $ordersSeries[] = (clone $ordersBase)->whereBetween('created_at', [$monthStart, $monthEnd])->count();
             $revenueSeries[] = (float) (clone $ordersBase)
                 ->where('payment_status', 1)
