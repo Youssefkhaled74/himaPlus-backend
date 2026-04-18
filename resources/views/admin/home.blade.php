@@ -580,7 +580,7 @@
             </section>
 
             <!-- Recent Users & Low Stock Grid -->
-            <section class="dashboard-grid" style="margin-top: 2rem;">
+            <section class="dashboard-grid dashboard-grid--auto" style="margin-top: 2rem;">
                 <div class="d-flex flex-column gap-4">
                     <div class="card dashboard-table-card">
                         <div class="card-header">

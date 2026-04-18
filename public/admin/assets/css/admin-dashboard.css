@@ -1189,6 +1189,10 @@ html[dir='ltr'] .page-title-box .page-title-right {
     gap: 24px;
 }
 
+.dashboard-grid--auto {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
 .dashboard-panel {
     height: 100%;
 }
@@ -2312,4 +2316,3 @@ textarea.form-control {
         justify-content: space-between;
     }
 }
-
