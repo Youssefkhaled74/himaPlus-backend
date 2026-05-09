@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +49,8 @@ class VendorProductController extends Controller
     public function create()
     {
         $categories = Category::where('deleted_at', null)->get();
-        return view('front.vendor.products.create', compact('categories'));
+        $countries = Country::where('deleted_at', null)->orderBy('name')->get();
+        return view('front.vendor.products.create', compact('categories', 'countries'));
     }
 
     /**
@@ -66,12 +68,17 @@ class VendorProductController extends Controller
             'images' => 'required|array|min:1',
             'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             // New specification fields
-            'imaging_type' => 'nullable|string|max:255',
             'mfg_date' => 'nullable|date',
             'exp_date' => 'nullable|date|after_or_equal:mfg_date',
             'weight' => 'nullable|string|max:255',
-            'dimensions' => 'nullable|string|max:255',
             'warranty' => 'nullable|string|max:255',
+            'registration_type' => 'required|in:sfda,saber',
+            'guarantee_file' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
+            'registration_number' => 'required|string|max:100',
+            'registration_expiry_date' => 'required|date',
+            'factory_name' => 'required|string|max:100',
+            'factory_country' => 'required|string|max:100',
+            'uom' => 'required|string|max:100',
         ]);
         
         if ($validator->fails()) {
@@ -91,14 +98,21 @@ class VendorProductController extends Controller
                 'provider_id' => auth()->id(),
                 'is_activate' => 1,
                 // Add specification fields
-                'imaging_type' => $request->imaging_type,
                 'manufacture_date' => $request->mfg_date,
                 'production_date' => $request->mfg_date,
                 'expiry_date' => $request->exp_date,
                 'weight' => $request->weight,
-                'dimensions' => $request->dimensions,
                 'warranty' => $request->warranty,
+                'registration_type' => $request->registration_type,
+                'registration_number' => $request->registration_number,
+                'registration_expiry_date' => $request->registration_expiry_date,
+                'factory_name' => $request->factory_name,
+                'factory_country' => $request->factory_country,
+                'uom' => $request->uom,
             ]);
+            if ($request->hasFile('guarantee_file')) {
+                $product->guarantee_file = uploadIamge($request->file('guarantee_file'), 'products');
+            }
             
             // Handle image uploads
             if ($request->hasFile('images')) {
@@ -153,7 +167,8 @@ class VendorProductController extends Controller
             ->firstOrFail();
         
         $categories = Category::where('deleted_at', null)->get();
-        return view('front.vendor.products.edit', compact('product', 'categories'));
+        $countries = Country::where('deleted_at', null)->orderBy('name')->get();
+        return view('front.vendor.products.edit', compact('product', 'categories', 'countries'));
     }
 
     /**
@@ -307,12 +322,17 @@ class VendorProductController extends Controller
             'quantity' => 'required|integer|min:0',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             // New specification fields
-            'imaging_type' => 'nullable|string|max:255',
             'mfg_date' => 'nullable|date',
             'exp_date' => 'nullable|date|after_or_equal:mfg_date',
             'weight' => 'nullable|string|max:255',
-            'dimensions' => 'nullable|string|max:255',
             'warranty' => 'nullable|string|max:255',
+            'registration_type' => 'required|in:sfda,saber',
+            'guarantee_file' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
+            'registration_number' => 'required|string|max:100',
+            'registration_expiry_date' => 'required|date',
+            'factory_name' => 'required|string|max:100',
+            'factory_country' => 'required|string|max:100',
+            'uom' => 'required|string|max:100',
         ]);
         
         if ($validator->fails()) {
@@ -330,14 +350,21 @@ class VendorProductController extends Controller
                 'price' => $request->price,
                 'stock_quantity' => $request->quantity,
                 // Update specification fields
-                'imaging_type' => $request->imaging_type,
                 'manufacture_date' => $request->mfg_date,
                 'production_date' => $request->mfg_date,
                 'expiry_date' => $request->exp_date,
                 'weight' => $request->weight,
-                'dimensions' => $request->dimensions,
                 'warranty' => $request->warranty,
+                'registration_type' => $request->registration_type,
+                'registration_number' => $request->registration_number,
+                'registration_expiry_date' => $request->registration_expiry_date,
+                'factory_name' => $request->factory_name,
+                'factory_country' => $request->factory_country,
+                'uom' => $request->uom,
             ]);
+            if ($request->hasFile('guarantee_file')) {
+                $product->guarantee_file = uploadIamge($request->file('guarantee_file'), 'products');
+            }
             
             // Handle existing + removed + newly uploaded images.
             $imagePaths = $this->normalizeImagePaths($product->imgs);

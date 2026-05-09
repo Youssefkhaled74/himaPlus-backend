@@ -41,8 +41,22 @@ class ProductController extends Controller
             ->when($request->category_id, function($q) use($request) {
                 $q->where('category_id', $request->category_id);
             })
+            ->when($request->factory_name, function($q) use($request) {
+                $q->where('factory_name', 'like', '%'. $request->factory_name .'%');
+            })
+            ->when($request->factory_country, function($q) use($request) {
+                $q->where('factory_country', 'like', '%'. $request->factory_country .'%');
+            })
             ->when($request->provider_id, function($q) use($request) {
                 $q->where('provider_id', $request->provider_id);
+            })
+            ->when($request->vendor_name, function($q) use($request) {
+                $q->whereHas('provider', function ($provider) use ($request) {
+                    $provider->where('name', 'like', '%'. $request->vendor_name .'%');
+                });
+            })
+            ->when($request->product_name, function($q) use($request) {
+                $q->where('name', 'like', '%'. $request->product_name .'%');
             })
             ->when($request->is_offer, function($q) {
                 $q->where('is_offer', 1);
@@ -61,7 +75,7 @@ class ProductController extends Controller
                 elseif ((int)$request->sort == 5) { $q->withCount('order_item')->orderBy('order_item_count', 'DESC'); } 
                 else { $q->orderBy('id', 'DESC'); }
             })
-            ->active()->unArchive()->with('category')->withCount(['ratings'])->withAvg('ratings', 'rating')
+            ->active()->unArchive()->with(['category', 'provider'])->withCount(['ratings'])->withAvg('ratings', 'rating')
             ->offset($offset)->limit(PAGINATION_COUNT)->get();
             return responseJson(200, "success", $records);
         }catch(\Exception $e){
@@ -91,12 +105,17 @@ class ProductController extends Controller
                 'files'           => ['nullable', 'array', 'max:10'],
                 'files.*'         => ['file', 'mimes:jpeg,png,jpg,webp,webm,avif', 'max:5120'],
 
-                'imaging_type'     => ['nullable', 'string', 'max:255'],
+                'registration_type' => ['required', 'in:sfda,saber'],
+                'guarantee_file' => ['required', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:10240'],
+                'registration_number' => ['required', 'string', 'max:100'],
+                'registration_expiry_date' => ['required', 'date'],
+                'factory_name' => ['required', 'string', 'max:100'],
+                'factory_country' => ['required', 'string', 'max:100'],
+                'uom' => ['required', 'string', 'max:100'],
                 'manufacture_date' => ['nullable', 'date', 'before_or_equal:today'],
                 'production_date'  => ['nullable', 'date', 'before_or_equal:today'],
                 'expiry_date'      => ['nullable', 'date', 'after:manufacture_date'],
                 'weight'        => ['nullable', 'string', 'max:255'],
-                'dimensions'    => ['nullable', 'string', 'max:255'],
                 'warranty'      => ['nullable', 'string', 'max:255'],
                 'origin_id'     => ['nullable', 'integer', 'exists:countries,id'],
                 'is_offer'     => ['nullable', 'in:1,0'],
@@ -127,12 +146,17 @@ class ProductController extends Controller
                 'files'           => ['nullable', 'array', 'max:10'],
                 'files.*'         => ['file', 'mimes:jpeg,png,jpg,webp,webm,avif', 'max:5120'],
 
-                'imaging_type'     => ['nullable', 'string', 'max:255'],
+                'registration_type' => ['required', 'in:sfda,saber'],
+                'guarantee_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:10240'],
+                'registration_number' => ['required', 'string', 'max:100'],
+                'registration_expiry_date' => ['required', 'date'],
+                'factory_name' => ['required', 'string', 'max:100'],
+                'factory_country' => ['required', 'string', 'max:100'],
+                'uom' => ['required', 'string', 'max:100'],
                 'manufacture_date' => ['nullable', 'date', 'before_or_equal:today'],
                 'production_date'  => ['nullable', 'date', 'before_or_equal:today'],
                 'expiry_date'      => ['nullable', 'date', 'after:manufacture_date'],
                 'weight'        => ['nullable', 'string', 'max:255'],
-                'dimensions'    => ['nullable', 'string', 'max:255'],
                 'warranty'      => ['nullable', 'string', 'max:255'],
                 'origin_id'     => ['nullable', 'integer', 'exists:countries,id'],
                 'is_offer'     => ['nullable', 'in:1,0'],

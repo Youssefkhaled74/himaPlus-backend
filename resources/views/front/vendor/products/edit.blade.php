@@ -226,6 +226,48 @@
                             </div>
                         </div>
 
+                        <div class="mb-3 mt-2">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Registration Type <span class="text-danger">*</span></label>
+                                    <select name="registration_type" class="form-select hp-select" required>
+                                        <option value="">Select</option>
+                                        <option value="sfda" {{ old('registration_type', $product->registration_type) === 'sfda' ? 'selected' : '' }}>SFDA</option>
+                                        <option value="saber" {{ old('registration_type', $product->registration_type) === 'saber' ? 'selected' : '' }}>SABER</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Guarantee File @if(!$product->guarantee_file)<span class="text-danger">*</span>@endif</label>
+                                    <input type="file" name="guarantee_file" class="form-control hp-input" accept=".jpg,.jpeg,.png,.webp,.pdf" {{ $product->guarantee_file ? '' : 'required' }}>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Registration Number <span class="text-danger">*</span></label>
+                                    <input type="text" name="registration_number" value="{{ old('registration_number', $product->registration_number) }}" class="form-control hp-input" maxlength="100" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Registration Expiry Date <span class="text-danger">*</span></label>
+                                    <input type="date" name="registration_expiry_date" value="{{ old('registration_expiry_date', optional($product->registration_expiry_date)->format('Y-m-d')) }}" class="form-control hp-input" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Factory Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="factory_name" value="{{ old('factory_name', $product->factory_name) }}" class="form-control hp-input" maxlength="100" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">Factory Country <span class="text-danger">*</span></label>
+                                    <select name="factory_country" class="form-select hp-select" required>
+                                        <option value="">Select country</option>
+                                        @foreach($countries as $country)
+                                            <option value="{{ $country->name }}" {{ old('factory_country', $product->factory_country) === $country->name ? 'selected' : '' }}>{{ $country->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-semibold">UOM <span class="text-danger">*</span></label>
+                                    <input type="text" name="uom" value="{{ old('uom', $product->uom) }}" class="form-control hp-input" maxlength="100" required>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="d-flex justify-content-end mt-4">
                             <a href="{{ route('vendor/products') }}" class="btn btn-secondary me-2">{{ app()->getLocale() == 'ar' ? 'إلغاء' : 'Cancel' }}</a>
                             <button type="submit" class="hp-btn-gradient px-5">{{ app()->getLocale() == 'ar' ? 'تحديث المنتج' : 'Update Product' }}</button>
@@ -241,6 +283,12 @@
 
 @section('script')
 <script>
+    document.querySelectorAll('input[name=\"imaging_type\"], input[name=\"dimensions\"]').forEach((el) => {
+        const wrapper = el.closest('.col-md-12') || el.closest('.mb-3');
+        if (wrapper) wrapper.style.display = 'none';
+        el.disabled = true;
+    });
+
     // Image preview for new uploads
     document.getElementById('images')?.addEventListener('change', function(e) {
         const gallery = document.getElementById('imageGallery');

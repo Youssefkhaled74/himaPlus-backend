@@ -29,6 +29,23 @@
         <section class="py-5">
             <div class="container">
                 @isset($report['category'])
+                    <form method="GET" action="{{ route('products') }}" class="row g-2 mb-4">
+                        <div class="col-md-3"><input class="form-control" name="product_name" value="{{ request('product_name') }}" placeholder="Product name"></div>
+                        <div class="col-md-2"><input class="form-control" name="factory_name" value="{{ request('factory_name') }}" placeholder="Factory name"></div>
+                        <div class="col-md-2"><input class="form-control" name="vendor_name" value="{{ request('vendor_name') }}" placeholder="Supplier name"></div>
+                        <div class="col-md-3">
+                            <select class="form-select" name="factory_country">
+                                <option value="">Factory country</option>
+                                @foreach($countries as $country)
+                                    <option value="{{ $country->name }}" {{ request('factory_country') === $country->name ? 'selected' : '' }}>{{ $country->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex gap-2">
+                            <button class="btn btn-primary w-100" type="submit">Filter</button>
+                            <a href="{{ route('products') }}" class="btn btn-outline-secondary">Reset</a>
+                        </div>
+                    </form>
                     <nav class="hp-breadcrumb small mb-4">
                         <a href="{{ route('categories') }}" class="hp-crumb">{{ __('products.home') }}</a>
                         <i class="bi bi-chevron-right"></i>

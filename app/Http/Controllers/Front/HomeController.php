@@ -91,8 +91,14 @@ class HomeController extends Controller
     {
         session()->put('active_nav', 'products');
         $report = $this->report->first();
-        $products = $this->product->with(['category', 'is_favorite'])->active()->unArchive()->withAvg('ratings', 'rating')->paginate(PAGINATION_COUNT);
-        return view('front.products', compact(['report', 'products']));
+        $products = $this->applyProductFilters($request, $this->product->query())
+            ->with(['category', 'is_favorite', 'provider'])
+            ->active()->unArchive()
+            ->withAvg('ratings', 'rating')
+            ->paginate(PAGINATION_COUNT)
+            ->withQueryString();
+        $countries = Country::whereNull('deleted_at')->orderBy('name')->get();
+        return view('front.products', compact(['report', 'products', 'countries']));
     }
 
     public function categoryProducts(Request $request, $id)
@@ -101,8 +107,14 @@ class HomeController extends Controller
         $report = $this->report->with([
             'category' => fn($q) => $q->where('id', $id)->first()
         ])->first();
-        $products = $this->product->where('category_id', $id)->active()->unArchive()->withAvg('ratings', 'rating')->paginate(PAGINATION_COUNT);
-        return view('front.categoryProducts', compact('report', 'products'));
+        $products = $this->applyProductFilters($request, $this->product->query()->where('category_id', $id))
+            ->active()->unArchive()
+            ->with(['provider'])
+            ->withAvg('ratings', 'rating')
+            ->paginate(PAGINATION_COUNT)
+            ->withQueryString();
+        $countries = Country::whereNull('deleted_at')->orderBy('name')->get();
+        return view('front.categoryProducts', compact('report', 'products', 'countries'));
     }
 
     public function product(Request $request, $id)
@@ -198,6 +210,18 @@ class HomeController extends Controller
             $records = $builder->latest()->with($relations)->withCount($relationsCount)->offset($offset)->limit(PAGINATION_COUNT)->get(); 
         }        
         return $records;
+    }
+
+    private function applyProductFilters(Request $request, Builder $query): Builder
+    {
+        return $query
+            ->when($request->filled('factory_name'), fn (Builder $q) => $q->where('factory_name', 'like', '%' . $request->factory_name . '%'))
+            ->when($request->filled('factory_country'), fn (Builder $q) => $q->where('factory_country', $request->factory_country))
+            ->when($request->filled('vendor_name'), fn (Builder $q) => $q->whereHas('provider', function (Builder $provider) use ($request) {
+                $provider->where('name', 'like', '%' . $request->vendor_name . '%');
+            }))
+            ->when($request->filled('product_name'), fn (Builder $q) => $q->where('name', 'like', '%' . $request->product_name . '%'))
+            ->when($request->filled('q') && mb_strlen(trim((string) $request->q)) >= 1, fn (Builder $q) => $q->where('name', 'like', '%' . trim((string) $request->q) . '%'));
     }
 
 }

@@ -182,6 +182,52 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-xxl-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label>Registration Type <span class="input-group-addon" style="color: red;">*</span></label>
+                                                    <select class="form-control" name="registration_type" required>
+                                                        <option value="">select</option>
+                                                        <option value="sfda" {{ $product->registration_type === 'sfda' ? 'selected' : '' }}>SFDA</option>
+                                                        <option value="saber" {{ $product->registration_type === 'saber' ? 'selected' : '' }}>SABER</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xxl-6 col-md-6">
+                                                <label>Guarantee File @if(!$product->guarantee_file)<span class="text-danger">*</span>@endif</label>
+                                                <input name="guarantee_file" type="file" class="form-control no-min-height" accept=".jpg,.jpeg,.png,.webp,.pdf" {{ $product->guarantee_file ? '' : 'required' }}>
+                                            </div>
+                                            <div class="col-xxl-6 col-md-6">
+                                                <div class="form-floating">
+                                                    <input name="registration_number" value="{{ $product->registration_number }}" type="text" class="form-control" placeholder="registration number" maxlength="100" required>
+                                                    <label>Registration Number <span class="text-danger">*</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-xxl-6 col-md-6">
+                                                <div class="form-floating">
+                                                    <input name="registration_expiry_date" value="{{ optional($product->registration_expiry_date)->format('Y-m-d') }}" type="date" class="form-control" required>
+                                                    <label>Registration Expiry Date <span class="text-danger">*</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-xxl-6 col-md-6">
+                                                <div class="form-floating">
+                                                    <input name="factory_name" value="{{ $product->factory_name }}" type="text" class="form-control" placeholder="factory name" maxlength="100" required>
+                                                    <label>Factory Name <span class="text-danger">*</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-xxl-6 col-md-6">
+                                                <div class="form-group">
+                                                    <label>Factory Country <span class="input-group-addon" style="color: red;">*</span></label>
+                                                    <select class="form-control" name="factory_country" id="factory_countries" required>
+                                                        <option value="{{ $product->factory_country }}">{{ $product->factory_country ?: 'select' }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xxl-6 col-md-6">
+                                                <div class="form-floating">
+                                                    <input name="uom" value="{{ $product->uom }}" type="text" class="form-control" placeholder="uom" maxlength="100" required>
+                                                    <label>UOM <span class="text-danger">*</span></label>
+                                                </div>
+                                            </div>
 
                                             <div class="col-12">
                                                 <button class="btn btn-primary" type="submit">{{ __('admin.pages.products.submit') }}</button>
@@ -280,5 +326,18 @@
             width: '100%'
         }
     });
+    $('#factory_countries').select2({
+        ajax: {
+            url: "{{ route('get/countries') }}",
+            dataType: 'json',
+            data: function (params) { return { q: params.term || '' }; },
+            processResults: function (data) {
+                return { results: $.map(data, function (item) { return { id: item.name, text: item.name } }) };
+            },
+            cache: true,
+            width: '100%'
+        }
+    });
+    $('[name=\"imaging_type\"],[name=\"dimensions\"]').prop('disabled', true).closest('.col-xxl-6').hide();
 </script>
 @endsection
