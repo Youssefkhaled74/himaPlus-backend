@@ -17,15 +17,16 @@ class InfoSeeder extends Seeder
                 'mobile' => '+966123456789',
                 'email' => 'info@himaplus.com',
                 'vat' => '300000000000003',
-                'desc' => 'Hima Plus is a leading online platform for medical supplies and healthcare products.',
-                'message' => 'Welcome to Hima Plus',
+                'desc' => 'Hima is a leading online platform for medical supplies and healthcare products.',
+                'message' => 'Welcome to Hima',
                 'vision' => 'Our vision is to provide quality healthcare products to everyone',
                 'asks' => 'Frequently Asked Questions',
-                'abouts' => 'About Hima Plus Company',
-                'terms' => 'Terms and conditions for Hima Plus services',
+                'abouts' => 'About Hima Company',
+                'terms' => 'Terms and conditions for Hima services',
                 'privacy_policies' => 'Privacy policy information - we protect your data',
                 'is_activate' => 1,
             ],
         ]);
     }
 }
+

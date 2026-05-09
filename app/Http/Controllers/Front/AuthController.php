@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Log;
 use App\Models\Favorite;
 use App\Models\Report;
+use App\Models\Order;
 
 class AuthController extends Controller
 {
@@ -28,9 +29,10 @@ class AuthController extends Controller
     public $notification;
     public $userRepository;
     public $forJawalyService;
+    public $order;
     
     public function __construct(
-        User $user, Report $report, Favorite $favorite, Notification $notification, UserRepository $userRepository, ForJawalyService $forJawalyService
+        User $user, Report $report, Favorite $favorite, Notification $notification, UserRepository $userRepository, ForJawalyService $forJawalyService, Order $order
     ){
         $this->user = $user;
         $this->report = $report;
@@ -38,6 +40,7 @@ class AuthController extends Controller
         $this->notification = $notification;
         $this->userRepository = $userRepository;
         $this->forJawalyService = $forJawalyService;
+        $this->order = $order;
     }
     
     public function register(Request $request)
@@ -308,6 +311,24 @@ class AuthController extends Controller
     {
         return view('front.auth.profile');
     }
+
+    public function dashboard()
+    {
+        $user = auth()->user();
+        $ordersQuery = $this->order->where('user_id', $user->id)->whereNull('deleted_at');
+        $orders = (clone $ordersQuery)->with(['provider'])->latest()->take(5)->get();
+        $counts = [
+            'orders' => (clone $ordersQuery)->count(),
+            'paid_invoices' => (clone $ordersQuery)->where('payment_status', 1)->count(),
+            'pending_orders' => (clone $ordersQuery)->where('payment_status', 0)->count(),
+            'favorites' => $this->favorite->where('user_id', $user->id)->count(),
+            'notifications' => $this->notification->where('user_id', $user->id)->count(),
+        ];
+        $recentNotifications = $this->notification->where('user_id', $user->id)->latest()->take(5)->get();
+        $featuredSuppliers = $this->user->getProviders()->active()->unArchive()->latest()->take(6)->get();
+
+        return view('front.auth.dashboard', compact('counts', 'orders', 'recentNotifications', 'featuredSuppliers'));
+    }
     
     public function cart()
     {
@@ -320,7 +341,7 @@ class AuthController extends Controller
         $report = $this->report->first();
         $favorites = $this->favorite->where('user_id', auth()->user()->id)->with([
             'product' => function ($q){
-                $q->with(['category', 'is_favorite'])->withAvg('ratings', 'rating');
+                $q->with(['category', 'is_favorite', 'provider'])->withAvg('ratings', 'rating');
             }
         ])->orderByDesc('id')->orderBy('id', 'DESC')->paginate(PAGINATION_COUNT);
         return view('front.auth.favorites', compact(['report', 'favorites']));

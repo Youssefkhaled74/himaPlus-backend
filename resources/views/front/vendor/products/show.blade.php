@@ -1,7 +1,7 @@
-﻿@extends('layouts.front.home')
+@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ $product->name ?? __('nav.product_details') ?? 'Product Details' }} - Vendor | HemaPulse</title>
+    <title>{{ $product->name ?? __('nav.product_details') ?? 'Product Details' }} - Vendor | Hima</title>
 @endsection
 
 @section('css')
@@ -605,7 +605,7 @@
                                         <span class="review-user">{{ $rating->user->name ?? 'User' }}</span>
                                         <span class="review-stars">
                                             @for($i=1; $i<=5; $i++)
-                                                {{ $i <= (int)$rating->rating ? '★' : '☆' }}
+                                                {{ $i <= (int)$rating->rating ? '?' : '?' }}
                                             @endfor
                                         </span>
                                     </div>
@@ -627,7 +627,7 @@
 
 <div id="deleteModalBackdrop" class="delete-modal-backdrop" aria-hidden="true">
     <div class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
-        <div class="delete-modal-icon">✓</div>
+        <div class="delete-modal-icon">?</div>
         <h3 id="deleteModalTitle" class="delete-modal-title">
             {{ __('products.delete_product_title') ?? 'Delete Product' }}
         </h3>
@@ -730,3 +730,4 @@
     })();
 </script>
 @endsection
+

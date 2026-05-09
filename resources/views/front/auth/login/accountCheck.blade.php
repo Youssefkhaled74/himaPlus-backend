@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>HemaPulse - Smart Medical Procurement</title>
+    <title>Hima - Smart Medical Procurement</title>
 @endsection
 
 <!-- custom page -->
@@ -204,3 +204,4 @@
         });
     </script>
 @endsection
+

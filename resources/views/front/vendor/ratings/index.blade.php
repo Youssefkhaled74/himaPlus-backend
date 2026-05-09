@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.ratings_reviews') ?? 'Ratings & Reviews' }} - Vendor | HemaPulse</title>
+    <title>{{ __('nav.ratings_reviews') ?? 'Ratings & Reviews' }} - Vendor | Hima</title>
 @endsection
 
 @section('css')
@@ -219,3 +219,4 @@
         // Add any interactive features if needed
     </script>
 @endsection
+

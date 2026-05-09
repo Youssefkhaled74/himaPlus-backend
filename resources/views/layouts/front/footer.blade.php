@@ -1,7 +1,7 @@
 @php
     $isVendorAuthed = auth()->check() && (int) auth()->user()->user_type === 2;
     $contactMobile = $siteInfo?->mobile ?: '+966 1760 2222';
-    $contactEmail = $siteInfo?->email ?: 'support@hemapulse.com';
+    $contactEmail = $siteInfo?->email ?: 'support@hima.com';
     $socialLinks = [
         ['icon' => 'bi-facebook', 'url' => $siteInfo?->facebook],
         ['icon' => 'bi-twitter-x', 'url' => $siteInfo?->twitter],
@@ -80,3 +80,4 @@
 
     <a href="#" class="scrolltop btn btn-gradient text-white"><i class="bi bi-arrow-up"></i></a>
 </footer>
+

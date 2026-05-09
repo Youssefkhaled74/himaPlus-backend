@@ -1,16 +1,16 @@
-﻿<?php
+<?php
 
 return [
     // Categories page
-    'categories_title' => 'HemaPulse - Categories',
+    'categories_title' => 'Hima - Categories',
     'categories_eyebrow' => 'Smart Healthcare Marketplace',
     'categories_heading' => 'Categories',
     'categories_desc' => 'Explore medical equipment, pharmaceuticals, lab instruments, and consumables one click away from your supply chain.',
 
     // Products page
-    'products_title' => 'HemaPulse - Products',
+    'products_title' => 'Hima - Products',
     'products_heading' => 'Products',
-    'products_desc' => 'Find high-quality medical devices, consumables, and equipment from verified suppliers — compare, request quotations, or shop directly with ease.',
+    'products_desc' => 'Find high-quality medical devices, consumables, and equipment from verified suppliers � compare, request quotations, or shop directly with ease.',
 
     // Common
     'home' => 'Home',
@@ -41,13 +41,13 @@ return [
     'products' => 'products',
 
     // Favorites page
-    'favorites_title' => 'HemaPulse - Favorites',
+    'favorites_title' => 'Hima - Favorites',
     'favorites_heading' => 'Favorites',
     'favorites_desc' => 'Easily access and manage your saved medical products.',
     'favorites' => 'Favorites',
 
     // Cart page
-    'cart_title' => 'HemaPulse - Cart',
+    'cart_title' => 'Hima - Cart',
     'cart' => 'Cart',
     'empty_cart' => 'Empty',
     'payment_details' => 'Payment Details',
@@ -57,7 +57,7 @@ return [
     'proceed_to_payment' => 'Proceed to Payment',
 
     // Checkout page
-    'checkout_title' => 'HemaPulse - Checkout',
+    'checkout_title' => 'Hima - Checkout',
     'checkout' => 'Checkout',
     'cost' => 'Cost',
     'address' => 'Address',
@@ -68,7 +68,7 @@ return [
     'invalid_coupon' => 'The selected coupon is invalid.',
 
     // Order page
-    'order_title' => 'HemaPulse - Order Details',
+    'order_title' => 'Hima - Order Details',
     'orders' => 'Orders',
     'order_details' => 'Order Details',
     'get_payment' => 'Get Payment',
@@ -149,3 +149,4 @@ return [
     'add_offer' => 'Add Offer',
     'delete_offer_confirm' => 'Are you sure you want to delete this offer?',
 ];
+

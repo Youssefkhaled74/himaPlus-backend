@@ -74,6 +74,9 @@
                 @else
                     <ul class="navbar-nav ms-auto align-items-lg-center">
                         <li class="nav-item">
+                            <a class="nav-link" id="nav-dashboard" href="{{ route('user/dashboard') }}">{{ app()->getLocale() === 'ar' ? 'لوحة العميل' : 'Dashboard' }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" id="nav-home" href="{{ route('home') }}">{{ __('nav.home') }}</a>
                         </li>
                         <li class="nav-item">

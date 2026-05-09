@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>{{ __('profile.my_profile') }} - Vendor | HemaPulse</title>
+    <title>{{ __('profile.my_profile') }} - Vendor | Hima</title>
 @endsection
 
 <!-- custom page -->
@@ -240,3 +240,4 @@
         });
     </script>
 @endsection
+

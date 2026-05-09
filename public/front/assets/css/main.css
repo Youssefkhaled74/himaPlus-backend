@@ -1,5 +1,5 @@
 
-/* HemaPulse - custom styles (Bootstrap base) */
+/* Hima - custom styles (Bootstrap base) */
 :root{
   --hp-primary:#0C63D6;
   --hp-secondary:#0CC597;
@@ -1101,3 +1101,4 @@ a:hover{text-decoration:underline}
 }
 
 /* Arrows stay same in RTL - no changes needed */
+

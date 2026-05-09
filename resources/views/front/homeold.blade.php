@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>HemaPulse - Smart Medical Procurement</title>
+    <title>Hima - Smart Medical Procurement</title>
 @endsection
 
 <!-- custom page -->
@@ -312,9 +312,9 @@
                 <div class="ndl__wrap">
                     <!-- Card Left -->
                     <div class="ndl__card">
-                        <h3 class="ndl__title">Smart & Seamless —<br>Download HemaPulse Now</h3>
+                        <h3 class="ndl__title">Smart & Seamless —<br>Download Hima Now</h3>
                         <p class="ndl__desc">
-                        Simplify how hospitals and suppliers connect. With HemaPulse, you can request
+                        Simplify how hospitals and suppliers connect. With Hima, you can request
                         quotations, compare offers, and manage medical product orders — all in one smart,
                         secure, and easy-to-use platform.
                         </p>
@@ -355,13 +355,13 @@
                         <div class="accordion-item faq-item">
                             <h2 class="accordion-header" id="q1">
                                 <button class="accordion-button faq-item__btn" type="button" data-bs-toggle="collapse" data-bs-target="#a1" aria-expanded="true">
-                                    <span class="faq-item__text">1. What is Hemapulse?</span>
+                                    <span class="faq-item__text">1. What is Hima?</span>
                                     <span class="faq-item__badge faq-item__badge--active"><i class="bi bi-check-lg"></i></span>
                                 </button>
                             </h2>
                             <div id="a1" class="accordion-collapse collapse show" data-bs-parent="#faqAcc">
                                 <div class="accordion-body faq-item__body">
-                                    Hemapulse is a smart medical platform that connects healthcare providers with trusted 
+                                    Hima is a smart medical platform that connects healthcare providers with trusted 
                                     suppliers across Saudi Arabia. It allows users to request quotations, order medical products, 
                                     and manage maintenance services — all in one place.
                                 </div>
@@ -370,7 +370,7 @@
                         <div class="accordion-item faq-item">
                             <h2 class="accordion-header" id="q2">
                                 <button class="accordion-button collapsed faq-item__btn" type="button" data-bs-toggle="collapse" data-bs-target="#a2">
-                                    <span class="faq-item__text">2. Who can use HemaPulse?</span>
+                                    <span class="faq-item__text">2. Who can use Hima?</span>
                                     <span class="faq-item__badge"><i class="bi bi-info-lg"></i></span>
                                 </button>
                             </h2>
@@ -403,7 +403,7 @@
                         <div class="accordion-item faq-item">
                             <h2 class="accordion-header" id="q5">
                                 <button class="accordion-button collapsed faq-item__btn" type="button" data-bs-toggle="collapse" data-bs-target="#a5">
-                                    <span class="faq-item__text">5. What payment methods are available on HemaPulse?</span>
+                                    <span class="faq-item__text">5. What payment methods are available on Hima?</span>
                                     <span class="faq-item__badge"><i class="bi bi-info-lg"></i></span>
                                 </button>
                             </h2>
@@ -414,12 +414,12 @@
                         <div class="accordion-item faq-item">
                             <h2 class="accordion-header" id="q6">
                                 <button class="accordion-button collapsed faq-item__btn" type="button" data-bs-toggle="collapse" data-bs-target="#a6">
-                                    <span class="faq-item__text">6. How can I contact HemaPulse for support?</span>
+                                    <span class="faq-item__text">6. How can I contact Hima for support?</span>
                                     <span class="faq-item__badge"><i class="bi bi-info-lg"></i></span>
                                 </button>
                             </h2>
                             <div id="a6" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
-                                <div class="accordion-body faq-item__body">Email support@hemapulse.com or use in-app chat.</div>
+                                <div class="accordion-body faq-item__body">Email support@hima.com or use in-app chat.</div>
                             </div>
                         </div>
                     </div>
@@ -637,3 +637,4 @@
 
 </script>
 @endsection
+

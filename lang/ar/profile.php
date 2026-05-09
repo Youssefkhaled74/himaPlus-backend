@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'هيما بلس - ملفي الشخصي',
+    'title' => 'هيما - ملفي الشخصي',
     'my_profile' => 'ملفي الشخصي',
     'personal_info' => 'المعلومات الشخصية',
     'personal_info_short' => 'المعلومات الشخصية',

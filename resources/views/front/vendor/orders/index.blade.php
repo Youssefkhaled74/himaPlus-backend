@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.view_orders') ?? 'Orders' }} - Vendor | HemaPulse</title>
+    <title>{{ __('nav.view_orders') ?? 'Orders' }} - Vendor | Hima</title>
 @endsection
 
 @section('css')
@@ -211,3 +211,4 @@
     </div>
 </main>
 @endsection
+

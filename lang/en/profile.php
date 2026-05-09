@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'HemaPulse - My Profile',
+    'title' => 'Hima - My Profile',
     'my_profile' => 'My Profile',
     'personal_info' => 'Personal Information',
     'personal_info_short' => 'Personal Info',
@@ -66,4 +66,5 @@ return [
     // Alert
     'select_image_only' => 'Please select an image only',
 ];
+
 

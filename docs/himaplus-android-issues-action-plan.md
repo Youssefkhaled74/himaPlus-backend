@@ -1,7 +1,7 @@
-﻿# Hima Plus Android Issues - Action Plan
+# Hima Android Issues - Action Plan
 
 ## 1) Report Header
-- App Name: Hima Plus
+- App Name: Hima
 - App Owner: Majed Al-Asiri
 - Report Prepared By: Abdulaziz bin Nawaf Khalid Al-Otaibi
 - Target Platform: Android
@@ -86,3 +86,4 @@ This file organizes the reported technical, UX, and security findings into clear
 ## 8) Notes
 - Keep this file as the single source of truth for issue status.
 - Update `Status` and checkboxes every sprint.
+

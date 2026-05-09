@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.register') }} | HemaPulse</title>
+    <title>{{ __('nav.register') }} | Hima</title>
 @endsection
 
 @section('css')
@@ -364,3 +364,4 @@
 })();
 </script>
 @endsection
+

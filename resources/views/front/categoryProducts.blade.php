@@ -84,6 +84,10 @@
                                             </span>
                                         </div>
                                         <p class="text-muted small mb-3">{{ $product->desc }}</p>
+                                        <div class="small text-muted mb-2 d-flex align-items-center gap-2">
+                                            <img src="{{ $product->provider?->img ? asset($product->provider->img) : asset('front/assets/images/emptyproducts.png') }}" style="width:22px;height:22px;border-radius:50%;object-fit:cover;" alt="supplier">
+                                            <span>{{ $product->provider?->name ?? 'Supplier' }}</span>
+                                        </div>
                                         <div class="d-flex align-items-center">
                                             <span class="equipment-price me-3">{{ $product->price }} SAR</span>
                                             
@@ -91,6 +95,7 @@
                                                 <i class="bi bi-cart-plus-fill"></i>
                                             </button>
                                             <a href="{{ route('product', [$product->id]) }}" class="btn btn-gradient btn-sm px-3 me-2">{{ __('products.details') }}</a>
+                                            <a href="{{ route('products', ['vendor_name' => $product->provider?->name]) }}" class="btn btn-outline-secondary btn-sm px-2">{{ app()->getLocale() === 'ar' ? 'المورد' : 'Supplier' }}</a>
                                         </div>
                                     </div>
                                 </article>

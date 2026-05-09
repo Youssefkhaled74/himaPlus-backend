@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-<title>{{ __('nav.notifications') ?? 'Notifications' }} - Vendor | HemaPulse</title>
+<title>{{ __('nav.notifications') ?? 'Notifications' }} - Vendor | Hima</title>
 @endsection
 
 @section('css')
@@ -349,3 +349,4 @@
     </div>
 </main>
 @endsection
+

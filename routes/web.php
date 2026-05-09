@@ -72,6 +72,7 @@ Route::group(['middleware' => ['limitReq']], function(){
         Route::get('get/categories/{offset?}/{limit?}', [HomeController::class, 'categoriesSearch'])->name('user/get/categories');
 
         Route::group(['prefix' => 'user'], function(){
+            Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('user/dashboard');
             Route::get('/profile', [AuthController::class, 'profile'])->name('user/profile');
             Route::post('/update', [AuthController::class, 'userUpdate'])->name('user/update');
             Route::post('/lang/update', [AuthController::class, 'userLang'])->name('user/lang/update');

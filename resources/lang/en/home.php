@@ -2,7 +2,7 @@
 
 return [
     // Page Title
-    'title' => 'HemaPulse - Smart Medical Procurement',
+    'title' => 'Hima - Smart Medical Procurement',
 
     // Hero Section
     'hero_eyebrow' => 'Smart Healthcare Marketplace',
@@ -90,27 +90,28 @@ return [
     'details' => 'Details',
 
     // Download Section
-    'download_title' => 'Smart & Seamless —<br>Download HemaPulse Now',
-    'download_desc' => 'Simplify how hospitals and suppliers connect. With HemaPulse, you can request quotations, compare offers, and manage medical product orders — all in one smart, secure, and easy-to-use platform.',
+    'download_title' => 'Smart & Seamless —<br>Download Hima Now',
+    'download_desc' => 'Simplify how hospitals and suppliers connect. With Hima, you can request quotations, compare offers, and manage medical product orders — all in one smart, secure, and easy-to-use platform.',
 
     // FAQ Section
     'faq_title' => 'FAQ',
     'faq_subtitle' => 'Everything you need to know — right here.',
-    'faq_q1' => '1. What is Hemapulse?',
-    'faq_a1' => 'Hemapulse is a smart medical platform that connects healthcare providers with trusted suppliers across Saudi Arabia. It allows users to request quotations, order medical products, and manage maintenance services — all in one place.',
-    'faq_q2' => '2. Who can use HemaPulse?',
+    'faq_q1' => '1. What is Hima?',
+    'faq_a1' => 'Hima is a smart medical platform that connects healthcare providers with trusted suppliers across Saudi Arabia. It allows users to request quotations, order medical products, and manage maintenance services — all in one place.',
+    'faq_q2' => '2. Who can use Hima?',
     'faq_a2' => 'Hospitals, clinics, and verified suppliers.',
     'faq_q3' => '3. How does the quotation request process work?',
     'faq_a3' => 'Create RFQ → receive multiple offers → compare → accept → track.',
     'faq_q4' => '4. How can I track orders or maintenance requests?',
     'faq_a4' => 'Track status, delivery and technician visits from your dashboard.',
-    'faq_q5' => '5. What payment methods are available on HemaPulse?',
+    'faq_q5' => '5. What payment methods are available on Hima?',
     'faq_a5' => 'Bank transfer, corporate card, and POs with approved suppliers.',
-    'faq_q6' => '6. How can I contact HemaPulse for support?',
-    'faq_a6' => 'Email support@hemapulse.com or use in-app chat.',
+    'faq_q6' => '6. How can I contact Hima for support?',
+    'faq_a6' => 'Email support@hima.com or use in-app chat.',
 
     // Testimonials Section
     'clients_title_1' => 'What Our',
     'clients_title_2' => 'Clients',
     'clients_title_3' => 'Say?',
 ];
+

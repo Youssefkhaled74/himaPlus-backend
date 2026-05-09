@@ -60,6 +60,10 @@
             <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
             <span class="text-primary fw-semibold">{{ __('products.order_details') }} #{{ $order->id }} – {{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y') }}</span>
         </nav>
+        <div class="alert alert-light border mb-3">
+            <strong>{{ app()->getLocale() === 'ar' ? 'رحلة الطلب:' : 'Order Journey:' }}</strong>
+            {{ app()->getLocale() === 'ar' ? 'إنشاء الطلب → تأكيد المورد → تجهيز → شحن → تسليم → اكتمال' : 'Created → Supplier Confirmed → Processing → Shipped → Delivered → Completed' }}
+        </div>
         <div class="row g-4">
             @include('flash::message')
             @if ($errors->any())

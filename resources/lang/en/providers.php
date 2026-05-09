@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'HemaPulse - Service Providers',
+    'title' => 'Hima - Service Providers',
     'hero_eyebrow' => 'Smart Healthcare Marketplace',
     'hero_title' => 'Service Providers',
     'hero_desc' => 'Our platform enables medical suppliers, manufacturers, and logistics providers to connect with verified healthcare institutions and manage their operations efficiently.',
@@ -31,11 +31,12 @@ return [
     'step4_title' => 'Submit Offers & Deliver',
     'step4_desc' => 'Send your offers, fulfill orders, and grow your client base.',
 
-    'download_title' => 'Smart & Seamless —<br>Download HemaPulse Now',
-    'download_desc' => 'Simplify how hospitals and suppliers connect. With HemaPulse, you can request quotations, compare offers, and manage medical product orders — all in one smart, secure, and easy-to-use platform.',
+    'download_title' => 'Smart & Seamless —<br>Download Hima Now',
+    'download_desc' => 'Simplify how hospitals and suppliers connect. With Hima, you can request quotations, compare offers, and manage medical product orders — all in one smart, secure, and easy-to-use platform.',
 
     'banner_title' => 'Interested in Joining as a Service Provider ?',
     'banner_desc' => 'Get exclusive discounts and limited-time deals from trusted suppliers across Saudi Arabia.',
     'register_now' => 'Register Now',
     'contact_us' => 'Contact Us',
 ];
+

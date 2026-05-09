@@ -60,12 +60,12 @@ return [
     'status_completed' => 'Completed',
 
     // Footer
-    'footer_desc' => 'HemaPulse connects healthcare providers with trusted suppliers, enabling compliant procurement, streamlined maintenance, and unified tracking.',
+    'footer_desc' => 'Hima connects healthcare providers with trusted suppliers, enabling compliant procurement, streamlined maintenance, and unified tracking.',
     'site_map' => 'Site Map',
     'services' => 'Services',
     'products' => 'Products',
     'discover_app' => 'Discover our app',
-    'copyright' => '© 2025 HemaPulse. All rights reserved.',
+    'copyright' => '© 2025 Hima. All rights reserved.',
     'powered_by' => 'Powered by TPTC',
 
     // Scheduled Orders
@@ -200,3 +200,4 @@ return [
     'mark_all_read'=> 'Mark All as Read',
     'mark_read'=> 'Mark as Read',
 ];
+

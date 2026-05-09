@@ -14,7 +14,7 @@ class ForJawalyService
         ];
         $data = [
             "messages" => [[
-                "text" => "مرحب بكم في تطبيق هيما بالس واليك رمز التاكيد: " . $code,
+                "text" => "مرحب بكم في تطبيق هيما واليك رمز التاكيد: " . $code,
                 "numbers" => [$phone],
                 "sender" => 'TechPack'
             ]]

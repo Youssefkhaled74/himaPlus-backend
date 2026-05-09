@@ -351,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `info` (
 -- Dumping data for table hemaplus-database.info: ~1 rows (approximately)
 DELETE FROM `info`;
 INSERT INTO `info` (`id`, `created_at`, `updated_at`, `mobile`, `email`, `vat`, `desc`, `message`, `vision`, `asks`, `abouts`, `terms`, `privacy_policies`, `deleted_at`, `is_activate`, `location`, `facebook`, `instagram`, `twitter`, `snapchat`, `tiktok`, `report_id`) VALUES
-	(1, '2025-10-08 05:11:42', '2025-10-08 05:11:42', '+966123456789', 'info@himaplus.com', '300000000000003', 'Hima Plus is a leading online platform for medical supplies and healthcare products.', 'Welcome to Hima Plus', 'Our vision is to provide quality healthcare products to everyone', 'Frequently Asked Questions', 'About Hima Plus Company', 'Terms and conditions for Hima Plus services', 'Privacy policy information - we protect your data', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1);
+	(1, '2025-10-08 05:11:42', '2025-10-08 05:11:42', '+966123456789', 'info@himaplus.com', '300000000000003', 'Hima is a leading online platform for medical supplies and healthcare products.', 'Welcome to Hima', 'Our vision is to provide quality healthcare products to everyone', 'Frequently Asked Questions', 'About Hima Company', 'Terms and conditions for Hima services', 'Privacy policy information - we protect your data', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1);
 
 -- Dumping structure for table hemaplus-database.jobs
 CREATE TABLE IF NOT EXISTS `jobs` (
@@ -1409,4 +1409,5 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
 

@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>{{ __('profile.reset_password') }} - HemaPulse</title>
+    <title>{{ __('profile.reset_password') }} - Hima</title>
 @endsection
 
 <!-- custom page -->
@@ -73,3 +73,4 @@
         </div>
     </main>
 @endsection
+

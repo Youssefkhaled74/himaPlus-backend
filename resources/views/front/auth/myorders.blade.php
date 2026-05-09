@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>HemaPulse - Smart Medical Procurement</title>
+    <title>Hima - Smart Medical Procurement</title>
 @endsection
 
 <!-- custom page -->
@@ -54,7 +54,7 @@
 @section('content')
 
 <main class="container my-4">
-    <h5 class="mb-3">Orders</h5>
+    <h5 class="mb-3">{{ app()->getLocale() === 'ar' ? 'طلباتي وفواتيري' : 'My Orders & Invoices' }}</h5>
     @include('flash::message')
     @if ($errors->any())
         <div style="text-align: left; margin: 15px;">
@@ -69,12 +69,15 @@
         @php
             $tab = request()->route('page_type');
         @endphp
-        <li class="nav-item"><a class="nav-link {{ $tab == 'all' ? 'active' : '' }}" href="{{ route('user/myorders', 'all') }}">All</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'purchase-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'purchase-orders') }}">Purchase Orders</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'quotations' ? 'active' : '' }}" href="{{ route('user/myorders', 'quotations') }}">Quotations</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'maintenances' ? 'active' : '' }}" href="{{ route('user/myorders', 'maintenances') }}">Maintenance</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'scheduled-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'scheduled-orders') }}">Scheduled Orders</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'all' ? 'active' : '' }}" href="{{ route('user/myorders', 'all') }}">{{ app()->getLocale()==='ar' ? 'الكل' : 'All' }}</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'purchase-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'purchase-orders') }}">{{ app()->getLocale()==='ar' ? 'طلبات شراء' : 'Purchase Orders' }}</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'quotations' ? 'active' : '' }}" href="{{ route('user/myorders', 'quotations') }}">{{ app()->getLocale()==='ar' ? 'طلبات تسعير' : 'Quotations' }}</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'maintenances' ? 'active' : '' }}" href="{{ route('user/myorders', 'maintenances') }}">{{ app()->getLocale()==='ar' ? 'صيانة' : 'Maintenance' }}</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'scheduled-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'scheduled-orders') }}">{{ app()->getLocale()==='ar' ? 'طلبات مجدولة' : 'Scheduled Orders' }}</a></li>
     </ul>
+    <div class="alert alert-light border small">
+        {{ app()->getLocale()==='ar' ? 'مراحل الطلب: إنشاء الطلب → تأكيد المورد → تجهيز → شحن → تسليم → اكتمال.' : 'Order stages: Created → Supplier Confirmed → Processing → Shipped → Delivered → Completed.' }}
+    </div>
 
     <div class="reveal">
 
@@ -104,11 +107,11 @@
                 <div class="empty-state__icon">
                     <i class="bi bi-inbox"></i>
                 </div>
-                <h5 class="empty-state__title">No Orders Yet</h5>
-                <p class="empty-state__text">You haven't placed any orders yet. Start browsing our products and place your first order.</p>
+                <h5 class="empty-state__title">{{ app()->getLocale()==='ar' ? 'لا توجد طلبات بعد' : 'No Orders Yet' }}</h5>
+                <p class="empty-state__text">{{ app()->getLocale()==='ar' ? 'لم تقم بإنشاء أي طلب حتى الآن. ابدأ بتصفح المنتجات.' : 'You have not placed orders yet. Start browsing products.' }}</p>
                 <a href="{{ route('products') }}" class="empty-state__btn">
                     <i class="bi bi-cart-plus"></i>
-                    Browse Products
+                    {{ app()->getLocale()==='ar' ? 'تصفح المنتجات' : 'Browse Products' }}
                 </a>
             </div>
         @endif
@@ -160,3 +163,4 @@
     });
 </script>
 @endsection
+

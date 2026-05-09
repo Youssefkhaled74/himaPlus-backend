@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'HemaPulse - Contact Us',
+    'title' => 'Hima - Contact Us',
     'hero_title' => 'Contact Us',
     'hero_desc' => "We're here to support your medical procurement and maintenance needs. Reach out to our team anytime.",
 
@@ -30,3 +30,4 @@ return [
     'address_value' => 'Riyadh, Saudi Arabia',
     'stay_connected' => 'Stay Connected',
 ];
+

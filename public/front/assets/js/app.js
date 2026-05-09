@@ -1,5 +1,5 @@
 
-// HemaPulse interactions with jQuery
+// Hima interactions with jQuery
 $(function(){
   const $window = $(window);
   const $body = $('body');
@@ -170,3 +170,4 @@ $(function(){
     window.scrollTo({top:0, behavior:'smooth'});
   });
 });
+
