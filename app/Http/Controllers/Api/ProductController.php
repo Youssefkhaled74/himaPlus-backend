@@ -107,6 +107,7 @@ class ProductController extends Controller
 
                 'registration_type' => ['required', 'in:sfda,saber'],
                 'guarantee_file' => ['required', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:10240'],
+                'product_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
                 'registration_number' => ['required', 'string', 'max:100'],
                 'registration_expiry_date' => ['required', 'date'],
                 'factory_name' => ['required', 'string', 'max:100'],
@@ -148,6 +149,7 @@ class ProductController extends Controller
 
                 'registration_type' => ['required', 'in:sfda,saber'],
                 'guarantee_file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:10240'],
+                'product_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
                 'registration_number' => ['required', 'string', 'max:100'],
                 'registration_expiry_date' => ['required', 'date'],
                 'factory_name' => ['required', 'string', 'max:100'],

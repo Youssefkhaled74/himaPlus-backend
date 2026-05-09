@@ -549,10 +549,6 @@
                     <div class="spec-grid">
                         <div class="spec-box">
                             <div class="spec-row">
-                                <div class="k">{{ __('products.imaging_type') ?? 'Imaging Type' }}:</div>
-                                <div class="v">{{ $product->imaging_type ?? '-' }}</div>
-                            </div>
-                            <div class="spec-row">
                                 <div class="k">{{ __('products.power') ?? 'Power' }}:</div>
                                 <div class="v">{{ $product->power ?? '-' }}</div>
                             </div>
@@ -564,16 +560,36 @@
 
                         <div class="spec-box">
                             <div class="spec-row">
-                                <div class="k">{{ __('products.dimensions') ?? 'Dimensions' }}:</div>
-                                <div class="v">{{ $product->dimensions ?? '-' }}</div>
+                                <div class="k">Registration Type:</div>
+                                <div class="v">{{ strtoupper((string)($product->registration_type ?? '-')) }}</div>
                             </div>
                             <div class="spec-row">
-                                <div class="k">{{ __('products.warranty') ?? 'Warranty' }}:</div>
-                                <div class="v">{{ $product->warranty ?? '-' }}</div>
+                                <div class="k">Registration Number:</div>
+                                <div class="v">{{ $product->registration_number ?? '-' }}</div>
                             </div>
                             <div class="spec-row">
-                                <div class="k">{{ __('products.origin') ?? 'Origin' }}:</div>
-                                <div class="v">{{ $product->origin->name ?? '-' }}</div>
+                                <div class="k">Registration Expiry:</div>
+                                <div class="v">{{ optional($product->registration_expiry_date)->format('Y-m-d') ?? '-' }}</div>
+                            </div>
+                            <div class="spec-row">
+                                <div class="k">Factory Name:</div>
+                                <div class="v">{{ $product->factory_name ?? '-' }}</div>
+                            </div>
+                            <div class="spec-row">
+                                <div class="k">Factory Country:</div>
+                                <div class="v">{{ $product->factory_country ?? '-' }}</div>
+                            </div>
+                            <div class="spec-row">
+                                <div class="k">UOM:</div>
+                                <div class="v">{{ $product->uom ?? '-' }}</div>
+                            </div>
+                            <div class="spec-row">
+                                <div class="k">Product PDF:</div>
+                                <div class="v">@if($product->product_pdf)<a href="{{ asset(ltrim($product->product_pdf, '/')) }}" target="_blank">View</a>@else-@endif</div>
+                            </div>
+                            <div class="spec-row">
+                                <div class="k">Registration Certificate:</div>
+                                <div class="v">@if($product->guarantee_file)<a href="{{ asset(ltrim($product->guarantee_file, '/')) }}" target="_blank">View</a>@else-@endif</div>
                             </div>
                         </div>
                     </div>

@@ -27,10 +27,16 @@
                             <a class="nav-link {{ str_contains($routeName, 'vendor/products') ? 'active' : '' }}" href="{{ route('vendor/products') }}">{{ __('nav.products') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('vendor/orders/my-offers') || (request()->routeIs('vendor/orders') && request('tab') === 'quotations') ? 'active' : '' }}" href="{{ route('vendor/orders', ['tab' => 'quotations']) }}">{{ __('nav.requests') }}</a>
+                            <a class="nav-link {{ request()->routeIs('vendor/orders/my-offers') || (request()->routeIs('vendor/orders') && request('tab') === 'quotations') ? 'active' : '' }}" href="{{ route('vendor/orders', ['tab' => 'quotations']) }}">{{ app()->getLocale() === 'ar' ? 'طلبات التسعير' : 'Quotation Requests' }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ str_contains($routeName, 'vendor/orders') && !(request()->routeIs('vendor/orders') && request('tab') === 'quotations') ? 'active' : '' }}" href="{{ route('vendor/orders') }}">{{ __('nav.orders') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('vendor/invoices') ? 'active' : '' }}" href="{{ route('vendor/invoices') }}">{{ app()->getLocale() === 'ar' ? 'الفواتير' : 'Invoices' }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('vendor/categories') ? 'active' : '' }}" href="{{ route('vendor/categories') }}">{{ __('nav.categories') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('contactUs') ? 'active' : '' }}" href="{{ route('contactUs') }}">{{ __('nav.contact_us') }}</a>

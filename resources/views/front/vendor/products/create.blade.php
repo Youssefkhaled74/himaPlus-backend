@@ -439,6 +439,11 @@
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Product PDF Attachment <span class="text-danger">*</span></label>
+                            <input type="file" name="product_pdf" class="form-control hp-input" accept=".pdf" required>
+                        </div>
+
                         {{-- Actions --}}
                         <div class="d-flex justify-content-end mt-4">
                             <button type="submit" class="hp-btn-gradient px-5">

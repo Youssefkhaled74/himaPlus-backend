@@ -161,6 +161,9 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['limitReq']], function() {
 Route::group(['prefix' => 'vendor', 'middleware' => ['auth', 'vendorCheck']], function() {
     // Dashboard
     Route::get('/dashboard', [VendorDashboardController::class, 'dashboard'])->name('vendor/dashboard');
+    Route::get('/invoices', [VendorDashboardController::class, 'invoices'])->name('vendor/invoices');
+    Route::get('/categories', [VendorDashboardController::class, 'categories'])->name('vendor/categories');
+    Route::post('/categories', [VendorDashboardController::class, 'storeCategory'])->name('vendor/categories/store');
     
     // Profile
     Route::get('/profile', [VendorAuthController::class, 'profile'])->name('vendor/profile');

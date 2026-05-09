@@ -67,6 +67,7 @@ class VendorProductController extends Controller
             'quantity' => 'required|integer|min:0',
             'images' => 'required|array|min:1',
             'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'product_pdf' => 'required|file|mimes:pdf|max:10240',
             // New specification fields
             'mfg_date' => 'nullable|date',
             'exp_date' => 'nullable|date|after_or_equal:mfg_date',
@@ -113,6 +114,10 @@ class VendorProductController extends Controller
             if ($request->hasFile('guarantee_file')) {
                 $product->guarantee_file = uploadIamge($request->file('guarantee_file'), 'products');
             }
+            if ($request->hasFile('product_pdf')) {
+                $product->product_pdf = uploadIamge($request->file('product_pdf'), 'products');
+            }
+            $product->save();
             
             // Handle image uploads
             if ($request->hasFile('images')) {
@@ -321,6 +326,7 @@ class VendorProductController extends Controller
             'price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'product_pdf' => 'nullable|file|mimes:pdf|max:10240',
             // New specification fields
             'mfg_date' => 'nullable|date',
             'exp_date' => 'nullable|date|after_or_equal:mfg_date',
@@ -364,6 +370,9 @@ class VendorProductController extends Controller
             ]);
             if ($request->hasFile('guarantee_file')) {
                 $product->guarantee_file = uploadIamge($request->file('guarantee_file'), 'products');
+            }
+            if ($request->hasFile('product_pdf')) {
+                $product->product_pdf = uploadIamge($request->file('product_pdf'), 'products');
             }
             
             // Handle existing + removed + newly uploaded images.

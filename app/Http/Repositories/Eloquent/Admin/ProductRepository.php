@@ -67,6 +67,10 @@ class ProductRepository extends BaseAdminRepository
             $file = uploadIamge($request->file('guarantee_file'), $this->crudName());
             $request->merge(['guarantee_file' => $file]);
         }
+        if ($request->hasFile('product_pdf')) {
+            $file = uploadIamge($request->file('product_pdf'), $this->crudName());
+            $request->merge(['product_pdf' => $file]);
+        }
 
         return array_filter(array_intersect_key($request->all(), $this->model->fildes()));
     }

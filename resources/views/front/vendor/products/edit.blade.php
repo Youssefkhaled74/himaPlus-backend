@@ -268,6 +268,14 @@
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Product PDF Attachment</label>
+                            <input type="file" name="product_pdf" class="form-control hp-input" accept=".pdf">
+                            @if(!empty($product->product_pdf))
+                                <a class="d-inline-block mt-2" href="{{ asset(ltrim($product->product_pdf, '/')) }}" target="_blank">View current PDF</a>
+                            @endif
+                        </div>
+
                         <div class="d-flex justify-content-end mt-4">
                             <a href="{{ route('vendor/products') }}" class="btn btn-secondary me-2">{{ app()->getLocale() == 'ar' ? 'إلغاء' : 'Cancel' }}</a>
                             <button type="submit" class="hp-btn-gradient px-5">{{ app()->getLocale() == 'ar' ? 'تحديث المنتج' : 'Update Product' }}</button>

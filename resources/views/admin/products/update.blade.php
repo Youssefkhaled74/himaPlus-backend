@@ -197,6 +197,10 @@
                                                 <input name="guarantee_file" type="file" class="form-control no-min-height" accept=".jpg,.jpeg,.png,.webp,.pdf" {{ $product->guarantee_file ? '' : 'required' }}>
                                             </div>
                                             <div class="col-xxl-6 col-md-6">
+                                                <label>Product PDF</label>
+                                                <input name="product_pdf" type="file" class="form-control no-min-height" accept=".pdf">
+                                            </div>
+                                            <div class="col-xxl-6 col-md-6">
                                                 <div class="form-floating">
                                                     <input name="registration_number" value="{{ $product->registration_number }}" type="text" class="form-control" placeholder="registration number" maxlength="100" required>
                                                     <label>Registration Number <span class="text-danger">*</span></label>

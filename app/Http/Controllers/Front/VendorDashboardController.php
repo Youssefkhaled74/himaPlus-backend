@@ -8,6 +8,7 @@ use App\Models\Offer;
 use App\Models\Product;
 use App\Models\Rating;
 use App\Models\Notification;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -129,6 +130,7 @@ class VendorDashboardController extends Controller
             ->get();
         
         $recentNotifications = Notification::where('user_id', $vendor->id)
+            ->whereIn('type', ['order', 'payment', 'status_change', 'product_approval', 'product_rejection'])
             ->orderBy('created_at', 'desc')
             ->take(3)
             ->get();
@@ -166,5 +168,67 @@ class VendorDashboardController extends Controller
             'unreadNotificationsCount',
             'featuredProducts'
         ));
+    }
+
+    public function invoices(Request $request)
+    {
+        $vendor = auth()->user();
+        $status = (string) $request->get('status', '');
+        $dateFrom = $request->get('date_from');
+        $dateTo = $request->get('date_to');
+
+        $query = $this->relevantOrdersQuery((int) $vendor->id)
+            ->with(['user:id,name', 'offers']);
+
+        if ($status !== '') {
+            $query->where(function ($q) use ($status) {
+                $q->where('payment_status', $status)
+                    ->orWhere('request_type', $status);
+            });
+        }
+        if ($dateFrom) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        }
+
+        $invoices = $query->latest()->paginate(15)->withQueryString();
+        $totals = [
+            'amount' => (clone $query)->sum('total_cost'),
+            'paid' => (clone $query)->where('payment_status', 'paid')->count(),
+            'pending' => (clone $query)->where('payment_status', 'pending')->count(),
+            'scheduled' => (clone $query)->where('request_type', 2)->count(),
+            'completed' => (clone $query)->whereHas('timeline', fn($t) => $t->where('timeline_no', 6))->count(),
+        ];
+
+        return view('front.vendor.invoices.index', compact('invoices', 'totals', 'status', 'dateFrom', 'dateTo'));
+    }
+
+    public function categories()
+    {
+        $categories = Category::whereNull('deleted_at')
+            ->with(['products' => function ($query) {
+                $query->where('provider_id', auth()->id())->latest();
+            }])->orderBy('name')->get();
+
+        return view('front.vendor.categories.index', compact('categories'));
+    }
+
+    public function storeCategory(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+            'img' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+        ]);
+
+        $payload = ['name' => $request->name];
+        if ($request->hasFile('img')) {
+            $payload['img'] = uploadIamge($request->file('img'), 'categories');
+        }
+
+        Category::create($payload);
+        flash()->success('Category added successfully');
+        return back();
     }
 }

@@ -17,7 +17,9 @@ class VendorNotificationsController extends Controller
         $vendorId = auth()->id();
         
         // Build query for notifications
+        $allowedTypes = ['order', 'payment', 'status_change', 'product_approval', 'product_rejection'];
         $query = Notification::where('user_id', $vendorId)
+            ->whereIn('type', $allowedTypes)
             ->orderBy('created_at', 'desc');
         
         // Filter by type if provided
@@ -40,9 +42,8 @@ class VendorNotificationsController extends Controller
             'total' => Notification::where('user_id', $vendorId)->count(),
             'unread' => Notification::where('user_id', $vendorId)->unread()->count(),
             'orders' => Notification::where('user_id', $vendorId)->where('type', 'order')->count(),
-            'offers' => Notification::where('user_id', $vendorId)->where('type', 'offer')->count(),
-            'scheduled' => Notification::where('user_id', $vendorId)->where('type', 'scheduled')->count(),
-            'rating' => Notification::where('user_id', $vendorId)->where('type', 'rating')->count(),
+            'payment' => Notification::where('user_id', $vendorId)->where('type', 'payment')->count(),
+            'status_change' => Notification::where('user_id', $vendorId)->where('type', 'status_change')->count(),
         ];
         
         return view('front.vendor.notifications.index', [

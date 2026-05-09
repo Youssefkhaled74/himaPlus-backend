@@ -103,6 +103,9 @@
     @include('flash::message')
 
     <h3 class="vo-title">{{ __('nav.view_orders') ?? 'Orders' }}</h3>
+    @if(($counts['all'] ?? 0) > 0)
+        <div class="alert alert-info py-2">{{ __('طلبات بانتظار المتابعة') }}: <strong>{{ $counts['all'] }}</strong></div>
+    @endif
 
     <div class="vo-tabs">
         <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="vo-tab {{ $tab === 'all' ? 'active' : '' }}">{{ __('nav.all') ?? 'All' }}</a>
