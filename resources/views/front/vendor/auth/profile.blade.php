@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>{{ __('profile.my_profile') }} - Vendor | Hima</title>
+    <title>{{ __('profile.my_profile') }} - Vendor | Hema</title>
 @endsection
 
 <!-- custom page -->

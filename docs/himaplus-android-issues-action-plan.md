@@ -1,7 +1,7 @@
-# Hima Android Issues - Action Plan
+# Hema Android Issues - Action Plan
 
 ## 1) Report Header
-- App Name: Hima
+- App Name: Hema
 - App Owner: Majed Al-Asiri
 - Report Prepared By: Abdulaziz bin Nawaf Khalid Al-Otaibi
 - Target Platform: Android

@@ -1,7 +1,7 @@
 @php
     $isVendorAuthed = auth()->check() && (int) auth()->user()->user_type === 2;
     $contactMobile = $siteInfo?->mobile ?: '+966 1760 2222';
-    $contactEmail = $siteInfo?->email ?: 'support@hima.com';
+    $contactEmail = $siteInfo?->email ?: 'support@Hema.com';
     $socialLinks = [
         ['icon' => 'bi-facebook', 'url' => $siteInfo?->facebook],
         ['icon' => 'bi-twitter-x', 'url' => $siteInfo?->twitter],

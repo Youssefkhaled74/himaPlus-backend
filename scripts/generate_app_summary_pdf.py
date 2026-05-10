@@ -92,7 +92,7 @@ def main():
     story.append(Paragraph("App Summary", styles["TitleSmall"]))
     story.append(
         Paragraph(
-            "Repo-based snapshot of the Laravel app in <b>C:\\laragon\\www\\himaPlus_backend-main</b>.",
+            "Repo-based snapshot of the Laravel app in <b>C:\\laragon\\www\\HemaPlus_backend-main</b>.",
             styles["SmallNote"],
         )
     )

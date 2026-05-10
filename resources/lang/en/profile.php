@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Hima - My Profile',
+    'title' => 'Hema - My Profile',
     'my_profile' => 'My Profile',
     'personal_info' => 'Personal Information',
     'personal_info_short' => 'Personal Info',

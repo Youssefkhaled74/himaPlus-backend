@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.verify_account') ?? 'Verify Account' }} - Hima</title>
+    <title>{{ __('nav.verify_account') ?? 'Verify Account' }} - Hema</title>
 @endsection
 
 @section('css')

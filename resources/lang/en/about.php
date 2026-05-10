@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'title' => 'Hima - About Us',
+    'title' => 'Hema - About Us',
     'hero_eyebrow' => 'Smart Healthcare Marketplace',
     'hero_title' => 'About Us',
     'hero_desc' => 'We\'re dedicated to transforming healthcare connections — empowering hospitals and clinics to access trusted medical suppliers with ease, transparency, and innovation.',
 
     'who_we_are' => 'Who we Are',
-    'who_p1' => 'Hima is a digital medical platform that bridges the gap between healthcare providers and trusted suppliers across Saudi Arabia.',
+    'who_p1' => 'Hema is a digital medical platform that bridges the gap between healthcare providers and trusted suppliers across Saudi Arabia.',
     'who_p2' => 'We simplify the process of requesting quotations, managing maintenance, and purchasing medical products — all through one unified and transparent system.',
     'who_p3' => 'Our platform is designed for hospitals, clinics, and healthcare professionals who value efficiency, reliability, and quality in every transaction.',
 

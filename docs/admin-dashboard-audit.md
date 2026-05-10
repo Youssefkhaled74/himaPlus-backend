@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-This admin panel is a Laravel Blade system served from `routes/admin.php` under the `admin-panel/*` prefix. The routes are loaded by [RouteServiceProvider](C:\laragon\www\himaPlus_backend-main\app\Providers\RouteServiceProvider.php), not from `routes/web.php`.
+This admin panel is a Laravel Blade system served from `routes/admin.php` under the `admin-panel/*` prefix. The routes are loaded by [RouteServiceProvider](C:\laragon\www\HemaPlus_backend-main\app\Providers\RouteServiceProvider.php), not from `routes/web.php`.
 
 The main admin shell is built from:
 

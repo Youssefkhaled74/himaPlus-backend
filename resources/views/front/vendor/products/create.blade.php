@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-<title>{{ __('nav.add_product') ?? 'Add Product' }} - Vendor | Hima</title>
+<title>{{ __('nav.add_product') ?? 'Add Product' }} - Vendor | Hema</title>
 @endsection
 
 @section('css')

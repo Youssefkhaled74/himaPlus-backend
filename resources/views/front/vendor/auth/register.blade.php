@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.register') }} | Hima</title>
+    <title>{{ __('nav.register') }} | Hema</title>
 @endsection
 
 @section('css')

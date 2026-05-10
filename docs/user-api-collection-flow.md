@@ -421,12 +421,12 @@ npx newman run postman/user-app.postman_collection.json -e postman/local.postman
 
 ## Code References
 
-- Routes: [routes/api.php](/c:/laragon/www/himaPlus_backend-main/routes/api.php)
-- Response wrapper: [app/helper/functions.php](/c:/laragon/www/himaPlus_backend-main/app/helper/functions.php#L28)
-- Auth API: [app/Http/Controllers/Api/AuthController.php](/c:/laragon/www/himaPlus_backend-main/app/Http/Controllers/Api/AuthController.php)
-- Cart API: [app/Http/Controllers/Api/CartController.php](/c:/laragon/www/himaPlus_backend-main/app/Http/Controllers/Api/CartController.php)
-- Favorites API: [app/Http/Controllers/Api/FavoriteController.php](/c:/laragon/www/himaPlus_backend-main/app/Http/Controllers/Api/FavoriteController.php)
-- Orders API: [app/Http/Controllers/Api/OrderController.php](/c:/laragon/www/himaPlus_backend-main/app/Http/Controllers/Api/OrderController.php)
-- Chat API: [app/Http/Controllers/Api/ChatController.php](/c:/laragon/www/himaPlus_backend-main/app/Http/Controllers/Api/ChatController.php)
-- Products API: [app/Http/Controllers/Api/ProductController.php](/c:/laragon/www/himaPlus_backend-main/app/Http/Controllers/Api/ProductController.php)
-- Ratings API: [app/Http/Controllers/Api/RatingController.php](/c:/laragon/www/himaPlus_backend-main/app/Http/Controllers/Api/RatingController.php)
+- Routes: [routes/api.php](/c:/laragon/www/HemaPlus_backend-main/routes/api.php)
+- Response wrapper: [app/helper/functions.php](/c:/laragon/www/HemaPlus_backend-main/app/helper/functions.php#L28)
+- Auth API: [app/Http/Controllers/Api/AuthController.php](/c:/laragon/www/HemaPlus_backend-main/app/Http/Controllers/Api/AuthController.php)
+- Cart API: [app/Http/Controllers/Api/CartController.php](/c:/laragon/www/HemaPlus_backend-main/app/Http/Controllers/Api/CartController.php)
+- Favorites API: [app/Http/Controllers/Api/FavoriteController.php](/c:/laragon/www/HemaPlus_backend-main/app/Http/Controllers/Api/FavoriteController.php)
+- Orders API: [app/Http/Controllers/Api/OrderController.php](/c:/laragon/www/HemaPlus_backend-main/app/Http/Controllers/Api/OrderController.php)
+- Chat API: [app/Http/Controllers/Api/ChatController.php](/c:/laragon/www/HemaPlus_backend-main/app/Http/Controllers/Api/ChatController.php)
+- Products API: [app/Http/Controllers/Api/ProductController.php](/c:/laragon/www/HemaPlus_backend-main/app/Http/Controllers/Api/ProductController.php)
+- Ratings API: [app/Http/Controllers/Api/RatingController.php](/c:/laragon/www/HemaPlus_backend-main/app/Http/Controllers/Api/RatingController.php)

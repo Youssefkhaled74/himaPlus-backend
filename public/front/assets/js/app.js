@@ -1,5 +1,5 @@
 
-// Hima interactions with jQuery
+// Hema interactions with jQuery
 $(function(){
   const $window = $(window);
   const $body = $('body');

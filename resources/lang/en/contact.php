@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Hima - Contact Us',
+    'title' => 'Hema - Contact Us',
     'hero_title' => 'Contact Us',
     'hero_desc' => "We're here to support your medical procurement and maintenance needs. Reach out to our team anytime.",
 

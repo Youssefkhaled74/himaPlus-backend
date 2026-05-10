@@ -2,13 +2,13 @@
 
 return [
     // Categories page
-    'categories_title' => 'Hima - Categories',
+    'categories_title' => 'Hema - Categories',
     'categories_eyebrow' => 'Smart Healthcare Marketplace',
     'categories_heading' => 'Categories',
     'categories_desc' => 'Explore medical equipment, pharmaceuticals, lab instruments, and consumables one click away from your supply chain.',
 
     // Products page
-    'products_title' => 'Hima - Products',
+    'products_title' => 'Hema - Products',
     'products_heading' => 'Products',
     'products_desc' => 'Find high-quality medical devices, consumables, and equipment from verified suppliers � compare, request quotations, or shop directly with ease.',
 
@@ -41,13 +41,13 @@ return [
     'products' => 'products',
 
     // Favorites page
-    'favorites_title' => 'Hima - Favorites',
+    'favorites_title' => 'Hema - Favorites',
     'favorites_heading' => 'Favorites',
     'favorites_desc' => 'Easily access and manage your saved medical products.',
     'favorites' => 'Favorites',
 
     // Cart page
-    'cart_title' => 'Hima - Cart',
+    'cart_title' => 'Hema - Cart',
     'cart' => 'Cart',
     'empty_cart' => 'Empty',
     'payment_details' => 'Payment Details',
@@ -57,7 +57,7 @@ return [
     'proceed_to_payment' => 'Proceed to Payment',
 
     // Checkout page
-    'checkout_title' => 'Hima - Checkout',
+    'checkout_title' => 'Hema - Checkout',
     'checkout' => 'Checkout',
     'cost' => 'Cost',
     'address' => 'Address',
@@ -68,7 +68,7 @@ return [
     'invalid_coupon' => 'The selected coupon is invalid.',
 
     // Order page
-    'order_title' => 'Hima - Order Details',
+    'order_title' => 'Hema - Order Details',
     'orders' => 'Orders',
     'order_details' => 'Order Details',
     'get_payment' => 'Get Payment',

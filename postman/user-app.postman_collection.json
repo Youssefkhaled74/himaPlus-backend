@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "9cc8786e-8f38-4eab-bbf9-9bb7e467bc75",
-    "name": "Hima User App API",
+    "name": "Hema User App API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": "User/mobile app API collection generated from routes/api.php."
   },

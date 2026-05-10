@@ -351,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `info` (
 -- Dumping data for table hemaplus-database.info: ~1 rows (approximately)
 DELETE FROM `info`;
 INSERT INTO `info` (`id`, `created_at`, `updated_at`, `mobile`, `email`, `vat`, `desc`, `message`, `vision`, `asks`, `abouts`, `terms`, `privacy_policies`, `deleted_at`, `is_activate`, `location`, `facebook`, `instagram`, `twitter`, `snapchat`, `tiktok`, `report_id`) VALUES
-	(1, '2025-10-08 05:11:42', '2025-10-08 05:11:42', '+966123456789', 'info@himaplus.com', '300000000000003', 'Hima is a leading online platform for medical supplies and healthcare products.', 'Welcome to Hima', 'Our vision is to provide quality healthcare products to everyone', 'Frequently Asked Questions', 'About Hima Company', 'Terms and conditions for Hima services', 'Privacy policy information - we protect your data', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1);
+	(1, '2025-10-08 05:11:42', '2025-10-08 05:11:42', '+966123456789', 'info@Hemaplus.com', '300000000000003', 'Hema is a leading online platform for medical supplies and healthcare products.', 'Welcome to Hema', 'Our vision is to provide quality healthcare products to everyone', 'Frequently Asked Questions', 'About Hema Company', 'Terms and conditions for Hema services', 'Privacy policy information - we protect your data', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1);
 
 -- Dumping structure for table hemaplus-database.jobs
 CREATE TABLE IF NOT EXISTS `jobs` (
