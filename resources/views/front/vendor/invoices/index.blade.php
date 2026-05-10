@@ -2,19 +2,19 @@
 @section('title')<title>Vendor Invoices</title>@endsection
 @section('content')
 <main class="container py-4">
-    <h3 class="mb-3">???????? ????????</h3>
+    <h3 class="mb-3">فواتير المورد</h3>
     <form class="row g-2 mb-3" method="GET">
         <div class="col-md-3"><input type="date" name="date_from" value="{{ $dateFrom }}" class="form-control"></div>
         <div class="col-md-3"><input type="date" name="date_to" value="{{ $dateTo }}" class="form-control"></div>
         <div class="col-md-3">
             <select name="status" class="form-select">
-                <option value="">?? ???????</option>
+                <option value="">كل الحالات</option>
                 <option value="paid" {{ $status==='paid'?'selected':'' }}>Paid</option>
                 <option value="pending" {{ $status==='pending'?'selected':'' }}>Pending</option>
                 <option value="2" {{ $status==='2'?'selected':'' }}>Scheduled</option>
             </select>
         </div>
-        <div class="col-md-3"><button class="btn btn-primary w-100">?????</button></div>
+        <div class="col-md-3"><button class="btn btn-primary w-100">تصفية</button></div>
     </form>
 
     <div class="row g-3 mb-3">
@@ -32,14 +32,14 @@
                 @forelse($invoices as $order)
                     <tr>
                         <td>{{ $order->id }}</td>
-                        <td><a href="{{ route('vendor/orders/show', $order->id) }}">??? {{ $order->id }} - {{ $order->user->name ?? '-' }}</a></td>
+                        <td><a href="{{ route('vendor/orders/show', $order->id) }}">طلب {{ $order->id }} - {{ $order->user->name ?? '-' }}</a></td>
                         <td>{{ number_format((float)($order->total_cost ?? 0), 2) }} SAR</td>
                         <td>{{ ucfirst((string)($order->payment_status ?? 'pending')) }}</td>
                         <td>{{ (int)$order->request_type === 2 ? 'Scheduled' : 'Normal' }}</td>
                         <td>{{ optional($order->created_at)->format('Y-m-d') }}</td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="text-muted">?? ???? ??????</td></tr>
+                    <tr><td colspan="6" class="text-muted">لا توجد فواتير</td></tr>
                 @endforelse
                 </tbody>
             </table>

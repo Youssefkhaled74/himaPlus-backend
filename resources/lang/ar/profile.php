@@ -65,7 +65,7 @@ return [
 
     // Alert
     'select_image_only' => 'الرجاء اختيار صورة فقط',
-    
+
     // Products & Orders
     'view' => 'عرض',
     'edit' => 'تعديل',
@@ -83,6 +83,6 @@ return [
     'status' => 'الحالة',
     'update_profile' => 'تحديث البيانات',
     'notes' => 'ملاحظات',
-    'profile' =>'الملف الشخصي',
+    'profile' => 'الملف الشخصي',
 ];
 
