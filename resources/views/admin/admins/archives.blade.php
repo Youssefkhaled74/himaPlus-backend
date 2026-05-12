@@ -61,7 +61,7 @@
                                             <label>
                                                 <div class="form-group">
                                                     <select class="form-control data_search" name="job_id" id="jobs" aria-controls="dataTables-example" style="width: 220px">
-                                                        <option value="">Ø§Ù„ÙˆØ¸Ø§Ø¦Ù</option>
+                                                        <option value="">الوظائف</option>
                                                     </select>
                                                 </div>
                                             </label>
