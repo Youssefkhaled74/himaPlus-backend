@@ -6,6 +6,8 @@
 
 @section('css')
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Marai:wght@300;400;500;600;700;800&display=swap');
+
     .vendor-dashboard {
         --vd-bg: #f5f6f8;
         --vd-card: #ffffff;
@@ -19,6 +21,11 @@
         margin: 12px auto 0;
         background: var(--vd-bg);
         padding: 8px 0 24px;
+        font-family: "Marai", "Tajawal", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    }
+
+    .vendor-dashboard * {
+        font-family: inherit;
     }
 
     .vd-card {
@@ -36,7 +43,7 @@
     .vd-title {
         margin: 0 0 6px;
         color: var(--vd-title);
-        font-size: 40px;
+        font-size: 34px;
         line-height: 1.08;
         font-weight: 800;
         letter-spacing: -0.01em;
@@ -45,7 +52,7 @@
     .vd-subtitle {
         margin: 0;
         color: #475569;
-        font-size: 18px;
+        font-size: 16px;
         line-height: 1.55;
         max-width: 760px;
     }
@@ -61,7 +68,7 @@
         border-radius: 10px;
         color: #fff;
         font-weight: 700;
-        padding: 11px 18px;
+        padding: 10px 16px;
         text-decoration: none;
         background: linear-gradient(90deg, var(--vd-primary) 0%, var(--vd-accent) 100%);
     }
@@ -71,7 +78,7 @@
         border-radius: 10px;
         color: #1e3a8a;
         font-weight: 700;
-        padding: 11px 18px;
+        padding: 10px 16px;
         text-decoration: none;
         background: #fff;
     }
@@ -90,14 +97,14 @@
     .vd-stat-label {
         margin: 0;
         color: var(--vd-muted);
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
     }
 
     .vd-stat-value {
         margin: 8px 0 0;
         color: var(--vd-text);
-        font-size: 48px;
+        font-size: 40px;
         line-height: 1;
         font-weight: 800;
     }
@@ -113,7 +120,7 @@
     .vd-panel-title {
         margin: 0;
         color: #0f172a;
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 700;
         line-height: 1.1;
     }
@@ -122,7 +129,7 @@
         text-decoration: none;
         font-weight: 700;
         color: #2563eb;
-        font-size: 17px;
+        font-size: 15px;
     }
 
     .vd-list {
@@ -141,14 +148,14 @@
     .vd-item-title {
         margin: 0 0 4px;
         color: #111827;
-        font-size: 19px;
+        font-size: 17px;
         font-weight: 700;
     }
 
     .vd-item-sub {
         margin: 0;
         color: #475569;
-        font-size: 16px;
+        font-size: 15px;
         line-height: 1.5;
         word-break: break-word;
     }
@@ -190,26 +197,26 @@
 
     .vd-empty {
         color: #64748b;
-        font-size: 15px;
+        font-size: 14px;
         padding: 12px 0;
     }
 
     .vd-list .small.text-muted {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .vd-quick a {
-        font-size: 17px;
+        font-size: 15px;
     }
 
     @media (max-width: 992px) {
         .vendor-dashboard { max-width: 100%; padding: 8px 12px 24px; }
-        .vd-title { font-size: 30px; }
-        .vd-subtitle { font-size: 16px; }
-        .vd-stat-value { font-size: 36px; }
-        .vd-panel-title { font-size: 24px; }
-        .vd-item-title { font-size: 18px; }
-        .vd-item-sub { font-size: 15px; }
+        .vd-title { font-size: 28px; }
+        .vd-subtitle { font-size: 15px; }
+        .vd-stat-value { font-size: 32px; }
+        .vd-panel-title { font-size: 18px; }
+        .vd-item-title { font-size: 16px; }
+        .vd-item-sub { font-size: 14px; }
     }
 </style>
 @endsection
