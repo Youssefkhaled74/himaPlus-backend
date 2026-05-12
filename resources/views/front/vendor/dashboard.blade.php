@@ -36,7 +36,7 @@
     .vd-title {
         margin: 0 0 6px;
         color: var(--vd-title);
-        font-size: 46px;
+        font-size: 40px;
         line-height: 1.08;
         font-weight: 800;
         letter-spacing: -0.01em;
@@ -45,8 +45,9 @@
     .vd-subtitle {
         margin: 0;
         color: #475569;
-        font-size: 32px;
-        line-height: 1.3;
+        font-size: 18px;
+        line-height: 1.55;
+        max-width: 760px;
     }
 
     .vd-actions {
@@ -96,7 +97,7 @@
     .vd-stat-value {
         margin: 8px 0 0;
         color: var(--vd-text);
-        font-size: 42px;
+        font-size: 48px;
         line-height: 1;
         font-weight: 800;
     }
@@ -112,8 +113,8 @@
     .vd-panel-title {
         margin: 0;
         color: #0f172a;
-        font-size: 36px;
-        font-weight: 800;
+        font-size: 22px;
+        font-weight: 700;
         line-height: 1.1;
     }
 
@@ -121,7 +122,7 @@
         text-decoration: none;
         font-weight: 700;
         color: #2563eb;
-        font-size: 18px;
+        font-size: 17px;
     }
 
     .vd-list {
@@ -140,14 +141,16 @@
     .vd-item-title {
         margin: 0 0 4px;
         color: #111827;
-        font-size: 33px;
+        font-size: 19px;
         font-weight: 700;
     }
 
     .vd-item-sub {
         margin: 0;
         color: #475569;
-        font-size: 32px;
+        font-size: 16px;
+        line-height: 1.5;
+        word-break: break-word;
     }
 
     .vd-chip {
@@ -191,13 +194,21 @@
         padding: 12px 0;
     }
 
+    .vd-list .small.text-muted {
+        font-size: 14px;
+    }
+
+    .vd-quick a {
+        font-size: 17px;
+    }
+
     @media (max-width: 992px) {
         .vendor-dashboard { max-width: 100%; padding: 8px 12px 24px; }
-        .vd-title { font-size: 32px; }
-        .vd-subtitle { font-size: 18px; }
-        .vd-stat-value { font-size: 30px; }
+        .vd-title { font-size: 30px; }
+        .vd-subtitle { font-size: 16px; }
+        .vd-stat-value { font-size: 36px; }
         .vd-panel-title { font-size: 24px; }
-        .vd-item-title { font-size: 20px; }
+        .vd-item-title { font-size: 18px; }
         .vd-item-sub { font-size: 15px; }
     }
 </style>
@@ -311,4 +322,3 @@
     </div>
 </main>
 @endsection
-
