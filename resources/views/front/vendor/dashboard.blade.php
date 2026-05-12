@@ -1,86 +1,314 @@
 @extends('layouts.front.home')
 
 @section('title')
-<title>{{ __('nav.home') }} - Vendor Dashboard</title>
+    <title>{{ __('nav.home') }} - Vendor Dashboard</title>
+@endsection
+
+@section('css')
+<style>
+    .vendor-dashboard {
+        --vd-bg: #f5f6f8;
+        --vd-card: #ffffff;
+        --vd-border: #e7eaf0;
+        --vd-title: #0f2f7f;
+        --vd-text: #1f2937;
+        --vd-muted: #6b7280;
+        --vd-primary: #0f4bbf;
+        --vd-accent: #0ec6a0;
+        max-width: 95%;
+        margin: 12px auto 0;
+        background: var(--vd-bg);
+        padding: 8px 0 24px;
+    }
+
+    .vd-card {
+        background: var(--vd-card);
+        border: 1px solid var(--vd-border);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .vd-hero {
+        padding: 22px;
+        margin-bottom: 16px;
+    }
+
+    .vd-title {
+        margin: 0 0 6px;
+        color: var(--vd-title);
+        font-size: 46px;
+        line-height: 1.08;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
+
+    .vd-subtitle {
+        margin: 0;
+        color: #475569;
+        font-size: 32px;
+        line-height: 1.3;
+    }
+
+    .vd-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .vd-btn-primary {
+        border: 0;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: 700;
+        padding: 11px 18px;
+        text-decoration: none;
+        background: linear-gradient(90deg, var(--vd-primary) 0%, var(--vd-accent) 100%);
+    }
+
+    .vd-btn-outline {
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        color: #1e3a8a;
+        font-weight: 700;
+        padding: 11px 18px;
+        text-decoration: none;
+        background: #fff;
+    }
+
+    .vd-btn-primary:hover,
+    .vd-btn-outline:hover {
+        opacity: .95;
+        color: inherit;
+    }
+
+    .vd-stat {
+        padding: 16px 18px;
+        height: 100%;
+    }
+
+    .vd-stat-label {
+        margin: 0;
+        color: var(--vd-muted);
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .vd-stat-value {
+        margin: 8px 0 0;
+        color: var(--vd-text);
+        font-size: 42px;
+        line-height: 1;
+        font-weight: 800;
+    }
+
+    .vd-panel-head {
+        border-bottom: 1px solid var(--vd-border);
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .vd-panel-title {
+        margin: 0;
+        color: #0f172a;
+        font-size: 36px;
+        font-weight: 800;
+        line-height: 1.1;
+    }
+
+    .vd-link {
+        text-decoration: none;
+        font-weight: 700;
+        color: #2563eb;
+        font-size: 18px;
+    }
+
+    .vd-list {
+        padding: 8px 18px 14px;
+    }
+
+    .vd-item {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--vd-border);
+    }
+
+    .vd-item:last-child {
+        border-bottom: 0;
+    }
+
+    .vd-item-title {
+        margin: 0 0 4px;
+        color: #111827;
+        font-size: 33px;
+        font-weight: 700;
+    }
+
+    .vd-item-sub {
+        margin: 0;
+        color: #475569;
+        font-size: 32px;
+    }
+
+    .vd-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .vd-chip-paid { background: #dcfce7; color: #166534; }
+    .vd-chip-pending { background: #ffedd5; color: #9a3412; }
+
+    .vd-quick {
+        padding: 14px 18px 18px;
+        display: grid;
+        gap: 10px;
+    }
+
+    .vd-quick a {
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        padding: 12px 14px;
+        text-decoration: none;
+        color: #1e293b;
+        font-weight: 700;
+        background: #fff;
+    }
+
+    .vd-quick a:hover {
+        border-color: #93c5fd;
+        color: #1d4ed8;
+    }
+
+    .vd-empty {
+        color: #64748b;
+        font-size: 15px;
+        padding: 12px 0;
+    }
+
+    @media (max-width: 992px) {
+        .vendor-dashboard { max-width: 100%; padding: 8px 12px 24px; }
+        .vd-title { font-size: 32px; }
+        .vd-subtitle { font-size: 18px; }
+        .vd-stat-value { font-size: 30px; }
+        .vd-panel-title { font-size: 24px; }
+        .vd-item-title { font-size: 20px; }
+        .vd-item-sub { font-size: 15px; }
+    }
+</style>
 @endsection
 
 @section('content')
-<main class="container py-4">
+@php
+    $isAr = app()->getLocale() === 'ar';
+@endphp
+<main class="vendor-dashboard">
     @include('flash::message')
 
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div class="vd-card vd-hero">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
-                <h3 class="mb-1">{{ app()->getLocale() === 'ar' ? 'اهلا بكم شركاء النجاح' : 'Welcome Success Partners' }}</h3>
-                <p class="text-muted mb-0">{{ app()->getLocale() === 'ar' ? 'لوحة تحكم المورد لإدارة المنتجات والطلبات والفواتير بسهولة.' : 'Vendor dashboard for products, orders, and invoices.' }}</p>
+                <h3 class="vd-title">{{ $isAr ? 'اهلا بكم شركاء النجاح' : 'Welcome Success Partners' }}</h3>
+                <p class="vd-subtitle">{{ $isAr ? 'لوحة تحكم المورد لإدارة المنتجات والطلبات والفواتير بسهولة.' : 'Vendor dashboard for products, orders, and invoices.' }}</p>
             </div>
-            <div class="d-flex gap-2">
-                <a href="{{ route('vendor/products/create') }}" class="btn btn-primary">{{ app()->getLocale() === 'ar' ? 'إضافة منتج' : 'Add Product' }}</a>
-                <a href="{{ route('vendor/orders') }}" class="btn btn-outline-primary">{{ app()->getLocale() === 'ar' ? 'الطلبات' : 'Orders' }}</a>
+            <div class="vd-actions">
+                <a href="{{ route('vendor/products/create') }}" class="vd-btn-primary">{{ $isAr ? 'إضافة منتج' : 'Add Product' }}</a>
+                <a href="{{ route('vendor/orders') }}" class="vd-btn-outline">{{ $isAr ? 'الطلبات' : 'Orders' }}</a>
             </div>
         </div>
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-md-3"><div class="card border-0 shadow-sm"><div class="card-body"><small class="text-muted">{{ app()->getLocale() === 'ar' ? 'إجمالي الطلبات' : 'Total Orders' }}</small><h4 class="mb-0">{{ $ordersCount }}</h4></div></div></div>
-        <div class="col-md-3"><div class="card border-0 shadow-sm"><div class="card-body"><small class="text-muted">{{ app()->getLocale() === 'ar' ? 'الطلبات المجدولة' : 'Scheduled Orders' }}</small><h4 class="mb-0">{{ $scheduledOrdersCount }}</h4></div></div></div>
-        <div class="col-md-3"><div class="card border-0 shadow-sm"><div class="card-body"><small class="text-muted">{{ app()->getLocale() === 'ar' ? 'الطلبات المكتملة' : 'Completed Orders' }}</small><h4 class="mb-0">{{ $completedOrdersCount }}</h4></div></div></div>
-        <div class="col-md-3"><div class="card border-0 shadow-sm"><div class="card-body"><small class="text-muted">{{ app()->getLocale() === 'ar' ? 'المنتجات المفعلة' : 'Active Products' }}</small><h4 class="mb-0">{{ $productsCount }}</h4></div></div></div>
+        <div class="col-md-3">
+            <div class="vd-card vd-stat">
+                <p class="vd-stat-label">{{ $isAr ? 'إجمالي الطلبات' : 'Total Orders' }}</p>
+                <h4 class="vd-stat-value">{{ $ordersCount }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="vd-card vd-stat">
+                <p class="vd-stat-label">{{ $isAr ? 'الطلبات المجدولة' : 'Scheduled Orders' }}</p>
+                <h4 class="vd-stat-value">{{ $scheduledOrdersCount }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="vd-card vd-stat">
+                <p class="vd-stat-label">{{ $isAr ? 'الطلبات المكتملة' : 'Completed Orders' }}</p>
+                <h4 class="vd-stat-value">{{ $completedOrdersCount }}</h4>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="vd-card vd-stat">
+                <p class="vd-stat-label">{{ $isAr ? 'المنتجات المفعلة' : 'Active Products' }}</p>
+                <h4 class="vd-stat-value">{{ $productsCount }}</h4>
+            </div>
+        </div>
     </div>
 
     <div class="row g-4">
         <div class="col-lg-7">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <strong>{{ app()->getLocale() === 'ar' ? 'آخر الطلبات' : 'Recent Orders' }}</strong>
-                    <a href="{{ route('vendor/orders') }}">{{ app()->getLocale() === 'ar' ? 'عرض الكل' : 'View all' }}</a>
+            <div class="vd-card h-100">
+                <div class="vd-panel-head">
+                    <h5 class="vd-panel-title">{{ $isAr ? 'آخر الطلبات' : 'Recent Orders' }}</h5>
+                    <a class="vd-link" href="{{ route('vendor/orders') }}">{{ $isAr ? 'عرض الكل' : 'View all' }}</a>
                 </div>
-                <div class="card-body">
+                <div class="vd-list">
                     @forelse($recentOrders as $order)
-                        @php $pending = ($order->payment_status ?? '') === 'pending'; @endphp
-                        <div class="d-flex justify-content-between border-bottom py-2">
+                        @php
+                            $isPaid = (string)($order->payment_status ?? '') === '1' || (string)($order->payment_status ?? '') === 'paid';
+                        @endphp
+                        <div class="vd-item d-flex justify-content-between align-items-start gap-3">
                             <div>
-                                <div class="fw-semibold">{{ app()->getLocale() === 'ar' ? 'طلب' : 'Order' }} #{{ $order->id }}</div>
-                                <small class="text-muted">{{ $order->user->name ?? '-' }}</small>
+                                <p class="vd-item-title">{{ $isAr ? 'طلب' : 'Order' }} #{{ $order->id }}</p>
+                                <p class="vd-item-sub">{{ $order->user->name ?? '-' }}</p>
                             </div>
                             <div class="text-end">
-                                <span class="badge {{ $pending ? 'bg-warning text-dark' : 'bg-success' }}">{{ $pending ? 'Pending' : 'Paid' }}</span>
-                                <div class="small text-muted">{{ number_format((float)($order->total_cost ?? 0), 2) }} SAR</div>
+                                <span class="vd-chip {{ $isPaid ? 'vd-chip-paid' : 'vd-chip-pending' }}">{{ $isPaid ? ($isAr ? 'مدفوع' : 'Paid') : ($isAr ? 'قيد الانتظار' : 'Pending') }}</span>
+                                <div class="small text-muted mt-2">{{ number_format((float)($order->total_cost ?? 0), 2) }} SAR</div>
                             </div>
                         </div>
                     @empty
-                        <div class="text-muted">{{ app()->getLocale() === 'ar' ? 'لا توجد طلبات حالياً.' : 'No orders yet.' }}</div>
+                        <div class="vd-empty">{{ $isAr ? 'لا توجد طلبات حاليا.' : 'No orders yet.' }}</div>
                     @endforelse
                 </div>
             </div>
         </div>
+
         <div class="col-lg-5">
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <strong>{{ app()->getLocale() === 'ar' ? 'الإشعارات المهمة' : 'Important Notifications' }}</strong>
-                    <a href="{{ route('vendor/notifications') }}">{{ app()->getLocale() === 'ar' ? 'عرض الكل' : 'View all' }}</a>
+            <div class="vd-card mb-4">
+                <div class="vd-panel-head">
+                    <h5 class="vd-panel-title">{{ $isAr ? 'الإشعارات المهمة' : 'Important Notifications' }}</h5>
+                    <a class="vd-link" href="{{ route('vendor/notifications') }}">{{ $isAr ? 'عرض الكل' : 'View all' }}</a>
                 </div>
-                <div class="card-body">
+                <div class="vd-list">
                     @forelse($recentNotifications as $n)
-                        <div class="border-bottom py-2">
-                            <div class="fw-semibold">{{ $n->title ?? (app()->getLocale() === 'ar' ? 'تنبيه' : 'Alert') }}</div>
-                            <div class="small text-muted">{{ $n->message ?? $n->content }}</div>
+                        <div class="vd-item">
+                            <p class="vd-item-title">{{ $n->title ?? ($isAr ? 'تنبيه' : 'Alert') }}</p>
+                            <p class="vd-item-sub">{{ $n->message ?? $n->content }}</p>
                         </div>
                     @empty
-                        <div class="text-muted">{{ app()->getLocale() === 'ar' ? 'لا توجد إشعارات مهمة.' : 'No important notifications.' }}</div>
+                        <div class="vd-empty">{{ $isAr ? 'لا توجد إشعارات مهمة.' : 'No important notifications.' }}</div>
                     @endforelse
                 </div>
             </div>
 
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white"><strong>{{ app()->getLocale() === 'ar' ? 'اختصارات' : 'Quick Links' }}</strong></div>
-                <div class="card-body d-grid gap-2">
-                    <a href="{{ route('vendor/invoices') }}" class="btn btn-outline-secondary">{{ app()->getLocale() === 'ar' ? 'الفواتير' : 'Invoices' }}</a>
-                    <a href="{{ route('vendor/categories') }}" class="btn btn-outline-secondary">{{ app()->getLocale() === 'ar' ? 'التصنيفات' : 'Categories' }}</a>
-                    <a href="{{ route('vendor/products') }}" class="btn btn-outline-secondary">{{ app()->getLocale() === 'ar' ? 'المنتجات' : 'Products' }}</a>
+            <div class="vd-card">
+                <div class="vd-panel-head">
+                    <h5 class="vd-panel-title">{{ $isAr ? 'اختصارات' : 'Quick Links' }}</h5>
+                </div>
+                <div class="vd-quick">
+                    <a href="{{ route('vendor/invoices') }}">{{ $isAr ? 'الفواتير' : 'Invoices' }}</a>
+                    <a href="{{ route('vendor/categories') }}">{{ $isAr ? 'التصنيفات' : 'Categories' }}</a>
+                    <a href="{{ route('vendor/products') }}">{{ $isAr ? 'المنتجات' : 'Products' }}</a>
                 </div>
             </div>
         </div>
     </div>
 </main>
 @endsection
+
