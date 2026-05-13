@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 // use App\Http\ServicesLayer\FairbaseServices\FairbaseService;
 use App\Http\ServicesLayer\PaymobServices\PaymobService;
+use App\Http\ServicesLayer\ArbServices\ArbPaymentService;
 use App\Traits\PushNotificationsTrait;
 
 class OrderController extends Controller
@@ -39,10 +40,11 @@ class OrderController extends Controller
     public $notification;
     // public $fairbaseService;
     public $paymobService;
+    public $arbPaymentService;
 
     public function __construct(
         Order $order, OrderItem $orderItem, Product $product, ProductRepository $productRepository, InfoRepository $infoRepository,
-        Coupon $coupon, Offer $offer, Notification $notification, PaymobService $paymobService
+        Coupon $coupon, Offer $offer, Notification $notification, PaymobService $paymobService, ArbPaymentService $arbPaymentService
     ){
         $this->order = $order;
         $this->orderItem = $orderItem;
@@ -54,6 +56,7 @@ class OrderController extends Controller
         // $this->fairbaseService = $fairbaseService;
         $this->offer = $offer;
         $this->paymobService = $paymobService;
+        $this->arbPaymentService = $arbPaymentService;
         $this->middleware('auth:api', ['except' => []]);
     }
 
@@ -632,14 +635,24 @@ class OrderController extends Controller
             if (in_array(12, $timeline_no_arr)) {
                 return responseJson(500, "this order was deleted.");
             }
-            $device_type = 'mobile';
-            $total_cost = $order->total_cost + $order->delivery_fee;
-            $errorDetails = null;
-            $data['paymob_url'] = $this->paymobService->generatePaymentUrl($total_cost ?? 0, $order->id, $user, $device_type, $errorDetails);
-            if (!$data['paymob_url']) {
-                return responseJson(500, "paymob link generation failed", $errorDetails);
+            if ((int) $order->payment_status === 1) {
+                return responseJson(200, "this order is already paid", [
+                    'gateway' => 'arb',
+                    'order_id' => $order->id,
+                ]);
             }
-            return responseJson(200, "success", $data);
+
+            $device_type = 'mobile';
+            $errorDetails = null;
+            $payment = $this->arbPaymentService->generatePaymentUrl($order, $user, $device_type, request(), $errorDetails);
+            if (!$payment) {
+                return responseJson(500, "arb link generation failed", $errorDetails);
+            }
+            return responseJson(200, "success", [
+                'payment_url' => $payment['payment_url'],
+                'payment_id' => $payment['payment_id'],
+                'gateway' => 'arb',
+            ]);
         } catch (\Exception $ex) {
             return responseJson(500, "there is something wrong , please contact technical support");
         }

@@ -16,6 +16,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Validation\Rule;
 use App\Http\ServicesLayer\PaymobServices\PaymobService;
+use App\Http\ServicesLayer\ArbServices\ArbPaymentService;
 use App\Traits\PushNotificationsTrait;
 use Illuminate\Support\Facades\Log;
 use ZipArchive;
@@ -34,10 +35,11 @@ class OrderController extends Controller
     public $offer;
     public $notification;
     public $paymobService;
+    public $arbPaymentService;
 
     public function __construct(
         Order $order, OrderItem $orderItem, Product $product, ProductRepository $productRepository, InfoRepository $infoRepository,
-        Coupon $coupon, Offer $offer, Notification $notification, PaymobService $paymobService
+        Coupon $coupon, Offer $offer, Notification $notification, PaymobService $paymobService, ArbPaymentService $arbPaymentService
     ){
         $this->order = $order;
         $this->orderItem = $orderItem;
@@ -48,6 +50,7 @@ class OrderController extends Controller
         $this->infoRepository = $infoRepository;
         $this->offer = $offer;
         $this->paymobService = $paymobService;
+        $this->arbPaymentService = $arbPaymentService;
     }
 
     public function myOrders(Request $request, $page_type = 'all')
@@ -641,15 +644,14 @@ class OrderController extends Controller
                 return back();
             }
             $device_type = 'pc';
-            $total_cost = $order->total_cost + $order->delivery_fee;
             $errorDetails = null;
-            $data['paymob_url'] = $this->paymobService->generatePaymentUrl($total_cost, $order->id, $user, $device_type, $errorDetails);
-            if (!$data['paymob_url']) {
-                flash()->error("paymob link generation failed");
+            $payment = $this->arbPaymentService->generatePaymentUrl($order, $user, $device_type, request(), $errorDetails);
+            if (!$payment) {
+                flash()->error("arb link generation failed");
                 report($errorDetails);
                 return back();
             }
-            return redirect()->away($data['paymob_url']);
+            return redirect()->away($payment['payment_url']);
         } catch (\Exception $ex) {
             flash()->error("there is something wrong , please contact technical support");
             return back();

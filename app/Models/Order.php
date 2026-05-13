@@ -17,6 +17,10 @@ class Order extends Model
 		'discount', 
 		'address', 
 		'payment_type', 
+		'gateway_name',
+		'gateway_payment_id',
+		'gateway_track_id',
+		'gateway_response',
 		'getway_transaction_id', 
 		'payment_status', 
 		'vat_amount', 
@@ -59,6 +63,10 @@ class Order extends Model
 		'deleted_at', 
 	];
     public $timestamps = true;
+
+    protected $casts = [
+        'gateway_response' => 'array',
+    ];
 
 	public function getFilesAttribute($value)
 	{

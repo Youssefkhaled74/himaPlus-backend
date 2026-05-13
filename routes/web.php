@@ -13,6 +13,7 @@ use App\Http\Controllers\Front\VendorOrderController;
 use App\Http\Controllers\Front\VendorRatingsController;
 use App\Http\Controllers\Front\VendorNotificationsController;
 use App\Http\Controllers\Front\VendorAnalyticsController;
+use App\Http\Controllers\Api\ArbPaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,7 @@ Route::get('locale/{locale}', function ($locale) {
 })->name('locale.switch');
 
 Route::group(['middleware' => ['limitReq']], function(){
+    Route::match(['get', 'post'], '/payment/arb/callback', [ArbPaymentController::class, 'callback'])->name('arb.callback');
     Route::get('/', [HomeController::class, 'home']);
     Route::get('/home', [HomeController::class, 'home'])->name('home');
     Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');

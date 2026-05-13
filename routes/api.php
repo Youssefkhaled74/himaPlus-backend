@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\FavorateController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ArbPaymentController;
 use App\Http\Controllers\Api\PaymobController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RatingController;
@@ -121,6 +122,8 @@ Route::group(['middleware' => ['api', 'limitReq']], function ($router) {
 
     Route::get('/pay/callback', [PaymobController::class, 'callback']);
     Route::get('/pay/webhook', [PaymobController::class, 'webhook']);
+    Route::match(['get', 'post'], '/arb/callback', [ArbPaymentController::class, 'callback']);
+    Route::post('/arb/webhook', [ArbPaymentController::class, 'webhook']);
 
     Route::get('home', [HomeController::class, 'home']);
     Route::get('info', [HomeController::class, 'info']);

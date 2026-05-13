@@ -45,4 +45,14 @@ return [
         'iframe_url' => env('PAYMOB_IFRAME_URL'),
         'hmac_secret' => env('PAYMOB_HMAC_SECRET'),
     ],
+
+    'arb' => [
+        'tranportal_id' => env('ARB_TRANPORTAL_ID'),
+        'tranportal_password' => env('ARB_TRANPORTAL_PASSWORD'),
+        'resource_key' => env('ARB_RESOURCE_KEY'),
+        'endpoint' => env('ARB_PAYMENT_ENDPOINT'),
+        'response_url' => env('ARB_RESPONSE_URL'),
+        'error_url' => env('ARB_ERROR_URL'),
+        'environment' => env('ARB_ENVIRONMENT', 'sandbox'),
+    ],
 ];
