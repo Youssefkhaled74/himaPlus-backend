@@ -70,6 +70,20 @@ class ArbPaymentService
                     'Content-Type' => 'application/json',
                 ])->post((string) config('services.arb.endpoint'), $payload);
 
+            // Some ARB hosted endpoints reject JSON (415) and expect form-urlencoded fields.
+            if ($response->status() === 415) {
+                $response = Http::asForm()
+                    ->withOptions(['verify' => $verifySsl ?? true])
+                    ->withHeaders([
+                        'X-FORWARDED-FOR' => $this->forwardedFor($request),
+                    ])->post((string) config('services.arb.endpoint'), [
+                        'id' => (string) config('services.arb.tranportal_id'),
+                        'trandata' => $encryptedTranData,
+                        'responseURL' => $callbackUrl,
+                        'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
+                    ]);
+            }
+
             if (!$response->successful()) {
                 $errorDetails = [
                     'source' => 'arb_api',
@@ -85,7 +99,13 @@ class ArbPaymentService
             }
 
             $data = $response->json();
-            $first = is_array($data) ? ($data[0] ?? []) : [];
+            if (is_array($data) && array_is_list($data)) {
+                $first = $data[0] ?? [];
+            } elseif (is_array($data)) {
+                $first = $data;
+            } else {
+                $first = [];
+            }
             if ((string) ($first['status'] ?? '') !== '1') {
                 $errorDetails = [
                     'source' => 'arb_api',
