@@ -94,14 +94,17 @@ class ArbPaymentService
                     ]);
 
                     return [
-                        'payment_url' => $this->buildDirectRedirectUrl(
-                            (string) config('services.arb.endpoint'),
-                            $encryptedTranData,
-                            $callbackUrl
-                        ),
+                        'payment_url' => (string) config('services.arb.endpoint'),
                         'payment_id' => $trackId,
                         'track_id' => $trackId,
                         'gateway' => 'arb',
+                        'redirect_method' => 'post',
+                        'redirect_fields' => [
+                            'id' => (string) config('services.arb.tranportal_id'),
+                            'trandata' => $encryptedTranData,
+                            'responseURL' => $callbackUrl,
+                            'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
+                        ],
                     ];
                 }
 
@@ -434,19 +437,5 @@ class ArbPaymentService
         if (!empty($update)) {
             $order->update($update);
         }
-    }
-
-    private function buildDirectRedirectUrl(string $endpoint, string $encryptedTranData, string $callbackUrl): string
-    {
-        $query = [
-            'param' => 'paymentInit',
-            'trandata' => $encryptedTranData,
-            'id' => (string) config('services.arb.tranportal_id'),
-            'responseURL' => $callbackUrl,
-            'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
-        ];
-
-        $separator = str_contains($endpoint, '?') ? '&' : '?';
-        return $endpoint . $separator . http_build_query($query, '', '&', PHP_QUERY_RFC3986);
     }
 }

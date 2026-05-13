@@ -222,7 +222,7 @@ class OrderController extends Controller
                         if (count($createdOrderIds) > 1) {
                             session()->flash('info', 'Multiple orders were created. You are being redirected to pay the first order now.');
                         }
-                        return redirect()->away($payment['payment_url']);
+                        return $this->redirectToArbGateway($payment);
                     }
                     Log::warning('ARB payment link generation failed after order creation', [
                         'order_id' => $createdOrder->id,
@@ -681,11 +681,32 @@ class OrderController extends Controller
                 ]);
                 return back();
             }
-            return redirect()->away($payment['payment_url']);
+            return $this->redirectToArbGateway($payment);
         } catch (\Exception $ex) {
             flash()->error("there is something wrong , please contact technical support");
             return back();
         }
+    }
+
+    private function redirectToArbGateway(array $payment)
+    {
+        $url = (string) ($payment['payment_url'] ?? '');
+        if ($url === '') {
+            return back();
+        }
+
+        if (($payment['redirect_method'] ?? 'get') === 'post') {
+            $fields = (array) ($payment['redirect_fields'] ?? []);
+            $html = '<!doctype html><html><head><meta charset="utf-8"><title>Redirecting...</title></head><body>';
+            $html .= '<form id="arbRedirectForm" method="POST" action="' . e($url) . '">';
+            foreach ($fields as $name => $value) {
+                $html .= '<input type="hidden" name="' . e((string) $name) . '" value="' . e((string) $value) . '">';
+            }
+            $html .= '</form><p>Redirecting to payment gateway...</p><script>document.getElementById("arbRedirectForm").submit();</script></body></html>';
+            return response($html);
+        }
+
+        return redirect()->away($url);
     }
 
     public function makeOffer(Request $request)
