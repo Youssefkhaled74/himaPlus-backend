@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Http\ServicesLayer\FairbaseServices\FairbaseService;
 use App\Jobs\NewOrderMailJob;
 use App\Jobs\OrderUpdatesMailJob;
+use Illuminate\Support\Facades\Bus;
 
 trait PushNotificationsTrait
 {
@@ -21,7 +22,8 @@ trait PushNotificationsTrait
     {
         if (!is_null($email)) {
             try {
-                dispatch(new NewOrderMailJob($email, $orderNo))->delay(now()->addMinute());
+                $job = (new NewOrderMailJob($email, $orderNo))->delay(now()->addMinute());
+                Bus::dispatch($job);
             } catch (\Throwable $e) {
                 report($e);
             }
@@ -32,7 +34,8 @@ trait PushNotificationsTrait
     {
         if (!is_null($email)) {
             try {
-                dispatch(new OrderUpdatesMailJob($email, $message))->delay(now()->addMinute());
+                $job = (new OrderUpdatesMailJob($email, $message))->delay(now()->addMinute());
+                Bus::dispatch($job);
             } catch (\Throwable $e) {
                 report($e);
             }

@@ -85,6 +85,26 @@ class ArbPaymentService
             }
 
             if (!$response->successful()) {
+                // Legacy ARB endpoints may not accept backend POST media types and are intended for browser redirect with trandata.
+                if ($response->status() === 415) {
+                    $this->updateGatewayTracking($order, [
+                        'gateway_name' => 'arb',
+                        'gateway_payment_id' => null,
+                        'gateway_track_id' => $trackId,
+                    ]);
+
+                    return [
+                        'payment_url' => $this->buildDirectRedirectUrl(
+                            (string) config('services.arb.endpoint'),
+                            $encryptedTranData,
+                            $callbackUrl
+                        ),
+                        'payment_id' => $trackId,
+                        'track_id' => $trackId,
+                        'gateway' => 'arb',
+                    ];
+                }
+
                 $errorDetails = [
                     'source' => 'arb_api',
                     'reason' => 'http_request_failed',
@@ -414,5 +434,19 @@ class ArbPaymentService
         if (!empty($update)) {
             $order->update($update);
         }
+    }
+
+    private function buildDirectRedirectUrl(string $endpoint, string $encryptedTranData, string $callbackUrl): string
+    {
+        $query = [
+            'param' => 'paymentInit',
+            'trandata' => $encryptedTranData,
+            'id' => (string) config('services.arb.tranportal_id'),
+            'responseURL' => $callbackUrl,
+            'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
+        ];
+
+        $separator = str_contains($endpoint, '?') ? '&' : '?';
+        return $endpoint . $separator . http_build_query($query, '', '&', PHP_QUERY_RFC3986);
     }
 }
