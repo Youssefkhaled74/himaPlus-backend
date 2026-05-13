@@ -114,6 +114,7 @@ class OrderController extends Controller
             $discount = 0;
             $coupon = null;
             $coupon_id = null;
+            $createdOrderIds = [];
             $user = auth()->user();
             $info = $this->infoRepository->getfirst();
             $cartItems = $user->cart()->with('product')->get();
@@ -167,6 +168,7 @@ class OrderController extends Controller
                     'total_before_discount' => $grandTotal + ($vatAmount), 
                     'total_cost' => ($grandTotal + ($vatAmount)) - $discount, 
                 ]);
+                $createdOrderIds[] = (int) $order->id;
                 $order->timeline()->create([
                     'timeline_no' => 1,
                     'action_at' => now(),
@@ -205,6 +207,20 @@ class OrderController extends Controller
                 $user->cart()->delete();
             }
             DB::commit();
+
+            if (count($createdOrderIds) === 1) {
+                $createdOrder = $this->order->where('id', $createdOrderIds[0])->with(['timeline'])->first();
+                if (!is_null($createdOrder) && (int) $createdOrder->payment_status !== 1) {
+                    $errorDetails = null;
+                    $payment = $this->arbPaymentService->generatePaymentUrl($createdOrder, $user, 'pc', $request, $errorDetails);
+                    if (!empty($payment['payment_url'])) {
+                        return redirect()->away($payment['payment_url']);
+                    }
+                    report($errorDetails);
+                    flash()->error("order created, but online payment link generation failed");
+                }
+            }
+
             flash()->success("success");
             return redirect(route('user/myorders', 'all'));
         }catch(\Exception $e){
