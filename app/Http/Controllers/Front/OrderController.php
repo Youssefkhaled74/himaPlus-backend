@@ -177,30 +177,34 @@ class OrderController extends Controller
                 if (count($orderItems) > 0) {
                     $order->items()->createMany($orderItems);
                 }
-                $notificationArr[0] = [
-                    'title' => 'new order.', 'content' => "your order sended to the provider", 'user_id' => $user->id, 
-                    'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
-                    'created_at' => now(), 'updated_at' => now()
-                ];
-                
-                if (!is_null($order->provider_id)) {
-                    $notificationArr[1] = [
-                        'title' => 'new order.', 'content' => "you have new order", 'user_id' => $order->provider_id, 
+                try {
+                    $notificationArr[0] = [
+                        'title' => 'new order.', 'content' => "your order sended to the provider", 'user_id' => $user->id,
                         'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                         'created_at' => now(), 'updated_at' => now()
                     ];
-                    $provider = $order->provider;
-                    $this->targetNewOrderMailJob($provider?->email, $order->id);
+
+                    if (!is_null($order->provider_id)) {
+                        $notificationArr[1] = [
+                            'title' => 'new order.', 'content' => "you have new order", 'user_id' => $order->provider_id,
+                            'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
+                            'created_at' => now(), 'updated_at' => now()
+                        ];
+                        $provider = $order->provider;
+                        $this->targetNewOrderMailJob($provider?->email, $order->id);
+                        $this->targetFairbaseServicePushNotification(
+                            $provider?->fcm_token, $notificationArr[1]['title'], $notificationArr[1]['content'], 1, $order->id
+                        );
+                    }
+                    $this->notification->query()->insert($notificationArr);
+
+                    $this->targetNewOrderMailJob($user?->email, $order->id);
                     $this->targetFairbaseServicePushNotification(
-                        $provider?->fcm_token, $notificationArr[1]['title'], $notificationArr[1]['content'], 1, $order->id
+                        $user?->fcm_token, $notificationArr[0]['title'], $notificationArr[0]['content'], 1, $order->id
                     );
+                } catch (\Throwable $notificationEx) {
+                    report($notificationEx);
                 }
-                $this->notification->query()->insert($notificationArr);
-                
-                $this->targetNewOrderMailJob($user?->email, $order->id);
-                $this->targetFairbaseServicePushNotification(
-                    $user?->fcm_token, $notificationArr[0]['title'], $notificationArr[0]['content'], 1, $order->id
-                );
 
             }
             if (count($orderItems) > 0) {
@@ -208,12 +212,16 @@ class OrderController extends Controller
             }
             DB::commit();
 
-            if (count($createdOrderIds) === 1) {
-                $createdOrder = $this->order->where('id', $createdOrderIds[0])->with(['timeline'])->first();
+            if (count($createdOrderIds) > 0) {
+                $firstOrderId = (int) $createdOrderIds[0];
+                $createdOrder = $this->order->where('id', $firstOrderId)->with(['timeline'])->first();
                 if (!is_null($createdOrder) && (int) $createdOrder->payment_status !== 1) {
                     $errorDetails = null;
                     $payment = $this->arbPaymentService->generatePaymentUrl($createdOrder, $user, 'pc', $request, $errorDetails);
                     if (!empty($payment['payment_url'])) {
+                        if (count($createdOrderIds) > 1) {
+                            session()->flash('info', 'Multiple orders were created. You are being redirected to pay the first order now.');
+                        }
                         return redirect()->away($payment['payment_url']);
                     }
                     report($errorDetails);
