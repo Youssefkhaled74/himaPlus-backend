@@ -61,8 +61,10 @@ class ArbPaymentService
                 'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
             ]];
 
+            $verifySsl = filter_var(config('services.arb.verify_ssl', true), FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
             $response = Http::asJson()
                 ->acceptJson()
+                ->withOptions(['verify' => $verifySsl ?? true])
                 ->withHeaders([
                     'X-FORWARDED-FOR' => $this->forwardedFor($request),
                     'Content-Type' => 'application/json',

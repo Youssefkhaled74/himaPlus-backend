@@ -224,7 +224,10 @@ class OrderController extends Controller
                         }
                         return redirect()->away($payment['payment_url']);
                     }
-                    report($errorDetails);
+                    Log::warning('ARB payment link generation failed after order creation', [
+                        'order_id' => $createdOrder->id,
+                        'error_details' => $errorDetails,
+                    ]);
                     flash()->error("order created, but online payment link generation failed");
                 }
             }
@@ -672,7 +675,10 @@ class OrderController extends Controller
             $payment = $this->arbPaymentService->generatePaymentUrl($order, $user, $device_type, request(), $errorDetails);
             if (!$payment) {
                 flash()->error("arb link generation failed");
-                report($errorDetails);
+                Log::warning('ARB payment link generation failed from onlinePayment route', [
+                    'order_id' => $order->id,
+                    'error_details' => $errorDetails,
+                ]);
                 return back();
             }
             return redirect()->away($payment['payment_url']);

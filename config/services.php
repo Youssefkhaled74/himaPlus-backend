@@ -54,5 +54,6 @@ return [
         'response_url' => env('ARB_RESPONSE_URL'),
         'error_url' => env('ARB_ERROR_URL'),
         'environment' => env('ARB_ENVIRONMENT', 'sandbox'),
+        'verify_ssl' => env('ARB_VERIFY_SSL', true),
     ],
 ];
