@@ -26,11 +26,11 @@ class CartController extends Controller
                 $item = auth()->user()->cart()->firstOrNew(['product_id' => $id]);
                 if ($item->exists) {
                     $item->delete();
-                    return responseJson(200, "success");
+                    return responseJson(200, "success", ['count' => $this->cartCount()]);
                 }
                 $item->quantity = (int)$request->input('quantity', 1);
                 $item->save();
-                return responseJson(200, "success");
+                return responseJson(200, "success", ['count' => $this->cartCount()]);
             }
             return responseJson(500, 'product not found , please contact technical support');
         }catch(\Exception $e){
@@ -47,7 +47,7 @@ class CartController extends Controller
                     ['product_id' => $id],
                     ['quantity'   => $request->quantity ?? 1]
                 );
-                return responseJson(200, "success");
+                return responseJson(200, "success", ['count' => $this->cartCount()]);
             }
             return responseJson(500, 'product not found , please contact technical support');
         }catch(\Exception $e){
@@ -71,7 +71,7 @@ class CartController extends Controller
     {
         try{
             auth()->user()->cart()->delete();
-            return responseJson(200, "success");
+            return responseJson(200, "success", ['count' => 0]);
         }catch(\Exception $e){
             return responseJson(500, 'there is some thing wrong , please contact technical support');
         }
@@ -94,9 +94,9 @@ class CartController extends Controller
                         ]);
                     } else {
                         $cartItem->delete();
-                        return responseJson(200, "success", ['new_quan' => 0]);
+                        return responseJson(200, "success", ['new_quan' => 0, 'count' => $this->cartCount()]);
                     }
-                    return responseJson(200, "success", ['new_quan' => $cartItem->quantity]);
+                    return responseJson(200, "success", ['new_quan' => $cartItem->quantity, 'count' => $this->cartCount()]);
                 }
             }
             return responseJson(500, 'product not found , please contact technical support');
@@ -114,6 +114,11 @@ class CartController extends Controller
             flash()->error('there is something wrong , please contact technical support');
             return back();
         }
+    }
+
+    private function cartCount(): int
+    {
+        return (int) auth()->user()->cart()->sum('quantity');
     }
 
 }

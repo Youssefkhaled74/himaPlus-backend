@@ -92,8 +92,11 @@
                 $cart.addClass('shake');
                 $.get(route + '/' + id, { quantity: 1 })
                 .done(function(res){
-                    if (res && typeof res.count !== 'undefined') {
-                        $('#cartCount').text(res.count);
+                    const nextCount = (res && typeof res.count !== 'undefined')
+                        ? res.count
+                        : (res && res.data && typeof res.data.count !== 'undefined' ? res.data.count : null);
+                    if (nextCount !== null) {
+                        $('#cartCount').text(nextCount);
                     }
                 })
                 .always(function(){

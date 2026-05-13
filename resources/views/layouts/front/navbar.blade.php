@@ -1,6 +1,10 @@
 @php
     $isVendorAuthed = auth()->check() && (int) auth()->user()->user_type === 2;
     $routeName = request()->route() ? request()->route()->getName() : '';
+    $cartCount = 0;
+    if (auth()->check() && (int) auth()->user()->user_type !== 2) {
+        $cartCount = (int) auth()->user()->cart()->sum('quantity');
+    }
 @endphp
 
 <header class="header landing-header">
@@ -101,12 +105,12 @@
                             <a class="text-decoration-none" href="{{ route('products') }}" id="nav-search"><i class="bi bi-search"></i></a>
                             <a class="text-decoration-none" href="{{ route('user/favorites') }}" id="nav-heart"><i class="bi bi-heart"></i></a>
                             <a class="text-decoration-none" href="{{ route('user/profile') }}" id="nav-user-profile"><i class="bi bi-person"></i></a>
-                            <a id="cartIcon" class="text-decoration-none" href="{{ route('user/cart') }}" id="nav-bag"><i class="bi bi-bag"></i><span id="cartCount" class="badge bg-danger">0</span></a>
+                            <a id="cartIcon" class="text-decoration-none" href="{{ route('user/cart') }}"><i class="bi bi-bag"></i><span id="cartCount" class="badge bg-danger">{{ $cartCount }}</span></a>
                         @else
                             <a class="text-decoration-none" href="{{ route('products') }}" id="nav-search"><i class="bi bi-search"></i></a>
                             <a class="text-decoration-none" href="{{ route('user/favorites') }}" id="nav-heart"><i class="bi bi-heart"></i></a>
                             <a class="text-decoration-none" href="{{ route('user/loginForm') }}" id="nav-person"><i class="bi bi-person"></i></a>
-                            <a id="cartIcon" class="text-decoration-none" href="{{ route('user/cart') }}" id="nav-bag"><i class="bi bi-bag"></i></a>
+                            <a id="cartIcon" class="text-decoration-none" href="{{ route('user/cart') }}"><i class="bi bi-bag"></i></a>
                         @endif
 
                         <div class="dropdown lang-dropdown">
