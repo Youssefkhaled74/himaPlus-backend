@@ -72,21 +72,21 @@ class ArbPaymentService
 
             // Some ARB hosted endpoints reject JSON (415) and expect form-urlencoded fields.
             if ($response->status() === 415) {
+                $paymentInitTranData = $this->buildPaymentInitTranData($encryptedTranData, $callbackUrl);
                 $response = Http::asForm()
                     ->withOptions(['verify' => $verifySsl ?? true])
                     ->withHeaders([
                         'X-FORWARDED-FOR' => $this->forwardedFor($request),
                     ])->post((string) config('services.arb.endpoint'), [
-                        'id' => (string) config('services.arb.tranportal_id'),
-                        'trandata' => $encryptedTranData,
-                        'responseURL' => $callbackUrl,
-                        'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
+                        'param' => 'paymentInit',
+                        'trandata' => $paymentInitTranData,
                     ]);
             }
 
             if (!$response->successful()) {
                 // Legacy ARB endpoints may not accept backend POST media types and are intended for browser redirect with trandata.
                 if ($response->status() === 415) {
+                    $paymentInitTranData = $this->buildPaymentInitTranData($encryptedTranData, $callbackUrl);
                     $this->updateGatewayTracking($order, [
                         'gateway_name' => 'arb',
                         'gateway_payment_id' => null,
@@ -100,10 +100,8 @@ class ArbPaymentService
                         'gateway' => 'arb',
                         'redirect_method' => 'post',
                         'redirect_fields' => [
-                            'id' => (string) config('services.arb.tranportal_id'),
-                            'trandata' => $encryptedTranData,
-                            'responseURL' => $callbackUrl,
-                            'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
+                            'param' => 'paymentInit',
+                            'trandata' => $paymentInitTranData,
                         ],
                     ];
                 }
@@ -437,5 +435,13 @@ class ArbPaymentService
         if (!empty($update)) {
             $order->update($update);
         }
+    }
+
+    private function buildPaymentInitTranData(string $encryptedTranData, string $callbackUrl): string
+    {
+        return $encryptedTranData
+            . '&tranportalId=' . rawurlencode((string) config('services.arb.tranportal_id'))
+            . '&responseURL=' . rawurlencode($callbackUrl)
+            . '&errorURL=' . rawurlencode((string) config('services.arb.error_url', $callbackUrl));
     }
 }
