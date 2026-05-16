@@ -53,6 +53,27 @@ class ArbPaymentService
 
         try {
             $encryptedTranData = $this->cryptoService->encrypt(http_build_query($plainData, '', '&', PHP_QUERY_RFC3986), (string) config('services.arb.resource_key'));
+            $paymentInitTranData = $this->buildPaymentInitTranData($encryptedTranData, $callbackUrl);
+
+            // Primary flow: redirect customer browser with POST fields to ARB hosted endpoint.
+            // This avoids media-type mismatches (415) that happen when endpoint expects browser form post.
+            $this->updateGatewayTracking($order, [
+                'gateway_name' => 'arb',
+                'gateway_payment_id' => null,
+                'gateway_track_id' => $trackId,
+            ]);
+
+            return [
+                'payment_url' => (string) config('services.arb.endpoint'),
+                'payment_id' => $trackId,
+                'track_id' => $trackId,
+                'gateway' => 'arb',
+                'redirect_method' => 'post',
+                'redirect_fields' => [
+                    'param' => 'paymentInit',
+                    'trandata' => $paymentInitTranData,
+                ],
+            ];
 
             $payload = [[
                 'id' => (string) config('services.arb.tranportal_id'),
