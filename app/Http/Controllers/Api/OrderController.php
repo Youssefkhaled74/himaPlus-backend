@@ -649,9 +649,12 @@ class OrderController extends Controller
                 return responseJson(500, "arb link generation failed", $errorDetails);
             }
             return responseJson(200, "success", [
-                'payment_url' => $payment['payment_url'],
-                'payment_id' => $payment['payment_id'],
-                'gateway' => 'arb',
+                'payment_url' => $payment['payment_url'] ?? null,
+                'payment_id' => $payment['payment_id'] ?? null,
+                'track_id' => $payment['track_id'] ?? null,
+                'gateway' => $payment['gateway'] ?? 'arb',
+                'redirect_method' => $payment['redirect_method'] ?? 'get',
+                'redirect_fields' => $payment['redirect_fields'] ?? null,
             ]);
         } catch (\Exception $ex) {
             return responseJson(500, "there is something wrong , please contact technical support");
