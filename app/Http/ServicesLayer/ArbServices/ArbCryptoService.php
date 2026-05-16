@@ -9,19 +9,13 @@ class ArbCryptoService
     public function encrypt(string $plainText, string $resourceKey): string
     {
         $cipher = $this->resolveCipher($resourceKey);
-        $padded = $this->pkcs5Pad($plainText);
-        $encrypted = openssl_encrypt($padded, $cipher, $resourceKey, OPENSSL_ZERO_PADDING, self::IV);
+        $encrypted = openssl_encrypt($plainText, $cipher, $resourceKey, OPENSSL_RAW_DATA, self::IV);
 
         if ($encrypted === false) {
             throw new \RuntimeException('Failed to encrypt ARB trandata.');
         }
 
-        $raw = base64_decode($encrypted, true);
-        if ($raw === false) {
-            throw new \RuntimeException('Failed to normalize ARB encrypted trandata.');
-        }
-
-        return urlencode(bin2hex($raw));
+        return bin2hex($encrypted);
     }
 
     public function decrypt(string $encryptedText, string $resourceKey): string
@@ -39,29 +33,12 @@ class ArbCryptoService
             throw new \RuntimeException('Invalid ARB trandata encoding.');
         }
 
-        $decrypted = openssl_decrypt(base64_encode($decoded), $cipher, $resourceKey, OPENSSL_ZERO_PADDING, self::IV);
+        $decrypted = openssl_decrypt($decoded, $cipher, $resourceKey, OPENSSL_RAW_DATA, self::IV);
         if ($decrypted === false) {
             throw new \RuntimeException('Failed to decrypt ARB trandata.');
         }
 
-        return trim($this->pkcs5Unpad($decrypted));
-    }
-
-    private function pkcs5Pad(string $text): string
-    {
-        $pad = 16 - (strlen($text) % 16);
-
-        return $text . str_repeat(chr($pad), $pad);
-    }
-
-    private function pkcs5Unpad(string $text): string
-    {
-        $pad = ord(substr($text, -1));
-        if ($pad < 1 || $pad > 16) {
-            return $text;
-        }
-
-        return substr($text, 0, -$pad);
+        return trim($decrypted);
     }
 
     private function resolveCipher(string $resourceKey): string
