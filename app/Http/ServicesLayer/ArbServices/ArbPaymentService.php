@@ -74,32 +74,17 @@ class ArbPaymentService
             ]];
 
             $verifySsl = filter_var(config('services.arb.verify_ssl', true), FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
-            $response = Http::asJson()
+            $jsonPayload = json_encode($payload, JSON_UNESCAPED_SLASHES);
+            if ($jsonPayload === false) {
+                throw new \RuntimeException('Failed to encode ARB payment init payload.');
+            }
+
+            $response = Http::withBody($jsonPayload, 'application/json;charset=UTF-8')
                 ->acceptJson()
                 ->withOptions(['verify' => $verifySsl ?? true])
                 ->withHeaders([
                     'X-FORWARDED-FOR' => $this->forwardedFor($request),
-                    'Content-Type' => 'application/json',
-                ])->post((string) config('services.arb.endpoint'), $payload);
-
-            if ($response->status() === 415) {
-                Log::info('ARB payment init retrying as form request', [
-                    'order_id' => $order->id,
-                    'endpoint' => $endpoint,
-                ]);
-
-                $response = Http::asForm()
-                    ->acceptJson()
-                    ->withOptions(['verify' => $verifySsl ?? true])
-                    ->withHeaders([
-                        'X-FORWARDED-FOR' => $this->forwardedFor($request),
-                    ])->post($endpoint, [
-                        'id' => (string) config('services.arb.tranportal_id'),
-                        'trandata' => $encryptedTranData,
-                        'responseURL' => $callbackUrl,
-                        'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
-                    ]);
-            }
+                ])->send('POST', (string) config('services.arb.endpoint'));
 
             if (!$response->successful()) {
                 $errorDetails = [
