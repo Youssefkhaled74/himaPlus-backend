@@ -82,6 +82,25 @@ class ArbPaymentService
                     'Content-Type' => 'application/json',
                 ])->post((string) config('services.arb.endpoint'), $payload);
 
+            if ($response->status() === 415) {
+                Log::info('ARB payment init retrying as form request', [
+                    'order_id' => $order->id,
+                    'endpoint' => $endpoint,
+                ]);
+
+                $response = Http::asForm()
+                    ->acceptJson()
+                    ->withOptions(['verify' => $verifySsl ?? true])
+                    ->withHeaders([
+                        'X-FORWARDED-FOR' => $this->forwardedFor($request),
+                    ])->post($endpoint, [
+                        'id' => (string) config('services.arb.tranportal_id'),
+                        'trandata' => $encryptedTranData,
+                        'responseURL' => $callbackUrl,
+                        'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
+                    ]);
+            }
+
             if (!$response->successful()) {
                 $errorDetails = [
                     'source' => 'arb_api',
