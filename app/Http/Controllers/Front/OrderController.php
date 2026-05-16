@@ -695,14 +695,19 @@ class OrderController extends Controller
             return back();
         }
 
-        if (($payment['redirect_method'] ?? 'get') === 'post') {
-            $fields = (array) ($payment['redirect_fields'] ?? []);
+        $fields = (array) ($payment['redirect_fields'] ?? []);
+        $isNeoleapTranportal = str_contains(strtolower($url), '/pg/payment/tranportal.htm');
+        $mustPost = (($payment['redirect_method'] ?? 'get') === 'post') || $isNeoleapTranportal || !empty($fields);
+
+        if ($mustPost) {
             $html = '<!doctype html><html><head><meta charset="utf-8"><title>Redirecting...</title></head><body>';
-            $html .= '<form id="arbRedirectForm" method="POST" action="' . e($url) . '">';
+            $html .= '<form id="arbRedirectForm" method="POST" enctype="application/x-www-form-urlencoded" accept-charset="UTF-8" action="' . e($url) . '">';
             foreach ($fields as $name => $value) {
                 $html .= '<input type="hidden" name="' . e((string) $name) . '" value="' . e((string) $value) . '">';
             }
-            $html .= '</form><p>Redirecting to payment gateway...</p><script>document.getElementById("arbRedirectForm").submit();</script></body></html>';
+            $html .= '</form><p>Redirecting to payment gateway...</p>';
+            $html .= '<noscript><button type="submit" form="arbRedirectForm">Continue To Payment</button></noscript>';
+            $html .= '<script>(function(){var f=document.getElementById("arbRedirectForm");if(f){f.submit();}})();</script></body></html>';
             return response($html);
         }
 

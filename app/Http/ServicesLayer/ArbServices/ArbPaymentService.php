@@ -66,6 +66,13 @@ class ArbPaymentService
                 . '&responseURL=' . rawurlencode($callbackUrl)
                 . '&errorURL=' . rawurlencode((string) config('services.arb.error_url', $callbackUrl));
 
+            Log::info('ARB redirect payload prepared', [
+                'order_id' => $order->id,
+                'endpoint' => (string) config('services.arb.endpoint'),
+                'method' => 'post',
+                'has_trandata' => !empty($paymentInitTranData),
+            ]);
+
             return [
                 'payment_url' => (string) config('services.arb.endpoint'),
                 'payment_id' => $trackId,
