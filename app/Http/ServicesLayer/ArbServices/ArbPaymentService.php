@@ -63,28 +63,18 @@ class ArbPaymentService
 
             $endpoint = (string) config('services.arb.endpoint');
             $isHostedEndpoint = str_contains(strtolower($endpoint), '/pg/payment/hosted.htm');
+            $paymentInitTranData = $encryptedTranData;
 
-            $paymentInitTranData = $encryptedTranData
-                . '&tranportalId=' . rawurlencode((string) config('services.arb.tranportal_id'))
-                . '&responseURL=' . rawurlencode($callbackUrl)
-                . '&errorURL=' . rawurlencode((string) config('services.arb.error_url', $callbackUrl));
-
-            $redirectMethod = $isHostedEndpoint ? 'get' : 'post';
+            // hosted/tranportal integrations both use browser POST with form fields.
+            $redirectMethod = 'post';
             $paymentUrl = $endpoint;
             $redirectFields = [
                 'param' => 'paymentInit',
                 'trandata' => $paymentInitTranData,
+                'tranportalId' => (string) config('services.arb.tranportal_id'),
+                'responseURL' => $callbackUrl,
+                'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
             ];
-
-            if ($isHostedEndpoint) {
-                $paymentUrl = rtrim($endpoint, '?')
-                    . '?param=paymentInit'
-                    . '&trandata=' . rawurlencode($encryptedTranData)
-                    . '&tranportalId=' . rawurlencode((string) config('services.arb.tranportal_id'))
-                    . '&responseURL=' . rawurlencode($callbackUrl)
-                    . '&errorURL=' . rawurlencode((string) config('services.arb.error_url', $callbackUrl));
-                $redirectFields = null;
-            }
 
             Log::info('ARB redirect payload prepared', [
                 'order_id' => $order->id,
