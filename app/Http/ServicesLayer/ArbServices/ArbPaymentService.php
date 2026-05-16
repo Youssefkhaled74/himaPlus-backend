@@ -59,13 +59,6 @@ class ArbPaymentService
                 'gateway_track_id' => $trackId,
             ]);
 
-            $endpoint = (string) config('services.arb.endpoint');
-            Log::info('ARB payment init request prepared', [
-                'order_id' => $order->id,
-                'endpoint' => $endpoint,
-                'has_trandata' => !empty($encryptedTranData),
-            ]);
-
             $payload = [[
                 'id' => (string) config('services.arb.tranportal_id'),
                 'trandata' => $encryptedTranData,
@@ -78,49 +71,82 @@ class ArbPaymentService
             if ($jsonPayload === false) {
                 throw new \RuntimeException('Failed to encode ARB payment init payload.');
             }
+            $configuredEndpoint = (string) config('services.arb.endpoint');
+            $candidateEndpoints = array_values(array_unique(array_filter([
+                str_replace('/pg/payment/hosted.htm', '/pg/payment/tranportal.htm', $configuredEndpoint),
+                $configuredEndpoint,
+            ])));
 
-            $response = Http::withBody($jsonPayload, 'application/json;charset=UTF-8')
-                ->acceptJson()
-                ->withOptions(['verify' => $verifySsl ?? true])
-                ->withHeaders([
-                    'X-FORWARDED-FOR' => $this->forwardedFor($request),
-                ])->send('POST', (string) config('services.arb.endpoint'));
+            $first = [];
+            $selectedEndpoint = null;
+            $lastHttpStatus = null;
+            $lastHttpBody = null;
 
-            if (!$response->successful()) {
-                $errorDetails = [
-                    'source' => 'arb_api',
-                    'reason' => 'http_request_failed',
-                    'http_status' => $response->status(),
-                ];
-                Log::error('ARB payment init failed (http)', [
+            foreach ($candidateEndpoints as $endpoint) {
+                Log::info('ARB payment init request prepared', [
                     'order_id' => $order->id,
-                    'status' => $response->status(),
-                    'body' => $response->body(),
+                    'endpoint' => $endpoint,
+                    'has_trandata' => !empty($encryptedTranData),
                 ]);
-                return null;
+
+                $response = Http::withBody($jsonPayload, 'application/json;charset=UTF-8')
+                    ->acceptJson()
+                    ->withOptions(['verify' => $verifySsl ?? true])
+                    ->withHeaders([
+                        'X-FORWARDED-FOR' => $this->forwardedFor($request),
+                    ])->send('POST', $endpoint);
+
+                $lastHttpStatus = $response->status();
+                $lastHttpBody = $response->body();
+
+                if (!$response->successful()) {
+                    Log::warning('ARB payment init http failure on endpoint', [
+                        'order_id' => $order->id,
+                        'endpoint' => $endpoint,
+                        'status' => $response->status(),
+                    ]);
+                    continue;
+                }
+
+                $data = $response->json();
+                if (is_array($data) && array_is_list($data)) {
+                    $first = $data[0] ?? [];
+                } elseif (is_array($data)) {
+                    $first = $data;
+                } else {
+                    $first = [];
+                }
+
+                if ((string) ($first['status'] ?? '') === '1') {
+                    $selectedEndpoint = $endpoint;
+                    break;
+                }
+
+                Log::warning('ARB payment init rejected on endpoint', [
+                    'order_id' => $order->id,
+                    'endpoint' => $endpoint,
+                    'status' => $first['status'] ?? null,
+                    'error' => $first['error'] ?? null,
+                    'errorText' => $first['errorText'] ?? null,
+                ]);
             }
 
-            $data = $response->json();
-            if (is_array($data) && array_is_list($data)) {
-                $first = $data[0] ?? [];
-            } elseif (is_array($data)) {
-                $first = $data;
-            } else {
-                $first = [];
-            }
-            if ((string) ($first['status'] ?? '') !== '1') {
+            if (empty($selectedEndpoint)) {
                 $errorDetails = [
                     'source' => 'arb_api',
                     'reason' => 'gateway_status_failed',
                     'status' => $first['status'] ?? null,
                     'error' => $first['error'] ?? null,
                     'errorText' => $first['errorText'] ?? null,
+                    'http_status' => $lastHttpStatus,
                 ];
-                Log::warning('ARB payment init rejected', [
+                Log::error('ARB payment init failed (all endpoints)', [
                     'order_id' => $order->id,
-                    'status' => $first['status'] ?? null,
-                    'error' => $first['error'] ?? null,
-                    'errorText' => $first['errorText'] ?? null,
+                    'status' => $lastHttpStatus,
+                    'body' => $lastHttpBody,
+                    'gateway_status' => $first['status'] ?? null,
+                    'gateway_error' => $first['error'] ?? null,
+                    'gateway_error_text' => $first['errorText'] ?? null,
                 ]);
                 return null;
             }
@@ -133,6 +159,7 @@ class ArbPaymentService
 
             Log::info('ARB payment init accepted', [
                 'order_id' => $order->id,
+                'endpoint' => $selectedEndpoint,
                 'payment_id' => $paymentId,
                 'payment_page_url' => $paymentPageUrl,
             ]);
