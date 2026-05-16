@@ -78,7 +78,11 @@ class ArbPaymentService
 
             if ($isHostedEndpoint) {
                 $paymentUrl = rtrim($endpoint, '?')
-                    . '?param=paymentInit&trandata=' . rawurlencode($paymentInitTranData);
+                    . '?param=paymentInit'
+                    . '&trandata=' . rawurlencode($encryptedTranData)
+                    . '&tranportalId=' . rawurlencode((string) config('services.arb.tranportal_id'))
+                    . '&responseURL=' . rawurlencode($callbackUrl)
+                    . '&errorURL=' . rawurlencode((string) config('services.arb.error_url', $callbackUrl));
                 $redirectFields = null;
             }
 
