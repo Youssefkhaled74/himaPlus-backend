@@ -53,31 +53,29 @@ class ArbPaymentService
 
         try {
             $encryptedTranData = $this->cryptoService->encrypt(http_build_query($plainData, '', '&', PHP_QUERY_RFC3986), (string) config('services.arb.resource_key'));
-            // Primary flow: build hosted payment URL with query params.
-            // Many tranportal-style gateways expect:
-            //   ?param=paymentInit&trandata=<encrypted_data>&tranportalId=...&responseURL=...&errorURL=...
-            // and may reject opening tranportal endpoint without these params (415).
+            // Primary flow: browser POST redirect to gateway endpoint.
+            // Note: tranportal.htm rejects GET and expects form POST fields.
             $this->updateGatewayTracking($order, [
                 'gateway_name' => 'arb',
                 'gateway_payment_id' => null,
                 'gateway_track_id' => $trackId,
             ]);
 
-            $endpoint = rtrim((string) config('services.arb.endpoint'), '?');
-            $paymentUrl = $endpoint
-                . '?param=paymentInit'
-                . '&trandata=' . rawurlencode($encryptedTranData)
+            $paymentInitTranData = $encryptedTranData
                 . '&tranportalId=' . rawurlencode((string) config('services.arb.tranportal_id'))
                 . '&responseURL=' . rawurlencode($callbackUrl)
                 . '&errorURL=' . rawurlencode((string) config('services.arb.error_url', $callbackUrl));
 
             return [
-                'payment_url' => $paymentUrl,
+                'payment_url' => (string) config('services.arb.endpoint'),
                 'payment_id' => $trackId,
                 'track_id' => $trackId,
                 'gateway' => 'arb',
-                'redirect_method' => 'get',
-                'redirect_fields' => null,
+                'redirect_method' => 'post',
+                'redirect_fields' => [
+                    'param' => 'paymentInit',
+                    'trandata' => $paymentInitTranData,
+                ],
             ];
 
             $payload = [[
