@@ -53,8 +53,6 @@ class ArbPaymentService
 
         try {
             $encryptedTranData = $this->cryptoService->encrypt(http_build_query($plainData, '', '&', PHP_QUERY_RFC3986), (string) config('services.arb.resource_key'));
-            // Primary flow: browser POST redirect to gateway endpoint.
-            // Note: tranportal.htm rejects GET and expects form POST fields.
             $this->updateGatewayTracking($order, [
                 'gateway_name' => 'arb',
                 'gateway_payment_id' => null,
@@ -62,36 +60,11 @@ class ArbPaymentService
             ]);
 
             $endpoint = (string) config('services.arb.endpoint');
-            $isHostedEndpoint = str_contains(strtolower($endpoint), '/pg/payment/hosted.htm');
-            $paymentInitTranData = $encryptedTranData;
-
-            // hosted/tranportal integrations both use browser POST with form fields.
-            $redirectMethod = 'post';
-            $paymentUrl = $endpoint;
-            $redirectFields = [
-                'param' => 'paymentInit',
-                'trandata' => $paymentInitTranData,
-                'tranportalId' => (string) config('services.arb.tranportal_id'),
-                'responseURL' => $callbackUrl,
-                'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
-            ];
-
-            Log::info('ARB redirect payload prepared', [
+            Log::info('ARB payment init request prepared', [
                 'order_id' => $order->id,
                 'endpoint' => $endpoint,
-                'method' => $redirectMethod,
-                'is_hosted_endpoint' => $isHostedEndpoint,
-                'has_trandata' => !empty($paymentInitTranData),
+                'has_trandata' => !empty($encryptedTranData),
             ]);
-
-            return [
-                'payment_url' => $paymentUrl,
-                'payment_id' => $trackId,
-                'track_id' => $trackId,
-                'gateway' => 'arb',
-                'redirect_method' => $redirectMethod,
-                'redirect_fields' => $redirectFields,
-            ];
 
             $payload = [[
                 'id' => (string) config('services.arb.tranportal_id'),
@@ -109,42 +82,7 @@ class ArbPaymentService
                     'Content-Type' => 'application/json',
                 ])->post((string) config('services.arb.endpoint'), $payload);
 
-            // Some ARB hosted endpoints reject JSON (415) and expect form-urlencoded fields.
-            if ($response->status() === 415) {
-                $paymentInitTranData = $this->buildPaymentInitTranData($encryptedTranData, $callbackUrl);
-                $response = Http::asForm()
-                    ->withOptions(['verify' => $verifySsl ?? true])
-                    ->withHeaders([
-                        'X-FORWARDED-FOR' => $this->forwardedFor($request),
-                    ])->post((string) config('services.arb.endpoint'), [
-                        'param' => 'paymentInit',
-                        'trandata' => $paymentInitTranData,
-                    ]);
-            }
-
             if (!$response->successful()) {
-                // Legacy ARB endpoints may not accept backend POST media types and are intended for browser redirect with trandata.
-                if ($response->status() === 415) {
-                    $paymentInitTranData = $this->buildPaymentInitTranData($encryptedTranData, $callbackUrl);
-                    $this->updateGatewayTracking($order, [
-                        'gateway_name' => 'arb',
-                        'gateway_payment_id' => null,
-                        'gateway_track_id' => $trackId,
-                    ]);
-
-                    return [
-                        'payment_url' => (string) config('services.arb.endpoint'),
-                        'payment_id' => $trackId,
-                        'track_id' => $trackId,
-                        'gateway' => 'arb',
-                        'redirect_method' => 'post',
-                        'redirect_fields' => [
-                            'param' => 'paymentInit',
-                            'trandata' => $paymentInitTranData,
-                        ],
-                    ];
-                }
-
                 $errorDetails = [
                     'source' => 'arb_api',
                     'reason' => 'http_request_failed',
@@ -189,6 +127,12 @@ class ArbPaymentService
                 return null;
             }
 
+            Log::info('ARB payment init accepted', [
+                'order_id' => $order->id,
+                'payment_id' => $paymentId,
+                'payment_page_url' => $paymentPageUrl,
+            ]);
+
             $this->updateGatewayTracking($order, [
                 'gateway_name' => 'arb',
                 'gateway_payment_id' => $paymentId,
@@ -196,7 +140,7 @@ class ArbPaymentService
             ]);
 
             return [
-                'payment_url' => $paymentPageUrl . '?PaymentID=' . $paymentId,
+                'payment_url' => $this->framePaymentPageUrl($paymentPageUrl, $paymentId),
                 'payment_id' => $paymentId,
                 'track_id' => $trackId,
                 'gateway' => 'arb',
@@ -474,6 +418,17 @@ class ArbPaymentService
         if (!empty($update)) {
             $order->update($update);
         }
+    }
+
+    private function framePaymentPageUrl(string $paymentPageUrl, string $paymentId): string
+    {
+        if (preg_match('/[?&]paymentid=/i', $paymentPageUrl)) {
+            return $paymentPageUrl;
+        }
+
+        $separator = str_contains($paymentPageUrl, '?') ? '&' : '?';
+
+        return $paymentPageUrl . $separator . 'PaymentID=' . rawurlencode($paymentId);
     }
 
 }
