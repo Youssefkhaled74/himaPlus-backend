@@ -61,28 +61,42 @@ class ArbPaymentService
                 'gateway_track_id' => $trackId,
             ]);
 
+            $endpoint = (string) config('services.arb.endpoint');
+            $isHostedEndpoint = str_contains(strtolower($endpoint), '/pg/payment/hosted.htm');
+
             $paymentInitTranData = $encryptedTranData
                 . '&tranportalId=' . rawurlencode((string) config('services.arb.tranportal_id'))
                 . '&responseURL=' . rawurlencode($callbackUrl)
                 . '&errorURL=' . rawurlencode((string) config('services.arb.error_url', $callbackUrl));
 
+            $redirectMethod = $isHostedEndpoint ? 'get' : 'post';
+            $paymentUrl = $endpoint;
+            $redirectFields = [
+                'param' => 'paymentInit',
+                'trandata' => $paymentInitTranData,
+            ];
+
+            if ($isHostedEndpoint) {
+                $paymentUrl = rtrim($endpoint, '?')
+                    . '?param=paymentInit&trandata=' . rawurlencode($paymentInitTranData);
+                $redirectFields = null;
+            }
+
             Log::info('ARB redirect payload prepared', [
                 'order_id' => $order->id,
-                'endpoint' => (string) config('services.arb.endpoint'),
-                'method' => 'post',
+                'endpoint' => $endpoint,
+                'method' => $redirectMethod,
+                'is_hosted_endpoint' => $isHostedEndpoint,
                 'has_trandata' => !empty($paymentInitTranData),
             ]);
 
             return [
-                'payment_url' => (string) config('services.arb.endpoint'),
+                'payment_url' => $paymentUrl,
                 'payment_id' => $trackId,
                 'track_id' => $trackId,
                 'gateway' => 'arb',
-                'redirect_method' => 'post',
-                'redirect_fields' => [
-                    'param' => 'paymentInit',
-                    'trandata' => $paymentInitTranData,
-                ],
+                'redirect_method' => $redirectMethod,
+                'redirect_fields' => $redirectFields,
             ];
 
             $payload = [[
