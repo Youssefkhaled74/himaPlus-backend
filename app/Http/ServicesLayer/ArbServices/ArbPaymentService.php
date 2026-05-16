@@ -53,11 +53,9 @@ class ArbPaymentService
 
         try {
             $encryptedTranData = $this->cryptoService->encrypt(http_build_query($plainData, '', '&', PHP_QUERY_RFC3986), (string) config('services.arb.resource_key'));
-            $paymentInitTranData = $this->buildPaymentInitTranData($encryptedTranData, $callbackUrl);
-
             // Primary flow: build hosted payment URL with query params.
             // Many tranportal-style gateways expect:
-            //   ?param=paymentInit&trandata=<encrypted_and_wrapped_data>
+            //   ?param=paymentInit&trandata=<encrypted_data>&tranportalId=...&responseURL=...&errorURL=...
             // and may reject opening tranportal endpoint without these params (415).
             $this->updateGatewayTracking($order, [
                 'gateway_name' => 'arb',
@@ -67,8 +65,11 @@ class ArbPaymentService
 
             $endpoint = rtrim((string) config('services.arb.endpoint'), '?');
             $paymentUrl = $endpoint
-                . '?param=paymentInit&trandata='
-                . rawurlencode($paymentInitTranData);
+                . '?param=paymentInit'
+                . '&trandata=' . rawurlencode($encryptedTranData)
+                . '&tranportalId=' . rawurlencode((string) config('services.arb.tranportal_id'))
+                . '&responseURL=' . rawurlencode($callbackUrl)
+                . '&errorURL=' . rawurlencode((string) config('services.arb.error_url', $callbackUrl));
 
             return [
                 'payment_url' => $paymentUrl,
@@ -462,11 +463,4 @@ class ArbPaymentService
         }
     }
 
-    private function buildPaymentInitTranData(string $encryptedTranData, string $callbackUrl): string
-    {
-        return $encryptedTranData
-            . '&tranportalId=' . rawurlencode((string) config('services.arb.tranportal_id'))
-            . '&responseURL=' . rawurlencode($callbackUrl)
-            . '&errorURL=' . rawurlencode((string) config('services.arb.error_url', $callbackUrl));
-    }
 }
