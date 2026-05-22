@@ -29,7 +29,7 @@
 	{
 		$response = [
 			'status' => $status,
-			'msg' => $msg,
+			'msg' => __($msg),
 			'data' => $data
 		];
 		return response()->json($response);
