@@ -181,10 +181,13 @@ class VendorDashboardController extends Controller
             ->with(['user:id,name', 'offers']);
 
         if ($status !== '') {
-            $query->where(function ($q) use ($status) {
-                $q->where('payment_status', $status)
-                    ->orWhere('request_type', $status);
-            });
+            if ($status === 'paid') {
+                $query->where('payment_status', 1);
+            } elseif ($status === 'pending') {
+                $query->where('payment_status', 0);
+            } elseif ($status === '2') {
+                $query->where('request_type', 2);
+            }
         }
         if ($dateFrom) {
             $query->whereDate('created_at', '>=', $dateFrom);
