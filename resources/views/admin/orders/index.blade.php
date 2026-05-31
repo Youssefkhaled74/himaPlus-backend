@@ -118,9 +118,6 @@
                                         class="form-control"
                                         placeholder="{{ __('admin.pages.orders.search_by_order_no') }}">
                                 </div>
-                                <button type="submit" class="btn btn-light">
-                                    <i class="ri-search-line align-bottom"></i>
-                                </button>
                             </form>
 
                             <div class="admin-orders-toggle" role="tablist" aria-label="Orders tabs">
