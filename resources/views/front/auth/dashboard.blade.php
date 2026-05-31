@@ -127,40 +127,52 @@
 
     <section class="row g-3 mb-4 reveal">
         <div class="col-6 col-md-4 col-xl-2">
-            <div class="dashboard-stat-card">
-                <div class="label">{{ app()->getLocale() === 'ar' ? 'طلباتي' : 'My Orders' }}</div>
-                <div class="value">{{ $counts['orders'] }}</div>
-            </div>
+            <a href="{{ route('user/myorders', 'all') }}" class="text-decoration-none d-block">
+                <div class="dashboard-stat-card">
+                    <div class="label">{{ app()->getLocale() === 'ar' ? 'طلباتي' : 'My Orders' }}</div>
+                    <div class="value">{{ $counts['orders'] }}</div>
+                </div>
+            </a>
         </div>
         <div class="col-6 col-md-4 col-xl-2">
-            <div class="dashboard-stat-card">
-                <div class="label">{{ app()->getLocale() === 'ar' ? 'فواتير مدفوعة' : 'Paid Invoices' }}</div>
-                <div class="value">{{ $counts['paid_invoices'] }}</div>
-            </div>
+            <a href="{{ route('user/myorders', 'all') }}" class="text-decoration-none d-block">
+                <div class="dashboard-stat-card">
+                    <div class="label">{{ app()->getLocale() === 'ar' ? 'فواتير مدفوعة' : 'Paid Invoices' }}</div>
+                    <div class="value">{{ $counts['paid_invoices'] }}</div>
+                </div>
+            </a>
         </div>
         <div class="col-6 col-md-4 col-xl-2">
-            <div class="dashboard-stat-card">
-                <div class="label">{{ app()->getLocale() === 'ar' ? 'طلبات معلقة' : 'Pending Orders' }}</div>
-                <div class="value">{{ $counts['pending_orders'] }}</div>
-            </div>
+            <a href="{{ route('user/myorders', 'all') }}" class="text-decoration-none d-block">
+                <div class="dashboard-stat-card">
+                    <div class="label">{{ app()->getLocale() === 'ar' ? 'طلبات معلقة' : 'Pending Orders' }}</div>
+                    <div class="value">{{ $counts['pending_orders'] }}</div>
+                </div>
+            </a>
         </div>
         <div class="col-6 col-md-4 col-xl-2">
-            <div class="dashboard-stat-card">
-                <div class="label">{{ app()->getLocale() === 'ar' ? 'المفضلة' : 'Favorites' }}</div>
-                <div class="value">{{ $counts['favorites'] }}</div>
-            </div>
+            <a href="{{ route('user/favorites') }}" class="text-decoration-none d-block">
+                <div class="dashboard-stat-card">
+                    <div class="label">{{ app()->getLocale() === 'ar' ? 'المفضلة' : 'Favorites' }}</div>
+                    <div class="value">{{ $counts['favorites'] }}</div>
+                </div>
+            </a>
         </div>
         <div class="col-6 col-md-4 col-xl-2">
-            <div class="dashboard-stat-card">
-                <div class="label">{{ app()->getLocale() === 'ar' ? 'الإشعارات' : 'Notifications' }}</div>
-                <div class="value">{{ $counts['notifications'] }}</div>
-            </div>
+            <a href="javascript:void(0)" class="text-decoration-none d-block">
+                <div class="dashboard-stat-card">
+                    <div class="label">{{ app()->getLocale() === 'ar' ? 'الإشعارات' : 'Notifications' }}</div>
+                    <div class="value">{{ $counts['notifications'] }}</div>
+                </div>
+            </a>
         </div>
         <div class="col-6 col-md-4 col-xl-2">
-            <div class="dashboard-stat-card">
-                <div class="label">{{ app()->getLocale() === 'ar' ? 'متابعة' : 'Tracking' }}</div>
-                <div class="value">{{ $counts['orders'] }}</div>
-            </div>
+            <a href="{{ route('user/myorders', 'all') }}" class="text-decoration-none d-block">
+                <div class="dashboard-stat-card">
+                    <div class="label">{{ app()->getLocale() === 'ar' ? 'متابعة' : 'Tracking' }}</div>
+                    <div class="value">{{ $counts['orders'] }}</div>
+                </div>
+            </a>
         </div>
     </section>
 
@@ -199,15 +211,17 @@
                 </div>
                 <div>
                     @forelse($orders as $order)
-                        <div class="dashboard-list-item d-flex justify-content-between align-items-center gap-3">
-                            <div>
-                                <div class="fw-semibold">#{{ $order->id }} - {{ $order->provider->name ?? '-' }}</div>
-                                <small class="text-muted">{{ optional($order->created_at)->format('Y-m-d') }}</small>
+                        <a href="{{ route('user/get/order', $order->id) }}" class="text-decoration-none">
+                            <div class="dashboard-list-item d-flex justify-content-between align-items-center gap-3">
+                                <div>
+                                    <div class="fw-semibold">#{{ $order->id }} - {{ $order->provider->name ?? '-' }}</div>
+                                    <small class="text-muted">{{ optional($order->created_at)->format('Y-m-d') }}</small>
+                                </div>
+                                <div>
+                                    <span class="badge {{ (int)($order->payment_status ?? 0) === 1 ? 'bg-success' : 'bg-warning text-dark' }}">{{ (int)($order->payment_status ?? 0) === 1 ? 'Paid' : 'Pending' }}</span>
+                                </div>
                             </div>
-                            <div>
-                                <span class="badge {{ (int)($order->payment_status ?? 0) === 1 ? 'bg-success' : 'bg-warning text-dark' }}">{{ (int)($order->payment_status ?? 0) === 1 ? 'Paid' : 'Pending' }}</span>
-                            </div>
-                        </div>
+                        </a>
                     @empty
                         <div class="text-muted">{{ app()->getLocale() === 'ar' ? 'لا توجد طلبات حتى الآن.' : 'No orders yet.' }}</div>
                     @endforelse
@@ -219,13 +233,15 @@
                 <strong class="d-block mb-2">{{ app()->getLocale() === 'ar' ? 'الموردون والشركات' : 'Suppliers & Companies' }}</strong>
                 <div>
                     @forelse($featuredSuppliers as $supplier)
-                        <div class="dashboard-list-item d-flex align-items-center gap-2">
-                            <img src="{{ $supplier->img ? asset($supplier->img) : asset('front/assets/images/emptyproducts.png') }}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;" alt="supplier">
-                            <div class="flex-grow-1">
-                                <div class="fw-semibold">{{ $supplier->name }}</div>
-                                <a class="small" href="{{ route('products', ['vendor_name' => $supplier->name]) }}">{{ app()->getLocale() === 'ar' ? 'عرض المنتجات' : 'View products' }}</a>
+                        <a href="{{ route('products', ['vendor_name' => $supplier->name]) }}" class="text-decoration-none">
+                            <div class="dashboard-list-item d-flex align-items-center gap-2">
+                                <img src="{{ $supplier->img ? asset($supplier->img) : asset('front/assets/images/emptyproducts.png') }}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;" alt="supplier">
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold">{{ $supplier->name }}</div>
+                                    <span class="small">{{ app()->getLocale() === 'ar' ? 'عرض المنتجات' : 'View products' }}</span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     @empty
                         <div class="text-muted">{{ app()->getLocale() === 'ar' ? 'لا يوجد موردون.' : 'No suppliers.' }}</div>
                     @endforelse
