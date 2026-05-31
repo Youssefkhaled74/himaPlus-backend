@@ -150,9 +150,9 @@ body{
 .profile-side .custom-btn-tab{display:flex; align-items:center; gap:10px; width:100%; background:rgba(255,255,255,.1); border:0; color:#fff; padding:.7rem .9rem; border-radius:10px; margin-bottom:10px; text-decoration:none}
 .profile-side .custom-btn-tab.active{background:#fff; color:#1f2b45}
 .profile-side .custom-btn-tab .bi{font-size:1rem}
-.profile-side .nav-link-tab{display:flex; align-items:center; gap:10px; width:100%; background:rgba(255,255,255,.1); border:0; color:#fff; padding:.7rem .9rem; border-radius:10px; margin-bottom:10px; text-decoration:none}
+/* .profile-side .nav-link-tab{display:flex; align-items:center; gap:10px; width:100%; background:rgba(255,255,255,.1); border:0; color:#fff; padding:.7rem .9rem; border-radius:10px; margin-bottom:10px; text-decoration:none}
 .profile-side .nav-link-tab:hover{background:#fff; color:#1f2b45}
-.profile-side .nav-link-tab .bi{font-size:1rem}
+.profile-side .nav-link-tab .bi{font-size:1rem} */
 
 /* Ghost button */
 .btn-ghost{border:1px solid var(--hp-border); background:#fff; color:#27324a; border-radius:10px; font-weight:600}
