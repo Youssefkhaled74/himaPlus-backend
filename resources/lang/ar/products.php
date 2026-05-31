@@ -18,6 +18,13 @@ return [
     'details' => 'التفاصيل',
     'add_to_cart' => 'أضف للسلة',
     'add_to_wishlist' => 'أضف للمفضلة',
+    'product_name' => 'اسم المنتج',
+    'factory_name' => 'اسم المصنع',
+    'supplier_name' => 'اسم المورد',
+    'factory_country' => 'دولة المصنع',
+    'filter' => 'تصفية',
+    'reset' => 'إعادة تعيين',
+    'supplier' => 'المورد',
 
     // Product details
     'stock_status' => 'حالة المخزون',

@@ -30,20 +30,20 @@
             <div class="container">
                 @isset($report['category'])
                     <form method="GET" action="{{ route('categoryProducts', [$report['category']->id]) }}" class="row g-2 mb-4">
-                        <div class="col-md-3"><input class="form-control" name="product_name" value="{{ request('product_name') }}" placeholder="Product name"></div>
-                        <div class="col-md-2"><input class="form-control" name="factory_name" value="{{ request('factory_name') }}" placeholder="Factory name"></div>
-                        <div class="col-md-2"><input class="form-control" name="vendor_name" value="{{ request('vendor_name') }}" placeholder="Supplier name"></div>
+                        <div class="col-md-3"><input class="form-control" name="product_name" value="{{ request('product_name') }}" placeholder="{{ __('products.product_name') }}"></div>
+                        <div class="col-md-2"><input class="form-control" name="factory_name" value="{{ request('factory_name') }}" placeholder="{{ __('products.factory_name') }}"></div>
+                        <div class="col-md-2"><input class="form-control" name="vendor_name" value="{{ request('vendor_name') }}" placeholder="{{ __('products.supplier_name') }}"></div>
                         <div class="col-md-3">
                             <select class="form-select" name="factory_country">
-                                <option value="">Factory country</option>
+                                <option value="">{{ __('products.factory_country') }}</option>
                                 @foreach($countries as $country)
                                     <option value="{{ $country->name }}" {{ request('factory_country') === $country->name ? 'selected' : '' }}>{{ $country->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-2 d-flex gap-2">
-                            <button class="btn btn-primary w-100" type="submit">Filter</button>
-                            <a href="{{ route('categoryProducts', [$report['category']->id]) }}" class="btn btn-outline-secondary">Reset</a>
+                            <button class="btn btn-primary w-100" type="submit">{{ __('products.filter') }}</button>
+                            <a href="{{ route('categoryProducts', [$report['category']->id]) }}" class="btn btn-outline-secondary">{{ __('products.reset') }}</a>
                         </div>
                     </form>
                     <nav class="hp-breadcrumb small mb-4">
@@ -95,7 +95,7 @@
                                                 <i class="bi bi-cart-plus-fill"></i>
                                             </button>
                                             <a href="{{ route('product', [$product->id]) }}" class="btn btn-gradient btn-sm px-3 me-2">{{ __('products.details') }}</a>
-                                            <a href="{{ route('products', ['vendor_name' => $product->provider?->name]) }}" class="btn btn-outline-secondary btn-sm px-2">{{ app()->getLocale() === 'ar' ? 'المورد' : 'Supplier' }}</a>
+                                            <a href="{{ route('products', ['vendor_name' => $product->provider?->name]) }}" class="btn btn-outline-secondary btn-sm px-2">{{ __('products.supplier') }}</a>
                                         </div>
                                     </div>
                                 </article>

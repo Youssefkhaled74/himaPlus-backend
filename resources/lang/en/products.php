@@ -18,6 +18,13 @@ return [
     'details' => 'Details',
     'add_to_cart' => 'Add to Cart',
     'add_to_wishlist' => 'Add to wishlist',
+    'product_name' => 'Product name',
+    'factory_name' => 'Factory name',
+    'supplier_name' => 'Supplier name',
+    'factory_country' => 'Factory country',
+    'filter' => 'Filter',
+    'reset' => 'Reset',
+    'supplier' => 'Supplier',
 
     // Product details
     'stock_status' => 'Stock Status',
