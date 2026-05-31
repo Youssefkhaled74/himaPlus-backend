@@ -38,13 +38,13 @@
                     <a class="btn-tab active" section-name="{{ __('profile.personal_info') }}" data-target="#profile-pane" href="#profile-pane">
                         <i class="bi bi-person"></i> <span>{{ __('profile.personal_info_short') }}</span>
                     </a>
-                    <a class="btn-tab" href="{{ route('user/dashboard') }}">
+                    <a class="nav-link-tab" href="{{ route('user/dashboard') }}">
                         <i class="bi bi-speedometer2"></i> <span>{{ app()->getLocale() === 'ar' ? 'لوحة العميل' : 'Dashboard' }}</span>
                     </a>
-                    <a class="btn-tab" href="{{ route('user/myorders', 'all') }}">
+                    <a class="nav-link-tab" href="{{ route('user/myorders', 'all') }}">
                         <i class="bi bi-bag-check"></i> <span>{{ app()->getLocale() === 'ar' ? 'طلباتي' : 'My Orders' }}</span>
                     </a>
-                    <a class="btn-tab" href="{{ route('user/favorites') }}">
+                    <a class="nav-link-tab" href="{{ route('user/favorites') }}">
                         <i class="bi bi-heart"></i> <span>{{ app()->getLocale() === 'ar' ? 'المفضلة' : 'Favorites' }}</span>
                     </a>
                     <a class="btn-tab" section-name="{{ __('profile.change_password') }}" data-target="#password-pane" href="#password-pane">
