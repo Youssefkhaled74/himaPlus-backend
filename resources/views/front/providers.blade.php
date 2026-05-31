@@ -144,8 +144,8 @@
                 </div>
 
                 <!-- Cards -->
-                <div class="row g-4">
-                    <div class="col-md-4" data-aos="fade-up" data-aos-once="false" data-aos-mirror="true">
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-5" data-aos="fade-up" data-aos-once="false" data-aos-mirror="true">
                         <a class="nc-card" href="#">
                             <div class="nc-card__media">
                                 <img src="{{ asset('front/assets/images/empty-medical-office-with-desktop-pc 11111.png') }}" alt="Medical Suppliers">
@@ -154,7 +154,7 @@
                             <div class="nc-card__title">{{ __('providers.medical_suppliers') }}</div>
                         </a>
                     </div>
-                    <div class="col-md-4" data-aos="fade-up" data-aos-once="false" data-aos-mirror="true" data-aos-delay="100">
+                    <div class="col-md-5" data-aos="fade-up" data-aos-once="false" data-aos-mirror="true" data-aos-delay="100">
                         <a class="nc-card" href="#">
                             <div class="nc-card__media">
                                 <img src="{{ asset('front/assets/images/acoustic-engineering-hospitals-minimize-noise-pollution 1.png') }}" alt="Medical Suppliers">
@@ -163,7 +163,6 @@
                             <div class="nc-card__title">{{ __('providers.pharmaceutical_companies') }}</div>
                         </a>
                     </div>
-
                 </div>
 
                 <!-- See More -->
