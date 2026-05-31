@@ -190,7 +190,7 @@
                 </div>
             @endforelse
 
-            @if(isset($categories) && $categories->hasPages())
+            @if(isset($categories) && method_exists($categories, 'hasPages') && $categories->hasPages())
                 <nav class="mt-4">
                     <ul class="pagination flex-wrap justify-content-center align-items-center mb-0">
                         @if (!$categories->onFirstPage())
