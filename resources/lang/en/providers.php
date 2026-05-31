@@ -38,5 +38,19 @@ return [
     'banner_desc' => 'Get exclusive discounts and limited-time deals from trusted suppliers across Saudi Arabia.',
     'register_now' => 'Register Now',
     'contact_us' => 'Contact Us',
+
+    // Vendor Categories
+    'categories' => 'Categories',
+    'categories_desc' => 'Manage your product categories',
+    'add_new' => 'Add New',
+    'add_category' => 'Add New Category',
+    'add_category_desc' => 'Create a new category with an optional image',
+    'category_name' => 'Category name',
+    'add' => 'Add',
+    'all_categories' => 'All Categories',
+    'all_categories_desc' => 'Registered categories and their associated products',
+    'products_count' => 'products',
+    'no_categories' => 'No Categories',
+    'no_categories_desc' => 'Add a new category using the form above',
 ];
 

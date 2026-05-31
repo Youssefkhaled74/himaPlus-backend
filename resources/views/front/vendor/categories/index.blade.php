@@ -1,5 +1,5 @@
 @extends('layouts.front.home')
-@section('title')<title>Vendor Categories</title>@endsection
+@section('title')<title>{{ __('providers.categories') ?? 'Vendor Categories' }}</title>@endsection
 
 @section('css')
 <style>
@@ -177,9 +177,8 @@
                         @endif
                         <div>
                             <div class="fw-semibold" style="color:#0f2f7f;">{{ $category->name }}</div>
-                            <small class="text-muted">{{ $category->products->count() }} {{ __('providers.products_count') ?? 'منتج' }}</small>
+                            <small class="text-muted">{{ $category->products->count() }} {{ __('providers.products_count') ?? __('products.products') }}</small>
                         </div>
-                    </div>
                     </div>
                 </div>
             @empty
