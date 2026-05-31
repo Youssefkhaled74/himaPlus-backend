@@ -269,54 +269,7 @@
             </div>
         </section>
 
-        <section id="new-downloads" class="ndl">
-            <div class="container">
-                <div class="ndl__wrap">
-                    <!-- Card Left -->
-                    <div class="ndl__card" data-aos="fade-right" data-aos-once="false" data-aos-mirror="true">
-                        <h3 class="ndl__title">{!! __('providers.download_title') !!}</h3>
-                        <p class="ndl__desc">
-                            {{ __('providers.download_desc') }}
-                        </p>
-                        <div class="ndl__stores">
-                        <a href="#" class="ndl__store">
-                            <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store">
-                        </a>
-                        <a href="#" class="ndl__store">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
-                        </a>
-                        </div>
-                    </div>
 
-                    <div class="ndl__scene" data-aos="fade-left" data-aos-once="false" data-aos-mirror="true" data-aos-delay="100">
-                        <div class="ndl__tray"></div>
-                        <div class="ndl__phones">
-                        <img class="ndl__phone ndl__phone--center" src="{{ asset('front/assets/images/Group 1171275716.png') }}" alt="app center">
-                        </div>
-                        <div class="ndl__decor">
-                            <span></span><span></span><span></span><span></span><span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="new-banar" class="nb new-banar-fonts">
-            <div class="nb__bg" style="background-image:url({{ asset('front/assets/images/doctor-is-analyzing-treatment.png') }});"></div>
-            <div class="nb__hex"></div>
-            <div class="container position-relative">
-                <div class="row justify-content-center">
-                    <div class="col-11 col-lg-9 text-center">
-                        <h2 class="nb__title">{{ __('providers.banner_title') }}</h2>
-                        <p class="nb__subtitle">
-                            {{ __('providers.banner_desc') }}
-                        </p>
-                        <a href="{{ route('user/loginForm') }}" class="nb-btn me-3" aria-label="{{ __('providers.register_now') }}" style="text-decoration: none;"><span>{{ __('providers.register_now') }}</span></a>
-                        <a href="{{ route('contactUs') }}" class="nb-btn-outline" aria-label="{{ __('providers.contact_us') }}" style="text-decoration: none;"><span>{{ __('providers.contact_us') }}</span></a>
-                    </div>
-                </div>
-            </div>
-        </section>
 
     </main>
         
