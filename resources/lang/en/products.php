@@ -74,6 +74,22 @@ return [
     'complete_order' => 'Complete Order',
     'invalid_coupon' => 'The selected coupon is invalid.',
 
+    // Orders List page
+    'my_orders' => 'My Orders & Invoices',
+    'my_orders_title' => 'Hema - My Orders',
+    'order_number_label' => 'Order',
+    'supplier_label' => 'Supplier',
+    'total_label' => 'Total',
+    'no_orders_title' => 'No Orders Yet',
+    'no_orders_text' => 'You have not placed orders yet. Start browsing products.',
+    'browse_products' => 'Browse Products',
+    'all_orders' => 'All',
+    'purchase_orders' => 'Purchase Orders',
+    'quotations' => 'Quotations',
+    'maintenance' => 'Maintenance',
+    'scheduled_orders' => 'Scheduled Orders',
+    'order_stages_info' => 'Order stages: Created → Confirmed → Processing → Shipped → Delivered → Completed.',
+
     // Order page
     'order_title' => 'Hema - Order Details',
     'orders' => 'Orders',

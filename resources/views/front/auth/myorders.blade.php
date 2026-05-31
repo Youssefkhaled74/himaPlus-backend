@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Hema - Smart Medical Procurement</title>
+    <title>{{ __('products.my_orders_title') }}</title>
 @endsection
 
 <!-- custom page -->
@@ -54,7 +54,7 @@
 @section('content')
 
 <main class="container my-4">
-    <h5 class="mb-3">{{ app()->getLocale() === 'ar' ? 'طلباتي وفواتيري' : 'My Orders & Invoices' }}</h5>
+    <h5 class="mb-3">{{ __('products.my_orders') }}</h5>
     @include('flash::message')
     @if ($errors->any())
         <div style="text-align: left; margin: 15px;">
@@ -69,14 +69,14 @@
         @php
             $tab = request()->route('page_type');
         @endphp
-        <li class="nav-item"><a class="nav-link {{ $tab == 'all' ? 'active' : '' }}" href="{{ route('user/myorders', 'all') }}">{{ app()->getLocale()==='ar' ? 'الكل' : 'All' }}</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'purchase-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'purchase-orders') }}">{{ app()->getLocale()==='ar' ? 'طلبات شراء' : 'Purchase Orders' }}</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'quotations' ? 'active' : '' }}" href="{{ route('user/myorders', 'quotations') }}">{{ app()->getLocale()==='ar' ? 'طلبات تسعير' : 'Quotations' }}</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'maintenances' ? 'active' : '' }}" href="{{ route('user/myorders', 'maintenances') }}">{{ app()->getLocale()==='ar' ? 'صيانة' : 'Maintenance' }}</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'scheduled-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'scheduled-orders') }}">{{ app()->getLocale()==='ar' ? 'طلبات مجدولة' : 'Scheduled Orders' }}</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'all' ? 'active' : '' }}" href="{{ route('user/myorders', 'all') }}">{{ __('products.all_orders') }}</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'purchase-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'purchase-orders') }}">{{ __('products.purchase_orders') }}</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'quotations' ? 'active' : '' }}" href="{{ route('user/myorders', 'quotations') }}">{{ __('products.quotations') }}</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'maintenances' ? 'active' : '' }}" href="{{ route('user/myorders', 'maintenances') }}">{{ __('products.maintenance') }}</a></li>
+        <li class="nav-item"><a class="nav-link {{ $tab == 'scheduled-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'scheduled-orders') }}">{{ __('products.scheduled_orders') }}</a></li>
     </ul>
     <div class="alert alert-light border small">
-        {{ app()->getLocale()==='ar' ? 'مراحل الطلب: إنشاء الطلب → تأكيد المورد → تجهيز → شحن → تسليم → اكتمال.' : 'Order stages: Created → Supplier Confirmed → Processing → Shipped → Delivered → Completed.' }}
+        {!! __('products.order_stages_info') !!}
     </div>
 
     <div class="reveal">
@@ -94,10 +94,9 @@
                     <div class="chip chip--{{ timelineNameBackground($lastTimeline?->timeline_no) }}">{{ timelineName($lastTimeline?->timeline_no) }}</div>
                     <div class="order-card__title">{{ orderType($order->order_type) }}</div>
                     <div class="meta">
-                        <div><strong>Order #{{ $order->id }} – {{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y') }}</strong></div>
-                        {{-- <div>Product: X-Ray Machine – 2 Units</div> --}}
-                        <div>Supplier: {{ $order->provider?->name }}</div>
-                        <div>Total: {{ $order->total_cost }} SAR</div>
+                        <div><strong>{{ __('products.order_number_label') }} #{{ $order->id }} – {{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y') }}</strong></div>
+                        <div>{{ __('products.supplier_label') }}: {{ $order->provider?->name }}</div>
+                        <div>{{ __('products.total_label') }}: {{ $order->total_cost }} {{ __('products.currency_sar') }}</div>
                     </div>
                     <a class="chev" href="{{ route('user/get/order', $order->id) }}"><i class="bi bi-chevron-right"></i></a>
                 </div>
@@ -107,11 +106,11 @@
                 <div class="empty-state__icon">
                     <i class="bi bi-inbox"></i>
                 </div>
-                <h5 class="empty-state__title">{{ app()->getLocale()==='ar' ? 'لا توجد طلبات بعد' : 'No Orders Yet' }}</h5>
-                <p class="empty-state__text">{{ app()->getLocale()==='ar' ? 'لم تقم بإنشاء أي طلب حتى الآن. ابدأ بتصفح المنتجات.' : 'You have not placed orders yet. Start browsing products.' }}</p>
+                <h5 class="empty-state__title">{{ __('products.no_orders_title') }}</h5>
+                <p class="empty-state__text">{{ __('products.no_orders_text') }}</p>
                 <a href="{{ route('products') }}" class="empty-state__btn">
                     <i class="bi bi-cart-plus"></i>
-                    {{ app()->getLocale()==='ar' ? 'تصفح المنتجات' : 'Browse Products' }}
+                    {{ __('products.browse_products') }}
                 </a>
             </div>
         @endif

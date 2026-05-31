@@ -123,7 +123,7 @@
                                 <div class="product-meta">{{ $product->category?->name }}</div>
                                 <div class="text-muted small mt-1">x{{ $item->quantity }}</div>
                             </div>
-                            <div class="product-price">{{ $item->item_price }} ASR</div>
+                            <div class="product-price">{{ $item->item_price }} {{ __('products.currency_sar') }}</div>
                         </div>
                     @endforeach
                     @endif

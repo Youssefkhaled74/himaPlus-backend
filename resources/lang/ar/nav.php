@@ -68,6 +68,9 @@ return [
     'copyright' => '© 2025 هيما. جميع الحقوق محفوظة.',
     'powered_by' => 'بواسطة TPTC',
 
+    // Invoices
+    'invoices' => 'الفواتير',
+
     // Scheduled Orders
     'scheduled_orders' => 'الطلبات المجدولة',
     'recent_scheduled_orders' => 'الطلبات المجدولة الأخيرة',

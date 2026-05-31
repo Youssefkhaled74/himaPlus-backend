@@ -31,13 +31,13 @@
                             <a class="nav-link {{ str_contains($routeName, 'vendor/products') ? 'active' : '' }}" href="{{ route('vendor/products') }}">{{ __('nav.products') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('vendor/orders/my-offers') || (request()->routeIs('vendor/orders') && request('tab') === 'quotations') ? 'active' : '' }}" href="{{ route('vendor/orders', ['tab' => 'quotations']) }}">{{ app()->getLocale() === 'ar' ? 'طلبات التسعير' : 'Quotation Requests' }}</a>
+                            <a class="nav-link {{ request()->routeIs('vendor/orders/my-offers') || (request()->routeIs('vendor/orders') && request('tab') === 'quotations') ? 'active' : '' }}" href="{{ route('vendor/orders', ['tab' => 'quotations']) }}">{{ __('nav.quotations') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ str_contains($routeName, 'vendor/orders') && !(request()->routeIs('vendor/orders') && request('tab') === 'quotations') ? 'active' : '' }}" href="{{ route('vendor/orders') }}">{{ __('nav.orders') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('vendor/invoices') ? 'active' : '' }}" href="{{ route('vendor/invoices') }}">{{ app()->getLocale() === 'ar' ? 'الفواتير' : 'Invoices' }}</a>
+                            <a class="nav-link {{ request()->routeIs('vendor/invoices') ? 'active' : '' }}" href="{{ route('vendor/invoices') }}">{{ __('nav.invoices') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('vendor/categories') ? 'active' : '' }}" href="{{ route('vendor/categories') }}">{{ __('nav.categories') }}</a>
@@ -78,7 +78,7 @@
                 @else
                     <ul class="navbar-nav ms-auto align-items-lg-center">
                         <li class="nav-item">
-                            <a class="nav-link" id="nav-dashboard" href="{{ route('user/dashboard') }}">{{ app()->getLocale() === 'ar' ? 'لوحة العميل' : 'Dashboard' }}</a>
+                            <a class="nav-link" id="nav-dashboard" href="{{ route('user/dashboard') }}">{{ __('nav.dashboard') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="nav-home" href="{{ route('home') }}">{{ __('nav.home') }}</a>

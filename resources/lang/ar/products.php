@@ -74,6 +74,22 @@ return [
     'complete_order' => 'إكمال الطلب',
     'invalid_coupon' => 'الكوبون المحدد غير صالح.',
 
+    // Orders List page
+    'my_orders' => 'طلباتي وفواتيري',
+    'my_orders_title' => 'هيما - طلباتي',
+    'order_number_label' => 'طلب رقم',
+    'supplier_label' => 'المورد',
+    'total_label' => 'الإجمالي',
+    'no_orders_title' => 'لا توجد طلبات بعد',
+    'no_orders_text' => 'لم تقم بإنشاء أي طلب حتى الآن. ابدأ بتصفح المنتجات.',
+    'browse_products' => 'تصفح المنتجات',
+    'all_orders' => 'الكل',
+    'purchase_orders' => 'طلبات شراء',
+    'quotations' => 'طلبات تسعير',
+    'maintenance' => 'صيانة',
+    'scheduled_orders' => 'طلبات مجدولة',
+    'order_stages_info' => 'مراحل الطلب: إنشاء الطلب → تأكيد المورد → تجهيز → شحن → تسليم → اكتمال.',
+
     // Order page
     'order_title' => 'هيما - تفاصيل الطلب',
     'orders' => 'الطلبات',

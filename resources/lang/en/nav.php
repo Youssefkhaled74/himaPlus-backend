@@ -68,6 +68,9 @@ return [
     'copyright' => '© 2025 Hema. All rights reserved.',
     'powered_by' => 'Powered by TPTC',
 
+    // Invoices
+    'invoices' => 'Invoices',
+
     // Scheduled Orders
     'scheduled_orders' => 'Scheduled Orders',
     'recent_scheduled_orders' => 'Recent Scheduled Orders',
