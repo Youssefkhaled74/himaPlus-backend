@@ -163,15 +163,7 @@
                             <div class="nc-card__title">{{ __('providers.pharmaceutical_companies') }}</div>
                         </a>
                     </div>
-                    <div class="col-md-4" data-aos="fade-up" data-aos-once="false" data-aos-mirror="true" data-aos-delay="200">
-                        <a class="nc-card" href="#">
-                            <div class="nc-card__media">
-                                <img src="{{ asset('front/assets/images/hospital-lab-with-sterile-test-tubes-glass-vials-sample-analysis 2.png') }}" alt="Medical Suppliers">
-                                <span class="nc-card__overlay"></span>
-                            </div>
-                            <div class="nc-card__title">{{ __('providers.medical_logistics') }}</div>
-                        </a>
-                    </div>
+
                 </div>
 
                 <!-- See More -->
