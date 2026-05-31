@@ -38,9 +38,10 @@ class VendorNotificationsController extends Controller
         $notifications = $query->paginate(15);
         
         // Get counts for filters
+        $baseQuery = Notification::where('user_id', $vendorId)->whereIn('type', $allowedTypes);
         $counts = [
-            'total' => Notification::where('user_id', $vendorId)->count(),
-            'unread' => Notification::where('user_id', $vendorId)->unread()->count(),
+            'total' => (clone $baseQuery)->count(),
+            'unread' => (clone $baseQuery)->unread()->count(),
             'orders' => Notification::where('user_id', $vendorId)->where('type', 'order')->count(),
             'payment' => Notification::where('user_id', $vendorId)->where('type', 'payment')->count(),
             'status_change' => Notification::where('user_id', $vendorId)->where('type', 'status_change')->count(),
