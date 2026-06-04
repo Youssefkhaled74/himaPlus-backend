@@ -25,9 +25,11 @@
             padding: 10px 14px;
         }
 
-        .info-tabs .nav-link.active {
+        .info-tabs .nav-link.active,
+        .info-tabs .nav-link.active:focus,
+        .info-tabs .nav-link.active:hover {
             background: linear-gradient(135deg, #18326f, #0f4bbf);
-            color: #fff;
+            color: #fff !important;
             border-color: transparent;
         }
 
