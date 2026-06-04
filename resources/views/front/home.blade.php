@@ -377,7 +377,7 @@
                                             <div class="col-md-4">
                                                 <a class="nc-card" href="{{ route('categoryProducts', [$category->id]) }}">
                                                     <div class="nc-card__media">
-                                                        <img src="{{ asset($category->img) }}" alt="{{ $category->name }}">
+                                                        <img src="{{ asset($category->img) }}" alt="{{ $category->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                                         <span class="nc-card__overlay"></span>
                                                     </div>
                                                     <div class="nc-card__title">{{ $category->name }}</div>
@@ -460,7 +460,7 @@
                                 <article class="equipment-card h-100"  data-aos-once="false" data-aos-mirror="true" data-aos="zoom-in" data-aos-delay="100" data-aos="{{ $product->name }}">
                                     {{-- <img src="{{ asset($product->img) }}" class="equipment-card__image" alt="Digital X-Ray"> --}}
                                     <div class="position-relative">
-                                        <img src="{{ asset('storage/' . $product->img) }}" class="equipment-card__image" alt="{{ $product->name }}">
+                                        <img src="{{ asset('storage/' . $product->img) }}" class="equipment-card__image" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                         @if (is_null($product->is_favorite))
                                             <button class="wishlist-btn btn p-0 position-absolute top-0 end-0 m-2" data-id="{{ $product->id }}" aria-label="Add to wishlist">
                                                 <i class="bi bi-heart fs-5"></i>
@@ -486,7 +486,7 @@
                                         <div class="d-flex align-items-center">
                                             <span class="equipment-price me-3">{{ $product->price }} SAR</span>
 
-                                            <button class="hp-pill-btn ms-auto me-2 add-to-cart" data-id="{{ $product->id }}" data-img="{{ asset('storage/' . $product->img) }}" title="Add to cart">
+                                            <button class="hp-pill-btn ms-auto me-2 add-to-cart" data-id="{{ $product->id }}" data-img="{{ asset('storage/' . $product->img) }}" title="Add to cart" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                                 <i class="bi bi-cart-plus-fill"></i>
                                             </button>
                                             <a href="{{ route('product', [$product->id]) }}" class="btn btn-gradient btn-sm px-3 me-2">{{ __('home.details') }}</a>

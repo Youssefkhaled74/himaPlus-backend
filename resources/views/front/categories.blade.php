@@ -38,7 +38,7 @@
                         @foreach ($report['categories'] as $g => $category)
                             <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                                 <a class="hp-cat-card" href="{{ route('categoryProducts', [$category->id]) }}">
-                                    <img src="{{ asset($category->img) }}" alt="{{ $category->name }}">
+                                    <img src="{{ asset($category->img) }}" alt="{{ $category->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                     <span>{{ $category->name }}</span>
                                 </a>
                             </div>

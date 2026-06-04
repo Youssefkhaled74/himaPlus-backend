@@ -138,7 +138,7 @@
                                             <td class="fw-semibold">#{{ $record->id }}</td>
                                             <td class="fw-semibold">{{ $record->name }}</td>
                                             <td>
-                                                <img src="{{ asset($record->img) }}" alt="record image" class="img-fluid rounded-4" width="72" style="height:72px; object-fit:cover;">
+                                                <img src="{{ asset($record->img) }}" alt="record image" class="img-fluid rounded-4" width="72" style="height:72px; object-fit:cover;" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                             </td>
                                             <td>{{ $record->category?->name }}</td>
                                             <td>{{ $record->origin?->name }}</td>

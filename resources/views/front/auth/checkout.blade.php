@@ -49,7 +49,7 @@
                             $vat += $cost * $rate;
                         @endphp
                         <div class="product-item mb-3" id="item-area-{{ $item->product_id }}">
-                            <div class="product-thumb"><img src="{{ asset('storage/' . $product->img) }}" alt="{{ $product->name }}"></div>
+                            <div class="product-thumb"><img src="{{ asset('storage/' . $product->img) }}" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'"></div>
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between">
                                     <div>

@@ -138,16 +138,16 @@
                     <div class="row g-4">
                         <div class="col-lg-7">
                             <div class="hp-product-view card overflow-hidden mb-3">
-                                <img id="pd-main" src="{{ asset('storage/' . $product->img) }}" class="w-100" alt="{{ $product?->category->name }}">
+                                <img id="pd-main" src="{{ asset('storage/' . $product->img) }}" class="w-100" alt="{{ $product?->category->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                             </div>
                             
                             <div class="d-flex align-items-center justify-content-between">
                                 <button id="thumbPrev" class="btn btn-outline-secondary btn-sm rounded-4 hp-prev" aria-label="Previous image"><i class="bi bi-chevron-left"></i></button>
                                 <div id="thumbs" class="d-flex gap-2 thumbs-scroll mx-3">
-                                    <img class="hp-thumb" src="{{ asset('storage/' . $product->img) }}" alt="Thumbnail 1">
+                                    <img class="hp-thumb" src="{{ asset('storage/' . $product->img) }}" alt="Thumbnail 1" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                     @foreach ($product->imgs as $i => $img)
                                         @if (!$img == "")
-                                            <img class="hp-thumb" src="{{ asset('storage/' . $img) }}" alt="Thumbnail {{ $i+2 }}">
+                                            <img class="hp-thumb" src="{{ asset('storage/' . $img) }}" alt="Thumbnail {{ $i+2 }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                         @endif
                                     @endforeach
                                 </div>
@@ -356,7 +356,7 @@
                                 <article class="equipment-card h-100"  data-aos-once="false" data-aos-mirror="true" data-aos="{{ $related->name }}">
                                     {{-- <img src="{{ asset($related->img) }}" class="equipment-card__image" alt="Digital X-Ray"> --}}
                                     <div class="position-relative">
-                                        <img src="{{ asset($related->img) }}" class="equipment-card__image" alt="{{ $related->name }}">
+                                        <img src="{{ asset($related->img) }}" class="equipment-card__image" alt="{{ $related->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                         @if (is_null($related->is_favorite))
                                             <button class="wishlist-btn btn p-0 position-absolute top-0 end-0 m-2" data-id="{{ $related->id }}" aria-label="Add to wishlist">
                                                 <i class="bi bi-heart fs-5"></i>

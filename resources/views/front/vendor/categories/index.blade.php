@@ -168,13 +168,7 @@
             @forelse($categories as $category)
                 <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
                     <div class="d-flex align-items-center gap-3">
-                        @if(!empty($category->img))
-                            <img src="{{ asset(ltrim($category->img,'/')) }}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;" alt="cat">
-                        @else
-                            <div style="width:48px;height:48px;border-radius:10px;background:#eef2f7;display:flex;align-items:center;justify-content:center;">
-                                <i class="bi bi-folder text-muted"></i>
-                            </div>
-                        @endif
+                            <img src="{{ !empty($category->img) ? asset(ltrim($category->img,'/')) : asset('front/assets/images/emptyproducts.png') }}" style="width:48px;height:48px;border-radius:10px;object-fit:cover;" alt="cat" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                         <div>
                             <div class="fw-semibold" style="color:#0f2f7f;">{{ $category->name }}</div>
                             <small class="text-muted">{{ $category->products->count() }} {{ __('providers.products_count') ?? __('products.products') }}</small>

@@ -58,7 +58,7 @@
                                             $imgUrl = asset('storage/' . $img);
                                         }
                                     } else {
-                                        $imgUrl = asset('front/assets/images/placeholder.png');
+                                        $imgUrl = asset('front/assets/images/emptyproducts.png');
                                     }
                                 @endphp
                                 <div class="product-thumb"><img src="{{ $imgUrl }}" alt="{{ $product->name }}"></div>

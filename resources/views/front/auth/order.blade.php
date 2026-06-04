@@ -117,7 +117,7 @@
                             $product = $item->product;
                         @endphp
                         <div class="mini-card mb-3">
-                            <div class="mini-thumb"><img src="{{ asset('storage/' . $product->img) }}" alt="{{ $product->name }}"></div>
+                            <div class="mini-thumb"><img src="{{ asset('storage/' . $product->img) }}" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'"></div>
                             <div class="flex-grow-1">
                                 <div class="product-title">{{ $product->name }}</div>
                                 <div class="product-meta">{{ $product->category?->name }}</div>
