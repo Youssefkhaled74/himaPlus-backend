@@ -39,7 +39,7 @@
                 'paid' => number_format($dashboard['totals']['accepted_paid_orders'] ?? 0),
                 'unpaid' => number_format($dashboard['totals']['accepted_unpaid_orders'] ?? 0),
             ]),
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
+            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=accepted',
         ],
         [
             'label' => __('admin.dashboard.rejected_orders'),
@@ -48,7 +48,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
+            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=canceled',
         ],
         [
             'label' => __('admin.dashboard.in_progress_orders'),
@@ -57,7 +57,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
+            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=processing',
         ],
         [
             'label' => __('admin.dashboard.executed_orders'),
@@ -66,7 +66,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
+            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=completed',
         ],
     ];
 @endphp
