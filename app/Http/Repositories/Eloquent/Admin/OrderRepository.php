@@ -75,6 +75,8 @@ class OrderRepository extends BaseAdminRepository
                 } elseif (isset($timelineMap[$status])) {
                     $query->whereHas('timeline', function ($q) use ($timelineMap, $status) {
                         $q->where('timeline_no', $timelineMap[$status]);
+                    })->whereDoesntHave('timeline', function ($q) use ($timelineMap, $status) {
+                        $q->where('timeline_no', '>', $timelineMap[$status]);
                     });
                 }
             })
