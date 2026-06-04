@@ -438,6 +438,8 @@ return [
             'search_in' => 'Search in :label...',
             'requests' => 'Requests',
             'archives' => 'Archives',
+            'previous' => 'Previous',
+            'next' => 'Next',
             'showing_entries' => 'Showing :from to :to of :total entries',
             'showing' => 'Showing',
             'to' => 'to',

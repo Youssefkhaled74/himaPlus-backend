@@ -129,6 +129,76 @@
             }
         }
 
+        .admin-pagination-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-top: 1.25rem;
+        }
+        .admin-pagination-info {
+            font-size: 0.82rem;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+        .admin-pagination {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .admin-pagination .page-item {
+            margin: 0;
+        }
+        .admin-pagination .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 .5rem;
+            border-radius: 8px !important;
+            border: 1px solid #e2e5f1;
+            background: #fff;
+            color: #4b5563;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all .15s ease;
+        }
+        .admin-pagination .page-link:hover {
+            background: #f3f6ff;
+            border-color: #c4d0e3;
+            color: #0f4bbf;
+        }
+        .admin-pagination .page-item.active .page-link {
+            background: #0f4bbf;
+            border-color: #0f4bbf;
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(15, 75, 191, 0.2);
+        }
+        .admin-pagination .page-item.disabled .page-link {
+            opacity: .4;
+            pointer-events: none;
+        }
+        .admin-pagination .page-link.prev-next {
+            font-size: 0.75rem;
+            gap: 4px;
+            padding: 0 .65rem;
+        }
+        .admin-pagination .page-link.ellipsis {
+            border: 0;
+            background: transparent;
+            min-width: 24px;
+            color: #9ca3af;
+            pointer-events: none;
+        }
+
         .country-status-toggle-wrap {
             display: inline-flex;
             align-items: center;
@@ -289,32 +359,64 @@
                         </table>
                     </div>
 
-                    <div class="d-flex justify-content-center mt-4">
+                    <div class="admin-pagination-wrap">
+                        <div class="admin-pagination-info">
+                            @php
+                                $from = $countries->firstItem();
+                                $to = $countries->lastItem();
+                                $total = $countries->total();
+                            @endphp
+                            {{ __('admin.pages.common.showing_entries', ['from' => $from, 'to' => $to, 'total' => $total]) }}
+                        </div>
                         <nav aria-label="Page navigation">
-                            <ul class="pagination flex-wrap justify-content-center align-items-center">
-                                @if (!$countries->onFirstPage())
-                                    <li class="page-item mt-1">
-                                        <a class="page-link" href="{{ $countries->previousPageUrl() }}" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
+                            <ul class="admin-pagination">
+                                {{-- Previous --}}
+                                <li class="page-item {{ $countries->onFirstPage() ? 'disabled' : '' }}">
+                                    <a class="page-link prev-next" href="{{ $countries->previousPageUrl() ?? '#' }}" aria-label="Previous">
+                                        <i class="ri-arrow-left-s-line"></i>
+                                        <span>{{ __('admin.pages.common.previous') }}</span>
+                                    </a>
+                                </li>
+
+                                {{-- Page numbers with ellipsis --}}
+                                @php
+                                    $current = $countries->currentPage();
+                                    $last = $countries->lastPage();
+                                    $start = max(1, $current - 2);
+                                    $end = min($last, $current + 2);
+                                @endphp
+
+                                @if($start > 1)
+                                    <li class="page-item {{ $current == 1 ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $countries->url(1) }}">1</a>
                                     </li>
+                                    @if($start > 2)
+                                        <li class="page-item"><span class="page-link ellipsis">...</span></li>
+                                    @endif
                                 @endif
 
-                                @for ($i = 1; $i <= $countries->lastPage(); $i++)
-                                    <li class="page-item mt-1 {{ $i == $countries->currentPage() ? 'active' : '' }}">
-                                        <a class="page-link" href="{{ $countries->url($i) }}" @if ($i == $countries->currentPage()) style="font-weight:bold;" @endif>
-                                            {{ $i }}
-                                        </a>
+                                @for($i = $start; $i <= $end; $i++)
+                                    <li class="page-item {{ $i == $current ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $countries->url($i) }}">{{ $i }}</a>
                                     </li>
                                 @endfor
 
-                                @if ($countries->hasMorePages())
-                                    <li class="page-item mt-1">
-                                        <a class="page-link" href="{{ $countries->nextPageUrl() }}" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
+                                @if($end < $last)
+                                    @if($end < $last - 1)
+                                        <li class="page-item"><span class="page-link ellipsis">...</span></li>
+                                    @endif
+                                    <li class="page-item {{ $current == $last ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $countries->url($last) }}">{{ $last }}</a>
                                     </li>
                                 @endif
+
+                                {{-- Next --}}
+                                <li class="page-item {{ !$countries->hasMorePages() ? 'disabled' : '' }}">
+                                    <a class="page-link prev-next" href="{{ $countries->nextPageUrl() ?? '#' }}" aria-label="Next">
+                                        <span>{{ __('admin.pages.common.next') }}</span>
+                                        <i class="ri-arrow-right-s-line"></i>
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
                     </div>

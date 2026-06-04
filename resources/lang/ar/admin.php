@@ -475,6 +475,8 @@ return [
             'search_in' => 'بحث في :label...',
             'requests' => 'الطلبات الواردة',
             'archives' => 'الأرشيف',
+            'previous' => 'السابق',
+            'next' => 'التالي',
             'showing_entries' => 'عرض :from إلى :to من أصل :total سجل',
             'showing' => 'عرض',
             'to' => 'إلى',
