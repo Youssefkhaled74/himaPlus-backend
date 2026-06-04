@@ -202,9 +202,14 @@
 
 @section('content')
     @php
-        $tab = $tab ?? request('tab', 'orders');
+        $tab = (string) ($tab ?? request('tab', 'orders'));
         $isRequestsPage = $tab === 'requests';
-        $orderNo = $orderNo ?? request('order_no', '');
+        $orderNo = (string) ($orderNo ?? request('order_no', ''));
+        $status = (string) ($status ?? request('status', ''));
+        $orderType = (string) ($orderType ?? request('order_type', ''));
+        $paymentStatus = (string) ($paymentStatus ?? request('payment_status', ''));
+        $dateFrom = (string) ($dateFrom ?? request('date_from', ''));
+        $dateTo = (string) ($dateTo ?? request('date_to', ''));
 
         $statusLabels = [
             'pending' => __('admin.pages.orders.statuses.pending'),
@@ -331,7 +336,6 @@
                                         <option value="{{ $key }}" {{ $status === $key ? 'selected' : '' }}>&#9679; {{ $label }}</option>
                                     @endif
                                 @endforeach
-                                <option value="scheduled" {{ $status === 'scheduled' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.scheduled') }}</option>
                                 <option value="upcoming" {{ $status === 'upcoming' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.upcoming') }}</option>
                                 <option value="active" {{ $status === 'active' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.active') }}</option>
                                 <option value="paused" {{ $status === 'paused' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.paused') }}</option>

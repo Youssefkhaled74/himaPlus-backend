@@ -22,16 +22,17 @@ class OrderController extends Controller
     public function index(Request $request, $offset, $limit)
     {
         try{
-            $tab = $request->get('tab', 'orders');
+            $tab = (string) $request->get('tab', 'orders');
             $orderNo = trim((string) $request->get('order_no', ''));
-            $status = $request->get('status', '');
-            $orderType = $request->get('order_type', '');
-            $paymentStatus = $request->get('payment_status', '');
-            $dateFrom = $request->get('date_from', '');
-            $dateTo = $request->get('date_to', '');
+            $status = (string) $request->get('status', '');
+            $orderType = (string) $request->get('order_type', '');
+            $paymentStatus = (string) $request->get('payment_status', '');
+            $dateFrom = (string) $request->get('date_from', '');
+            $dateTo = (string) $request->get('date_to', '');
             $orders = $this->orders->index($offset, $limit, $tab, $orderNo, $status, $orderType, $paymentStatus, $dateFrom, $dateTo);
             return view('admin.orders.index', compact('orders', 'tab', 'orderNo', 'status', 'orderType', 'paymentStatus', 'dateFrom', 'dateTo'));
         }catch(\Exception $e){
+            report($e);
             flash()->error('There is something wrong , please contact technical support');
             return back();
         }
