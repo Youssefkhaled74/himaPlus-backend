@@ -195,6 +195,30 @@ class HomeController extends Controller
         return responseJson(200, "success", $data);
     }
 
+    public function suggestions(Request $request)
+    {
+        $field = $request->get('field', 'name');
+        $q = $request->get('q', '');
+
+        $query = Product::active()->unArchive();
+
+        if ($field === 'vendor_name') {
+            $data = $query->whereHas('provider', function ($p) use ($q) {
+                $p->where('name', 'like', "%{$q}%");
+            })->with('provider')->get()->pluck('provider.name')->unique()->filter()->values();
+        } else {
+            $allowed = ['name', 'factory_name', 'factory_country'];
+            $field = in_array($field, $allowed) ? $field : 'name';
+            $data = $query->where($field, 'like', "%{$q}%")
+                ->distinct()
+                ->pluck($field)
+                ->filter()
+                ->values();
+        }
+
+        return response()->json($data);
+    }
+
     public function funSearch($request, $offset, Builder $builder)
     {
         $query = $request->get('q');

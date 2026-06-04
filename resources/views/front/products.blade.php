@@ -7,6 +7,24 @@
 
 <!-- custom page -->
 @section('css')
+<style>
+    .autocomplete-wrap { position: relative; }
+    .autocomplete-wrap .suggestions-list {
+        position: absolute; top: 100%; left: 0; right: 0; z-index: 1050;
+        background: #fff; border: 1px solid #d1d9e6; border-radius: 0 0 10px 10px;
+        max-height: 220px; overflow-y: auto; display: none;
+        box-shadow: 0 8px 24px rgba(0,0,0,.08);
+        list-style: none; padding: 0; margin: 0;
+    }
+    .autocomplete-wrap .suggestions-list li {
+        padding: .5rem .85rem; cursor: pointer; font-size: .88rem;
+        transition: background .1s;
+    }
+    .autocomplete-wrap .suggestions-list li:hover,
+    .autocomplete-wrap .suggestions-list li.highlighted {
+        background: #eef2ff; color: #0f4bbf;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -29,17 +47,26 @@
         <section class="py-5">
             <div class="container">
                 @isset($report['category'])
-                    <form method="GET" action="{{ route('products') }}" class="row g-2 mb-4">
-                        <div class="col-md-3"><input class="form-control" name="product_name" value="{{ request('product_name') }}" placeholder="Product name"></div>
-                        <div class="col-md-2"><input class="form-control" name="factory_name" value="{{ request('factory_name') }}" placeholder="Factory name"></div>
-                        <div class="col-md-2"><input class="form-control" name="vendor_name" value="{{ request('vendor_name') }}" placeholder="Supplier name"></div>
-                        <div class="col-md-3">
-                            <select class="form-select" name="factory_country">
-                                <option value="">Factory country</option>
+                    <form method="GET" action="{{ route('products') }}" class="row g-2 mb-4" id="productsFilterForm">
+                        <div class="col-md-3 autocomplete-wrap">
+                            <input class="form-control" name="product_name" value="{{ request('product_name') }}" placeholder="Product name" autocomplete="off" data-suggest="name">
+                            <ul class="suggestions-list"></ul>
+                        </div>
+                        <div class="col-md-2 autocomplete-wrap">
+                            <input class="form-control" name="factory_name" value="{{ request('factory_name') }}" placeholder="Factory name" autocomplete="off" data-suggest="factory_name">
+                            <ul class="suggestions-list"></ul>
+                        </div>
+                        <div class="col-md-2 autocomplete-wrap">
+                            <input class="form-control" name="vendor_name" value="{{ request('vendor_name') }}" placeholder="Supplier name" autocomplete="off" data-suggest="vendor_name">
+                            <ul class="suggestions-list"></ul>
+                        </div>
+                        <div class="col-md-3 autocomplete-wrap">
+                            <input class="form-control" name="factory_country" value="{{ request('factory_country') }}" placeholder="Factory country" autocomplete="off" list="countryList">
+                            <datalist id="countryList">
                                 @foreach($countries as $country)
-                                    <option value="{{ $country->name }}" {{ request('factory_country') === $country->name ? 'selected' : '' }}>{{ $country->name }}</option>
+                                    <option value="{{ $country->name }}">{{ $country->name }}</option>
                                 @endforeach
-                            </select>
+                            </datalist>
                         </div>
                         <div class="col-md-2 d-flex gap-2">
                             <button class="btn btn-primary w-100" type="submit">Filter</button>
@@ -156,6 +183,45 @@
 <script>
     $(function(){
         $('#nav-categories').addClass('active');
+
+        var suggestTimeout;
+        $('[data-suggest]').each(function () {
+            var $input = $(this);
+            var $list  = $input.next('.suggestions-list');
+            var field  = $input.data('suggest');
+
+            $input.on('input', function () {
+                clearTimeout(suggestTimeout);
+                var val = $input.val().trim();
+                if (val.length < 1) { $list.hide().empty(); return; }
+                suggestTimeout = setTimeout(function () {
+                    $.getJSON('{{ route("products/suggestions") }}', { field: field, q: val }, function (data) {
+                        $list.empty();
+                        if (data.length === 0) { $list.hide(); return; }
+                        $.each(data.slice(0, 10), function (i, item) {
+                            $list.append('<li>' + $('<span>').text(item).html() + '</li>');
+                        });
+                        $list.show();
+                    });
+                }, 200);
+            });
+
+            $list.on('click', 'li', function () {
+                $input.val($(this).text());
+                $list.hide().empty();
+            });
+
+            $list.on('mouseenter', 'li', function () {
+                $list.find('.highlighted').removeClass('highlighted');
+                $(this).addClass('highlighted');
+            });
+
+            $(document).on('click', function (e) {
+                if (!$input.is(e.target) && !$list.is(e.target) && $list.has(e.target).length === 0) {
+                    $list.hide();
+                }
+            });
+        });
     });
 </script>
 @endsection
