@@ -20,12 +20,15 @@ class UserController extends Controller
         $this->users = $users;
     }
 
-    public function index($offset, $limit)
+    public function index(Request $request, $offset, $limit)
     {
         try{
-            $users = $this->users->index($offset, $limit);
-            return view('admin.users.index', compact('users'));
+            $userType = (string) $request->get('user_type', '');
+            $search = (string) $request->get('search', '');
+            $users = $this->users->index($offset, $limit, $userType, $search);
+            return view('admin.users.index', compact('users', 'userType', 'search'));
         }catch(\Exception $e){
+            report($e);
             flash()->error('There is something wrong , please contact technical support');
             return back();
         }
