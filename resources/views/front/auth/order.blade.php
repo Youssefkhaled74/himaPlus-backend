@@ -247,18 +247,30 @@
                                             <div class="modal-body">
                                                 <div class="card border-0 shadow-sm">
                                                     <div class="card-body d-flex align-items-center gap-3">
-                                                        <img src="{{asset($provider?->img)}}" class="rounded-circle" width="56" height="56" alt="Logo">
                                                         <div class="flex-grow-1">
-                                                            <h6 class="mb-1">{{ $provider?->name }}</h6>
-                                                            <div class="text-muted small">
-                                                                <i class="bi bi-mobile {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i>{{ __('products.mobile') }}: {{ $provider?->mobile ?? '—' }}.
+                                                            <h6 class="mb-3">{{ __('products.app_contact_info') }}</h6>
+                                                            <div class="text-muted small mb-2">
+                                                                <i class="bi bi-mobile {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i>{{ __('products.mobile') }}: {{ $info?->mobile ?? '—' }}.
                                                             </div>
-                                                            <div class="text-muted small">
-                                                                <i class="bi bi-envelope {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i>{{ __('products.email') }}: {{ $provider?->email ?? '—' }}.
+                                                            <div class="text-muted small mb-2">
+                                                                <i class="bi bi-envelope {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i>{{ __('products.email') }}: {{ $info?->email ?? '—' }}.
                                                             </div>
-                                                            <div class="text-muted small">
-                                                                <i class="bi bi-geo-alt {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i>{{ $provider?->location ?? '—' }}.
-                                                                <i class="bi bi-star-fill text-warning {{ app()->getLocale() == 'ar' ? 'me-2 ms-1' : 'ms-2 me-1' }}"></i>{{ round($provider?->ratings->avg('rating'), 2) }}
+                                                            <div class="text-muted small mb-2">
+                                                                <i class="bi bi-geo-alt {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i>{{ __('products.location') }}: {{ $info?->location ?? '—' }}.
+                                                            </div>
+                                                            <div class="d-flex gap-2 mt-3">
+                                                                @if($info?->facebook)
+                                                                    <a href="{{ $info->facebook }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-facebook"></i></a>
+                                                                @endif
+                                                                @if($info?->twitter)
+                                                                    <a href="{{ $info->twitter }}" target="_blank" class="btn btn-outline-info btn-sm"><i class="bi bi-twitter-x"></i></a>
+                                                                @endif
+                                                                @if($info?->instagram)
+                                                                    <a href="{{ $info->instagram }}" target="_blank" class="btn btn-outline-danger btn-sm"><i class="bi bi-instagram"></i></a>
+                                                                @endif
+                                                                @if($info?->snapchat)
+                                                                    <a href="{{ $info->snapchat }}" target="_blank" class="btn btn-outline-warning btn-sm"><i class="bi bi-snapchat"></i></a>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>

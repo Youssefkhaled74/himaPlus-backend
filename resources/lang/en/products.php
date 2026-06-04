@@ -118,6 +118,8 @@ return [
     'cancel_order_confirm' => 'Are you sure you want to cancel this order?',
     'contact_supplier' => 'Contact Supplier',
     'contact_client' => 'Contact Client',
+    'app_contact_info' => 'App Contact Information',
+    'location' => 'Location',
     'mobile' => 'Mobile',
     'email' => 'Email',
     'get_app_chat' => 'Get the app for instant chat',

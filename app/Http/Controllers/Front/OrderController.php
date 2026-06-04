@@ -87,7 +87,9 @@ class OrderController extends Controller
             'items.product.category', 'timeline', 'provider.ratings', 'user', 'offer.provider', 'offers.provider', 'partial_receive'
         ])->withCount('items')->first();
 
-        return view("front.auth.order", compact('order'));
+        $info = $this->infoRepository->findActive();
+
+        return view("front.auth.order", compact('order', 'info'));
     }
 
     public function checkCoupon(Request $request)

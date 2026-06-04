@@ -118,6 +118,8 @@ return [
     'cancel_order_confirm' => 'هل أنت متأكد من إلغاء هذا الطلب؟',
     'contact_supplier' => 'التواصل مع المورد',
     'contact_client' => 'التواصل مع العميل',
+    'app_contact_info' => 'معلومات التواصل للتطبيق',
+    'location' => 'الموقع',
     'mobile' => 'الجوال',
     'email' => 'البريد الإلكتروني',
     'get_app_chat' => 'احصل على التطبيق للمحادثة الفورية',
