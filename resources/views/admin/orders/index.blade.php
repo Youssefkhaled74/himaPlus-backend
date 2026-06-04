@@ -69,7 +69,135 @@
                 min-width: 0;
             }
         }
+
+        .admin-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .admin-filter-bar .form-control,
+        .admin-filter-bar .form-select {
+            min-height: 44px;
+            border-radius: 14px !important;
+            font-size: 0.88rem;
+        }
+
+        .admin-filter-bar .input-group {
+            min-width: 160px;
+        }
+
+        .admin-filter-bar .input-group-text {
+            border-radius: 14px 0 0 14px !important;
+        }
+
+        html[dir='rtl'] .admin-filter-bar .input-group-text {
+            border-radius: 0 14px 14px 0 !important;
+        }
+
+        .admin-filter-bar .btn-filter {
+            min-height: 44px;
+            border-radius: 14px;
+            font-weight: 800;
+            padding-inline: 20px;
+        }
+
+        .admin-filter-tags {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 12px 0 0;
+        }
+
+        .admin-filter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(15, 75, 191, 0.10);
+            color: #0f4bbf;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .admin-filter-tag .btn-close-sm {
+            width: 16px;
+            height: 16px;
+            font-size: 0.6rem;
+            opacity: 0.6;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f4bbf;
+        }
+
+        .admin-filter-tag .btn-close-sm:hover {
+            opacity: 1;
+        }
+
+        .admin-filter-tag.is-reset {
+            background: rgba(216, 79, 79, 0.10);
+            color: #d84f4f;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .admin-filter-tag.is-reset:hover {
+            background: rgba(216, 79, 79, 0.18);
+        }
+
+        .flatpickr-input {
+            background: #fff !important;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-inline-end: 6px;
+            flex-shrink: 0;
+        }
+
+        .filter-section-toggle {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .filter-section-toggle .ri-arrow-up-s-line,
+        .filter-section-toggle .ri-arrow-down-s-line {
+            transition: transform 0.2s ease;
+        }
+
+        .filter-section-toggle.collapsed .ri-arrow-up-s-line {
+            display: none;
+        }
+
+        .filter-section-toggle:not(.collapsed) .ri-arrow-down-s-line {
+            display: none;
+        }
+
+        @media (max-width: 767.98px) {
+            .admin-filter-bar .input-group,
+            .admin-filter-bar .form-select {
+                min-width: 100%;
+            }
+
+            .admin-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endsection
 
 @section('content')
@@ -77,6 +205,54 @@
         $tab = $tab ?? request('tab', 'orders');
         $isRequestsPage = $tab === 'requests';
         $orderNo = $orderNo ?? request('order_no', '');
+
+        $statusLabels = [
+            'pending' => __('admin.pages.orders.statuses.pending'),
+            'order_created' => __('admin.pages.orders.statuses.order_created'),
+            'confirmed' => __('admin.pages.orders.statuses.confirmed'),
+            'processing' => __('admin.pages.orders.statuses.processing'),
+            'shipped' => __('admin.pages.orders.statuses.shipped'),
+            'delivered' => __('admin.pages.orders.statuses.delivered'),
+            'completed' => __('admin.pages.orders.statuses.completed'),
+            'canceled' => __('admin.pages.orders.statuses.canceled'),
+            'rejected' => __('admin.pages.orders.statuses.rejected'),
+            'offers_received' => __('admin.pages.orders.statuses.offers_received'),
+            'supplier_selected' => __('admin.pages.orders.statuses.supplier_selected'),
+            'converted_to_order' => __('admin.pages.orders.statuses.converted_to_order'),
+            'under_review' => __('admin.pages.orders.statuses.under_review'),
+            'assigned_to_supplier' => __('admin.pages.orders.statuses.assigned_to_supplier'),
+            'scheduled' => 'Scheduled',
+            'offers_pending' => __('admin.pages.orders.statuses.offers_received'),
+            'accepted' => 'Accepted',
+            'upcoming' => __('admin.pages.orders.statuses.upcoming'),
+            'active' => __('admin.pages.orders.statuses.active'),
+            'paused' => __('admin.pages.orders.statuses.paused'),
+        ];
+
+        $statusColors = [
+            'pending' => '#f59e0b',
+            'order_created' => '#6366f1',
+            'confirmed' => '#10b981',
+            'processing' => '#3b82f6',
+            'shipped' => '#06b6d4',
+            'delivered' => '#10b981',
+            'completed' => '#059669',
+            'canceled' => '#ef4444',
+            'rejected' => '#ef4444',
+            'offers_received' => '#06b6d4',
+            'supplier_selected' => '#6b7280',
+            'converted_to_order' => '#3b82f6',
+            'under_review' => '#6b7280',
+            'assigned_to_supplier' => '#3b82f6',
+            'scheduled' => '#8b5cf6',
+            'offers_pending' => '#f59e0b',
+            'accepted' => '#10b981',
+            'upcoming' => '#6b7280',
+            'active' => '#3b82f6',
+            'paused' => '#f59e0b',
+        ];
+
+        $hasActiveFilters = $orderNo !== '' || $status !== '' || $orderType !== '' || $paymentStatus !== '' || $dateFrom !== '' || $dateTo !== '';
     @endphp
 
     <div class="page-content">
@@ -103,23 +279,6 @@
                             <p class="admin-card-head__text">{{ __('admin.pages.orders.overview_subtitle') }}</p>
                         </div>
                         <div class="admin-card-head__actions">
-                            <form method="GET" action="{{ route('admin/orders/index', ['offset' => 0, 'limit' => PAGINATION_COUNT]) }}" class="d-flex align-items-center gap-2">
-                                <input type="hidden" name="tab" value="{{ $tab }}">
-                                <div class="input-group">
-                                    <span class="input-group-text bg-transparent">
-                                        <i class="ri-search-line"></i>
-                                    </span>
-                                    <input
-                                        type="text"
-                                        name="order_no"
-                                        value="{{ $orderNo }}"
-                                        inputmode="numeric"
-                                        pattern="[0-9]*"
-                                        class="form-control"
-                                        placeholder="{{ __('admin.pages.orders.search_by_order_no') }}">
-                                </div>
-                            </form>
-
                             <div class="admin-orders-toggle" role="tablist" aria-label="Orders tabs">
                                 <a
                                     href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders"
@@ -140,6 +299,127 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <form method="GET" action="{{ route('admin/orders/index', ['offset' => 0, 'limit' => PAGINATION_COUNT]) }}" id="ordersFilterForm">
+                        <input type="hidden" name="tab" value="{{ $tab }}">
+
+                        <div class="admin-filter-bar">
+                            <div class="input-group" style="min-width:170px;">
+                                <span class="input-group-text bg-transparent">
+                                    <i class="ri-search-line"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    name="order_no"
+                                    value="{{ $orderNo }}"
+                                    inputmode="numeric"
+                                    pattern="[0-9]*"
+                                    class="form-control"
+                                    placeholder="{{ __('admin.pages.orders.search_by_order_no') }}">
+                            </div>
+
+                            <select name="order_type" class="form-select" style="width:auto;min-width:130px;">
+                                <option value="">{{ __('admin.pages.common.order_type') }}</option>
+                                <option value="1" {{ $orderType === '1' ? 'selected' : '' }}>{{ __('admin.pages.common.order') }}</option>
+                                <option value="2" {{ $orderType === '2' ? 'selected' : '' }}>{{ __('admin.pages.common.quotation') }}</option>
+                                <option value="3" {{ $orderType === '3' ? 'selected' : '' }}>{{ __('admin.pages.common.maintenance') }}</option>
+                            </select>
+
+                            <select name="status" class="form-select" style="width:auto;min-width:150px;">
+                                <option value="">{{ __('admin.pages.common.status') }}</option>
+                                @foreach($statusLabels as $key => $label)
+                                    @if($key !== 'upcoming' && $key !== 'active' && $key !== 'paused')
+                                        <option value="{{ $key }}" {{ $status === $key ? 'selected' : '' }}>&#9679; {{ $label }}</option>
+                                    @endif
+                                @endforeach
+                                <option value="scheduled" {{ $status === 'scheduled' ? 'selected' : '' }}>&#9679; Scheduled</option>
+                                <option value="upcoming" {{ $status === 'upcoming' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.upcoming') }}</option>
+                                <option value="active" {{ $status === 'active' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.active') }}</option>
+                                <option value="paused" {{ $status === 'paused' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.paused') }}</option>
+                            </select>
+
+                            <select name="payment_status" class="form-select" style="width:auto;min-width:120px;">
+                                <option value="">{{ __('admin.dashboard.payment_status') }}</option>
+                                <option value="1" {{ $paymentStatus === '1' ? 'selected' : '' }}>{{ __('admin.dashboard.paid') }}</option>
+                                <option value="0" {{ $paymentStatus === '0' ? 'selected' : '' }}>{{ __('admin.dashboard.unpaid') }}</option>
+                            </select>
+
+                            <input
+                                type="text"
+                                name="date_from"
+                                value="{{ $dateFrom }}"
+                                class="form-control flatpickr-input"
+                                placeholder="{{ __('admin.pages.common.date_from') ?? 'From date' }}"
+                                style="width:auto;min-width:130px;"
+                                data-input>
+                            <input
+                                type="text"
+                                name="date_to"
+                                value="{{ $dateTo }}"
+                                class="form-control flatpickr-input"
+                                placeholder="{{ __('admin.pages.common.date_to') ?? 'To date' }}"
+                                style="width:auto;min-width:130px;"
+                                data-input>
+
+                            <button type="submit" class="btn btn-primary btn-filter">
+                                <i class="ri-search-2-line align-bottom"></i>
+                            </button>
+
+                            @if($hasActiveFilters)
+                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}" class="btn btn-light btn-filter">
+                                    <i class="ri-close-line align-bottom"></i>
+                                </a>
+                            @endif
+                        </div>
+
+                        @if($hasActiveFilters)
+                            <div class="admin-filter-tags">
+                                @if($orderNo !== '')
+                                    <span class="admin-filter-tag">
+                                        <i class="ri-hashtag"></i> {{ $orderNo }}
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no=&status={{ $status }}&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
+                                    </span>
+                                @endif
+                                @if($status !== '')
+                                    <span class="admin-filter-tag">
+                                        <span class="status-dot" style="background:{{ $statusColors[$status] ?? '#6b7280' }}"></span>
+                                        {{ $statusLabels[$status] ?? $status }}
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no={{ $orderNo }}&status=&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
+                                    </span>
+                                @endif
+                                @if($orderType !== '')
+                                    <span class="admin-filter-tag">
+                                        <i class="ri-file-list-3-line"></i>
+                                        @if($orderType === '1') {{ __('admin.pages.common.order') }}
+                                        @elseif($orderType === '2') {{ __('admin.pages.common.quotation') }}
+                                        @else {{ __('admin.pages.common.maintenance') }}
+                                        @endif
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no={{ $orderNo }}&status={{ $status }}&order_type=&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
+                                    </span>
+                                @endif
+                                @if($paymentStatus !== '')
+                                    <span class="admin-filter-tag">
+                                        @if($paymentStatus === '1')
+                                            <i class="ri-checkbox-circle-line" style="color:#10b981;"></i> {{ __('admin.dashboard.paid') }}
+                                        @else
+                                            <i class="ri-time-line" style="color:#f59e0b;"></i> {{ __('admin.dashboard.unpaid') }}
+                                        @endif
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no={{ $orderNo }}&status={{ $status }}&order_type={{ $orderType }}&payment_status=&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
+                                    </span>
+                                @endif
+                                @if($dateFrom !== '' || $dateTo !== '')
+                                    <span class="admin-filter-tag">
+                                        <i class="ri-calendar-line"></i> {{ $dateFrom ?: '...' }} → {{ $dateTo ?: '...' }}
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no={{ $orderNo }}&status={{ $status }}&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from=&date_to=" class="btn-close-sm">&times;</a>
+                                    </span>
+                                @endif
+                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}" class="admin-filter-tag is-reset">
+                                    <i class="ri-restart-line"></i> Reset
+                                </a>
+                            </div>
+                        @endif
+                    </form>
+                </div>
+                <div class="card-body" style="padding-top:0;">
                     <div class="table-responsive">
                         <table id="scroll-horizontal" class="table nowrap align-middle dataTable no-footer" style="width: 100%" aria-describedby="scroll-horizontal_info">
                             <thead>
