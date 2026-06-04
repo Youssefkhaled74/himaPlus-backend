@@ -42,7 +42,8 @@ class UserRepository extends BaseAdminRepository
                 });
             })
             ->orderBy('id', 'DESC')
-            ->paginate(PAGINATION_COUNT);
+            ->paginate(PAGINATION_COUNT)
+            ->appends(request()->query());
     }
 
     public function customUpdate($request, $id)
