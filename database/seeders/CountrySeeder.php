@@ -9,6 +9,9 @@ class CountrySeeder extends Seeder
 {
     public function run(): void
     {
+        // Delete all existing records
+        DB::table('countries')->delete();
+
         $countries = [
             'السعودية',
             'الإمارات العربية المتحدة',
@@ -210,14 +213,12 @@ class CountrySeeder extends Seeder
         $now = now();
 
         foreach ($countries as $name) {
-            DB::table('countries')->updateOrInsert(
-                ['name' => $name],
-                [
-                    'is_activate' => 1,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ]
-            );
+            DB::table('countries')->insert([
+                'name' => $name,
+                'is_activate' => 1,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
         }
     }
 }
