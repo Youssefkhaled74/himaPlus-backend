@@ -221,9 +221,9 @@
             'converted_to_order' => __('admin.pages.orders.statuses.converted_to_order'),
             'under_review' => __('admin.pages.orders.statuses.under_review'),
             'assigned_to_supplier' => __('admin.pages.orders.statuses.assigned_to_supplier'),
-            'scheduled' => 'Scheduled',
+            'scheduled' => __('admin.pages.orders.statuses.scheduled'),
             'offers_pending' => __('admin.pages.orders.statuses.offers_received'),
-            'accepted' => 'Accepted',
+            'accepted' => __('admin.pages.orders.statuses.accepted'),
             'upcoming' => __('admin.pages.orders.statuses.upcoming'),
             'active' => __('admin.pages.orders.statuses.active'),
             'paused' => __('admin.pages.orders.statuses.paused'),
@@ -331,7 +331,7 @@
                                         <option value="{{ $key }}" {{ $status === $key ? 'selected' : '' }}>&#9679; {{ $label }}</option>
                                     @endif
                                 @endforeach
-                                <option value="scheduled" {{ $status === 'scheduled' ? 'selected' : '' }}>&#9679; Scheduled</option>
+                                <option value="scheduled" {{ $status === 'scheduled' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.scheduled') }}</option>
                                 <option value="upcoming" {{ $status === 'upcoming' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.upcoming') }}</option>
                                 <option value="active" {{ $status === 'active' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.active') }}</option>
                                 <option value="paused" {{ $status === 'paused' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.paused') }}</option>
@@ -413,7 +413,7 @@
                                     </span>
                                 @endif
                                 <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}" class="admin-filter-tag is-reset">
-                                    <i class="ri-restart-line"></i> Reset
+                                    <i class="ri-restart-line"></i> {{ __('admin.pages.common.reset') }}
                                 </a>
                             </div>
                         @endif
