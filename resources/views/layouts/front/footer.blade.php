@@ -62,13 +62,6 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <h6>{{ __('nav.discover_app') }}</h6>
-                <div class="app-badges">
-                    <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
-                </div>
-            </div>
         </div>
 
         <div class="divider"></div>
