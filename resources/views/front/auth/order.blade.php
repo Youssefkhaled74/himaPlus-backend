@@ -263,21 +263,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="mt-4 p-3 rounded-3 bg-light d-flex align-items-center">
-                                                    <i class="bi bi-phone-vibrate fs-3 text-primary {{ app()->getLocale() == 'ar' ? 'ms-3' : 'me-3' }}"></i>
-                                                    <div class="flex-grow-1">
-                                                        <div class="fw-semibold">{{ __('products.get_app_chat') }}</div>
-                                                        <div class="text-muted small">{{ __('products.download_app_msg') }}</div>
-                                                    </div>
-                                                    <div class="d-flex gap-2">
-                                                        <a href="https://apps.apple.com/app/idXXXXXXXX" class="btn btn-dark btn-sm">
-                                                            <i class="bi bi-apple {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i> App Store
-                                                        </a>
-                                                        <a href="https://play.google.com/store/apps/details?id=XXXXXXXX" class="btn btn-success btn-sm">
-                                                            <i class="bi bi-google-play {{ app()->getLocale() == 'ar' ? 'ms-1' : 'me-1' }}"></i> Google Play
-                                                        </a>
-                                                    </div>
-                                                </div>
+
                                             </div>
                                             <div class="modal-footer border-0">
                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('products.close') }}</button>
