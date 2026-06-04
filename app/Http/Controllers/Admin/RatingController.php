@@ -18,10 +18,11 @@ class RatingController extends Controller
         $this->ratings = $ratings;
     }
 
-    public function index($offset, $limit)
+    public function index(Request $request, $offset, $limit)
     {
         try{
-            return $this->ratings->index($offset, $limit);
+            $search = (string) $request->get('search', '');
+            return $this->ratings->index($offset, $limit, $search);
         }catch(\Exception $e){
             flash()->error('There is something wrong , please contact technical support');
             return back();

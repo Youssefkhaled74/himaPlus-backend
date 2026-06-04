@@ -18,11 +18,12 @@ class CategoryController extends Controller
         $this->categories = $categories;
     }
 
-    public function index($offset, $limit)
+    public function index(Request $request, $offset, $limit)
     {
         try{
-            $categories = $this->categories->index($offset, $limit);
-            return view('admin.categories.index', compact('categories'));
+            $search = (string) $request->get('search', '');
+            $categories = $this->categories->index($offset, $limit, $search);
+            return view('admin.categories.index', compact('categories', 'search'));
         }catch(\Exception $e){
             flash()->error('There is something wrong , please contact technical support');
             return back();

@@ -20,14 +20,26 @@ class CategoryRepository extends BaseAdminRepository
         return 'categories';
     }
 
-    public function index($offset, $limit)
+    public function index($offset, $limit, $search = '')
     {
-        return $this->pagination($offset, $limit);
+        return $this->pagination($offset, $limit, $search);
     }
 
-    public function pagination($offset, $limit)
+    public function pagination($offset, $limit, $search = '')
     {
-        return $this->model->with($this->model->model_relations())->withCount($this->model->model_relations_counts())->unArchive()->orderBy('id', 'DESC')->paginate(PAGINATION_COUNT);
+        return $this->model
+            ->with($this->model->model_relations())
+            ->withCount($this->model->model_relations_counts())
+            ->unArchive()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                      ->orWhere('id', 'LIKE', "%{$search}%");
+                });
+            })
+            ->orderBy('id', 'DESC')
+            ->paginate(PAGINATION_COUNT)
+            ->appends(request()->query());
     }
 
     public function create(){}

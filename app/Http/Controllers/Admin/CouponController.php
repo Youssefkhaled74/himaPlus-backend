@@ -18,11 +18,12 @@ class CouponController extends Controller
         $this->coupons = $coupons;
     }
 
-    public function index($offset, $limit)
+    public function index(Request $request, $offset, $limit)
     {
         try{
-            $coupons = $this->coupons->index($offset, $limit);
-            return view('admin.coupons.index', compact('coupons'));
+            $search = (string) $request->get('search', '');
+            $coupons = $this->coupons->index($offset, $limit, $search);
+            return view('admin.coupons.index', compact('coupons', 'search'));
         }catch(\Exception $e){
             flash()->error('There is something wrong , please contact technical support');
             return back();

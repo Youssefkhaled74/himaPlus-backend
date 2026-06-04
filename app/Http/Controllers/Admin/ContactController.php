@@ -18,11 +18,12 @@ class ContactController extends Controller
         $this->contacts = $contacts;
     }
 
-    public function index($offset, $limit)
+    public function index(Request $request, $offset, $limit)
     {
         try{
-            $contacts = $this->contacts->index($offset, $limit);
-            return view('admin.contacts.index', compact('contacts'));
+            $search = (string) $request->get('search', '');
+            $contacts = $this->contacts->index($offset, $limit, $search);
+            return view('admin.contacts.index', compact('contacts', 'search'));
         }catch(\Exception $e){
             flash()->error('There is something wrong , please contact technical support');
             return back();

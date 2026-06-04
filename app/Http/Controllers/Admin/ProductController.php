@@ -18,11 +18,12 @@ class ProductController extends Controller
         $this->products = $products;
     }
 
-    public function index($offset, $limit)
+    public function index(Request $request, $offset, $limit)
     {
         try{
-            $products = $this->products->index($offset, $limit);
-            return view('admin.products.index', compact('products'));
+            $search = (string) $request->get('search', '');
+            $products = $this->products->index($offset, $limit, $search);
+            return view('admin.products.index', compact('products', 'search'));
         }catch(\Exception $e){
             flash()->error('There is something wrong , please contact technical support');
             return back();
