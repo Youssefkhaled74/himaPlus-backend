@@ -18,11 +18,12 @@ class CountryController extends Controller
         $this->countries = $countries;
     }
 
-    public function index($offset, $limit)
+    public function index(Request $request, $offset, $limit)
     {
         try{
-            $countries = $this->countries->index($offset, $limit);
-            return view('admin.countries.index', compact('countries'));
+            $search = (string) $request->get('search', '');
+            $countries = $this->countries->index($offset, $limit, $search);
+            return view('admin.countries.index', compact('countries', 'search'));
         }catch(\Exception $e){
             flash()->error('There is something wrong , please contact technical support');
             return back();

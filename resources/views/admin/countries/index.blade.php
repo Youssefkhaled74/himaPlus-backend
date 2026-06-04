@@ -6,6 +6,129 @@
 
 @section('css')
     <style>
+        .admin-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            align-items: center;
+        }
+        .admin-filter-bar .form-control,
+        .admin-filter-bar .form-select {
+            border-radius: .5rem !important;
+            border: 1px solid #e2e5f1;
+        }
+        .admin-filter-bar .input-group {
+            flex-wrap: nowrap;
+        }
+        .admin-filter-bar .input-group-text {
+            border-radius: .5rem 0 0 .5rem !important;
+            border: 1px solid #e2e5f1;
+            border-right: 0;
+        }
+        html[dir='rtl'] .admin-filter-bar .input-group-text {
+            border-radius: 0 .5rem .5rem 0 !important;
+            border: 1px solid #e2e5f1;
+            border-left: 0;
+        }
+        .admin-filter-bar .btn-filter {
+            border-radius: .5rem !important;
+            padding: .375rem 1rem;
+        }
+        .admin-filter-tags {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 12px 0 0;
+        }
+        .admin-filter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(15, 75, 191, 0.10);
+            color: #0f4bbf;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+        .admin-filter-tag .btn-close-sm {
+            width: 16px;
+            height: 16px;
+            font-size: 0.6rem;
+            opacity: 0.6;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f4bbf;
+            text-decoration: none;
+            line-height: 1;
+        }
+        .admin-filter-tag .btn-close-sm:hover {
+            opacity: 1;
+        }
+        .admin-filter-tag.is-reset {
+            background: rgba(216, 79, 79, 0.10);
+            color: #d84f4f;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .admin-filter-tag.is-reset:hover {
+            background: rgba(216, 79, 79, 0.18);
+        }
+        .admin-filter-tag .tag-icon {
+            font-size: 0.9rem;
+        }
+        .admin-filter-count {
+            margin-inline-start: auto;
+            font-size: 0.8rem;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+        .search-clear-btn {
+            border: 1px solid #e2e5f1;
+            border-left: 0;
+            border-radius: 0 .5rem .5rem 0 !important;
+            background: transparent;
+            color: #9ca3af;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0 .6rem;
+            font-size: .9rem;
+            transition: color .15s;
+        }
+        .search-clear-btn:hover {
+            color: #d84f4f;
+        }
+        html[dir='rtl'] .search-clear-btn {
+            border-radius: .5rem 0 0 .5rem !important;
+            border: 1px solid #e2e5f1;
+            border-right: 0;
+            border-left: 1px solid #e2e5f1;
+        }
+        @media (max-width: 767.98px) {
+            .admin-filter-bar .input-group,
+            .admin-filter-bar .form-select {
+                width: 100% !important;
+                min-width: 0 !important;
+            }
+            .admin-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .admin-filter-count {
+                margin-inline-start: 0;
+                width: 100%;
+                text-align: start;
+            }
+        }
+
         .country-status-toggle-wrap {
             display: inline-flex;
             align-items: center;
@@ -60,6 +183,46 @@
                     </div>
                 </div>
 
+                @php $hasActiveFilters = ($search ?? '') !== ''; @endphp
+                <div class="card-body" style="padding-bottom:0;">
+                    <form method="GET" action="{{ route('admin/countries/index', ['offset' => 0, 'limit' => PAGINATION_COUNT]) }}" id="countriesFilterForm">
+                        <div class="admin-filter-bar">
+                            <div class="input-group" style="min-width:200px;">
+                                <span class="input-group-text bg-transparent"><i class="ri-search-line"></i></span>
+                                <input type="text" name="search" value="{{ $search ?? '' }}" class="form-control" placeholder="{{ __('admin.pages.common.search_in', ['label' => __('admin.nav.countries')]) }}" id="countrySearchInput">
+                                @if(($search ?? '') !== '')
+                                <button type="button" class="search-clear-btn" onclick="clearCountrySearch()">&times;</button>
+                                @endif
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-filter">
+                                <i class="ri-search-2-line align-bottom"></i>
+                            </button>
+                            @if($hasActiveFilters)
+                                <a href="{{ route('admin/countries/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-filter">
+                                    <i class="ri-close-line align-bottom"></i>
+                                </a>
+                            @endif
+                            <span class="admin-filter-count">
+                                <i class="ri-earth-line align-bottom me-1"></i>
+                                {{ $countries->total() }}
+                            </span>
+                        </div>
+                        @if($hasActiveFilters)
+                        <div class="admin-filter-tags">
+                            @if(($search ?? '') !== '')
+                            <span class="admin-filter-tag">
+                                <i class="ri-search-line tag-icon"></i>
+                                {{ $search }}
+                                <a href="{{ route('admin/countries/index') }}/0/{{ PAGINATION_COUNT }}" class="btn-close-sm">&times;</a>
+                            </span>
+                            @endif
+                            <a href="{{ route('admin/countries/index') }}/0/{{ PAGINATION_COUNT }}" class="admin-filter-tag is-reset">
+                                <i class="ri-restart-line"></i> {{ __('admin.pages.common.reset') }}
+                            </a>
+                        </div>
+                        @endif
+                    </form>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="scroll-horizontal" class="table nowrap align-middle dataTable no-footer" style="width: 100%" aria-describedby="scroll-horizontal_info">
@@ -185,6 +348,22 @@
 
 @section('script')
     <script>
+        function clearCountrySearch() {
+            document.getElementById('countrySearchInput').value = '';
+            document.getElementById('countriesFilterForm').submit();
+        }
+
+        @if(($search ?? '') !== '')
+            document.addEventListener('DOMContentLoaded', function() {
+                var input = document.getElementById('countrySearchInput');
+                if (input) {
+                    var len = input.value.length;
+                    input.setSelectionRange(len, len);
+                    input.focus();
+                }
+            });
+        @endif
+
         (function () {
             $('.nav-link.menu-link').removeClass('active');
             $('.menu-dropdown').removeClass('show');
