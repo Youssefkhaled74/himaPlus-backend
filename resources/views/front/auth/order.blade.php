@@ -247,6 +247,7 @@
                                             <div class="modal-body">
                                                 <div class="card border-0 shadow-sm">
                                                     <div class="card-body d-flex align-items-center gap-3">
+                                                        <img src="{{ asset('front/assets/images/newLogo.png') }}" width="56" height="56" alt="Hema">
                                                         <div class="flex-grow-1">
                                                             <h6 class="mb-3">{{ __('products.app_contact_info') }}</h6>
                                                             <div class="text-muted small mb-2">

@@ -87,7 +87,7 @@ class OrderController extends Controller
             'items.product.category', 'timeline', 'provider.ratings', 'user', 'offer.provider', 'offers.provider', 'partial_receive'
         ])->withCount('items')->first();
 
-        $info = $this->infoRepository->findActive();
+        $info = $this->infoRepository->getfirst();
 
         return view("front.auth.order", compact('order', 'info'));
     }
