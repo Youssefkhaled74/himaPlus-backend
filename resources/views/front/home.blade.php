@@ -503,40 +503,7 @@
             </section>
         @endisset
         
-        <!-- =================== New Downloads =================== -->
-        <section id="new-downloads" class="ndl">
-            <div class="container">
-                <div class="ndl__wrap">
-                    <!-- Card Left -->
-                    <div class="ndl__card">
-                        <h3 class="ndl__title">{!! __('home.download_title') !!}</h3>
-                        <p class="ndl__desc">{{ __('home.download_desc') }}</p>
-                        <div class="ndl__stores">
-                        <a href="#" class="ndl__store">
-                            <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store">
-                        </a>
-                        <a href="#" class="ndl__store">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
-                        </a>
-                        </div>
-                    </div>
 
-                    <!-- Phones Right -->
-                    <div class="ndl__scene">
-                        <div class="ndl__tray"></div>
-                        <div class="ndl__phones">
-                        {{-- <img class="ndl__phone ndl__phone--left" src="https://dummyimage.com/260x520/ffffff/cccccc.png&text=App+UI" alt="app left"> --}}
-                        <img class="ndl__phone ndl__phone--center" src="{{ asset('front/assets/images/Group 1171275716.png') }}" alt="app center">
-                        {{-- <img class="ndl__phone ndl__phone--right" src="https://dummyimage.com/260x520/ffffff/cccccc.png&text=RFQ+Form" alt="app right"> --}}
-                        </div>
-                        <div class="ndl__decor">
-                            <span></span><span></span><span></span><span></span><span></span>
-                            {{-- <img class="group-5-icon" src="{{ asset('front/assets/images/Group 5.png') }}" alt="app right"> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- ===== FAQ ===== -->
         <section id="faq" class="section section--pad-lg reveal">
