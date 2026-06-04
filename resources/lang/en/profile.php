@@ -63,6 +63,10 @@ return [
     'send_reset_code' => 'Send Reset Code',
     'remember_password' => 'Remember your password?',
 
+    // Login
+    'remember_me' => 'Remember me',
+    'forgot_password' => 'Forgot password?',
+
     // Alert
     'select_image_only' => 'Please select an image only',
     
