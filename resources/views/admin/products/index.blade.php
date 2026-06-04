@@ -74,10 +74,6 @@
                 ]"
             >
                 <x-slot:actions>
-                    <a href="{{ route('admin/products/archives') . '/0/' . PAGINATION_COUNT }}" class="btn btn-light">
-                        <i class="ri-archive-line align-bottom"></i>
-                        <span>{{ __('admin.pages.common.archives') }}</span>
-                    </a>
                     <a href="{{ route('admin/products/create') }}" class="btn btn-primary">
                         <i class="ri-add-line align-bottom"></i>
                         <span>{{ __('admin.pages.products.add_product') }}</span>
@@ -157,7 +153,7 @@
                                                                 class="form-check-input"
                                                                 type="checkbox"
                                                                 role="switch"
-                                                                aria-label="Toggle product activation"
+                                                                title="{{ __('admin.pages.common.toggle_activation') }}"
                                                                 {{ (int) $record->is_activate === 1 ? 'checked' : '' }}
                                                                 onchange="this.form.submit()">
                                                         </div>

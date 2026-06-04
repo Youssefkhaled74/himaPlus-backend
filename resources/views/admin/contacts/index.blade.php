@@ -18,10 +18,6 @@
             ]"
         >
             <x-slot:actions>
-                <a href="{{ route('admin/contacts/archives') . '/0/' . PAGINATION_COUNT }}" class="btn btn-light">
-                    <i class="ri-archive-line align-bottom"></i>
-                    <span>{{ __('admin.pages.common.archives') }}</span>
-                </a>
                 <a href="{{ route('admin/contacts/create') }}" class="btn btn-primary">
                     <i class="ri-add-line align-bottom"></i>
                     <span>{{ __('admin.pages.contacts.add_contact') }}</span>
