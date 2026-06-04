@@ -881,7 +881,7 @@ a:hover{text-decoration:underline}
 
 /* Eye button */
 .hp-eye-btn{
-  position:absolute;right:.75rem;top:50%;transform:translateY(-50%);
+  position:absolute;inset-inline-end:.75rem;top:50%;transform:translateY(-50%);
   border:0;background:transparent;color:#9AA6B2;font-size:1.1rem;
 }
 .hp-eye-btn:hover{color:#0d6efd}
