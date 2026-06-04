@@ -48,7 +48,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=canceled',
+            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=rejected',
         ],
         [
             'label' => __('admin.dashboard.in_progress_orders'),

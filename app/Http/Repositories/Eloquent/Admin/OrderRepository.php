@@ -72,11 +72,24 @@ class OrderRepository extends BaseAdminRepository
                     $query->whereHas('offers', function ($q) {
                         $q->whereIn('status', [2, '2', 'accepted']);
                     });
+                } elseif ($status === 'rejected') {
+                    $query->whereHas('offers', function ($q) {
+                        $q->whereIn('status', [3, '3', 'rejected']);
+                    })->whereDoesntHave('offers', function ($q) {
+                        $q->whereIn('status', [1, '1', 'pending', 2, '2', 'accepted']);
+                    });
                 } elseif (isset($timelineMap[$status])) {
                     $query->whereHas('timeline', function ($q) use ($timelineMap, $status) {
                         $q->where('timeline_no', $timelineMap[$status]);
                     })->whereDoesntHave('timeline', function ($q) use ($timelineMap, $status) {
                         $q->where('timeline_no', '>', $timelineMap[$status]);
+                    })->whereDoesntHave('offers', function ($q) {
+                        $q->whereIn('status', [2, '2', 'accepted']);
+                    })->where(function ($q) {
+                        $q->whereDoesntHave('offers')
+                            ->orWhereHas('offers', function ($q) {
+                                $q->whereIn('status', [1, '1', 'pending']);
+                            });
                     });
                 }
             })
