@@ -60,9 +60,18 @@
             <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
             <span class="text-primary fw-semibold">{{ __('products.order_details') }} #{{ $order->id }} – {{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y') }}</span>
         </nav>
+        @php
+            $__isAr = app()->getLocale() === 'ar';
+            $__journeyMap = [
+                1 => $__isAr ? 'إنشاء الطلب → تجهيز → شحن → تسليم → اكتمال' : 'Ordered → Processing → Shipped → Delivered → Completed',
+                2 => $__isAr ? 'إنشاء الطلب → استلام العروض → قبول العرض → اكتمال' : 'Ordered → Offers → Offer Accepted → Completed',
+                3 => $__isAr ? 'إنشاء الطلب → جدولة الزيارة → صيانة → اكتمال' : 'Ordered → Visit Scheduled → Maintenance → Completed',
+            ];
+            $__journeyText = $__journeyMap[(int)$order->order_type] ?? $__journeyMap[1];
+        @endphp
         <div class="alert alert-light border mb-3">
-            <strong>{{ app()->getLocale() === 'ar' ? 'رحلة الطلب:' : 'Order Journey:' }}</strong>
-            {{ app()->getLocale() === 'ar' ? 'إنشاء الطلب → تأكيد المورد → تجهيز → شحن → تسليم → اكتمال' : 'Created → Supplier Confirmed → Processing → Shipped → Delivered → Completed' }}
+            <strong>{{ $__isAr ? 'رحلة الطلب:' : 'Order Journey:' }}</strong>
+            {{ $__journeyText }}
         </div>
         <div class="row g-4">
             @include('flash::message')
@@ -129,83 +138,35 @@
                     @endif
                 </div>
 
+                @php
+                    $__customerSteps = match ((int)$order->order_type) {
+                        1 => [1, 3, 4, 5, 6],
+                        2 => [1, 7, 9, 6],
+                        3 => [1, 7, 9, 6],
+                        default => [1, 3, 4, 5, 6],
+                    };
+                @endphp
                 <div class="detail-card mt-3 reveal">
                     <h6 class="mb-3">{{ __('products.timeline') }}</h6>
                     <div class="timeline">
-                        <div class="t-item {{ isset($step_1->id) ? 'active' : '' }}">
-                            <span class="t-bullet"></span>
-                            <div class="timeline-data fw-semibold">{{ __('products.order_created') }}</div>
-                            <div class="timeline-data t-date">Sep 1</div>
-                            <div class="timeline-data t-date">
-                                {{ \Carbon\Carbon::parse($step_1?->created_at)->format('M j, Y') }}
-                            </div>
-                        </div>
                         @if (!isset($step_12->id))
-                            @if ($order->order_type == 1)
-                                <div class="t-item {{ isset($step_2->id) ? 'active' : '' }}">
+                            @foreach ($__customerSteps as $__cs)
+                                @php
+                                    $__csVar = 'step_' . $__cs;
+                                    $__csEntry = $$__csVar;
+                                @endphp
+                                <div class="t-item {{ isset($__csEntry->id) ? 'active' : '' }}">
                                     <span class="t-bullet"></span>
-                                    <div class="timeline-data fw-semibold">{{ __('products.confirmed_by_supplier') }}</div>
-                                    <div class="timeline-data t-date">Sep 2</div>
+                                    <div class="timeline-data fw-semibold">{{ customerTimelineName($__cs, $order->order_type) }}</div>
                                     <div class="timeline-data t-date">
-                                        {{ \Carbon\Carbon::parse($step_2?->created_at)->format('M j, Y') }}
+                                        {{ \Carbon\Carbon::parse($__csEntry?->created_at)->format('M j, Y') }}
                                     </div>
                                 </div>
-                            @endif
-                            @if ($order->order_type > 1)
-                                <div class="t-item {{ isset($step_7->id) ? 'active' : '' }}">
-                                    <span class="t-bullet"></span>
-                                    <div class="timeline-data fw-semibold">{{ __('products.offers_received') }}</div>
-                                    <div class="timeline-data t-date">Sep 7</div>
-                                    <div class="timeline-data t-date">
-                                        {{ \Carbon\Carbon::parse($step_7?->created_at)->format('M j, Y') }}
-                                    </div>
-                                </div>
-                                <div class="t-item {{ isset($step_9->id) ? 'active' : '' }}">
-                                    <span class="t-bullet"></span>
-                                    <div class="timeline-data fw-semibold">{{ __('products.converted_to_order') }}</div>
-                                    <div class="timeline-data t-date">Sep 9</div>
-                                    <div class="timeline-data t-date">
-                                        {{ \Carbon\Carbon::parse($step_9?->created_at)->format('M j, Y') }}
-                                    </div>
-                                </div>
-                            @endif
-                            <div class="t-item {{ isset($step_3->id) ? 'active' : '' }}">
-                                <span class="t-bullet"></span>
-                                <div class="timeline-data fw-semibold">{{ __('products.processing') }}</div>
-                                <div class="timeline-data t-date">Sep 3</div>
-                                <div class="timeline-data t-date">
-                                    {{ \Carbon\Carbon::parse($step_3?->created_at)->format('M j, Y') }}
-                                </div>
-                            </div>
-                            <div class="t-item {{ isset($step_4->id) ? 'active' : '' }}">
-                                <span class="t-bullet"></span>
-                                <div class="timeline-data fw-semibold">{{ __('products.shipped') }}</div>
-                                <div class="timeline-data t-date">Sep 4</div>
-                                <div class="timeline-data t-date">
-                                    {{ \Carbon\Carbon::parse($step_4?->created_at)->format('M j, Y') }}
-                                </div>
-                            </div>
-                            <div class="t-item {{ isset($step_5->id) ? 'active' : '' }}">
-                                <span class="t-bullet"></span>
-                                <div class="timeline-data fw-semibold">{{ __('products.delivered') }}</div>
-                                <div class="timeline-data t-date">Sep 5</div>
-                                <div class="timeline-data t-date">
-                                    {{ \Carbon\Carbon::parse($step_5?->created_at)->format('M j, Y') }}
-                                </div>
-                            </div>
-                            <div class="t-item {{ isset($step_6->id) ? 'active' : '' }}">
-                                <span class="t-bullet"></span>
-                                <div class="timeline-data fw-semibold">{{ __('products.completed') }}</div>
-                                <div class="timeline-data t-date">Sep 6</div>
-                                <div class="timeline-data t-date">
-                                    {{ \Carbon\Carbon::parse($step_6?->created_at)->format('M j, Y') }}
-                                </div>
-                            </div>
+                            @endforeach
                         @else
                             <div class="t-item active">
                                 <span class="t-bullet"></span>
-                                <div class="timeline-data fw-semibold">{{ __('products.canceled') }}</div>
-                                <div class="timeline-data t-date">Sep 12</div>
+                                <div class="timeline-data fw-semibold">{{ customerTimelineName(12, $order->order_type) }}</div>
                                 <div class="timeline-data t-date">
                                     {{ \Carbon\Carbon::parse($step_12?->created_at)->format('M j, Y') }}
                                 </div>

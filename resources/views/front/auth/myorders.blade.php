@@ -91,7 +91,7 @@
                 @endphp
 
                 <div class="order-card mb-3 position-relative">
-                    <div class="chip chip--{{ timelineNameBackground($lastTimeline?->timeline_no) }}">{{ timelineName($lastTimeline?->timeline_no) }}</div>
+                    <div class="chip chip--{{ timelineNameBackground($lastTimeline?->timeline_no) }}">{{ customerTimelineName($lastTimeline?->timeline_no, $order->order_type) }}</div>
                     <div class="order-card__title">{{ orderType($order->order_type) }}</div>
                     <div class="meta">
                         <div><strong>{{ __('products.order_number_label') }} #{{ $order->id }} – {{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y') }}</strong></div>

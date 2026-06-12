@@ -102,14 +102,23 @@
 
     $currentStatus = 'Pending';
     if ($isScheduled) {
-        $currentStatus = ucfirst($order->scheduled_status);
+        $currentStatus = frontScheduledStatusLabel($order->scheduled_status, true);
     } elseif ($lastTimelineNo > 0) {
-        $currentStatus = timelineName($lastTimelineNo);
+        $currentStatus = vendorTimelineName($lastTimelineNo, $order->order_type);
     }
 
     $actionLabel = null;
     $timelineActionNo = null;
     $showPendingConfirmActions = false;
+    $isMaintenance = (int)$order->order_type === 3;
+    $__stepMap = match ((int)$order->order_type) {
+        1 => [1 => 3, 3 => 4, 4 => 5, 5 => 6],
+        2 => [1 => 7, 7 => 9, 9 => 6],
+        3 => [1 => 7, 7 => 9, 9 => 6],
+        default => [],
+    };
+    $nextTimelineNo = $__stepMap[$lastTimelineNo] ?? null;
+
     if ($isQuotation) {
         if (!$myOffer) {
             $actionLabel = __('Send Offer') ?? 'Send Offer';
@@ -118,19 +127,30 @@
             if ($offerStatus === '3' || $offerStatus === 'rejected') {
                 $actionLabel = __('Resubmit Offer') ?? 'Resubmit Offer';
             } elseif ($offerStatus === '2' || $offerStatus === 'accepted') {
-                if ($lastTimelineNo >= 4 && $lastTimelineNo < 5) {
-                    $actionLabel = __('Mark as Delivered') ?? 'Mark as Delivered';
-                    $timelineActionNo = 5;
-                } elseif ($lastTimelineNo >= 3 && $lastTimelineNo < 4) {
-                    $actionLabel = __('Mark as Shipped') ?? 'Mark as Shipped';
-                    $timelineActionNo = 4;
-                } elseif ($lastTimelineNo >= 2 && $lastTimelineNo < 3) {
-                    $actionLabel = __('Mark as Processing') ?? 'Mark as Processing';
-                    $timelineActionNo = 3;
+                if ($nextTimelineNo === 7) {
+                    $actionLabel = __('Mark as Offer Prepared') ?? 'Mark as Offer Prepared';
+                    $timelineActionNo = 7;
+                } elseif ($nextTimelineNo === 9) {
+                    $actionLabel = __('Mark as Offer Sent') ?? 'Mark as Offer Sent';
+                    $timelineActionNo = 9;
+                } elseif ($nextTimelineNo === 6) {
+                    $actionLabel = __('Mark as Completed') ?? 'Mark as Completed';
+                    $timelineActionNo = 6;
                 }
             } else {
                 $actionLabel = __('Edit Offer') ?? 'Edit Offer';
             }
+        }
+    } elseif ($isMaintenance) {
+        if ($nextTimelineNo === 7) {
+            $actionLabel = __('Mark as Appointment Set') ?? 'Mark as Appointment Set';
+            $timelineActionNo = 7;
+        } elseif ($nextTimelineNo === 9) {
+            $actionLabel = __('Mark as In Progress') ?? 'Mark as In Progress';
+            $timelineActionNo = 9;
+        } elseif ($nextTimelineNo === 6) {
+            $actionLabel = __('Mark as Completed') ?? 'Mark as Completed';
+            $timelineActionNo = 6;
         }
     } elseif ($isScheduled) {
         if (in_array(strtolower($order->scheduled_status), ['upcoming','active','paused'])) {
@@ -141,28 +161,25 @@
             $actionLabel = __('Cancelled') ?? 'Cancelled';
         }
     } else {
-        if ($lastTimelineNo >= 5 && $lastTimelineNo < 6) {
-            $actionLabel = __('Mark as Completed') ?? 'Mark as Completed';
-            $timelineActionNo = 6;
-        } elseif ($lastTimelineNo >= 4 && $lastTimelineNo < 5) {
-            $actionLabel = __('Mark as Delivered') ?? 'Mark as Delivered';
-            $timelineActionNo = 5;
-        } elseif ($lastTimelineNo >= 3 && $lastTimelineNo < 4) {
-            $actionLabel = __('Mark as Shipped') ?? 'Mark as Shipped';
-            $timelineActionNo = 4;
-        } elseif ($lastTimelineNo >= 2 && $lastTimelineNo < 3) {
+        // Purchase order
+        if ($nextTimelineNo === 3) {
             $actionLabel = __('Mark as Processing') ?? 'Mark as Processing';
             $timelineActionNo = 3;
-        } elseif ($lastTimelineNo === 1) {
-            $actionLabel = __('Confirmed') ?? 'Confirmed';
-            $timelineActionNo = 2;
-            $showPendingConfirmActions = true;
+        } elseif ($nextTimelineNo === 4) {
+            $actionLabel = __('Mark as Shipped') ?? 'Mark as Shipped';
+            $timelineActionNo = 4;
+        } elseif ($nextTimelineNo === 5) {
+            $actionLabel = __('Mark as Delivered') ?? 'Mark as Delivered';
+            $timelineActionNo = 5;
+        } elseif ($nextTimelineNo === 6) {
+            $actionLabel = __('Mark as Completed') ?? 'Mark as Completed';
+            $timelineActionNo = 6;
         }
     }
 
     $timelineSteps = $isQuotation
-        ? [1,7,9,3,4,5]
-        : ($isScheduled ? [1,2,3,4,5,6] : [1,2,3,4,5,6]);
+        ? [1,7,9,6]
+        : ($isMaintenance ? [1,7,9,6] : ($isScheduled ? [1,2,3,4,5,6] : [1,3,4,5,6]));
 
     $isAr = app()->getLocale() === 'ar';
     $tr = function ($text) use ($isAr) {
@@ -197,6 +214,10 @@
             'mark as shipped' => 'تحديد كتم الشحن',
             'mark as delivered' => 'تحديد كتم التسليم',
             'mark as completed' => 'تحديد كمكتمل',
+            'mark as offer prepared' => 'تحديد كمعد',
+            'mark as offer sent' => 'تحديد كإرسال العرض',
+            'mark as appointment set' => 'تحديد موعد',
+            'mark as in progress' => 'تحديد كقيد التنفيذ',
             'requests details' => 'تفاصيل الطلبات',
             'my offer' => 'عرضي',
             'offer rejected' => 'تم رفض العرض',
@@ -333,7 +354,7 @@
                         <div class="vos-step {{ $done ? 'done' : 'pending' }}">
                             <span class="dot"><i class="bi bi-check"></i></span>
                             <div class="vos-step-copy">
-                                <div class="name">{{ $tr(timelineName($stepNo)) }}</div>
+                                <div class="name">{{ vendorTimelineName($stepNo, $order->order_type) }}</div>
                                 <div class="date">{{ $entry ? $entry->created_at->translatedFormat('M j') : '-' }}</div>
                             </div>
                         </div>

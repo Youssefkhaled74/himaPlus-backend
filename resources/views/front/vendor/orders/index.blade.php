@@ -119,11 +119,12 @@
         @php
             $lastTimelineNo = optional($order->timeline->sortByDesc('timeline_no')->first())->timeline_no;
             $lastTimelineLabel = strtolower(trim((string) timelineName((int) $lastTimelineNo)));
+            $lastTimelineDisplay = vendorTimelineName((int) $lastTimelineNo, (int)$order->order_type);
             $myOffer = $order->offers->where('provider_id', auth()->id())->first();
             $orderFiles = collect(is_array($order->files) ? $order->files : [])->filter()->values();
 
             if ((int) $order->request_type === 2) {
-                $statusText = ucfirst($order->scheduled_status);
+                $statusText = frontScheduledStatusLabel($order->scheduled_status, true);
                 $statusKey = strtolower($order->scheduled_status);
                 $title = __('Scheduled Order') ?? 'Scheduled Order';
             } else {
@@ -144,11 +145,11 @@
                         $statusText = 'Rejected';
                         $statusKey = 'rejected';
                     } else {
-                        $statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
+                        $statusText = $lastTimelineDisplay !== '---' ? $lastTimelineDisplay : 'Pending';
                         $statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
                     }
                 } else {
-                    $statusText = ucwords($lastTimelineLabel !== '---' ? $lastTimelineLabel : 'Pending');
+                    $statusText = $lastTimelineDisplay !== '---' ? $lastTimelineDisplay : 'Pending';
                     $statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
                 }
             }

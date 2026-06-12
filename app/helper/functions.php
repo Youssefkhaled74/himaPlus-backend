@@ -181,6 +181,103 @@
 	}
 
 
+    function customerTimelineName($timeline_no, $order_type = 1)
+    {
+        $ar = app()->getLocale() === 'ar';
+
+        if ((int) $order_type === 1) {
+            $labels = [
+                1 => $ar ? 'تم الطلب' : 'Ordered',
+                3 => $ar ? 'قيد التجهيز' : 'Processing',
+                4 => $ar ? 'قيد الشحن' : 'Shipped',
+                5 => $ar ? 'تم التسليم' : 'Delivered',
+                6 => $ar ? 'مكتمل' : 'Completed',
+                12 => $ar ? 'ملغي' : 'Canceled',
+            ];
+        } elseif ((int) $order_type === 2) {
+            $labels = [
+                1 => $ar ? 'تم الطلب' : 'Ordered',
+                7 => $ar ? 'قيد التسعير' : 'Under Pricing',
+                9 => $ar ? 'تم استلام العرض' : 'Offer Received',
+                6 => $ar ? 'مكتمل' : 'Completed',
+                12 => $ar ? 'ملغي' : 'Canceled',
+            ];
+        } elseif ((int) $order_type === 3) {
+            $labels = [
+                1 => $ar ? 'تم الطلب' : 'Ordered',
+                7 => $ar ? 'تم جدولة الزيارة' : 'Visit Scheduled',
+                9 => $ar ? 'قيد الصيانة' : 'Under Maintenance',
+                6 => $ar ? 'مكتمل' : 'Completed',
+                12 => $ar ? 'ملغي' : 'Canceled',
+            ];
+        } else {
+            $labels = [];
+        }
+
+        return $labels[$timeline_no] ?? timelineName($timeline_no);
+    }
+
+    function vendorTimelineName($timeline_no, $order_type = 1)
+    {
+        $ar = app()->getLocale() === 'ar';
+
+        if ((int) $order_type === 1) {
+            $labels = [
+                1 => $ar ? 'طلب جديد' : 'New Order',
+                3 => $ar ? 'قيد التجهيز' : 'Processing',
+                4 => $ar ? 'تم الشحن' : 'Shipped',
+                5 => $ar ? 'تم التسليم' : 'Delivered',
+                6 => $ar ? 'مكتمل' : 'Completed',
+                12 => $ar ? 'ملغي' : 'Canceled',
+            ];
+        } elseif ((int) $order_type === 2) {
+            $labels = [
+                1 => $ar ? 'طلب تسعير جديد' : 'New Quotation Request',
+                7 => $ar ? 'إعداد العرض' : 'Preparing Offer',
+                9 => $ar ? 'تم إرسال العرض' : 'Offer Sent',
+                6 => $ar ? 'مكتمل' : 'Completed',
+                12 => $ar ? 'ملغي' : 'Canceled',
+            ];
+        } elseif ((int) $order_type === 3) {
+            $labels = [
+                1 => $ar ? 'طلب صيانة جديد' : 'New Maintenance Request',
+                7 => $ar ? 'تم تحديد الموعد' : 'Appointment Set',
+                9 => $ar ? 'قيد التنفيذ' : 'In Progress',
+                6 => $ar ? 'مكتمل' : 'Completed',
+                12 => $ar ? 'ملغي' : 'Canceled',
+            ];
+        } else {
+            $labels = [];
+        }
+
+        return $labels[$timeline_no] ?? timelineName($timeline_no);
+    }
+
+    function frontScheduledStatusLabel($status, $isVendor = false)
+    {
+        $ar = app()->getLocale() === 'ar';
+
+        if ($isVendor) {
+            $labels = [
+                'upcoming' => $ar ? 'تم اعتماد الجدولة' : 'Schedule Approved',
+                'active' => $ar ? 'سارية' : 'Active',
+                'paused' => $ar ? 'متوقفة' : 'Paused',
+                'completed' => $ar ? 'منتهية' : 'Expired',
+                'cancelled' => $ar ? 'ملغية' : 'Cancelled',
+            ];
+        } else {
+            $labels = [
+                'upcoming' => $ar ? 'تمت الموافقة' : 'Approved',
+                'active' => $ar ? 'قيد التوريد' : 'Supplying',
+                'paused' => $ar ? 'متوقف' : 'Paused',
+                'completed' => $ar ? 'تم الاستلام' : 'Received',
+                'cancelled' => $ar ? 'ملغي' : 'Cancelled',
+            ];
+        }
+
+        return $labels[strtolower($status)] ?? ucfirst($status);
+    }
+
     // "autoload": {
     //     "psr-4": {
     //         "App\\": "app/",
