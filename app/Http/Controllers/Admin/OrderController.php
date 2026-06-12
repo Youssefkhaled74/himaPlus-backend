@@ -29,8 +29,9 @@ class OrderController extends Controller
             $paymentStatus = (string) $request->get('payment_status', '');
             $dateFrom = (string) $request->get('date_from', '');
             $dateTo = (string) $request->get('date_to', '');
-            $orders = $this->orders->index($offset, $limit, $tab, $orderNo, $status, $orderType, $paymentStatus, $dateFrom, $dateTo);
-            return view('admin.orders.index', compact('orders', 'tab', 'orderNo', 'status', 'orderType', 'paymentStatus', 'dateFrom', 'dateTo'));
+            $scheduledStatus = (string) $request->get('scheduled_status', '');
+            $orders = $this->orders->index($offset, $limit, $tab, $orderNo, $status, $orderType, $paymentStatus, $dateFrom, $dateTo, $scheduledStatus);
+            return view('admin.orders.index', compact('orders', 'tab', 'orderNo', 'status', 'orderType', 'paymentStatus', 'dateFrom', 'dateTo', 'scheduledStatus'));
         }catch(\Exception $e){
             report($e);
             flash()->error('There is something wrong , please contact technical support');

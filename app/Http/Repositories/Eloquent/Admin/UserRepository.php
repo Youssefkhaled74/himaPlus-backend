@@ -20,12 +20,12 @@ class UserRepository extends BaseAdminRepository
         return 'users';
     }
 
-    public function index($offset, $limit, $userType = '', $search = '')
+    public function index($offset, $limit, $userType = '', $search = '', $isActivate = '', $createdToday = '')
     {
-        return $this->pagination($offset, $limit, $userType, $search);
+        return $this->pagination($offset, $limit, $userType, $search, $isActivate, $createdToday);
     }
 
-    public function pagination($offset, $limit, $userType = '', $search = '')
+    public function pagination($offset, $limit, $userType = '', $search = '', $isActivate = '', $createdToday = '')
     {
         return $this->model
             ->with($this->model->model_relations())
@@ -33,6 +33,12 @@ class UserRepository extends BaseAdminRepository
             ->unArchive()
             ->when($userType !== '', function ($query) use ($userType) {
                 $query->where('user_type', (int) $userType);
+            })
+            ->when($isActivate !== '', function ($query) use ($isActivate) {
+                $query->where('is_activate', (int) $isActivate);
+            })
+            ->when($createdToday !== '', function ($query) {
+                $query->whereDate('created_at', now()->toDateString());
             })
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {

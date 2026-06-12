@@ -9,14 +9,14 @@
     $paidTotal = max(1, (int) ($dashboard['totals']['orders'] ?? 0));
     $paidPercent = round((((int) ($dashboard['totals']['paid_orders'] ?? 0)) / $paidTotal) * 100, 1);
     $quickActions = [
-        ['label' => __('admin.dashboard.manage_orders'), 'icon' => 'ri-shopping-bag-line', 'route' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT],
-        ['label' => __('admin.dashboard.manage_users'), 'icon' => 'ri-user-3-line', 'route' => route('admin/users/index') . '/0/' . PAGINATION_COUNT],
-        ['label' => __('admin.dashboard.manage_products'), 'icon' => 'ri-capsule-line', 'route' => route('admin/products/index') . '/0/' . PAGINATION_COUNT],
-        ['label' => __('admin.dashboard.manage_categories'), 'icon' => 'ri-layout-grid-line', 'route' => route('admin/categories/index') . '/0/' . PAGINATION_COUNT],
-        ['label' => __('admin.dashboard.manage_coupons'), 'icon' => 'ri-coupon-2-line', 'route' => route('admin/coupons/index') . '/0/' . PAGINATION_COUNT],
-        ['label' => __('admin.dashboard.manage_ratings'), 'icon' => 'ri-star-line', 'route' => route('admin/ratings/index') . '/0/' . PAGINATION_COUNT],
-        ['label' => __('admin.dashboard.view_contacts'), 'icon' => 'ri-mail-line', 'route' => route('admin/contacts/index') . '/0/' . PAGINATION_COUNT],
-        ['label' => __('admin.dashboard.manage_admins'), 'icon' => 'ri-shield-user-line', 'route' => route('admin/admins/index') . '/0/' . PAGINATION_COUNT],
+        ['label' => __('admin.dashboard.manage_orders'), 'icon' => 'ri-shopping-bag-line', 'route' => route('admin/orders/index', [0, PAGINATION_COUNT])],
+        ['label' => __('admin.dashboard.manage_users'), 'icon' => 'ri-user-3-line', 'route' => route('admin/users/index', [0, PAGINATION_COUNT])],
+        ['label' => __('admin.dashboard.manage_products'), 'icon' => 'ri-capsule-line', 'route' => route('admin/products/index', [0, PAGINATION_COUNT])],
+        ['label' => __('admin.dashboard.manage_categories'), 'icon' => 'ri-layout-grid-line', 'route' => route('admin/categories/index', [0, PAGINATION_COUNT])],
+        ['label' => __('admin.dashboard.manage_coupons'), 'icon' => 'ri-coupon-2-line', 'route' => route('admin/coupons/index', [0, PAGINATION_COUNT])],
+        ['label' => __('admin.dashboard.manage_ratings'), 'icon' => 'ri-star-line', 'route' => route('admin/ratings/index', [0, PAGINATION_COUNT])],
+        ['label' => __('admin.dashboard.view_contacts'), 'icon' => 'ri-mail-line', 'route' => route('admin/contacts/index', [0, PAGINATION_COUNT])],
+        ['label' => __('admin.dashboard.manage_admins'), 'icon' => 'ri-shield-user-line', 'route' => route('admin/admins/index', [0, PAGINATION_COUNT])],
     ];
     $stats = [
         [
@@ -26,7 +26,7 @@
             'icon' => 'ri-shopping-bag-3-line',
             'softClass' => 'bg-primary-subtle text-primary',
             'showIcon' => true,
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT,
+                                'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?tab=',
         ],
         [
             'label' => __('admin.dashboard.accepted_orders'),
@@ -39,7 +39,7 @@
                 'paid' => number_format($dashboard['totals']['accepted_paid_orders'] ?? 0),
                 'unpaid' => number_format($dashboard['totals']['accepted_unpaid_orders'] ?? 0),
             ]),
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=accepted',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=accepted&tab=',
         ],
         [
             'label' => __('admin.dashboard.rejected_orders'),
@@ -48,7 +48,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=rejected',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=rejected&tab=',
         ],
         [
             'label' => __('admin.dashboard.in_progress_orders'),
@@ -57,7 +57,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=processing',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=processing&tab=',
         ],
         [
             'label' => __('admin.dashboard.executed_orders'),
@@ -66,7 +66,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT . '?status=completed',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=completed&tab=',
         ],
     ];
 @endphp
@@ -95,11 +95,11 @@
                         </div>
 
                         <div class="d-flex flex-wrap gap-3 pt-2">
-                            <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-primary">
+                            <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="btn btn-primary">
                                 <i class="ri-shopping-bag-line align-bottom me-1"></i>
                                 {{ __('admin.dashboard.open_orders') }}
                             </a>
-                            <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light">
+                            <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light">
                                 <i class="ri-capsule-line align-bottom me-1"></i>
                                 {{ __('admin.dashboard.browse_products') }}
                             </a>
@@ -197,35 +197,35 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?user_type=2" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.vendors_count') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.vendor_orders_summary_hint') }}</div>
                                     </div>
                                     <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['vendors_count'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?user_type=1" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.customers_count') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.orders_rate_per_customer_hint') }}</div>
                                     </div>
                                     <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['customers_count'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.avg_orders_per_customer') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.orders_rate_per_customer_hint') }}</div>
                                     </div>
                                     <span class="badge bg-warning-subtle text-warning">{{ number_format((float) ($dashboard['totals']['avg_orders_per_customer'] ?? 0), 2) }}</span>
                                 </a>
-                                <a href="{{ route('admin/contacts/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/contacts/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.contact_numbers_summary') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.contacts_snapshot') }}</div>
                                     </div>
                                     <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['contacts'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/ratings/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/ratings/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.ratings_summary') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.ratings_snapshot') }}</div>
@@ -243,13 +243,13 @@
                                     <h5 class="card-title mb-1">{{ __('admin.dashboard.top_products') }}</h5>
                                     <p class="text-muted mb-0">{{ __('admin.dashboard.top_products_subtitle') }}</p>
                                 </div>
-                                <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
+                                <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
                                 @forelse($dashboard['top_products'] as $product)
-                                    <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                    <a href="{{ route('admin/products/edit', $product->id) }}" class="dashboard-mini-item text-decoration-none">
                                         <div>
                                             <div class="fw-semibold">{{ $product->name }}</div>
                                             <div class="text-muted small">
@@ -278,19 +278,19 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?is_activate=1" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.active_users_label') }}</div>
                                     </div>
                                     <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['active_users'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?is_activate=0" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.inactive_users_label') }}</div>
                                     </div>
                                     <span class="badge bg-danger-subtle text-danger">{{ number_format($dashboard['totals']['inactive_users'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?created_today=1" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.new_users_label') }}</div>
                                     </div>
@@ -313,25 +313,25 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.total_offers') }}</div>
                                     </div>
                                     <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['total_offers'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=offers_pending" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.pending_offers') }}</div>
                                     </div>
                                     <span class="badge bg-warning-subtle text-warning">{{ number_format($dashboard['totals']['pending_offers'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=accepted" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.accepted_offers') }}</div>
                                     </div>
                                     <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['accepted_offers'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.acceptance_rate') }}</div>
                                     </div>
@@ -352,19 +352,19 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=scheduled" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.scheduled_orders') }}</div>
                                     </div>
                                     <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['scheduled_orders'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=scheduled&scheduled_status=active" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.active_scheduled_orders') }}</div>
                                     </div>
                                     <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['active_scheduled_orders'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=scheduled&scheduled_status=completed" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.completed_scheduled_orders') }}</div>
                                     </div>
@@ -385,13 +385,13 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.total_unread_notifications') }}</div>
                                     </div>
                                     <span class="badge bg-danger-subtle text-danger">{{ number_format($dashboard['totals']['total_unread_notifications'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.vendor_unread_notifications') }}</div>
                                     </div>
@@ -427,7 +427,7 @@
                                     <h5 class="card-title mb-1">{{ __('admin.dashboard.recent_orders') }}</h5>
                                     <p class="text-muted mb-0">{{ __('admin.dashboard.recent_orders_subtitle') }}</p>
                                 </div>
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.view_all') }}</a>
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -445,7 +445,7 @@
                                     </thead>
                                     <tbody>
                                         @forelse($dashboard['recent_orders'] as $order)
-                                            <tr>
+                                            <tr onclick="window.location='{{ route('admin/orders/edit', $order->id) }}'" style="cursor: pointer;">
                                                 <td class="fw-semibold">#{{ $order->id }}</td>
                                                 <td>{{ optional($order->user)->name ?? '-' }}</td>
                                                 <td>{{ optional($order->provider)->name ?? '-' }}</td>
@@ -484,14 +484,14 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/categories/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/categories/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.total_categories_label') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.stats.categories') }}</div>
                                     </div>
                                     <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['categories'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.total_products_label') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.stats.products') }}</div>
@@ -499,13 +499,13 @@
                                     <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['products'] ?? 0) }}</span>
                                 </a>
                                 @forelse($dashboard['top_categories'] as $category)
-                                    <div class="dashboard-mini-item">
+                                    <a href="{{ route('admin/categories/edit', $category->id) }}" class="dashboard-mini-item text-decoration-none">
                                         <div>
                                             <div class="fw-semibold">{{ $category->name }}</div>
                                             <div class="text-muted small">{{ __('admin.dashboard.products_listed') }}</div>
                                         </div>
                                         <span class="badge bg-primary-subtle text-primary">{{ $category->products_count }}</span>
-                                    </div>
+                                    </a>
                                 @empty
                                     <p class="text-muted mb-0">{{ __('admin.dashboard.no_category_insights') }}</p>
                                 @endforelse
@@ -524,7 +524,7 @@
                     </div>
                     <h4 class="mb-2">{{ __('admin.dashboard.registered_accounts', ['count' => number_format($dashboard['totals']['users'] ?? 0)]) }}</h4>
                     <p class="text-muted mb-3">{{ __('admin.dashboard.users_snapshot_text') }}</p>
-                    <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_users') }}</a>
+                    <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_users') }}</a>
                 </article>
 
                 <article class="dashboard-entity-card is-green">
@@ -534,7 +534,7 @@
                     </div>
                     <h4 class="mb-2">{{ __('admin.dashboard.total_orders', ['count' => number_format($dashboard['totals']['orders'] ?? 0)]) }}</h4>
                     <p class="text-muted mb-3">{{ __('admin.dashboard.operations_snapshot_text') }}</p>
-                    <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_orders_short') }}</a>
+                    <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_orders_short') }}</a>
                 </article>
 
                 <article class="dashboard-entity-card is-amber">
@@ -544,7 +544,7 @@
                     </div>
                     <h4 class="mb-2">{{ __('admin.dashboard.listed_products', ['count' => number_format($dashboard['totals']['products'] ?? 0)]) }}</h4>
                     <p class="text-muted mb-3">{{ __('admin.dashboard.catalog_snapshot_text') }}</p>
-                    <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
+                    <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
                 </article>
 
                 <article class="dashboard-entity-card" style="background: linear-gradient(135deg, #0f4bbf 0%, #10c7a5 100%); color: white;">
@@ -554,7 +554,7 @@
                     </div>
                     <h4 class="mb-2" style="color: white;">{{ __('admin.dashboard.low_stock_items', ['count' => number_format($dashboard['totals']['low_stock'] ?? 0)]) }}</h4>
                     <p class="mb-3" style="color: rgba(255,255,255,0.8);">{{ __('admin.dashboard.inventory_alert_text') }}</p>
-                    <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
+                    <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}?low_stock=1" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
                 </article>
 
                 <article class="dashboard-entity-card is-blue">
@@ -564,7 +564,7 @@
                     </div>
                     <h4 class="mb-2">{{ number_format($dashboard['totals']['ratings'] ?? 0) }}</h4>
                     <p class="text-muted mb-3">{{ __('admin.dashboard.ratings_snapshot_text') }}</p>
-                    <a href="{{ route('admin/ratings/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_ratings') }}</a>
+                    <a href="{{ route('admin/ratings/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_ratings') }}</a>
                 </article>
 
                 <article class="dashboard-entity-card is-green">
@@ -574,7 +574,7 @@
                     </div>
                     <h4 class="mb-2">{{ number_format($dashboard['totals']['contacts'] ?? 0) }}</h4>
                     <p class="text-muted mb-3">{{ __('admin.dashboard.contacts_snapshot_text') }}</p>
-                    <a href="{{ route('admin/contacts/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_contacts') }}</a>
+                    <a href="{{ route('admin/contacts/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_contacts') }}</a>
                 </article>
 
             </section>
@@ -589,7 +589,7 @@
                                     <h5 class="card-title mb-1">{{ __('admin.dashboard.recent_users') }}</h5>
                                     <p class="text-muted mb-0">{{ __('admin.dashboard.recent_users_subtitle') }}</p>
                                 </div>
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.view_all') }}</a>
+                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -605,7 +605,7 @@
                                     </thead>
                                     <tbody>
                                         @forelse($dashboard['recent_users'] as $user)
-                                            <tr>
+                                            <tr onclick="window.location='{{ route('admin/users/show', $user->id) }}'" style="cursor: pointer;">
                                                 <td class="fw-semibold">#{{ $user->id }}</td>
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
@@ -672,20 +672,20 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <div class="dashboard-mini-item">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?payment_status=1" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.paid_orders_label') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.paid_badge') }}</div>
                                     </div>
                                     <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['paid_orders'] ?? 0) }}</span>
-                                </div>
-                                <div class="dashboard-mini-item">
+                                </a>
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?payment_status=0" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.pending_payments_label') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.pending_badge') }}</div>
                                     </div>
                                     <span class="badge bg-warning-subtle text-warning">{{ number_format($dashboard['totals']['unpaid_orders'] ?? 0) }}</span>
-                                </div>
+                                </a>
                                 <div class="dashboard-mini-item">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.collection_rate_label') }}</div>

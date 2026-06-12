@@ -20,12 +20,12 @@ class OrderRepository extends BaseAdminRepository
         return 'orders';
     }
 
-    public function index($offset, $limit, $tab = 'orders', $orderNo = '', $status = '', $orderType = '', $paymentStatus = '', $dateFrom = '', $dateTo = '')
+    public function index($offset, $limit, $tab = 'orders', $orderNo = '', $status = '', $orderType = '', $paymentStatus = '', $dateFrom = '', $dateTo = '', $scheduledStatus = '')
     {
-        return $this->pagination($offset, $limit, $tab, $orderNo, $status, $orderType, $paymentStatus, $dateFrom, $dateTo);
+        return $this->pagination($offset, $limit, $tab, $orderNo, $status, $orderType, $paymentStatus, $dateFrom, $dateTo, $scheduledStatus);
     }
 
-    public function pagination($offset, $limit, $tab = 'orders', $orderNo = '', $status = '', $orderType = '', $paymentStatus = '', $dateFrom = '', $dateTo = '')
+    public function pagination($offset, $limit, $tab = 'orders', $orderNo = '', $status = '', $orderType = '', $paymentStatus = '', $dateFrom = '', $dateTo = '', $scheduledStatus = '')
     {
         return $this->model
             ->with(array_merge($this->model->model_relations(), ['timeline', 'offers']))
@@ -93,10 +93,13 @@ class OrderRepository extends BaseAdminRepository
                     });
                 }
             })
+            ->when($scheduledStatus !== '', function ($query) use ($scheduledStatus) {
+                $query->where('request_type', 2)->where('scheduled_status', $scheduledStatus);
+            })
             ->when($tab === 'requests', function ($query) {
                 $query->whereIn('order_type', [2, 3])
                     ->whereNull('offer_id');
-            }, function ($query) {
+            })->when($tab === 'orders', function ($query) {
                 $query->where(function ($businessQuery) {
                     $businessQuery->where('order_type', 1)
                         ->orWhereNotNull('offer_id');

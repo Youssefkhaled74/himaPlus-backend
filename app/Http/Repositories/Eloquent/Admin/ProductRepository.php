@@ -20,12 +20,12 @@ class ProductRepository extends BaseAdminRepository
         return 'products';
     }
 
-    public function index($offset, $limit, $search = '')
+    public function index($offset, $limit, $search = '', $lowStock = '')
     {
-        return $this->pagination($offset, $limit, $search);
+        return $this->pagination($offset, $limit, $search, $lowStock);
     }
 
-    public function pagination($offset, $limit, $search = '')
+    public function pagination($offset, $limit, $search = '', $lowStock = '')
     {
         return $this->model
             ->with($this->model->model_relations())
@@ -36,6 +36,9 @@ class ProductRepository extends BaseAdminRepository
                     $q->where('name', 'LIKE', "%{$search}%")
                       ->orWhere('id', 'LIKE', "%{$search}%");
                 });
+            })
+            ->when($lowStock !== '', function ($query) {
+                $query->where('stock_quantity', '<', 20);
             })
             ->orderBy('id', 'DESC')
             ->paginate(PAGINATION_COUNT)

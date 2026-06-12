@@ -25,8 +25,10 @@ class UserController extends Controller
         try{
             $userType = (string) $request->get('user_type', '');
             $search = (string) $request->get('search', '');
-            $users = $this->users->index($offset, $limit, $userType, $search);
-            return view('admin.users.index', compact('users', 'userType', 'search'));
+            $isActivate = (string) $request->get('is_activate', '');
+            $createdToday = (string) $request->get('created_today', '');
+            $users = $this->users->index($offset, $limit, $userType, $search, $isActivate, $createdToday);
+            return view('admin.users.index', compact('users', 'userType', 'search', 'isActivate', 'createdToday'));
         }catch(\Exception $e){
             report($e);
             flash()->error('There is something wrong , please contact technical support');

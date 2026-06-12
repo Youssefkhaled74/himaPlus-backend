@@ -22,8 +22,9 @@ class ProductController extends Controller
     {
         try{
             $search = (string) $request->get('search', '');
-            $products = $this->products->index($offset, $limit, $search);
-            return view('admin.products.index', compact('products', 'search'));
+            $lowStock = (string) $request->get('low_stock', '');
+            $products = $this->products->index($offset, $limit, $search, $lowStock);
+            return view('admin.products.index', compact('products', 'search', 'lowStock'));
         }catch(\Exception $e){
             flash()->error('There is something wrong , please contact technical support');
             return back();
