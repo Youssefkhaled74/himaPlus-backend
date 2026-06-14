@@ -68,15 +68,15 @@ body{
 .method .logos img{height:18px; margin-right:6px}
 
 /* Footer */
-.footer{color:#e5ecff; background:#042C7B; padding:56px 0 22px; margin-top:64px}
-.footer .logo img{height:40px}
+.footer{color:#e5ecff; background:#1a4a8a; padding:56px 0 22px; margin-top:64px}
+.footer .logo img{height:40px; background:#fff; padding:6px; border-radius:12px;}
 .footer h6{color:#fff; font-weight:700; margin-bottom:14px}
 .footer a{color:#cfe0ff; text-decoration:none}
 .footer a:hover{color:#fff}
 .footer .app-badges img{height:38px; margin-right:10px}
 .footer .social .bi{font-size:1.1rem; margin-right:.75rem; color:#cfe0ff}
 .footer .social .bi:hover{color:#fff}
-.footer .divider{height:1px; background:#2d4778; margin:24px 0}
+.footer .divider{height:1px; background:#3a5f9e; margin:24px 0}
 
 /* Contact page */
 .hero{background:url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1887&auto=format&fit=crop') center/cover no-repeat; height:240px; display:flex; align-items:center; justify-content:center; color:#fff; text-align:center}
@@ -172,7 +172,7 @@ body{
 .topbar .bi{vertical-align:-0.2rem}
 
 .landing-header{box-shadow:0 6px 20px rgba(14,43,87,.06); background:#fff}
-.landing-header .navbar-brand img{height:50px;width: 125px;}
+.landing-header .navbar-brand img{height:50px;width: 125px; background:#fff; padding:6px; border-radius:12px;}
 .landing-header .btn-primary{background:var(--hp-primary); border-color:var(--hp-primary); border-radius:999px; font-weight:600}
 .landing-header .btn-primary:hover{background:#0a4ca5; border-color:#0a4ca5}
 

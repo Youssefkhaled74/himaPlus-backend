@@ -105,7 +105,6 @@
                         </form>
 
                         <div class="admin-auth-footer">
-                            <p class="mb-0">{{ __('admin.auth.no_account') }} <a href="#" class="fw-semibold">{{ __('admin.auth.signup') }}</a></p>
                         </div>
                     </div>
                 </div>
