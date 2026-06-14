@@ -39,7 +39,7 @@
                 'paid' => number_format($dashboard['totals']['accepted_paid_orders'] ?? 0),
                 'unpaid' => number_format($dashboard['totals']['accepted_unpaid_orders'] ?? 0),
             ]),
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=accepted&tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=confirmed&tab=',
         ],
         [
             'label' => __('admin.dashboard.rejected_orders'),
