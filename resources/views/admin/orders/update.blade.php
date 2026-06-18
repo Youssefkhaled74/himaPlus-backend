@@ -127,6 +127,48 @@
                     </div>
                 </div>
 
+                <div class="col-12">
+                    <div class="card admin-content-card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Order Items</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>{{ __('nav.product_name') ?? 'Product Name' }}</th>
+                                            <th>{{ __('nav.product_quantity') ?? 'Quantity' }}</th>
+                                            <th>{{ __('admin.pages.products.fields.expiry_date') ?? 'Expiry Date' }}</th>
+                                            <th>{{ __('nav.delivery_days') ?? 'Delivery Duration' }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($order->items as $item)
+                                            @php
+                                                $deliveryDuration = $order->delivery_duration
+                                                    ?? ($acceptedOffer?->delivery_time ?? '-');
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td class="fw-semibold">{{ $item->product?->name ?? '-' }}</td>
+                                                <td>{{ $item->quantity }}</td>
+                                                <td>{{ optional($item->product?->expiry_date)->format('Y-m-d') ?? '-' }}</td>
+                                                <td>{{ $deliveryDuration }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center text-muted py-4">No items found for this order.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-lg-6">
                     <div class="card admin-content-card h-100">
                         <div class="card-header">
