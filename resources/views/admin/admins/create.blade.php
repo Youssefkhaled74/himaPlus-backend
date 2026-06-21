@@ -22,9 +22,9 @@
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"></li>
-                            <li class="breadcrumb-item"><a href="{{route('admin/index')}}">Home</a></li>
-                            <li class="breadcrumb-item active"><a href="{{route('admin/admins/index')}}/0/{{PAGINATION_COUNT}}">Admins</a></li>
-                            <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">Create</li>
+                            <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
+                            <li class="breadcrumb-item active"><a href="{{route('admin/admins/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.pages.admins.title') }}</a></li>
+                            <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">{{ __('admin.pages.common.create') }}</li>
                         </ol>
                     </div>
 
@@ -47,7 +47,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Admins Form</h4>
+                        <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.admins.form_title') ?? 'Admins Form' }}</h4>
                     </div>
                     <div class="card-body">
                         <form role="form" action="{{url(route('admin/admins/create'))}}" method="post" enctype="multipart/form-data">
@@ -58,19 +58,19 @@
                                     <div class="col-xxl-6 col-md-6">
                                         <div class="form-floating">
                                             <input name="name" type="text" class="form-control" id="namefloatingInput" placeholder="Enter your name">
-                                            <label for="namefloatingInput">name</label>
+                                            <label for="namefloatingInput">{{ __('admin.pages.common.name') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-xxl-6 col-md-6">
                                         <div class="form-floating">
                                             <input name="email" type="email" class="form-control" id="namefloatingInput" placeholder="Enter your email">
-                                            <label for="namefloatingInput">email</label>
+                                            <label for="namefloatingInput">{{ __('admin.pages.common.email') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-xxl-6 col-md-6">
                                         <div class="form-floating">
                                             <input name="phone" type="text" class="form-control" id="namefloatingInput" placeholder="Enter your phone">
-                                            <label for="namefloatingInput">phone</label>
+                                            <label for="namefloatingInput">{{ __('admin.pages.admins.phone') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-xxl-6 col-md-6">
@@ -82,13 +82,13 @@
                                     <div class="col-xxl-6 col-md-6">
                                         <div class="form-floating">
                                             <input name="password" type="password" class="form-control" id="namefloatingInput" placeholder="Enter your email">
-                                            <label for="namefloatingInput">password</label>
+                                            <label for="namefloatingInput">{{ __('admin.pages.admins.password') }}</label>
                                         </div>
                                     </div>
                                     <div class="col-xxl-6 col-md-6">
                                         <div class="form-floating">
                                             <input name="password_confirmation" type="password" class="form-control" id="namefloatingInput" placeholder="Enter your password confirmation">
-                                            <label for="namefloatingInput">password confirmation</label>
+                                            <label for="namefloatingInput">{{ __('admin.pages.admins.password_confirmation') }}</label>
                                         </div>
                                     </div>
                                     <!-- <div class="form-group input-group">
@@ -99,8 +99,8 @@
                                     </div> -->
 
                                     <div class="col-12">
-                                        <button class="btn btn-primary" type="submit">Submit form</button>
-                                        <button class="btn btn-success" type="reset">Reset Button</button>
+                                        <button class="btn btn-primary" type="submit">{{ __('admin.pages.common.submit_form') }}</button>
+                                        <button class="btn btn-success" type="reset">{{ __('admin.pages.common.reset_button') }}</button>
                                     </div>
 
 

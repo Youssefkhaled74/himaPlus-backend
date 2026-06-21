@@ -23,7 +23,7 @@
                         <div class="p-0 ms-auto rounded-circle profile-photo-edit">
                             {{-- <input id="profile-foreground-img-file-input" type="file" class="profile-foreground-img-file-input"> --}}
                             <label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light">
-                                <i class="ri-image-edit-line align-bottom me-1"></i> Profile
+                                <i class="ri-image-edit-line align-bottom me-1"></i> {{ __('admin.pages.common.personal_details') ?? 'Profile' }}
                             </label>
                         </div>
                     </div>
@@ -71,12 +71,12 @@
                         <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
-                                    <i class="fas fa-home"></i> Personal Details
+                                    <i class="fas fa-home"></i> {{ __('admin.pages.common.personal_details') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
-                                    <i class="far fa-user"></i> Change Password
+                                    <i class="far fa-user"></i> {{ __('admin.pages.common.change_password') }}
                                 </a>
                             </li>
                         </ul>
@@ -89,26 +89,26 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label for="firstnameInput" class="form-label">First Name</label>
-                                                <input name="name" type="text" class="form-control" id="firstnameInput" placeholder="Username" value="{{$admin->name}}">
+                                                <label for="firstnameInput" class="form-label">{{ __('admin.pages.common.first_name') }}</label>
+                                                <input name="name" type="text" class="form-control" id="firstnameInput" placeholder="{{ __('admin.pages.common.enter_username') }}" value="{{$admin->name}}">
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label for="emailInput" class="form-label">Email Address</label>
-                                                <input name="email" type="email" class="form-control" id="emailInput" placeholder="Email" value="{{$admin->email}}" style="direction: rtl;">
+                                                <label for="emailInput" class="form-label">{{ __('admin.pages.common.email_address') }}</label>
+                                                <input name="email" type="email" class="form-control" id="emailInput" placeholder="{{ __('admin.pages.common.enter_email') }}" value="{{$admin->email}}" style="direction: rtl;">
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="mb-3">
-                                                <label for="lastnameInput" class="form-label">Phone</label>
-                                                <input name="phone" type="text" class="form-control" id="lastnameInput" placeholder="Phone" value="{{$admin->phone}}">
+                                                <label for="lastnameInput" class="form-label">{{ __('admin.pages.common.phone') }}</label>
+                                                <input name="phone" type="text" class="form-control" id="lastnameInput" placeholder="{{ __('admin.pages.common.enter_phone') }}" value="{{$admin->phone}}">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="hstack gap-2 justify-content-end">
-                                                <button type="submit" class="btn btn-primary">Updates</button>
-                                                <button type="button" class="btn btn-soft-success">Cancel</button>
+                                                <button type="submit" class="btn btn-primary">{{ __('admin.pages.common.updates') }}</button>
+                                                <button type="button" class="btn btn-soft-success">{{ __('admin.pages.common.cancel') }}</button>
                                             </div>
                                         </div>
                                     </div>
@@ -121,20 +121,20 @@
                                     <div class="row g-2">
                                         <div class="col-lg-4">
                                             <div>
-                                                <label for="oldpasswordInput" class="form-label">Old Password*</label>
-                                                <input name="old_password" type="password" class="form-control" id="oldpasswordInput" placeholder="Enter current password">
+                                                <label for="oldpasswordInput" class="form-label">{{ __('admin.pages.common.old_password') }}*</label>
+                                                <input name="old_password" type="password" class="form-control" id="oldpasswordInput" placeholder="{{ __('admin.pages.common.enter_current_password') }}">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div>
-                                                <label for="newpasswordInput" class="form-label">New Password*</label>
-                                                <input name="password" type="password" class="form-control" id="newpasswordInput" placeholder="Enter new password">
+                                                <label for="newpasswordInput" class="form-label">{{ __('admin.pages.common.new_password') }}*</label>
+                                                <input name="password" type="password" class="form-control" id="newpasswordInput" placeholder="{{ __('admin.pages.common.enter_new_password') }}">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div>
-                                                <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
-                                                <input name="password_confirmation" type="password" class="form-control" id="confirmpasswordInput" placeholder="Confirm password">
+                                                <label for="confirmpasswordInput" class="form-label">{{ __('admin.pages.common.confirm_password') }}*</label>
+                                                <input name="password_confirmation" type="password" class="form-control" id="confirmpasswordInput" placeholder="{{ __('admin.pages.common.confirm_password') }}">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
@@ -144,7 +144,7 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="text-end">
-                                                <button type="submit" class="btn btn-success">Change Password</button>
+                                                <button type="submit" class="btn btn-success">{{ __('admin.pages.common.change_password') }}</button>
                                             </div>
                                         </div>
                                     </div>

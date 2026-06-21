@@ -26,8 +26,8 @@
         <div class="container-fluid">
             <x-admin.page-header
                 :badge="__('admin.pages.orders.module_label')"
-                :title="'Order #' . $order->id"
-                :description="'Operational details, timeline, offers, and payment summary.'"
+                :title="__('admin.pages.orders.order_details', ['id' => $order->id])"
+                :description="__('admin.pages.orders.operational_details')"
                 :breadcrumbs="[
                     ['label' => __('admin.pages.common.home'), 'href' => route('admin/index')],
                     ['label' => __('admin.nav.orders'), 'href' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT],
@@ -51,32 +51,32 @@
                                     <div class="row g-3">
                                         <div class="col-md-4">
                                             <div class="border rounded-3 p-3 h-100">
-                                                <div class="text-muted small mb-1">Type</div>
+                                                <div class="text-muted small mb-1">{{ __('admin.pages.orders.type') }}</div>
                                                 <div class="fw-semibold">{{ $orderType }}</div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="border rounded-3 p-3 h-100">
-                                                <div class="text-muted small mb-1">Mode</div>
+                                                <div class="text-muted small mb-1">{{ __('admin.pages.orders.mode') }}</div>
                                                 <div class="fw-semibold">{{ $requestMode }}</div>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="border rounded-3 p-3 h-100">
-                                                <div class="text-muted small mb-1">Status</div>
+                                                <div class="text-muted small mb-1">{{ __('admin.pages.orders.status') }}</div>
                                                 <span class="badge {{ $status['class'] }}">{{ $status['text'] }}</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="border rounded-3 p-3 h-100">
-                                                <div class="text-muted small mb-1">Customer</div>
+                                                <div class="text-muted small mb-1">{{ __('admin.pages.orders.customer') }}</div>
                                                 <div class="fw-semibold">{{ $order->user?->name ?? '-' }}</div>
                                                 <div class="small text-muted">{{ $order->user?->email ?? '-' }}</div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="border rounded-3 p-3 h-100">
-                                                <div class="text-muted small mb-1">Vendor</div>
+                                                <div class="text-muted small mb-1">{{ __('admin.pages.orders.vendor') }}</div>
                                                 <div class="fw-semibold">{{ $order->provider?->name ?? '-' }}</div>
                                                 <div class="small text-muted">{{ $order->provider?->email ?? '-' }}</div>
                                             </div>
@@ -87,13 +87,13 @@
                                     <div class="border rounded-3 p-3 h-100">
                                         <div class="d-flex justify-content-between align-items-start mb-3">
                                             <div>
-                                                <div class="text-muted small mb-1">Payment</div>
-                                                <div class="fw-semibold">Commercial Snapshot</div>
+                                                <div class="text-muted small mb-1">{{ __('admin.pages.orders.payment') }}</div>
+                                                <div class="fw-semibold">{{ __('admin.pages.orders.commercial_snapshot') }}</div>
                                             </div>
                                             <span class="badge {{ $paymentBadgeClass }}">{{ $paymentLabel }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between py-2 border-top">
-                                            <span class="text-muted">Items Cost</span>
+                                            <span class="text-muted">{{ __('admin.pages.orders.items_cost') }}</span>
                                             <span class="fw-semibold">{{ number_format((float) ($order->items_cost ?? 0), 2) }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between py-2 border-top">
@@ -101,23 +101,23 @@
                                             <span class="fw-semibold">{{ number_format((float) ($order->discount ?? 0), 2) }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between py-2 border-top">
-                                            <span class="text-muted">VAT Amount</span>
+                                            <span class="text-muted">{{ __('admin.pages.orders.vat_amount') }}</span>
                                             <span class="fw-semibold">{{ number_format((float) ($order->vat_amount ?? 0), 2) }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between py-2 border-top">
-                                            <span class="text-muted">Delivery Fee</span>
+                                            <span class="text-muted">{{ __('admin.pages.orders.delivery_fee') }}</span>
                                             <span class="fw-semibold">{{ number_format((float) ($order->delivery_fee ?? 0), 2) }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between py-2 border-top">
-                                            <span class="text-muted">Total Cost</span>
+                                            <span class="text-muted">{{ __('admin.pages.orders.total_cost') }}</span>
                                             <span class="fw-semibold">{{ number_format((float) ($order->total_cost ?? 0), 2) }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between py-2 border-top">
-                                            <span class="text-muted">Payment Type</span>
+                                            <span class="text-muted">{{ __('admin.pages.orders.payment_type') }}</span>
                                             <span class="fw-semibold">{{ $order->payment_type ?? '-' }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between py-2 border-top">
-                                            <span class="text-muted">Transaction ID</span>
+                                            <span class="text-muted">{{ __('admin.pages.orders.transaction_id') }}</span>
                                             <span class="fw-semibold">{{ $order->getway_transaction_id ?? '-' }}</span>
                                         </div>
                                     </div>
@@ -130,7 +130,7 @@
                 <div class="col-12">
                     <div class="card admin-content-card">
                         <div class="card-header">
-                            <h5 class="mb-0">Order Items</h5>
+                            <h5 class="mb-0">{{ __('admin.pages.orders.order_items') }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -138,10 +138,10 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>{{ __('nav.product_name') ?? 'Product Name' }}</th>
-                                            <th>{{ __('nav.product_quantity') ?? 'Quantity' }}</th>
-                                            <th>{{ __('admin.pages.products.fields.expiry_date') ?? 'Expiry Date' }}</th>
-                                            <th>{{ __('nav.delivery_days') ?? 'Delivery Duration' }}</th>
+                                            <th>{{ __('admin.pages.orders.product_name') }}</th>
+                                            <th>{{ __('admin.pages.orders.product_quantity') }}</th>
+                                            <th>{{ __('admin.pages.orders.expiry_date') }}</th>
+                                            <th>{{ __('admin.pages.orders.delivery_duration') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -159,7 +159,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="text-center text-muted py-4">No items found for this order.</td>
+                                                <td colspan="5" class="text-center text-muted py-4">{{ __('admin.pages.orders.no_items_found') }}</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -172,39 +172,39 @@
                 <div class="col-lg-6">
                     <div class="card admin-content-card h-100">
                         <div class="card-header">
-                            <h5 class="mb-0">Order Summary</h5>
+                            <h5 class="mb-0">{{ __('admin.pages.orders.order_summary') }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Address</span>
+                                <span class="text-muted">{{ __('admin.pages.orders.address') }}</span>
                                 <span class="fw-semibold text-end">{{ $order->address ?? '-' }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Device Category</span>
+                                <span class="text-muted">{{ __('admin.pages.orders.device_category') }}</span>
                                 <span class="fw-semibold">{{ $order->device_category?->name ?? '-' }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Device Name</span>
+                                <span class="text-muted">{{ __('admin.pages.orders.device_name') }}</span>
                                 <span class="fw-semibold">{{ $order->device_name ?? '-' }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Serial Number</span>
+                                <span class="text-muted">{{ __('admin.pages.orders.serial_number') }}</span>
                                 <span class="fw-semibold">{{ $order->serial_number ?? '-' }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Budget</span>
+                                <span class="text-muted">{{ __('admin.pages.orders.budget') }}</span>
                                 <span class="fw-semibold">{{ $order->budget ?? '-' }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Preferred Service Time</span>
+                                <span class="text-muted">{{ __('admin.pages.orders.preferred_service_time') }}</span>
                                 <span class="fw-semibold">{{ $order->preferred_service_time ?? '-' }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2 border-bottom">
-                                <span class="text-muted">Schedule Start</span>
+                                <span class="text-muted">{{ __('admin.pages.orders.schedule_start') }}</span>
                                 <span class="fw-semibold">{{ $order->schedule_start_date ?? '-' }}</span>
                             </div>
                             <div class="d-flex justify-content-between py-2">
-                                <span class="text-muted">Created At</span>
+                                <span class="text-muted">{{ __('admin.pages.orders.created_at') }}</span>
                                 <span class="fw-semibold">{{ optional($order->created_at)->format('Y-m-d H:i') }}</span>
                             </div>
                         </div>
@@ -214,36 +214,36 @@
                 <div class="col-lg-6">
                     <div class="card admin-content-card h-100">
                         <div class="card-header">
-                            <h5 class="mb-0">Accepted Offer</h5>
+                            <h5 class="mb-0">{{ __('admin.pages.orders.accepted_offer') }}</h5>
                         </div>
                         <div class="card-body">
                             @if($acceptedOffer)
                                 <div class="d-flex justify-content-between py-2 border-bottom">
-                                    <span class="text-muted">Offer ID</span>
+                                    <span class="text-muted">{{ __('admin.pages.orders.offer_id') }}</span>
                                     <span class="fw-semibold">#{{ $acceptedOffer->id }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between py-2 border-bottom">
-                                    <span class="text-muted">Vendor</span>
+                                    <span class="text-muted">{{ __('admin.pages.orders.vendor') }}</span>
                                     <span class="fw-semibold">{{ $acceptedOffer->provider?->name ?? '-' }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between py-2 border-bottom">
-                                    <span class="text-muted">Cost</span>
+                                    <span class="text-muted">{{ __('admin.pages.orders.cost') }}</span>
                                     <span class="fw-semibold">{{ number_format((float) ($acceptedOffer->cost ?? 0), 2) }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between py-2 border-bottom">
-                                    <span class="text-muted">Delivery Time</span>
+                                    <span class="text-muted">{{ __('admin.pages.orders.delivery_time') }}</span>
                                     <span class="fw-semibold">{{ $acceptedOffer->delivery_time ?? '-' }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between py-2 border-bottom">
-                                    <span class="text-muted">Warranty</span>
+                                    <span class="text-muted">{{ __('admin.pages.orders.warranty') }}</span>
                                     <span class="fw-semibold">{{ $acceptedOffer->warranty ?? '-' }}</span>
                                 </div>
                                 <div class="pt-2">
-                                    <div class="text-muted small mb-1">Notes</div>
+                                    <div class="text-muted small mb-1">{{ __('admin.pages.orders.notes') }}</div>
                                     <div class="fw-semibold">{{ $acceptedOffer->notes ?? '-' }}</div>
                                 </div>
                             @else
-                                <div class="text-center text-muted py-5">No accepted offer is attached to this order yet.</div>
+                                <div class="text-center text-muted py-5">{{ __('admin.pages.orders.no_accepted_offer') }}</div>
                             @endif
                         </div>
                     </div>
@@ -252,19 +252,19 @@
                 <div class="col-12">
                     <div class="card admin-content-card">
                         <div class="card-header">
-                            <h5 class="mb-0">Offers</h5>
+                            <h5 class="mb-0">{{ __('admin.pages.orders.offers_list') }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table align-middle">
                                     <thead>
                                         <tr>
-                                            <th>Offer</th>
-                                            <th>Vendor</th>
-                                            <th>Status</th>
-                                            <th>Cost</th>
-                                            <th>Delivery</th>
-                                            <th>Notes</th>
+                                            <th>{{ __('admin.pages.orders.offer') }}</th>
+                                            <th>{{ __('admin.pages.orders.vendor') }}</th>
+                                            <th>{{ __('admin.pages.orders.status') }}</th>
+                                            <th>{{ __('admin.pages.orders.cost') }}</th>
+                                            <th>{{ __('admin.pages.orders.delivery_time') }}</th>
+                                            <th>{{ __('admin.pages.orders.notes') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -272,11 +272,11 @@
                                             @php
                                                 $offerStatus = strtolower((string) $offer->status);
                                                 $offerLabel = $offerStatus === '2' || $offerStatus === 'accepted'
-                                                    ? 'Accepted'
-                                                    : ($offerStatus === '3' || $offerStatus === 'rejected' ? 'Rejected' : 'Pending');
-                                                $offerClass = $offerLabel === 'Accepted'
+                                                    ? __('admin.pages.orders.statuses.accepted')
+                                                    : ($offerStatus === '3' || $offerStatus === 'rejected' ? __('admin.pages.orders.statuses.rejected') : __('admin.pages.orders.statuses.pending'));
+                                                $offerClass = $offerLabel === __('admin.pages.orders.statuses.accepted')
                                                     ? 'bg-success-subtle text-success'
-                                                    : ($offerLabel === 'Rejected' ? 'bg-danger-subtle text-danger' : 'bg-warning-subtle text-warning');
+                                                    : ($offerLabel === __('admin.pages.orders.statuses.rejected') ? 'bg-danger-subtle text-danger' : 'bg-warning-subtle text-warning');
                                             @endphp
                                             <tr>
                                                 <td class="fw-semibold">#{{ $offer->id }}</td>
@@ -288,7 +288,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="6" class="text-center text-muted py-4">No offers found for this order.</td>
+                                                <td colspan="6" class="text-center text-muted py-4">{{ __('admin.pages.orders.no_offers') }}</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -301,17 +301,17 @@
                 <div class="col-lg-7">
                     <div class="card admin-content-card h-100">
                         <div class="card-header">
-                            <h5 class="mb-0">Timeline</h5>
+                            <h5 class="mb-0">{{ __('admin.pages.orders.timeline') }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table align-middle">
                                     <thead>
                                         <tr>
-                                            <th>Step</th>
-                                            <th>Actor</th>
-                                            <th>Timeline No</th>
-                                            <th>Action At</th>
+                                            <th>{{ __('admin.pages.orders.step') }}</th>
+                                            <th>{{ __('admin.pages.orders.actor') }}</th>
+                                            <th>{{ __('admin.pages.orders.timeline_no') }}</th>
+                                            <th>{{ __('admin.pages.orders.action_at') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -324,7 +324,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center text-muted py-4">No timeline entries found.</td>
+                                                <td colspan="4" class="text-center text-muted py-4">{{ __('admin.pages.orders.no_timeline') }}</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -337,17 +337,17 @@
                 <div class="col-lg-5">
                     <div class="card admin-content-card h-100">
                         <div class="card-header">
-                            <h5 class="mb-0">Cancellation History</h5>
+                            <h5 class="mb-0">{{ __('admin.pages.orders.cancellation_history') }}</h5>
                         </div>
                         <div class="card-body">
                             @forelse($cancellationEntries as $entry)
                                 <div class="border rounded-3 p-3 mb-3">
                                     <div class="fw-semibold mb-1">{{ timelineName((int) $entry->timeline_no) }}</div>
-                                    <div class="text-muted small mb-2">Cancelled by {{ $entry->user?->name ?? ('User #' . ($entry->user_id ?? '-')) }}</div>
+                                    <div class="text-muted small mb-2">{{ __('admin.pages.orders.cancelled_by') }} {{ $entry->user?->name ?? ('User #' . ($entry->user_id ?? '-')) }}</div>
                                     <div class="small">{{ optional($entry->action_at ?? $entry->created_at)->format('Y-m-d H:i') }}</div>
                                 </div>
                             @empty
-                                <div class="text-center text-muted py-5">No cancellation history recorded.</div>
+                                <div class="text-center text-muted py-5">{{ __('admin.pages.orders.no_cancellation') }}</div>
                             @endforelse
                         </div>
                     </div>
@@ -356,7 +356,7 @@
                 <div class="col-12">
                     <div class="card admin-content-card">
                         <div class="card-header">
-                            <h5 class="mb-0">Partial Receive</h5>
+                            <h5 class="mb-0">{{ __('admin.pages.orders.partial_receive') }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
@@ -364,22 +364,22 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="border rounded-3 p-3 h-100">
                                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                                <div class="fw-semibold">Partial #{{ $partialReceive->id }}</div>
+                                                <div class="fw-semibold">{{ __('admin.pages.orders.partial_id', ['id' => $partialReceive->id]) }}</div>
                                                 <span class="badge bg-info-subtle text-info">{{ optional($partialReceive->created_at)->format('Y-m-d') }}</span>
                                             </div>
-                                            <div class="small text-muted mb-1">Offer ID</div>
+                                            <div class="small text-muted mb-1">{{ __('admin.pages.orders.offer_id') }}</div>
                                             <div class="fw-semibold mb-3">{{ $partialReceive->offer_id ?? '-' }}</div>
-                                            <div class="small text-muted mb-1">Received Quantity</div>
+                                            <div class="small text-muted mb-1">{{ __('admin.pages.orders.received_quantity') }}</div>
                                             <div class="fw-semibold mb-3">{{ $partialReceive->received_quantity ?? '-' }}</div>
-                                            <div class="small text-muted mb-1">Received All</div>
-                                            <div class="fw-semibold mb-3">{{ (int) ($partialReceive->received_all_quantity ?? 0) === 1 ? 'Yes' : 'No' }}</div>
-                                            <div class="small text-muted mb-1">Reason</div>
+                                            <div class="small text-muted mb-1">{{ __('admin.pages.orders.received_all') }}</div>
+                                            <div class="fw-semibold mb-3">{{ (int) ($partialReceive->received_all_quantity ?? 0) === 1 ? __('admin.pages.orders.yes') : __('admin.pages.orders.no') }}</div>
+                                            <div class="small text-muted mb-1">{{ __('admin.pages.orders.reason') }}</div>
                                             <div class="fw-semibold">{{ $partialReceive->reason_for_partial ?? '-' }}</div>
                                         </div>
                                     </div>
                                 @empty
                                     <div class="col-12">
-                                        <div class="text-center text-muted py-4">No partial receive records found.</div>
+                                        <div class="text-center text-muted py-4">{{ __('admin.pages.orders.no_partial_receives') }}</div>
                                     </div>
                                 @endforelse
                             </div>
@@ -390,10 +390,10 @@
                 <div class="col-12">
                     <div class="card admin-content-card">
                         <div class="card-header">
-                            <h5 class="mb-0">Internal Notes</h5>
+                            <h5 class="mb-0">{{ __('admin.pages.orders.internal_notes') }}</h5>
                         </div>
                         <div class="card-body">
-                            <p class="mb-0">{{ $order->notes ?? 'No notes available for this order.' }}</p>
+                            <p class="mb-0">{{ $order->notes ?? __('admin.pages.orders.no_notes') }}</p>
                         </div>
                     </div>
                 </div>
