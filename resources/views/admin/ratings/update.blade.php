@@ -1,7 +1,7 @@
 @extends('layouts.admin.home')
 
 @section('title')
-    <title>Ratings</title>
+    <title>{{ __('admin.pages.ratings.title') }}</title>
 @endsection
 
 @section('css')

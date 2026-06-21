@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Orders</title>
+    <title>{{ __('admin.pages.orders.title') }}</title>
 @endsection
 
 <!-- custom css -->
@@ -22,9 +22,9 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"></li>
-                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/orders/index')}}/0/{{PAGINATION_COUNT}}">Orders</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">Create</li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
+                                <li class="breadcrumb-item active"><a href="{{route('admin/orders/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.pages.orders.title') }}</a></li>
+                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">{{ __('admin.pages.common.create') }}</li>
                             </ol>
                         </div>
 
@@ -47,7 +47,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Order Form</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.orders.order_form') ?? 'Order Form' }}</h4>
                         </div>
                         <div class="card-body">
                             <form role="form" action="{{url(route('admin/orders/create'))}}" method="post" enctype="multipart/form-data">
@@ -86,8 +86,8 @@
                                         </div> -->
 
                                         <div class="col-12">
-                                            <button class="btn btn-primary" type="submit">Submit form</button>
-                                            <button class="btn btn-success" type="reset">Reset Button</button>
+                                            <button class="btn btn-primary" type="submit">{{ __('admin.pages.common.submit_form') }}</button>
+                                            <button class="btn btn-success" type="reset">{{ __('admin.pages.common.reset_button') }}</button>
                                         </div>
 
                                     </div>

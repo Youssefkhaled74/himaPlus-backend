@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Admins</title>
+    <title>{{ __('admin.pages.admins.title') }}</title>
 @endsection
 
 <!-- custom css -->

@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Countries</title>
+    <title>{{ __('admin.pages.countries.title') }}</title>
 @endsection
 
 <!-- custom css -->
@@ -22,9 +22,9 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"></li>
-                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/countries/index')}}/0/{{PAGINATION_COUNT}}">Countries</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">Update</li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
+                                <li class="breadcrumb-item active"><a href="{{route('admin/countries/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.pages.countries.title') }}</a></li>
+                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">{{ __('admin.pages.common.update') }}</li>
                             </ol>
                         </div>
 
@@ -47,7 +47,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Country Update</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.countries.update_title') ?? 'Country Update' }}</h4>
                         </div>
                         <div class="card-body">
                             @isset($country)
@@ -59,12 +59,12 @@
                                             <div class="col-xxl-6 col-md-6">
                                                 <div class="form-floating">
                                                     <input name="name" type="text" class="form-control" id="namefloatingInput" placeholder="name" value="{{$country->name}}">
-                                                    <label for="namefloatingInput">name <span class="text-danger">*</span></label>
+                                                    <label for="namefloatingInput">{{ __('admin.pages.common.name') }} <span class="text-danger">*</span></label>
                                                 </div>
                                             </div>
 
                                             <div class="col-12">
-                                                <button class="btn btn-primary" type="submit">Submit form</button>
+                                                <button class="btn btn-primary" type="submit">{{ __('admin.pages.common.submit_form') }}</button>
                                             </div>
 
                                         </div>

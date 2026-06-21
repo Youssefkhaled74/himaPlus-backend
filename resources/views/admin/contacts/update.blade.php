@@ -1,7 +1,7 @@
 @extends('layouts.admin.home')
 
 @section('title')
-    <title>Contacts</title>
+    <title>{{ __('admin.pages.contacts.title') }}</title>
 @endsection
 
 @section('css')

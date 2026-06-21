@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Info</title>
+    <title>{{ __('admin.pages.info.title') }}</title>
 @endsection
 
 <!-- custom css -->
