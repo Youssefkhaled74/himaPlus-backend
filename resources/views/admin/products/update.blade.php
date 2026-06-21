@@ -5,10 +5,6 @@
     <title>{{ __('admin.pages.products.title') }}</title>
 @endsection
 
-<!-- custom css -->
-@section('css')
-@endsection
-
 @section('content')
 
     <div class="page-content">
@@ -21,10 +17,9 @@
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"></li>
                                 <li class="breadcrumb-item"><a href="{{ route('admin/index') }}">{{ __('admin.pages.common.home') }}</a></li>
-                                <li class="breadcrumb-item active"><a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}">{{ __('admin.nav.products') }}</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">{{ __('admin.pages.common.update') }}</li>
+                                <li class="breadcrumb-item"><a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}">{{ __('admin.nav.products') }}</a></li>
+                                <li class="breadcrumb-item active">{{ __('admin.pages.common.update') }}</li>
                             </ol>
                         </div>
 
@@ -51,7 +46,7 @@
                         </div>
                         <div class="card-body">
                             @isset($product)
-                                <form role="form" action="{{url(route('admin/products/update', $product->id))}}" method="post" enctype="multipart/form-data">
+                                <form role="form" action="{{ route('admin/products/update', $product->id) }}" method="post" enctype="multipart/form-data">
                                     <div class="live-preview">
                                         @csrf
                                         <div class="row gy-4">
@@ -184,7 +179,7 @@
                                             </div>
                                             <div class="col-xxl-6 col-md-6">
                                                 <div class="form-group">
-                                                    <label>Registration Type <span class="input-group-addon" style="color: red;">*</span></label>
+                                                    <label>{{ __('admin.pages.products.registration_type') }} <span class="input-group-addon" style="color: red;">*</span></label>
                                                     <select class="form-control" name="registration_type" required>
                                                         <option value="">select</option>
                                                         <option value="sfda" {{ $product->registration_type === 'sfda' ? 'selected' : '' }}>SFDA</option>
@@ -193,34 +188,34 @@
                                                 </div>
                                             </div>
                                             <div class="col-xxl-6 col-md-6">
-                                                <label>Guarantee File @if(!$product->guarantee_file)<span class="text-danger">*</span>@endif</label>
+                                                <label>{{ __('admin.pages.products.guarantee_file') }} @if(!$product->guarantee_file)<span class="text-danger">*</span>@endif</label>
                                                 <input name="guarantee_file" type="file" class="form-control no-min-height" accept=".jpg,.jpeg,.png,.webp,.pdf" {{ $product->guarantee_file ? '' : 'required' }}>
                                             </div>
                                             <div class="col-xxl-6 col-md-6">
-                                                <label>Product PDF</label>
+                                                <label>{{ __('admin.pages.products.product_pdf') }}</label>
                                                 <input name="product_pdf" type="file" class="form-control no-min-height" accept=".pdf">
                                             </div>
                                             <div class="col-xxl-6 col-md-6">
                                                 <div class="form-floating">
-                                                    <input name="registration_number" value="{{ $product->registration_number }}" type="text" class="form-control" placeholder="registration number" maxlength="100" required>
-                                                    <label>Registration Number <span class="text-danger">*</span></label>
+                                                    <input name="registration_number" value="{{ $product->registration_number }}" type="text" class="form-control" placeholder="{{ __('admin.pages.products.registration_number') }}" maxlength="100" required>
+                                                    <label>{{ __('admin.pages.products.registration_number') }} <span class="text-danger">*</span></label>
                                                 </div>
                                             </div>
                                             <div class="col-xxl-6 col-md-6">
                                                 <div class="form-floating">
                                                     <input name="registration_expiry_date" value="{{ optional($product->registration_expiry_date)->format('Y-m-d') }}" type="date" class="form-control" required>
-                                                    <label>Registration Expiry Date <span class="text-danger">*</span></label>
+                                                    <label>{{ __('admin.pages.products.registration_expiry_date') }} <span class="text-danger">*</span></label>
                                                 </div>
                                             </div>
                                             <div class="col-xxl-6 col-md-6">
                                                 <div class="form-floating">
-                                                    <input name="factory_name" value="{{ $product->factory_name }}" type="text" class="form-control" placeholder="factory name" maxlength="100" required>
-                                                    <label>Factory Name <span class="text-danger">*</span></label>
+                                                    <input name="factory_name" value="{{ $product->factory_name }}" type="text" class="form-control" placeholder="{{ __('admin.pages.products.factory_name') }}" maxlength="100" required>
+                                                    <label>{{ __('admin.pages.products.factory_name') }} <span class="text-danger">*</span></label>
                                                 </div>
                                             </div>
                                             <div class="col-xxl-6 col-md-6">
                                                 <div class="form-group">
-                                                    <label>Factory Country <span class="input-group-addon" style="color: red;">*</span></label>
+                                                    <label>{{ __('admin.pages.products.factory_country') }} <span class="input-group-addon" style="color: red;">*</span></label>
                                                     <select class="form-control" name="factory_country" id="factory_countries" required>
                                                         <option value="{{ $product->factory_country }}">{{ $product->factory_country ?: 'select' }}</option>
                                                     </select>
@@ -228,8 +223,8 @@
                                             </div>
                                             <div class="col-xxl-6 col-md-6">
                                                 <div class="form-floating">
-                                                    <input name="uom" value="{{ $product->uom }}" type="text" class="form-control" placeholder="uom" maxlength="100" required>
-                                                    <label>UOM <span class="text-danger">*</span></label>
+                                                    <input name="uom" value="{{ $product->uom }}" type="text" class="form-control" placeholder="{{ __('admin.pages.products.uom') }}" maxlength="100" required>
+                                                    <label>{{ __('admin.pages.products.uom') }} <span class="text-danger">*</span></label>
                                                 </div>
                                             </div>
 

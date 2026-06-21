@@ -128,7 +128,7 @@
                         <p class="card-subtitle mb-0">{{ __('admin.pages.categories.create_details_description') }}</p>
                     </div>
                     <div class="card-body">
-                        <form role="form" action="{{ url(route('admin/categories/create')) }}" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{ route('admin/categories/create') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="row gy-4">
                                 <div class="col-xxl-6 col-md-6">

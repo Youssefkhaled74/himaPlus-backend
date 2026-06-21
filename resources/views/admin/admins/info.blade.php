@@ -5,10 +5,6 @@
     <title>{{ __('admin.pages.admins.title') }}</title>
 @endsection
 
-<!-- custom page -->
-@section('css')
-@endsection
-
 @section('content')
 
 
@@ -37,7 +33,7 @@
                     <div class="card-body p-4">
                         <div class="text-center">
                             <div class="profile-user position-relative d-inline-block mx-auto  mb-4">
-                                <img src="{{asset(auth()->guard('admin')->user()->img)}}" class="rounded-circle avatar-xl img-thumbnail user-profile-image material-shadow" alt="user-profile-image">
+                                <img src="{{asset(auth()->guard('admin')->user()->img ?? 'admin/assets/images/users/avatar-1.jpg')}}" class="rounded-circle avatar-xl img-thumbnail user-profile-image material-shadow" alt="user-profile-image">
                                 <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
                                     <input name="file" id="profile-img-file-input" type="file" class="profile-img-file-input" form="personalForm">
                                     <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
@@ -84,7 +80,7 @@
                     <div class="card-body p-4">
                         <div class="tab-content">
                             <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                                <form id="personalForm" role="form" action="{{url(route('admin/admins/info-update'))}}" method="post" enctype="multipart/form-data">
+                                <form id="personalForm" role="form" action="{{ route('admin/admins/info-update') }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -116,7 +112,7 @@
                             </div>
                             <!--end tab-pane-->
                             <div class="tab-pane" id="changePassword" role="tabpanel">
-                                <form role="form" action="{{url(route('admin/admins/change-password'))}}" method="post">
+                                <form role="form" action="{{ route('admin/admins/change-password') }}" method="post">
                                     @csrf
                                     <div class="row g-2">
                                         <div class="col-lg-4">
@@ -161,6 +157,14 @@
 
 @endsection
 
-<!-- custom js -->
 @section('script')
+<script>
+(function () {
+    $('.nav-link.menu-link').removeClass('active');
+    $('.menu-dropdown').removeClass('show');
+    $('.sidebarinfo').addClass('active');
+    var target = $('.sidebarinfo').attr('href');
+    if (target) $(target).addClass('show');
+})();
+</script>
 @endsection

@@ -5,10 +5,6 @@
     <title>{{ __('admin.pages.admins.title') }}</title>
 @endsection
 
-<!-- custom css -->
-@section('css')
-@endsection
-
 @section('content')
 
 <div class="page-content">
@@ -19,14 +15,13 @@
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent" style="direction: ltr;">
                     {{-- <h4 class="mb-sm-0">Team</h4> --}}
 
-                    <div class="page-title-right">
-                        <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"></li>
-                            <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
-                            <li class="breadcrumb-item active"><a href="{{route('admin/admins/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.pages.admins.title') }}</a></li>
-                            <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">{{ __('admin.pages.common.create') }}</li>
-                        </ol>
-                    </div>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/admins/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.nav.admins') }}</a></li>
+                                <li class="breadcrumb-item active">{{ __('admin.pages.common.create') }}</li>
+                            </ol>
+                        </div>
 
                 </div>
             </div>
@@ -50,7 +45,7 @@
                         <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.admins.form_title') ?? 'Admins Form' }}</h4>
                     </div>
                     <div class="card-body">
-                        <form role="form" action="{{url(route('admin/admins/create'))}}" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{ route('admin/admins/create') }}" method="post" enctype="multipart/form-data">
                             <div class="live-preview">
                                 @csrf
                                 <div class="row gy-4">

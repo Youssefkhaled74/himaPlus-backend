@@ -229,7 +229,7 @@
                                                 <img src="{{ asset($record->img) }}" alt="record image" class="img-fluid rounded-4" width="72" style="height:72px; object-fit:cover;">
                                             </td>
                                             <td>
-                                                <form method="post" action="{{ url(route('admin/categories/activate')) }}" class="d-inline-block category-status-toggle-form">
+                                                <form method="post" action="{{ route('admin/categories/activate') }}" class="d-inline-block category-status-toggle-form">
                                                     @csrf
                                                     <input type="hidden" name="record_id" value="{{ $record->id }}">
                                                     <div class="category-status-toggle-wrap">
@@ -325,7 +325,7 @@
                                     <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
                                 </div>
                                 <div class="modal-body text-center p-5">
-                                    <form role="form" action="{{ url(route('admin/categories/delete')) }}" method="post">
+                                    <form role="form" action="{{ route('admin/categories/delete') }}" method="post">
                                         {{ csrf_field() }}
                                         <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
                                         <div class="mt-4 pt-4">

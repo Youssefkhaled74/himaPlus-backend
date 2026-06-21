@@ -112,7 +112,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ url(route('admin/info/update', $info?->id ?? 1)) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('admin/info/update', $info?->id ?? 1) }}" method="post" enctype="multipart/form-data">
                         @csrf
 
                         <ul class="nav nav-tabs-custom info-tabs mb-4" role="tablist">

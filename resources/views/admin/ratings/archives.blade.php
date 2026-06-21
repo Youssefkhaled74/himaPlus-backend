@@ -2,11 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Ratings</title>
-@endsection
-
-<!-- custom css -->
-@section('css')
+    <title>{{ __('admin.pages.ratings.title') }}</title>
 @endsection
 
 @section('content')
@@ -21,10 +17,9 @@
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"></li>
-                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/ratings/index')}}/0/{{PAGINATION_COUNT}}">Ratings</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">Archive</li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/ratings/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.nav.ratings') }}</a></li>
+                                <li class="breadcrumb-item active">{{ __('admin.pages.common.archive') }}</li>
                             </ol>
                         </div>
 
@@ -47,7 +42,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Ratings Viwes</h5>
+                            <h5 class="card-title mb-0">{{ __('admin.pages.ratings.archives') }}</h5>
                         </div>
                         <div class="card-body">
                             <div id="scroll-horizontal_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
@@ -172,7 +167,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
                                                             </div>
                                                             <div class="modal-body text-center p-5">
-                                                                <form role="form" action="{{url(route('admin/ratings/back'))}}" method="post">
+                                                                <form role="form" action="{{ route('admin/ratings/back') }}" method="post">
                                                           
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>

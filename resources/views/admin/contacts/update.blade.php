@@ -4,9 +4,6 @@
     <title>{{ __('admin.pages.contacts.title') }}</title>
 @endsection
 
-@section('css')
-@endsection
-
 @section('content')
 
     <div class="page-content">
@@ -17,10 +14,9 @@
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent" style="direction: ltr;">
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"></li>
                                 <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/contacts/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.pages.contacts.title') }}</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">{{ __('admin.pages.common.update') }}</li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/contacts/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.nav.contacts') }}</a></li>
+                                <li class="breadcrumb-item active">{{ __('admin.pages.common.update') }}</li>
                             </ol>
                         </div>
 
@@ -47,7 +43,7 @@
                         </div>
                         <div class="card-body">
                             @isset($contact)
-                                <form role="form" action="{{url(route('admin/contacts/update', $contact->id))}}" method="post">
+                                <form role="form" action="{{ route('admin/contacts/update', $contact->id) }}" method="post">
                                     @csrf
                                     <div class="row gy-4">
                                         <div class="col-xxl-6 col-md-6">

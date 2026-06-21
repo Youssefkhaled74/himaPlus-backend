@@ -2,11 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Admins</title>
-@endsection
-
-<!-- custom css -->
-@section('css')
+    <title>{{ __('admin.pages.admins.title') }}</title>
 @endsection
 
 @section('content')
@@ -22,10 +18,9 @@
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"></li>
-                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/admins/index')}}/0/{{PAGINATION_COUNT}}">Admins</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">Archive</li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/admins/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.nav.admins') }}</a></li>
+                                <li class="breadcrumb-item active">{{ __('admin.pages.common.archive') }}</li>
                             </ol>
                         </div>
 
@@ -48,7 +43,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="card-title mb-0">Admins Viwes</h5>
+                            <h5 class="card-title mb-0">{{ __('admin.pages.admins.archives') }}</h5>
                         </div>
                         <div class="card-body">
                             <div id="scroll-horizontal_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
@@ -138,7 +133,7 @@
                                                                 <h5 class="modal-title f-w-600" id="exampleModalLabell">Back Confirmation</h5>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form role="form" action="{{url(route('admin/admins/back'))}}" method="post">
+                                                                <form role="form" action="{{ route('admin/admins/back') }}" method="post">
                                                                     {{ csrf_field() }}
                                                                     <p>Are You Sure To Update This Record ?</p>
                                                                     <input id="back_record_id" name="record_id" type="hidden">

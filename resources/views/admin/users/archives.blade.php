@@ -145,7 +145,7 @@
                     <h5 class="modal-title f-w-600">{{ __('admin.pages.common.archive') }}</h5>
                 </div>
                 <div class="modal-body text-center p-5">
-                    <form action="{{ url(route('admin/users/back')) }}" method="post">
+                    <form action="{{ route('admin/users/back') }}" method="post">
                         @csrf
                         <lord-icon
                             src="https://cdn.lordicon.com/tdrtiskw.json"

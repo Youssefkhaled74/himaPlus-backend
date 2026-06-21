@@ -188,10 +188,9 @@
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent" dir="rtl">
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin/index') }}">{{ __('admin.pages.common.home') }}</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('admin/admins/index') }}/0/{{ PAGINATION_COUNT }}">{{ __('admin.nav.admins') }}</a></li>
-                            <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">{{ __('admin.pages.common.update') }}</li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin/admins/index') }}/0/{{ PAGINATION_COUNT }}">{{ __('admin.nav.admins') }}</a></li>
+                            <li class="breadcrumb-item active">{{ __('admin.pages.common.update') }}</li>
                         </ol>
                     </div>
                 </div>
@@ -217,7 +216,7 @@
                     </div>
                     <div class="card-body">
                         @isset($admin)
-                            <form role="form" action="{{ url(route('admin/admins/update', $admin->id)) }}" method="post" enctype="multipart/form-data" dir="rtl">
+                            <form role="form" action="{{ route('admin/admins/update', $admin->id) }}" method="post" enctype="multipart/form-data" dir="rtl">
                                 <div class="live-preview">
                                     @csrf
                                     <div class="row gy-4">

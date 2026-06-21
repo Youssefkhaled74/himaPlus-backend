@@ -269,7 +269,7 @@
                             <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
                         </div>
                         <div class="modal-body text-center p-5">
-                            <form role="form" action="{{ url(route('admin/coupons/delete')) }}" method="post">
+                            <form role="form" action="{{ route('admin/coupons/delete') }}" method="post">
                                 @csrf
                                 <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
                                 <div class="mt-4 pt-4">
@@ -291,7 +291,7 @@
                             <h5 class="modal-title f-w-600" id="exampleModalLabel"></h5>
                         </div>
                         <div class="modal-body text-center p-5">
-                            <form role="form" action="{{ url(route('admin/coupons/activate')) }}" method="post">
+                            <form role="form" action="{{ route('admin/coupons/activate') }}" method="post">
                                 @csrf
                                 <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
                                 <div class="mt-4 pt-4">

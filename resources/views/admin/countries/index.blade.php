@@ -314,7 +314,7 @@
                                             <td class="fw-semibold">#{{ $record->id }}</td>
                                             <td class="fw-semibold">{{ $record->name }}</td>
                                             <td>
-                                                <form method="post" action="{{ url(route('admin/countries/activate')) }}" class="d-inline-block country-status-toggle-form">
+                                                <form method="post" action="{{ route('admin/countries/activate') }}" class="d-inline-block country-status-toggle-form">
                                                     @csrf
                                                     <input type="hidden" name="record_id" value="{{ $record->id }}">
                                                     <div class="country-status-toggle-wrap">
@@ -428,7 +428,7 @@
                                     <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
                                 </div>
                                 <div class="modal-body text-center p-5">
-                                    <form role="form" action="{{ url(route('admin/countries/delete')) }}" method="post">
+                                    <form role="form" action="{{ route('admin/countries/delete') }}" method="post">
                                         {{ csrf_field() }}
                                         <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json" trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
                                         <div class="mt-4 pt-4">

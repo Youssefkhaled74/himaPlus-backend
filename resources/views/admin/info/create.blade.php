@@ -5,10 +5,6 @@
     <title>{{ __('admin.pages.info.title') }}</title>
 @endsection
 
-<!-- custom css -->
-@section('css')
-@endsection
-
 @section('content')
 
     <div class="page-content">
@@ -21,10 +17,9 @@
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"></li>
                                 <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/info/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.pages.info.title') }}</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">{{ __('admin.pages.common.create') }}</li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/info/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.nav.platform_info') }}</a></li>
+                                <li class="breadcrumb-item active">{{ __('admin.pages.common.create') }}</li>
                             </ol>
                         </div>
 
@@ -50,7 +45,7 @@
                             <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.info.form_title') ?? 'Info Form' }}</h4>
                         </div>
                         <div class="card-body">
-                            <form role="form" action="{{url(route('admin/info/create'))}}" method="post" enctype="multipart/form-data">
+                            <form role="form" action="{{ route('admin/info/create') }}" method="post" enctype="multipart/form-data">
                                 <div class="live-preview">
                                     @csrf
                                     <div class="row gy-4">
