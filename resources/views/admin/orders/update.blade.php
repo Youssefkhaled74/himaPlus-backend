@@ -12,7 +12,7 @@
         $cancellationEntries = $timelineEntries->where('timeline_no', 12)->values();
         $partialReceives = collect($order->partial_receive ?? [])->sortByDesc('created_at')->values();
         $paymentBadgeClass = (int) ($order->payment_status ?? 0) === 1 ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning';
-        $paymentLabel = (int) ($order->payment_status ?? 0) === 1 ? 'Paid' : 'Unpaid';
+        $paymentLabel = (int) ($order->payment_status ?? 0) === 1 ? __('admin.dashboard.paid_badge') : __('admin.dashboard.pending_badge');
         $orderType = match ((int) ($order->order_type ?? 0)) {
             1 => __('admin.pages.common.order'),
             2 => __('admin.pages.common.quotation'),
