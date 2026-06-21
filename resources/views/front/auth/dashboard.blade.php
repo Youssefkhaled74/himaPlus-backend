@@ -414,25 +414,7 @@
                     @endforelse
                 </div>
             </div>
-            <div class="cd-help">
-                <div class="cd-help__title"><i class="bi bi-question-circle me-1"></i>{{ app()->getLocale() === 'ar' ? 'مساعدة سريعة' : 'FAQ / Help' }}</div>
-                <div class="cd-help__item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>{{ app()->getLocale() === 'ar' ? 'اختر المنتج، أضفه إلى السلة، ثم أكمل الدفع.' : 'Choose a product, add it to cart, and proceed to checkout.' }}</span>
-                </div>
-                <div class="cd-help__item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>{{ app()->getLocale() === 'ar' ? 'طرق الدفع والتوصيل تظهر قبل تأكيد الطلب.' : 'Payment and delivery options are shown before order confirmation.' }}</span>
-                </div>
-                <div class="cd-help__item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>{{ app()->getLocale() === 'ar' ? 'الموردون موثقون ويمكن تتبع مراحل الطلب.' : 'Suppliers are verified and order stages are trackable.' }}</span>
-                </div>
-                <div class="cd-help__item">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span>{{ app()->getLocale() === 'ar' ? 'الدفع آمن والفواتير متاحة داخل صفحة الطلبات.' : 'Payments are secure and invoices are available under My Orders.' }}</span>
-                </div>
-            </div>
+            @include('front.partials.order-workflow-hint')
         </div>
     </section>
 </main>

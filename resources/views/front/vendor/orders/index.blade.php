@@ -115,6 +115,8 @@
         <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="vo-tab {{ $tab === 'scheduled' ? 'active' : '' }}">{{ __('nav.scheduled_orders') ?? 'Scheduled Orders' }}</a>
     </div>
 
+    @include('front.partials.order-workflow-hint')
+
     @forelse($orders as $order)
         @php
             $lastTimelineNo = optional($order->timeline->sortByDesc('timeline_no')->first())->timeline_no;

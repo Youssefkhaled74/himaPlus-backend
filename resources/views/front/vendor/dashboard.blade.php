@@ -315,6 +315,8 @@
                 </div>
             </div>
 
+            @include('front.partials.order-workflow-hint')
+
             <div class="vd-card">
                 <div class="vd-panel-head">
                     <h5 class="vd-panel-title">{{ $isAr ? 'اختصارات' : 'Quick Links' }}</h5>
