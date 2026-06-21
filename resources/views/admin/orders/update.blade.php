@@ -19,7 +19,7 @@
             3 => __('admin.pages.common.maintenance'),
             default => '---',
         };
-        $requestMode = (int) ($order->request_type ?? 0) === 2 ? 'Scheduled' : 'Standard';
+        $requestMode = (int) ($order->request_type ?? 0) === 2 ? __('admin.pages.orders.scheduled') : __('admin.pages.orders.standard');
     @endphp
 
     <div class="page-content">

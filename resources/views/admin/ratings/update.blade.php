@@ -18,9 +18,9 @@
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"></li>
-                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="{{route('admin/ratings/index')}}/0/{{PAGINATION_COUNT}}">Ratings</a></li>
-                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">Update</li>
+                                <li class="breadcrumb-item"><a href="{{route('admin/index')}}">{{ __('admin.pages.common.home') }}</a></li>
+                                <li class="breadcrumb-item active"><a href="{{route('admin/ratings/index')}}/0/{{PAGINATION_COUNT}}">{{ __('admin.pages.ratings.title') }}</a></li>
+                                <li class="active" style="color: var(--vz-breadcrumb-item-active-color);">{{ __('admin.pages.common.update') }}</li>
                             </ol>
                         </div>
 
@@ -43,7 +43,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Update Rating</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.ratings.update_title') ?? 'Update Rating' }}</h4>
                         </div>
                         <div class="card-body">
                             @isset($rating)
@@ -54,29 +54,29 @@
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" value="{{ $rating->user?->name ?? '-' }}" placeholder="user" readonly>
-                                                <label>User</label>
+                                                <label>{{ __('admin.pages.common.user') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input type="text" class="form-control" value="{{ $rating->for }} - {{ $rating->forable?->name ?? '-' }}" placeholder="for" readonly>
-                                                <label>For</label>
+                                                <label>{{ __('admin.pages.common.for') }}</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating">
                                                 <input name="rating" type="number" step="0.5" min="1" max="5" class="form-control" id="ratingfloatingInput" placeholder="rating" value="{{ old('rating', $rating->rating) }}">
-                                                <label for="ratingfloatingInput">Rating <span class="text-danger">*</span></label>
+                                                <label for="ratingfloatingInput">{{ __('admin.pages.common.rating') }} <span class="text-danger">*</span></label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label for="commentTextarea">Comment</label>
+                                                <label for="commentTextarea">{{ __('admin.pages.common.comment') }}</label>
                                                 <textarea name="comment" id="commentTextarea" class="form-control" rows="5">{{ old('comment', $rating->comment) }}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn btn-primary" type="submit">Save Changes</button>
+                                            <button class="btn btn-primary" type="submit">{{ __('admin.pages.common.save_changes') }}</button>
                                         </div>
                                     </div>
                                 </form>
