@@ -6,10 +6,8 @@
 
 @section('css')
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
     .vendor-orders,
-    .vendor-orders *{font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
+    .vendor-orders *{font-family:"Poppins","Tajawal",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
 
     :root{
         --vo-bg:#f5f6f8;
@@ -210,7 +208,7 @@
     @endforelse
 
     <div class="vo-pagination">
-        {{ $orders->appends(['tab' => $tab, 'status' => $status, 'search' => $search])->links('pagination::bootstrap-4') }}
+        {{ $orders->appends(['tab' => $tab, 'status' => $status, 'search' => $search])->links('pagination::bootstrap-5') }}
     </div>
 </main>
 @endsection

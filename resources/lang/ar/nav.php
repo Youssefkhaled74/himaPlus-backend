@@ -208,4 +208,7 @@ return [
     'requests' => 'الطلبات',
     'mark_all_read_desc' => 'وضع علامة على جميع الإشعارات كمقروءة',
     'mark_all_read'=> 'وضع علامة على الكل كمقروء',
+    'search' => 'بحث',
+    'estimated_revenue' => 'الإيرادات المقدرة',
+    'view_analytics' => 'عرض التحليلات',
     ];

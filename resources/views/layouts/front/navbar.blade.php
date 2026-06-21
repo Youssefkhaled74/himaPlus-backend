@@ -43,6 +43,12 @@
                             <a class="nav-link {{ request()->routeIs('vendor/categories') ? 'active' : '' }}" href="{{ route('vendor/categories') }}">{{ __('nav.categories') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('vendor/analytics') ? 'active' : '' }}" href="{{ route('vendor/analytics') }}">{{ __('nav.analytics') ?? 'Analytics' }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('vendor/ratings') ? 'active' : '' }}" href="{{ route('vendor/ratings') }}">{{ __('nav.ratings_reviews') ?? 'Ratings' }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('contactUs') ? 'active' : '' }}" href="{{ route('contactUs') }}">{{ __('nav.contact_us') }}</a>
                         </li>
                     </ul>

@@ -177,6 +177,8 @@ return [
     'reviews' => 'Reviews',
     'no_ratings' => 'No ratings yet',
     'dashboard_tip_title' => 'Tip:',
+    'estimated_revenue' => 'Estimated Revenue',
+    'view_analytics' => 'View Analytics',
     'vendor_portal' => 'Vendor Portal',
     'all_statuses' => 'All Statuses',
     'search_order_id' => 'Search Orders',

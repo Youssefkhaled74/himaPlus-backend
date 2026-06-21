@@ -7,7 +7,6 @@
 
 <!-- custom page -->
 @section('css')
-    <style></style>
 @endsection
 
 @section('content')
@@ -15,7 +14,7 @@
     @php
         $user = auth()->user();
     @endphp
-    <main class="container my-4" style="max-width: 80%;">
+    <main class="container my-4" style="max-width: 95%;">
         @include('flash::message')
         @if ($errors->any())
             <div style="text-align: {{ app()->getLocale() == 'ar' ? 'right' : 'left' }}; margin: 15px;">
@@ -181,63 +180,66 @@
         </div>
     </main>
 
-    <script>
-        // Tab switching
-        document.querySelectorAll('.btn-tab').forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Update breadcrumb
-                const sectionName = this.getAttribute('section-name');
-                document.getElementById('section-area-name').textContent = sectionName;
-                
-                // Remove active class from all tabs
-                document.querySelectorAll('.btn-tab').forEach(t => t.classList.remove('active'));
-                
-                // Add active class to clicked tab
-                this.classList.add('active');
-                
-                // Hide all panes
-                document.querySelectorAll('.tab-pane').forEach(pane => {
-                    pane.classList.add('d-none');
-                });
-                
-                // Show target pane
-                const target = this.getAttribute('data-target');
-                document.querySelector(target).classList.remove('d-none');
-            });
-        });
+@endsection
 
-        // Avatar upload preview
-        document.getElementById('avatarInput')?.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    document.getElementById('avatarPreview').src = event.target.result;
-                };
-                reader.readAsDataURL(file);
+@section('script')
+<script>
+    // Tab switching
+    document.querySelectorAll('.btn-tab').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Update breadcrumb
+            const sectionName = this.getAttribute('section-name');
+            document.getElementById('section-area-name').textContent = sectionName;
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.btn-tab').forEach(t => t.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            this.classList.add('active');
+            
+            // Hide all panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.add('d-none');
+            });
+            
+            // Show target pane
+            const target = this.getAttribute('data-target');
+            document.querySelector(target).classList.remove('d-none');
+        });
+    });
+
+    // Avatar upload preview
+    document.getElementById('avatarInput')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('avatarPreview').src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Password eye button toggle
+    document.querySelectorAll('.hp-eye-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const input = this.parentElement.querySelector('input');
+            const icon = this.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
             }
         });
-
-        // Password eye button toggle
-        document.querySelectorAll('.hp-eye-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const input = this.parentElement.querySelector('input');
-                const icon = this.querySelector('i');
-                
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
-                } else {
-                    input.type = 'password';
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
-                }
-            });
-        });
-    </script>
+    });
+</script>
 @endsection
 

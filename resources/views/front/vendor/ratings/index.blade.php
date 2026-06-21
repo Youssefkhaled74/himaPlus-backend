@@ -202,7 +202,7 @@
             <!-- Pagination -->
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
-                    {{ $ratings->links() }}
+                    {{ $ratings->links('pagination::bootstrap-5') }}
                 </ul>
             </nav>
         @else

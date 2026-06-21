@@ -5,12 +5,10 @@
 @endsection
 
 @section('css')
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-
+<style>
         .hp-main,
         .hp-main * {
-            font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            font-family: "Poppins", "Tajawal", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
         }
 
         .hp-main {
@@ -21,8 +19,7 @@
 
         .vendor-hero {
             min-height: 350px;
-            background: linear-gradient(0deg, rgba(9, 16, 31, .58), rgba(9, 16, 31, .58)),
-                url('{{ asset('front/assets/images/men-girls-are-surfing.png') }}') center/cover no-repeat;
+            background: linear-gradient(135deg, #0f4bbf 0%, #0ec6a0 100%);
             display: flex;
             align-items: center;
             text-align: center;
@@ -293,7 +290,7 @@
                                 type="text"
                                 name="search"
                                 value="{{ request('search', $search ?? '') }}"
-                                placeholder="Search..."
+                                placeholder="{{ __('nav.search') ?? 'Search...' }}"
                             >
                         </div>
                     </form>
@@ -313,18 +310,13 @@
                                 <div class="product-thumb">
                                     @if(!empty($product->img))
                                         @php
-                                            $imgPath = ltrim((string) $product->img, '/');
-                                            if (!str_starts_with($imgPath, 'http') && !str_contains($imgPath, '/')) {
-                                                $imgPath = 'products/' . $imgPath;
-                                            }
-                                            if (str_starts_with((string) $product->img, 'http')) {
-                                                $imgUrl = (string) $product->img;
-                                            } elseif (file_exists(storage_path('app/public/' . $imgPath))) {
-                                                $imgUrl = asset('storage/' . $imgPath);
-                                            } elseif (file_exists(public_path($imgPath))) {
-                                                $imgUrl = asset($imgPath);
+                                            $img = (string) $product->img;
+                                            if (str_starts_with($img, 'http')) {
+                                                $imgUrl = $img;
+                                            } elseif (str_contains($img, '/')) {
+                                                $imgUrl = asset(ltrim($img, '/'));
                                             } else {
-                                                $imgUrl = asset('storage/' . $imgPath);
+                                                $imgUrl = asset('storage/products/' . $img);
                                             }
                                         @endphp
                                         <img src="{{ $imgUrl }}" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}';">

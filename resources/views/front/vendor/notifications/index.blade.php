@@ -242,14 +242,14 @@
 @endsection
 
 @section('content')
-<main class="container-fluid my-5" style="max-width: 1200px;">
+<main class="vendor-orders" style="max-width:95%;margin:12px auto 0;padding:8px 12px 24px;">
     @include('flash::message')
 
-    <div class="vn-page">
+    <div class="vn-page" style="max-width:1200px;margin:0 auto;">
         <!-- Breadcrumb -->
         <nav class="mb-3" style="font-size:12px;">
             <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ __('nav.dashboard') ?? 'Dashboard' }}</a>
-            <span class="text-muted mx-1">/</span>
+            <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
             <span class="text-primary fw-bold">{{ __('nav.notifications') ?? 'Notifications' }}</span>
         </nav>
 
