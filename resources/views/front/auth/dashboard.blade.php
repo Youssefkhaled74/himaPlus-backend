@@ -414,7 +414,7 @@
                     @endforelse
                 </div>
             </div>
-            @include('front.partials.order-workflow-hint')
+            @include('front.partials.order-workflow-hint', ['role' => 'customer'])
         </div>
     </section>
 </main>

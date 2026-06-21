@@ -315,7 +315,7 @@
                 </div>
             </div>
 
-            @include('front.partials.order-workflow-hint')
+            @include('front.partials.order-workflow-hint', ['role' => 'vendor'])
 
             <div class="vd-card">
                 <div class="vd-panel-head">

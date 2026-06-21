@@ -115,7 +115,7 @@
         <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="vo-tab {{ $tab === 'scheduled' ? 'active' : '' }}">{{ __('nav.scheduled_orders') ?? 'Scheduled Orders' }}</a>
     </div>
 
-    @include('front.partials.order-workflow-hint')
+    @include('front.partials.order-workflow-hint', ['role' => 'vendor', 'activeTab' => $tab])
 
     @forelse($orders as $order)
         @php

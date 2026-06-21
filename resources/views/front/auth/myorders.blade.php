@@ -75,7 +75,7 @@
         <li class="nav-item"><a class="nav-link {{ $tab == 'maintenances' ? 'active' : '' }}" href="{{ route('user/myorders', 'maintenances') }}">{{ __('products.maintenance') }}</a></li>
         <li class="nav-item"><a class="nav-link {{ $tab == 'scheduled-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'scheduled-orders') }}">{{ __('products.scheduled_orders') }}</a></li>
     </ul>
-    @include('front.partials.order-workflow-hint')
+    @include('front.partials.order-workflow-hint', ['role' => 'customer', 'activeTab' => $tab])
 
     <div class="reveal">
 
