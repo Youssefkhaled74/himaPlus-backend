@@ -1,3 +1,4 @@
+```blade
 @extends('layouts.front.home')
 
 @section('title')
@@ -15,157 +16,403 @@
         --vi-muted: #6b7280;
         --vi-primary: #0f4bbf;
         --vi-accent: #0ec6a0;
+        --vi-soft: #eef5ff;
+        --vi-soft-2: #f4fbf9;
+        --vi-success-bg: #dcfce7;
+        --vi-success-text: #166534;
+        --vi-warning-bg: #fff7ed;
+        --vi-warning-text: #9a3412;
+        --vi-scheduled-bg: #e0e7ff;
+        --vi-scheduled-text: #3730a3;
+        --vi-normal-bg: #ecfeff;
+        --vi-normal-text: #155e75;
+
         max-width: 95%;
         margin: 12px auto 0;
         background: var(--vi-bg);
         padding: 8px 0 24px;
+        font-family: "Poppins", "Tajawal", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
     }
 
-    .vi-title {
-        font-size: 34px;
-        font-weight: 600;
-        color: var(--vi-title);
-        margin: 0 0 14px;
+    .vendor-invoices * {
+        font-family: inherit;
     }
 
-    .vi-filter {
+    .vi-card {
         background: var(--vi-card);
         border: 1px solid var(--vi-border);
         border-radius: 14px;
-        padding: 14px;
-        margin-bottom: 18px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
     }
 
-    .vi-filter .form-control,
-    .vi-filter .form-select {
-        height: 48px;
-        border: 1px solid #dbe2ee;
+    .vi-breadcrumb {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .vi-breadcrumb a {
+        text-decoration: none;
+        color: #6b7280;
+    }
+
+    .vi-breadcrumb .active {
+        color: var(--vi-primary);
+        font-weight: 700;
+    }
+
+    .vi-hero {
+        padding: 22px;
+        margin-bottom: 16px;
+    }
+
+    .vi-title {
+        margin: 0 0 6px;
+        color: var(--vi-title);
+        font-size: 34px;
+        line-height: 1.08;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
+
+    .vi-subtitle {
+        margin: 0;
+        color: #475569;
+        font-size: 16px;
+        line-height: 1.55;
+        max-width: 760px;
+    }
+
+    .vi-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .vi-btn-primary,
+    .vi-btn-outline {
         border-radius: 10px;
+        font-weight: 700;
+        padding: 10px 16px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all .2s ease;
+        min-height: 44px;
     }
 
-    .vi-filter .btn {
-        height: 48px;
+    .vi-btn-primary {
         border: 0;
-        border-radius: 10px;
-        font-weight: 600;
+        color: #fff;
         background: linear-gradient(90deg, var(--vi-primary) 0%, var(--vi-accent) 100%);
     }
 
-    .vi-stat-card {
-        background: var(--vi-card);
-        border: 1px solid var(--vi-border);
-        border-radius: 12px;
+    .vi-btn-primary:hover {
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(15, 75, 191, .14);
+    }
+
+    .vi-btn-outline {
+        border: 1px solid #cbd5e1;
+        color: #1e3a8a;
+        background: #fff;
+    }
+
+    .vi-btn-outline:hover {
+        color: #1e3a8a;
+        background: var(--vi-soft);
+        transform: translateY(-1px);
+    }
+
+    .vi-stat {
         padding: 16px 18px;
         height: 100%;
+        transition: all .2s ease;
+    }
+
+    .vi-stat:hover {
+        border-color: #93c5fd;
+        box-shadow: 0 4px 12px rgba(15, 75, 191, .08);
+        transform: translateY(-1px);
     }
 
     .vi-stat-label {
         margin: 0;
         color: var(--vi-muted);
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
     }
 
     .vi-stat-value {
-        margin: 6px 0 0;
+        margin: 8px 0 0;
         color: var(--vi-text);
-        font-size: 30px;
+        font-size: 40px;
         line-height: 1;
+        font-weight: 800;
+    }
+
+    .vi-panel-head {
+        border-bottom: 1px solid var(--vi-border);
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .vi-panel-title {
+        margin: 0;
+        color: #0f172a;
+        font-size: 20px;
         font-weight: 700;
+    }
+
+    .vi-panel-subtitle {
+        margin: 4px 0 0;
+        color: var(--vi-muted);
+        font-size: 13px;
+    }
+
+    .vi-body {
+        padding: 18px;
+    }
+
+    .vi-filter-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        align-items: end;
+    }
+
+    .vi-field label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .vi-field .form-control,
+    .vi-field .form-select {
+        min-height: 46px;
+        border-radius: 10px;
+        border-color: #d5deeb;
+        box-shadow: none;
+        color: #334155;
+        font-weight: 600;
+    }
+
+    .vi-field .form-control:focus,
+    .vi-field .form-select:focus {
+        border-color: rgba(15, 75, 191, .45);
+        box-shadow: 0 0 0 .18rem rgba(15, 75, 191, .08);
+    }
+
+    .vi-table-card {
+        overflow: hidden;
     }
 
     .vi-table-wrap {
-        background: var(--vi-card);
-        border: 1px solid var(--vi-border);
-        border-radius: 14px;
-        padding: 12px;
+        width: 100%;
+        overflow-x: auto;
     }
 
     .vi-table {
+        width: 100%;
         margin-bottom: 0;
+        border-collapse: collapse;
     }
 
     .vi-table thead th {
-        border-bottom-width: 1px;
-        font-size: 18px;
-        font-weight: 700;
-        color: #111827;
+        background: #f8fbff;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 800;
         white-space: nowrap;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--vi-border);
+        text-align: start;
     }
 
     .vi-table tbody td {
-        font-size: 17px;
-        vertical-align: middle;
         color: #111827;
+        font-size: 14px;
+        vertical-align: middle;
+        padding: 15px 16px;
+        border-bottom: 1px solid #edf2f7;
+        white-space: nowrap;
+    }
+
+    .vi-table tbody tr:hover td {
+        background: #f8fbff;
     }
 
     .vi-order-link {
-        color: #1f63eb;
+        color: var(--vi-primary);
         text-decoration: none;
-        font-weight: 500;
+        font-weight: 800;
     }
 
     .vi-order-link:hover {
+        color: #1e3a8a;
         text-decoration: underline;
+    }
+
+    .vi-order-meta {
+        display: block;
+        margin-top: 3px;
+        color: var(--vi-muted);
+        font-size: 12px;
+        font-weight: 600;
     }
 
     .vi-chip {
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        gap: 6px;
         border-radius: 999px;
         padding: 6px 12px;
         font-size: 12px;
         font-weight: 700;
         line-height: 1;
+        white-space: nowrap;
     }
 
-    .vi-chip-paid { background: #dcfce7; color: #166534; }
-    .vi-chip-pending { background: #ffedd5; color: #9a3412; }
-    .vi-chip-scheduled { background: #e0e7ff; color: #3730a3; }
-    .vi-chip-normal { background: #ecfeff; color: #155e75; }
+    .vi-chip-paid {
+        background: var(--vi-success-bg);
+        color: var(--vi-success-text);
+    }
+
+    .vi-chip-pending {
+        background: var(--vi-warning-bg);
+        color: var(--vi-warning-text);
+    }
+
+    .vi-chip-scheduled {
+        background: var(--vi-scheduled-bg);
+        color: var(--vi-scheduled-text);
+    }
+
+    .vi-chip-normal {
+        background: var(--vi-normal-bg);
+        color: var(--vi-normal-text);
+    }
+
+    .vi-chip-primary {
+        background: #eaf2ff;
+        color: #1d4ed8;
+    }
 
     .vi-empty {
-        color: var(--vi-muted);
         text-align: center;
-        padding: 20px 0;
+        padding: 38px 20px;
+        color: #64748b;
+    }
+
+    .vi-empty i {
+        font-size: 38px;
+        color: #94a3b8;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    .vi-empty-title {
+        margin: 0 0 5px;
+        color: #0f172a;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .vi-empty-text {
+        margin: 0;
+        color: #64748b;
+        font-size: 14px;
     }
 
     .vi-pagination {
-        margin-top: 16px;
+        padding: 18px;
+        border-top: 1px solid #edf2f7;
     }
 
     .vi-pagination .pagination {
         justify-content: center;
-        gap: 8px;
+        gap: 6px;
+        margin-bottom: 0;
     }
 
     .vi-pagination .page-link {
-        min-width: 36px;
-        height: 36px;
-        border: 1px solid #dce6fb;
         border-radius: 10px;
-        color: #2b4a8f;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 10px;
-        background: #eaf1ff;
+        margin: 0 2px;
+        color: var(--vi-primary);
+        font-weight: 700;
+        box-shadow: none;
+        border: 1px solid #d8e3f0;
     }
 
     .vi-pagination .page-item.active .page-link {
-        background: linear-gradient(90deg, #0f4bbf 0%, #10b981 100%);
-        border-color: transparent;
+        background: var(--vi-primary);
+        border-color: var(--vi-primary);
         color: #fff;
     }
 
     @media (max-width: 992px) {
-        .vendor-invoices { max-width: 100%; padding: 8px 12px 24px; }
-        .vi-title { font-size: 28px; }
-        .vi-table thead th { font-size: 15px; }
-        .vi-table tbody td { font-size: 14px; }
-        .vi-stat-value { font-size: 24px; }
+        .vendor-invoices {
+            max-width: 100%;
+            padding: 8px 12px 24px;
+        }
+
+        .vi-title {
+            font-size: 28px;
+        }
+
+        .vi-subtitle {
+            font-size: 15px;
+        }
+
+        .vi-stat-value {
+            font-size: 32px;
+        }
+
+        .vi-panel-title {
+            font-size: 18px;
+        }
+
+        .vi-filter-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .vi-hero {
+            padding: 18px;
+        }
+
+        .vi-title {
+            font-size: 24px;
+        }
+
+        .vi-actions {
+            width: 100%;
+        }
+
+        .vi-btn-primary,
+        .vi-btn-outline {
+            width: 100%;
+        }
+
+        .vi-panel-head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .vi-table thead th,
+        .vi-table tbody td {
+            padding: 12px;
+            font-size: 13px;
+        }
     }
 </style>
 @endsection
@@ -174,46 +421,146 @@
 @php
     $isAr = app()->getLocale() === 'ar';
 @endphp
+
 <main class="vendor-invoices">
-    <h3 class="vi-title">{{ $isAr ? 'فواتير المورد' : 'Vendor Invoices' }}</h3>
+    @include('flash::message')
 
-    <form class="row g-2 vi-filter" method="GET">
-        <div class="col-md-3">
-            <input type="date" name="date_from" value="{{ $dateFrom }}" class="form-control">
-        </div>
-        <div class="col-md-3">
-            <input type="date" name="date_to" value="{{ $dateTo }}" class="form-control">
-        </div>
-        <div class="col-md-3">
-            <select name="status" class="form-select">
-                <option value="">{{ $isAr ? 'كل الحالات' : 'All Statuses' }}</option>
-                <option value="paid" {{ $status === 'paid' ? 'selected' : '' }}>{{ $isAr ? 'مدفوع' : 'Paid' }}</option>
-                <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>{{ $isAr ? 'قيد الانتظار' : 'Pending' }}</option>
-                <option value="2" {{ $status === '2' ? 'selected' : '' }}>{{ $isAr ? 'مجدول' : 'Scheduled' }}</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <button class="btn btn-primary w-100">{{ $isAr ? 'تصفية' : 'Filter' }}</button>
-        </div>
-    </form>
+    <nav class="vi-breadcrumb">
+        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
+        <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
+        <span class="active">{{ $isAr ? 'فواتير المورد' : 'Vendor Invoices' }}</span>
+    </nav>
 
-    <div class="row g-3 mb-3">
-        <div class="col-md-3">
-            <div class="vi-stat-card"><p class="vi-stat-label">{{ $isAr ? 'مدفوع' : 'Paid' }}</p><h5 class="vi-stat-value">{{ $totals['paid'] }}</h5></div>
+    <section class="vi-card vi-hero">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h3 class="vi-title">
+                    {{ $isAr ? 'فواتير المورد' : 'Vendor Invoices' }}
+                </h3>
+
+                <p class="vi-subtitle">
+                    {{ $isAr
+                        ? 'راجع فواتير الطلبات، حالة الدفع، والطلبات المجدولة من مكان واحد بتصميم واضح وسهل المتابعة.'
+                        : 'Review order invoices, payment status, and scheduled requests from one clean and easy-to-track place.' }}
+                </p>
+            </div>
+
+            <div class="vi-actions">
+                <a href="{{ route('vendor/dashboard') }}" class="vi-btn-outline">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    {{ __('nav.dashboard') ?? ($isAr ? 'لوحة التحكم' : 'Dashboard') }}
+                </a>
+
+                <a href="{{ route('vendor/orders') }}" class="vi-btn-primary">
+                    <i class="bi bi-bag-check"></i>
+                    {{ __('nav.orders') ?? ($isAr ? 'الطلبات' : 'Orders') }}
+                </a>
+            </div>
         </div>
-        <div class="col-md-3">
-            <div class="vi-stat-card"><p class="vi-stat-label">{{ $isAr ? 'قيد الانتظار' : 'Pending' }}</p><h5 class="vi-stat-value">{{ $totals['pending'] }}</h5></div>
+    </section>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="vi-card vi-stat">
+                <p class="vi-stat-label">{{ $isAr ? 'مدفوع' : 'Paid' }}</p>
+                <h4 class="vi-stat-value">{{ number_format((int) $totals['paid']) }}</h4>
+            </div>
         </div>
-        <div class="col-md-3">
-            <div class="vi-stat-card"><p class="vi-stat-label">{{ $isAr ? 'مجدول' : 'Scheduled' }}</p><h5 class="vi-stat-value">{{ $totals['scheduled'] }}</h5></div>
+
+        <div class="col-6 col-md-3">
+            <div class="vi-card vi-stat">
+                <p class="vi-stat-label">{{ $isAr ? 'قيد الانتظار' : 'Pending' }}</p>
+                <h4 class="vi-stat-value">{{ number_format((int) $totals['pending']) }}</h4>
+            </div>
         </div>
-        <div class="col-md-3">
-            <div class="vi-stat-card"><p class="vi-stat-label">{{ $isAr ? 'مكتمل' : 'Completed' }}</p><h5 class="vi-stat-value">{{ $totals['completed'] }}</h5></div>
+
+        <div class="col-6 col-md-3">
+            <div class="vi-card vi-stat">
+                <p class="vi-stat-label">{{ $isAr ? 'مجدول' : 'Scheduled' }}</p>
+                <h4 class="vi-stat-value">{{ number_format((int) $totals['scheduled']) }}</h4>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="vi-card vi-stat">
+                <p class="vi-stat-label">{{ $isAr ? 'مكتمل' : 'Completed' }}</p>
+                <h4 class="vi-stat-value">{{ number_format((int) $totals['completed']) }}</h4>
+            </div>
         </div>
     </div>
 
-    <div class="vi-table-wrap">
-        <div class="table-responsive">
+    <section class="vi-card mb-4">
+        <div class="vi-panel-head">
+            <div>
+                <h5 class="vi-panel-title">{{ $isAr ? 'تصفية الفواتير' : 'Filter Invoices' }}</h5>
+                <p class="vi-panel-subtitle">
+                    {{ $isAr ? 'حدد الفترة أو حالة الدفع للوصول للفواتير المطلوبة بسرعة.' : 'Choose a date range or payment status to find invoices faster.' }}
+                </p>
+            </div>
+
+            @if(request()->hasAny(['date_from', 'date_to', 'status']))
+                <a href="{{ url()->current() }}" class="vi-btn-outline">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    {{ $isAr ? 'إعادة ضبط' : 'Reset' }}
+                </a>
+            @endif
+        </div>
+
+        <div class="vi-body">
+            <form method="GET" class="vi-filter-grid">
+                <div class="vi-field">
+                    <label>{{ $isAr ? 'من تاريخ' : 'From Date' }}</label>
+                    <input type="date" name="date_from" value="{{ $dateFrom }}" class="form-control">
+                </div>
+
+                <div class="vi-field">
+                    <label>{{ $isAr ? 'إلى تاريخ' : 'To Date' }}</label>
+                    <input type="date" name="date_to" value="{{ $dateTo }}" class="form-control">
+                </div>
+
+                <div class="vi-field">
+                    <label>{{ $isAr ? 'الحالة' : 'Status' }}</label>
+                    <select name="status" class="form-select">
+                        <option value="">{{ $isAr ? 'كل الحالات' : 'All Statuses' }}</option>
+                        <option value="paid" {{ $status === 'paid' ? 'selected' : '' }}>
+                            {{ $isAr ? 'مدفوع' : 'Paid' }}
+                        </option>
+                        <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>
+                            {{ $isAr ? 'قيد الانتظار' : 'Pending' }}
+                        </option>
+                        <option value="2" {{ $status === '2' ? 'selected' : '' }}>
+                            {{ $isAr ? 'مجدول' : 'Scheduled' }}
+                        </option>
+                    </select>
+                </div>
+
+                <div>
+                    <button class="vi-btn-primary w-100" type="submit">
+                        <i class="bi bi-funnel-fill"></i>
+                        {{ $isAr ? 'تصفية' : 'Filter' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="vi-card vi-table-card">
+        <div class="vi-panel-head">
+            <div>
+                <h5 class="vi-panel-title">{{ $isAr ? 'قائمة الفواتير' : 'Invoice List' }}</h5>
+                <p class="vi-panel-subtitle">
+                    {{ $isAr ? 'كل الفواتير المرتبطة بطلباتك وحالات الدفع.' : 'All invoices linked to your orders and payment statuses.' }}
+                </p>
+            </div>
+
+            <span class="vi-chip vi-chip-primary">
+                <i class="bi bi-receipt"></i>
+                {{ method_exists($invoices, 'total') ? number_format($invoices->total()) : number_format($invoices->count()) }}
+                {{ $isAr ? 'فاتورة' : 'Invoices' }}
+            </span>
+        </div>
+
+        <div class="vi-table-wrap">
             <table class="table vi-table align-middle">
                 <thead>
                     <tr>
@@ -225,45 +572,77 @@
                         <th>{{ $isAr ? 'التاريخ' : 'Date' }}</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @forelse($invoices as $order)
                         @php
                             $isPaid = (string)($order->payment_status ?? '') === '1' || (string)($order->payment_status ?? '') === 'paid';
                             $isScheduled = (int)($order->request_type ?? 0) === 2;
                         @endphp
+
                         <tr>
-                            <td>{{ $order->id }}</td>
+                            <td>
+                                <span class="fw-bold">#{{ $order->id }}</span>
+                            </td>
+
                             <td>
                                 <a class="vi-order-link" href="{{ route('vendor/orders/show', $order->id) }}">
-                                    {{ $isAr ? 'طلب' : 'Order' }} {{ $order->id }} - {{ $order->user->name ?? '-' }}
+                                    {{ $isAr ? 'طلب' : 'Order' }} #{{ $order->id }}
                                 </a>
+                                <span class="vi-order-meta">
+                                    <i class="bi bi-person"></i>
+                                    {{ $order->user->name ?? '-' }}
+                                </span>
                             </td>
-                            <td>{{ number_format((float)($order->total_cost ?? 0), 2) }} SAR</td>
+
+                            <td>
+                                <strong>{{ number_format((float)($order->total_cost ?? 0), 2) }}</strong>
+                                <span class="text-muted small">SAR</span>
+                            </td>
+
                             <td>
                                 <span class="vi-chip {{ $isPaid ? 'vi-chip-paid' : 'vi-chip-pending' }}">
+                                    <i class="bi {{ $isPaid ? 'bi-check2-circle' : 'bi-hourglass-split' }}"></i>
                                     {{ $isPaid ? ($isAr ? 'مدفوع' : 'Paid') : ($isAr ? 'قيد الانتظار' : 'Pending') }}
                                 </span>
                             </td>
+
                             <td>
                                 <span class="vi-chip {{ $isScheduled ? 'vi-chip-scheduled' : 'vi-chip-normal' }}">
+                                    <i class="bi {{ $isScheduled ? 'bi-calendar-check' : 'bi-bag-check' }}"></i>
                                     {{ $isScheduled ? ($isAr ? 'مجدول' : 'Scheduled') : ($isAr ? 'عادي' : 'Normal') }}
                                 </span>
                             </td>
-                            <td>{{ optional($order->created_at)->format('Y-m-d') }}</td>
+
+                            <td>
+                                <span class="fw-semibold">{{ optional($order->created_at)->format('Y-m-d') }}</span>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="vi-empty">{{ $isAr ? 'لا توجد فواتير' : 'No invoices found.' }}</td>
+                            <td colspan="6">
+                                <div class="vi-empty">
+                                    <i class="bi bi-receipt-cutoff"></i>
+                                    <h5 class="vi-empty-title">
+                                        {{ $isAr ? 'لا توجد فواتير' : 'No invoices found' }}
+                                    </h5>
+                                    <p class="vi-empty-text">
+                                        {{ $isAr ? 'جرّب تغيير الفلاتر أو راجع الطلبات لاحقاً.' : 'Try changing the filters or check again later.' }}
+                                    </p>
+                                </div>
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
 
-        <div class="vi-pagination">
-            {{ $invoices->links('pagination::bootstrap-5') }}
-        </div>
-    </div>
+        @if(method_exists($invoices, 'hasPages') && $invoices->hasPages())
+            <div class="vi-pagination">
+                {{ $invoices->withQueryString()->links('pagination::bootstrap-5') }}
+            </div>
+        @endif
+    </section>
 </main>
 @endsection
-
+```
