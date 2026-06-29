@@ -128,8 +128,12 @@ return [
     'maintenance' => 'Maintenance',
     'purchase' => 'Purchase',
     'quotation' => 'Quotation',
+    'quotation_request' => 'Quotation Request',
+    'maintenance_request' => 'Maintenance Request',
     'immediate' => 'Immediate',
     'scheduled' => 'Scheduled',
+    'scheduled_order' => 'Scheduled Order',
+    'scheduled_supply' => 'Scheduled Supply',
 
     // Status Labels
     'status' => 'Status',
@@ -176,6 +180,7 @@ return [
     'yesterday' => 'Yesterday',
     'this_week' => 'This Week',
     'this_month' => 'This Month',
+    'frequency' => 'Frequency',
 
     // Ratings
     'ratings' => 'Ratings',
@@ -215,5 +220,18 @@ return [
     'requests' => 'Requests',
     'mark_all_read'=> 'Mark All as Read',
     'mark_read'=> 'Mark as Read',
+    'request' => 'Request',
+    'hospital' => 'Hospital',
+    'device' => 'Device',
+    'assigned_to' => 'Assigned To',
+    'assigned_technician' => 'Technician who finished the job',
+    'attachments' => 'Attachments',
+    'files' => 'Files',
+    'first_file' => 'First File',
+    'total' => 'Total',
+    'currency_sar' => 'SAR',
+    'orders_waiting_follow_up' => 'Orders waiting for follow-up',
+    'no_orders_found' => 'No orders found.',
+    'product' => 'Product',
 ];
 

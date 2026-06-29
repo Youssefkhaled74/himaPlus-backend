@@ -6,13 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Offer;
 use App\Services\OrderStatusService;
+use App\Services\VendorOrderVisibilityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 class VendorOrderController extends Controller
 {
-    public function __construct(private OrderStatusService $orderStatusService)
+    public function __construct(
+        private OrderStatusService $orderStatusService,
+        private VendorOrderVisibilityService $vendorOrderVisibilityService
+    )
     {
     }
 
@@ -52,33 +56,9 @@ class VendorOrderController extends Controller
         $status = $request->get('status', '');
         $search = $request->get('search', '');
         
-        $query = Order::with(['user:id,name,email,mobile', 'items.product', 'offers', 'timeline'])
-            ->where(function ($builder) use ($vendor) {
-                $builder->where('provider_id', $vendor->id)
-                    ->orWhereHas('offers', function ($offersQuery) use ($vendor) {
-                        $offersQuery->where('provider_id', $vendor->id);
-                    });
-            });
-        
-        // Filter by tab
-        switch($tab) {
-            case 'purchase':
-                $query->purchaseOrders()->notScheduled();
-                break;
-            case 'quotations':
-                $query->quotations()->notScheduled();
-                break;
-            case 'maintenance':
-                $query->maintenance()->notScheduled();
-                break;
-            case 'scheduled':
-                $query->scheduled();
-                break;
-            case 'all':
-            default:
-                // Show all
-                break;
-        }
+        $query = $this->vendorOrderVisibilityService
+            ->visibleOrdersQuery((int) $vendor->id, $tab)
+            ->with(['user:id,name,email,mobile', 'items.product', 'offers', 'timeline']);
         
         if ($status) {
             $this->orderStatusService->applyStatusFilter($query, $status, [
@@ -91,8 +71,7 @@ class VendorOrderController extends Controller
             $query->where('id', 'LIKE', '%' . $search . '%');
         }
         
-        $orders = $query->whereNull('deleted_at')
-            ->latest()
+        $orders = $query->latest()
             ->paginate(15)
             ->through(function ($order) use ($vendor) {
                 $order->front_status_state = $order->resolveStatus([
@@ -106,24 +85,16 @@ class VendorOrderController extends Controller
         $myOffersCount = Offer::where('provider_id', $vendor->id)->count();
         
         // Get counts for tabs
-        $countsBase = Order::whereNull('deleted_at')
-            ->where(function ($builder) use ($vendor) {
-                $builder->where('provider_id', $vendor->id)
-                    ->orWhereHas('offers', function ($offersQuery) use ($vendor) {
-                        $offersQuery->where('provider_id', $vendor->id);
-                    });
-            });
-
         $counts = [
-            'all' => (clone $countsBase)->count(),
-            'purchase' => (clone $countsBase)->purchaseOrders()->notScheduled()->count(),
-            'quotations' => (clone $countsBase)->quotations()->notScheduled()->count(),
-            'maintenance' => (clone $countsBase)->maintenance()->notScheduled()->count(),
-            'scheduled' => (clone $countsBase)->scheduled()->count(),
-            'confirmed' => $this->orderStatusService->countByStatus($countsBase, OrderStatusService::STATUS_CONFIRMED, ['provider_id' => (int) $vendor->id]),
-            'processing' => $this->orderStatusService->countByStatus($countsBase, OrderStatusService::STATUS_PROCESSING, ['provider_id' => (int) $vendor->id]),
-            'completed' => $this->orderStatusService->countByStatus($countsBase, OrderStatusService::STATUS_COMPLETED, ['provider_id' => (int) $vendor->id]),
-            'scheduled_status' => $this->orderStatusService->countByStatus($countsBase, OrderStatusService::STATUS_SCHEDULED, ['provider_id' => (int) $vendor->id]),
+            'all' => $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'all')->count(),
+            'purchase' => $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'purchase')->count(),
+            'quotations' => $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'quotations')->count(),
+            'maintenance' => $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'maintenance')->count(),
+            'scheduled' => $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'scheduled')->count(),
+            'confirmed' => $this->orderStatusService->countByStatus($this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, $tab), OrderStatusService::STATUS_CONFIRMED, ['provider_id' => (int) $vendor->id]),
+            'processing' => $this->orderStatusService->countByStatus($this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, $tab), OrderStatusService::STATUS_PROCESSING, ['provider_id' => (int) $vendor->id]),
+            'completed' => $this->orderStatusService->countByStatus($this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, $tab), OrderStatusService::STATUS_COMPLETED, ['provider_id' => (int) $vendor->id]),
+            'scheduled_status' => $this->orderStatusService->countByStatus($this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, $tab), OrderStatusService::STATUS_SCHEDULED, ['provider_id' => (int) $vendor->id]),
         ];
         
         return view('front.vendor.orders.index', compact('orders', 'tab', 'status', 'search', 'myOffersCount', 'counts'));
@@ -139,10 +110,7 @@ class VendorOrderController extends Controller
             ->with(['user', 'items.product', 'timeline', 'offers.provider'])
             ->firstOrFail();
 
-        $isAllowed = ((int) $order->provider_id === (int) $vendor->id)
-            || $order->offers->contains(function ($offer) use ($vendor) {
-                return (int) $offer->provider_id === (int) $vendor->id;
-            });
+        $isAllowed = $this->vendorOrderVisibilityService->canViewOrder($order, (int) $vendor->id);
 
         if (!$isAllowed) {
             abort(403);

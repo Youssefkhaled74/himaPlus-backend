@@ -126,8 +126,12 @@ return [
     'maintenance' => 'الصيانة',
     'purchase' => 'شراء',
     'quotation' => 'تسعير',
+    'quotation_request' => 'طلب تسعير',
+    'maintenance_request' => 'طلب صيانة',
     'immediate' => 'فوري',
     'scheduled' => 'مجدول',
+    'scheduled_order' => 'طلب مجدول',
+    'scheduled_supply' => 'توريد مجدول',
 
     // Status Labels
     'status' => 'الحالة',
@@ -174,6 +178,7 @@ return [
     'yesterday' => 'أمس',
     'this_week' => 'هذا الأسبوع',
     'this_month' => 'هذا الشهر',
+    'frequency' => 'التكرار',
 
     // Ratings
     'ratings' => 'التقييمات',
@@ -220,4 +225,17 @@ return [
     'search' => 'بحث',
     'estimated_revenue' => 'الإيرادات المقدرة',
     'view_analytics' => 'عرض التحليلات',
+    'request' => 'طلب',
+    'hospital' => 'المنشأة',
+    'device' => 'الجهاز',
+    'assigned_to' => 'مسند إلى',
+    'assigned_technician' => 'الفني الذي أنهى المهمة',
+    'attachments' => 'المرفقات',
+    'files' => 'ملفات',
+    'first_file' => 'أول ملف',
+    'total' => 'الإجمالي',
+    'currency_sar' => 'ر.س',
+    'orders_waiting_follow_up' => 'طلبات بانتظار المتابعة',
+    'no_orders_found' => 'لا توجد طلبات مطابقة.',
+    'product' => 'المنتج',
     ];

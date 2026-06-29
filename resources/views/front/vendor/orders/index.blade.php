@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.view_orders') ?? 'Orders' }} - Vendor | Hema</title>
+    <title>{{ $tab === 'quotations' ? __('nav.quotations') : __('nav.view_orders') }} - Vendor | Hema</title>
 @endsection
 
 @section('css')
@@ -22,22 +22,17 @@
 
     .vendor-orders{max-width:95%;margin:12px auto 0;background:var(--vo-bg);padding:8px 0 24px;}
     .vo-title{font-size:34px;font-weight:600;color:#0f2f7f;margin:0 0 14px;}
-
     .vo-tabs{display:flex;flex-wrap:wrap;gap:0;background:#efeff2;border-radius:10px;padding:0;margin-bottom:22px;overflow:hidden;}
     .vo-tab{padding:12px 22px;font-size:16px;font-weight:500;color:#2f3747;text-decoration:none;background:transparent;line-height:1.2;}
     .vo-tab:hover{color:#0f4bbf;}
     .vo-tab.active{background:linear-gradient(90deg,#0f4bbf 0%, #10b981 100%);color:#fff;}
-
     .vo-card{display:block;text-decoration:none;color:inherit;background:var(--vo-card);border:1px solid var(--vo-border);border-radius:12px;overflow:hidden;margin-bottom:18px;}
     .vo-card-head{background:var(--vo-head);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
     .vo-card-head h6{margin:0;font-size:18px;font-weight:600;color:#21242c;}
     .vo-card-body{padding:18px 22px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-
     .vo-name{font-size:16px;font-weight:600;line-height:1.25;margin-bottom:8px;color:#1f2633;}
     .vo-meta{margin:0;color:#5d6471;font-size:14px;line-height:1.5;}
-
     .vo-arrow{font-size:26px;color:#b0b5bf;line-height:1;}
-
     .vo-chip{display:inline-flex;align-items:center;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:600;line-height:1;border:1px solid transparent;}
     .chip-pending{background:#eef0f4;color:#666d79;}
     .chip-confirmed{background:#dbefff;color:#2285e8;}
@@ -54,7 +49,6 @@
     .chip-supplier-selected{background:#e8e0f9;color:#7a58c9;}
     .chip-assigned{background:#dbefff;color:#2285e8;}
     .chip-on-hold{background:#ece4fa;color:#7a58c9;}
-
     .vo-pagination{display:flex;justify-content:center;margin-top:26px;}
     .vo-pagination .pagination{gap:8px;}
     .vo-pagination .page-link{min-width:36px;height:36px;border:1px solid #dce6fb;border-radius:10px;color:#2b4a8f;font-weight:600;display:inline-flex;align-items:center;justify-content:center;padding:0 10px;background:#eaf1ff;}
@@ -75,38 +69,50 @@
 <main class="vendor-orders">
     @include('flash::message')
 
-    <h3 class="vo-title">{{ __('nav.view_orders') ?? 'Orders' }}</h3>
-    @if(($counts['all'] ?? 0) > 0)
-        <div class="alert alert-info py-2">{{ __('طلبات بانتظار المتابعة') }}: <strong>{{ $counts['all'] }}</strong></div>
+    <h3 class="vo-title">{{ $tab === 'quotations' ? __('nav.quotations') : __('nav.view_orders') }}</h3>
+
+    @if(($counts[$tab] ?? $counts['all'] ?? 0) > 0)
+        <div class="alert alert-info py-2">{{ __('nav.orders_waiting_follow_up') }}: <strong>{{ $counts[$tab] ?? $counts['all'] }}</strong></div>
     @endif
 
-	    <div class="vo-tabs">
-	        <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="vo-tab {{ $tab === 'all' ? 'active' : '' }}">{{ __('nav.all') ?? 'All' }}</a>
-	        <a href="{{ route('vendor/orders', ['tab' => 'purchase']) }}" class="vo-tab {{ $tab === 'purchase' ? 'active' : '' }}">{{ __('nav.purchase_orders') ?? 'Purchase Orders' }}</a>
-	        <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="vo-tab {{ $tab === 'quotations' ? 'active' : '' }}">{{ __('nav.quotations') ?? 'Quotations' }}</a>
-	        <a href="{{ route('vendor/orders', ['tab' => 'maintenance']) }}" class="vo-tab {{ $tab === 'maintenance' ? 'active' : '' }}">{{ __('nav.maintenance') ?? 'Maintenance' }}</a>
-	        <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="vo-tab {{ $tab === 'scheduled' ? 'active' : '' }}">{{ __('nav.scheduled_orders') ?? 'Scheduled Orders' }}</a>
-	    </div>
+    <div class="vo-tabs">
+        <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="vo-tab {{ $tab === 'all' ? 'active' : '' }}">{{ __('nav.all') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'purchase']) }}" class="vo-tab {{ $tab === 'purchase' ? 'active' : '' }}">{{ __('nav.purchase_orders') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="vo-tab {{ $tab === 'quotations' ? 'active' : '' }}">{{ __('nav.quotations') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'maintenance']) }}" class="vo-tab {{ $tab === 'maintenance' ? 'active' : '' }}">{{ __('nav.maintenance') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="vo-tab {{ $tab === 'scheduled' ? 'active' : '' }}">{{ __('nav.scheduled_orders') }}</a>
+    </div>
 
-        <div class="vo-tabs" style="background:#fff;border:1px solid var(--vo-border);padding:8px;">
-            <a href="{{ route('vendor/orders', ['tab' => $tab]) }}" class="vo-tab {{ $status === '' ? 'active' : '' }}">{{ __('nav.all') ?? 'All' }}</a>
-            <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'confirmed']) }}" class="vo-tab {{ $status === 'confirmed' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.confirmed') }}</a>
-            <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'processing']) }}" class="vo-tab {{ $status === 'processing' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.processing') }}</a>
-            <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'completed']) }}" class="vo-tab {{ $status === 'completed' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.completed') }}</a>
-            <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'scheduled']) }}" class="vo-tab {{ $status === 'scheduled' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.scheduled') }}</a>
+    <div class="vo-tabs" style="background:#fff;border:1px solid var(--vo-border);padding:8px;">
+        <a href="{{ route('vendor/orders', ['tab' => $tab]) }}" class="vo-tab {{ $status === '' ? 'active' : '' }}">{{ __('nav.all') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'confirmed']) }}" class="vo-tab {{ $status === 'confirmed' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.confirmed') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'processing']) }}" class="vo-tab {{ $status === 'processing' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.processing') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'completed']) }}" class="vo-tab {{ $status === 'completed' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.completed') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'scheduled']) }}" class="vo-tab {{ $status === 'scheduled' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.scheduled') }}</a>
+    </div>
+
+    <form method="GET" action="{{ route('vendor/orders') }}" class="mb-3">
+        <input type="hidden" name="tab" value="{{ $tab }}">
+        @if($status !== '')
+            <input type="hidden" name="status" value="{{ $status }}">
+        @endif
+        <div class="input-group">
+            <input type="text" class="form-control" name="search" value="{{ $search }}" placeholder="{{ __('nav.search_order_id') }}">
+            <button class="btn btn-primary" type="submit">{{ __('nav.search') }}</button>
         </div>
+    </form>
 
     @include('front.partials.order-workflow-hint', ['role' => 'vendor', 'activeTab' => $tab])
 
     @forelse($orders as $order)
         @php
-            $statusState = $order->front_status_state ?? $order->front_status ?? ['text' => 'Pending', 'class' => 'chip-pending'];
+            $statusState = $order->front_status_state ?? $order->front_status ?? ['text' => __('nav.pending'), 'class' => 'chip-pending'];
             $orderFiles = collect(is_array($order->files) ? $order->files : [])->filter()->values();
             $title = (int) $order->request_type === 2
-                ? __('Scheduled Order') ?? 'Scheduled Order'
+                ? __('nav.scheduled_order')
                 : ((int) $order->order_type === 1
-                    ? __('Purchase Order') ?? 'Purchase Order'
-                    : ((int) $order->order_type === 2 ? __('Quotation Request') ?? 'Quotation Request' : __('Maintenance Request') ?? 'Maintenance Request'));
+                    ? __('nav.purchase_orders')
+                    : ((int) $order->order_type === 2 ? __('nav.quotation_request') : __('nav.maintenance_request')));
         @endphp
 
         <a href="{{ route('vendor/orders/show', $order->id) }}" class="vo-card">
@@ -117,46 +123,44 @@
             <div class="vo-card-body">
                 <div>
                     <div class="vo-name">
-                        @if((int)$order->request_type === 2)
-                            {{ $order->device_name ?: (__('Scheduled Supply') ?? 'Scheduled Supply') }}
+                        @if((int) $order->request_type === 2)
+                            {{ $order->device_name ?: __('nav.scheduled_supply') }}
+                        @elseif((int) $order->order_type === 1)
+                            {{ __('nav.order') }} #{{ $order->id }} - {{ $order->created_at->translatedFormat('M d, Y') }}
                         @else
-                            @if((int)$order->order_type === 3)
-                                {{ __('Request') ?? 'Request' }} #{{ $order->id }} - {{ $order->created_at->format('M d, Y') }}
-                            @elseif((int)$order->order_type === 2)
-                                {{ __('Request') ?? 'Request' }} #{{ $order->id }} - {{ $order->created_at->format('M d, Y') }}
-                            @else
-                                {{ __('Order') ?? 'Order' }} #{{ $order->id }} - {{ $order->created_at->format('M d, Y') }}
-                            @endif
+                            {{ __('nav.request') }} #{{ $order->id }} - {{ $order->created_at->translatedFormat('M d, Y') }}
                         @endif
                     </div>
-                    @if((int)$order->request_type === 2)
+
+                    @if((int) $order->request_type === 2)
                         @php
                             $start = $order->schedule_start_date ? \Carbon\Carbon::parse($order->schedule_start_date) : null;
                             $end = $start ? (clone $start)->addMonths(3) : null;
                         @endphp
-                        <p class="vo-meta">{{ __('Duration') ?? 'Duration' }}: {{ $start ? $start->format('M d') : '-' }} - {{ $end ? $end->format('M d, Y') : '-' }}</p>
-                        <p class="vo-meta">{{ __('Frequency') ?? 'Frequency' }}: {{ $order->frequency ?: '-' }}</p>
-                        <p class="vo-meta">{{ __('Next Shipment') ?? 'Next Shipment' }}: {{ $order->delivery_duration ?: '-' }}</p>
-                    @elseif((int)$order->order_type === 3)
-                        <p class="vo-meta">{{ __('Device') ?? 'Device' }}: {{ $order->device_name ?: '-' }}</p>
-                        <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '-' }}</p>
-                        <p class="vo-meta">{{ __('Assigned To') ?? 'Assigned To' }}: {{ __('Technician who finished the job') }}</p>
+                        <p class="vo-meta">{{ __('nav.duration') }}: {{ $start ? $start->translatedFormat('M d') : '-' }} - {{ $end ? $end->translatedFormat('M d, Y') : '-' }}</p>
+                        <p class="vo-meta">{{ __('nav.frequency') }}: {{ $order->frequency ?: '-' }}</p>
+                        <p class="vo-meta">{{ __('nav.next_shipment') }}: {{ $order->delivery_duration ?: '-' }}</p>
+                    @elseif((int) $order->order_type === 3)
+                        <p class="vo-meta">{{ __('nav.device') }}: {{ $order->device_name ?: '-' }}</p>
+                        <p class="vo-meta">{{ __('nav.hospital') }}: {{ $order->user->name ?? '-' }}</p>
+                        <p class="vo-meta">{{ __('nav.assigned_to') }}: {{ __('nav.assigned_technician') }}</p>
                     @else
-                        @if((int)$order->order_type === 2)
-                            <p class="vo-meta">{{ __('Attachments') ?? 'Attachments' }}: {{ $orderFiles->count() }} {{ __('Files') ?? 'Files' }}</p>
-                            <p class="vo-meta">{{ __('First File') ?? 'First File' }}: {{ $orderFiles->count() ? basename((string)$orderFiles->first()) : '-' }}</p>
+                        @if((int) $order->order_type === 2)
+                            <p class="vo-meta">{{ __('nav.attachments') }}: {{ $orderFiles->count() }} {{ __('nav.files') }}</p>
+                            <p class="vo-meta">{{ __('nav.first_file') }}: {{ $orderFiles->count() ? basename((string) $orderFiles->first()) : '-' }}</p>
                         @else
-                            <p class="vo-meta">{{ __('Product') ?? 'Product' }}: {{ optional($order->items->first())->product->name ?? ($order->device_name ?: '-') }} @if($order->items->count()) - {{ $order->items->sum('quantity') }} {{ __('Units') ?? 'Units' }} @endif</p>
+                            <p class="vo-meta">{{ __('nav.product') }}: {{ optional($order->items->first())->product->name ?? ($order->device_name ?: '-') }} @if($order->items->count()) - {{ $order->items->sum('quantity') }} {{ __('nav.units') }} @endif</p>
                         @endif
-                        <p class="vo-meta">{{ __('Hospital') ?? 'Hospital' }}: {{ $order->user->name ?? '-' }}</p>
-                        <p class="vo-meta">{{ __('Total') ?? 'Total' }}: {{ number_format((float)($order->total_cost ?? 0), 0) }} {{ __('SAR') ?? 'SAR' }}</p>
+                        <p class="vo-meta">{{ __('nav.hospital') }}: {{ $order->user->name ?? '-' }}</p>
+                        <p class="vo-meta">{{ __('nav.total') }}: {{ number_format((float) ($order->total_cost ?? 0), 0) }} {{ __('nav.currency_sar') }}</p>
                     @endif
                 </div>
-                <span class="vo-arrow"><i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i></span>
+
+                <span class="vo-arrow"><i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i></span>
             </div>
         </a>
     @empty
-        <div class="alert alert-light border">{{ __('No orders found.') ?? 'No orders found.' }}</div>
+        <div class="alert alert-light border">{{ __('nav.no_orders_found') }}</div>
     @endforelse
 
     <div class="vo-pagination">
@@ -164,4 +168,3 @@
     </div>
 </main>
 @endsection
-

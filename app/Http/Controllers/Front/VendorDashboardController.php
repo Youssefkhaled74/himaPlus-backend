@@ -10,25 +10,17 @@ use App\Models\Rating;
 use App\Models\Notification;
 use App\Models\Category;
 use App\Services\OrderStatusService;
+use App\Services\VendorOrderVisibilityService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class VendorDashboardController extends Controller
 {
-    public function __construct(private OrderStatusService $orderStatusService)
+    public function __construct(
+        private OrderStatusService $orderStatusService,
+        private VendorOrderVisibilityService $vendorOrderVisibilityService
+    )
     {
-    }
-
-    private function relevantOrdersQuery(int $vendorId): Builder
-    {
-        return Order::query()
-            ->whereNull('deleted_at')
-            ->where(function ($query) use ($vendorId) {
-                $query->where('provider_id', $vendorId)
-                    ->orWhereHas('offers', function ($offersQuery) use ($vendorId) {
-                        $offersQuery->where('provider_id', $vendorId);
-                    });
-            });
     }
 
     private function pendingOfferStatuses(): array
@@ -45,7 +37,7 @@ class VendorDashboardController extends Controller
     {
         $vendor = auth()->user();
 
-        $ordersBaseQuery = $this->relevantOrdersQuery((int) $vendor->id);
+        $ordersBaseQuery = $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'all');
 
         $ordersCount = (clone $ordersBaseQuery)->count();
         
@@ -94,15 +86,12 @@ class VendorDashboardController extends Controller
             ->whereIn('status', $this->acceptedOfferStatuses())
             ->sum('cost');
 
-        $newRequestsCount = (clone $ordersBaseQuery)
-            ->where(function ($query) use ($vendor) {
-                $query->whereNull('provider_id')
-                    ->orWhereHas('offers', function ($offersQuery) use ($vendor) {
-                        $offersQuery->where('provider_id', $vendor->id)
-                            ->whereIn('status', $this->pendingOfferStatuses());
-                    });
-            })
-            ->count();
+        $newRequestsCount = $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'quotations')
+            ->whereNull('provider_id')
+            ->count()
+            + $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'maintenance')
+                ->whereNull('provider_id')
+                ->count();
         
         $recentOrders = (clone $ordersBaseQuery)
             ->with(['user:id,name,email,mobile', 'offers'])
@@ -116,8 +105,8 @@ class VendorDashboardController extends Controller
                 ]);
             });
         
-        $recentScheduledOrders = (clone $ordersBaseQuery)
-            ->scheduled()
+        $recentScheduledOrders = $this->vendorOrderVisibilityService
+            ->visibleOrdersQuery((int) $vendor->id, 'scheduled')
             ->with(['user:id,name,email,mobile', 'offers'])
             ->latest()
             ->take(3)
@@ -191,7 +180,7 @@ class VendorDashboardController extends Controller
         $dateFrom = $request->get('date_from');
         $dateTo = $request->get('date_to');
 
-        $query = $this->relevantOrdersQuery((int) $vendor->id)
+        $query = $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'all')
             ->with(['user:id,name', 'offers']);
 
         if ($status !== '') {
