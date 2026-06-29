@@ -56,23 +56,35 @@ class OrderController extends Controller
     public function myOrders(Request $request, $page_type = 'all')
     {
         $user = auth()->user();
-        $orders = $user->orders()->when($page_type, function($q) use($page_type){
-            if ($page_type == 'purchase-orders') {
-                $q->where('order_type', 1);
-            }elseif ($page_type == 'quotations') {
-                $q->where('order_type', 2);
-            }elseif ($page_type == 'maintenances') {
-                $q->where('order_type', 3);
-            }elseif ($page_type == 'scheduled-orders') {
-                $q->where('request_type', 2);
-            }
-        })->when($request->orders_type, function($q) use($request){
-            $q->where('order_type', $request->orders_type);
-        })->when($request->schedule_requests, function($qq) use($request){
-            $qq->where('request_type', (int)$request->schedule_requests);
-        })->with([
-            'items.product', 'timeline', 'provider', 'offers', 'offer'
-        ])->orderBy('id', 'DESC')->paginate(PAGINATION_COUNT);
+
+        $orders = $user->orders()
+            ->when($page_type, function ($q) use ($page_type) {
+                if ($page_type == 'purchase-orders') {
+                    $q->where('order_type', 1);
+                } elseif ($page_type == 'quotations') {
+                    $q->where('order_type', 2);
+                } elseif ($page_type == 'maintenances') {
+                    $q->where('order_type', 3);
+                } elseif ($page_type == 'scheduled-orders') {
+                    $q->where('request_type', 2);
+                }
+            })
+            ->when($request->filled('payment_status'), function ($q) use ($request) {
+                $q->where('payment_status', (int) $request->payment_status);
+            })
+            ->when($request->orders_type, function ($q) use ($request) {
+                $q->where('order_type', $request->orders_type);
+            })
+            ->when($request->schedule_requests, function ($qq) use ($request) {
+                $qq->where('request_type', (int) $request->schedule_requests);
+            })
+            ->with([
+                'items.product', 'timeline', 'provider', 'offers', 'offer'
+            ])
+            ->orderBy('id', 'DESC')
+            ->paginate(PAGINATION_COUNT)
+            ->appends($request->query());
+
         return view("front.auth.myorders", compact('orders'));
     }
 

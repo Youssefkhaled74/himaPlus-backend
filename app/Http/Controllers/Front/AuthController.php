@@ -321,6 +321,7 @@ class AuthController extends Controller
             'orders' => (clone $ordersQuery)->count(),
             'paid_invoices' => (clone $ordersQuery)->where('payment_status', 1)->count(),
             'pending_orders' => (clone $ordersQuery)->where('payment_status', 0)->count(),
+            'tracking_orders' => (clone $ordersQuery)->where('request_type', 2)->count(),
             'favorites' => $this->favorite->where('user_id', $user->id)->count(),
             'notifications' => $this->notification->where('user_id', $user->id)->count(),
         ];

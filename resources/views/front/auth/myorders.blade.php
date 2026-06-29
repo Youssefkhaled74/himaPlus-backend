@@ -69,11 +69,55 @@
         @php
             $tab = request()->route('page_type');
         @endphp
-        <li class="nav-item"><a class="nav-link {{ $tab == 'all' ? 'active' : '' }}" href="{{ route('user/myorders', 'all') }}">{{ __('products.all_orders') }}</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'purchase-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'purchase-orders') }}">{{ __('products.purchase_orders') }}</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'quotations' ? 'active' : '' }}" href="{{ route('user/myorders', 'quotations') }}">{{ __('products.quotations') }}</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'maintenances' ? 'active' : '' }}" href="{{ route('user/myorders', 'maintenances') }}">{{ __('products.maintenance') }}</a></li>
-        <li class="nav-item"><a class="nav-link {{ $tab == 'scheduled-orders' ? 'active' : '' }}" href="{{ route('user/myorders', 'scheduled-orders') }}">{{ __('products.scheduled_orders') }}</a></li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ $tab == 'all' && !request()->filled('payment_status') ? 'active' : '' }}"
+               href="{{ route('user/myorders', 'all') }}">
+                {{ __('products.all_orders') }}
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ request('payment_status') === '1' ? 'active' : '' }}"
+               href="{{ route('user/myorders', 'all') }}?payment_status=1">
+                {{ app()->getLocale() === 'ar' ? 'الطلبات المدفوعة' : 'Paid Orders' }}
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ request('payment_status') === '0' ? 'active' : '' }}"
+               href="{{ route('user/myorders', 'all') }}?payment_status=0">
+                {{ app()->getLocale() === 'ar' ? 'الطلبات المعلقة' : 'Pending Orders' }}
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ $tab == 'purchase-orders' ? 'active' : '' }}"
+               href="{{ route('user/myorders', 'purchase-orders') }}">
+                {{ __('products.purchase_orders') }}
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ $tab == 'quotations' ? 'active' : '' }}"
+               href="{{ route('user/myorders', 'quotations') }}">
+                {{ __('products.quotations') }}
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ $tab == 'maintenances' ? 'active' : '' }}"
+               href="{{ route('user/myorders', 'maintenances') }}">
+                {{ __('products.maintenance') }}
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ $tab == 'scheduled-orders' ? 'active' : '' }}"
+               href="{{ route('user/myorders', 'scheduled-orders') }}">
+                {{ __('products.scheduled_orders') }}
+            </a>
+        </li>
     </ul>
     @include('front.partials.order-workflow-hint', ['role' => 'customer', 'activeTab' => $tab])
 
