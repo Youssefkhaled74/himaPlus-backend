@@ -35,7 +35,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=confirmed&tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=confirmed&tab=orders',
         ],
         [
             'label' => __('admin.dashboard.accepted_orders'),
@@ -48,7 +48,7 @@
                 'paid' => number_format($dashboard['totals']['accepted_paid_orders'] ?? 0),
                 'unpaid' => number_format($dashboard['totals']['accepted_unpaid_orders'] ?? 0),
             ]),
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=accepted_orders&tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=accepted_orders&tab=orders',
         ],
         [
             'label' => __('admin.dashboard.in_progress_orders'),
@@ -57,7 +57,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=processing&tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=processing&tab=orders',
         ],
         [
             'label' => __('admin.dashboard.executed_orders'),
@@ -66,7 +66,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=completed&tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=completed&tab=orders',
         ],
         [
             'label' => __('admin.pages.orders.statuses.scheduled'),
@@ -75,7 +75,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=scheduled&tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=scheduled&tab=orders',
         ],
         [
             'label' => __('admin.dashboard.rejected_orders'),
@@ -84,7 +84,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=rejected&tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=rejected&tab=orders',
         ],
         [
             'label' => __('admin.pages.orders.statuses.canceled'),
@@ -93,7 +93,7 @@
             'icon' => null,
             'softClass' => '',
             'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=cancelled&tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=cancelled&tab=orders',
         ],
     ];
 @endphp
@@ -294,80 +294,9 @@
                         </div>
                     </div>
 
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.user_guidance_title') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.user_guidance_subtitle') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?is_activate=1" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.active_users_label') }}</div>
-                                    </div>
-                                    <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['active_users'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?is_activate=0" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.inactive_users_label') }}</div>
-                                    </div>
-                                    <span class="badge bg-danger-subtle text-danger">{{ number_format($dashboard['totals']['inactive_users'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?created_today=1" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.new_users_label') }}</div>
-                                    </div>
-                                    <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['new_users_today'] ?? 0) }}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="d-flex flex-column gap-4">
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.offers_panel') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.offers_panel_subtitle') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.total_offers') }}</div>
-                                    </div>
-                                    <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['total_offers'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=offers_pending" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.pending_offers') }}</div>
-                                    </div>
-                                    <span class="badge bg-warning-subtle text-warning">{{ number_format($dashboard['totals']['pending_offers'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=accepted" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.accepted_offers') }}</div>
-                                    </div>
-                                    <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['accepted_offers'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.acceptance_rate') }}</div>
-                                    </div>
-                                    <span class="badge bg-info-subtle text-info">{{ number_format((float) ($dashboard['totals']['acceptance_rate'] ?? 0), 2) }}%</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="card dashboard-panel">
                         <div class="card-header">
                             <div class="dashboard-section-heading mb-0">
@@ -401,32 +330,6 @@
                         </div>
                     </div>
 
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.notifications_panel') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.notifications_panel_subtitle') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.total_unread_notifications') }}</div>
-                                    </div>
-                                    <span class="badge bg-danger-subtle text-danger">{{ number_format($dashboard['totals']['total_unread_notifications'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.vendor_unread_notifications') }}</div>
-                                    </div>
-                                    <span class="badge bg-warning-subtle text-warning">{{ number_format($dashboard['totals']['vendor_unread_notifications'] ?? 0) }}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
