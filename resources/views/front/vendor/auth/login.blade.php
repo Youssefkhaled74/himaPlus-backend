@@ -320,7 +320,9 @@
                                     <div class="form-check mb-3">
                                         <input class="form-check-input" type="checkbox" name="terms" id="regTerms" value="1" required>
                                         <label class="form-check-label small" for="regTerms">
-                                            <span class="required-star">*</span> I agree to the <a href="{{ route('privacyPolicy') }}" class="hp-link">Privacy Policy</a>
+                                            <span class="required-star">*</span> I agree to the
+                                            <a href="{{ route('termsConditions') }}" class="hp-link">Terms &amp; Conditions</a>
+                                            &amp; <a href="{{ route('privacyPolicy') }}" class="hp-link">Privacy Policy</a>
                                         </label>
                                     </div>
 

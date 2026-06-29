@@ -36,6 +36,7 @@
                         <li><a href="{{ route('categories') }}">{{ __('nav.categories') }}</a></li>
                         <li><a href="{{ route('products') }}">{{ __('nav.products') }}</a></li>
                         <li><a href="{{ route('privacyPolicy') }}">{{ app()->getLocale() === 'ar' ? 'سياسة الخصوصية' : __('nav.privacy_policy') }}</a></li>
+                        <li><a href="{{ route('termsConditions') }}">{{ app()->getLocale() === 'ar' ? 'الشروط والأحكام' : __('nav.terms_conditions') }}</a></li>
                         <li><a href="{{ route('user/myorders', 'all') }}">{{ __('nav.orders') }}</a></li>
                         <li><a href="{{ route('contactUs') }}">{{ __('nav.contact_us') }}</a></li>
                     @endif

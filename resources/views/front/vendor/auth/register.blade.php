@@ -250,7 +250,8 @@
                         <input class="mt-1 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-200"
                                type="checkbox" name="terms" id="terms" value="1" required>
                         <label class="text-sm text-gray-600" for="terms">
-                            I agree to <a href="{{ route('privacyPolicy') }}" class="font-semibold text-teal-600 hover:underline">Privacy Policy</a>
+                            I agree to <a href="{{ route('termsConditions') }}" class="font-semibold text-teal-600 hover:underline">Terms &amp; Conditions</a>
+                            &amp; <a href="{{ route('privacyPolicy') }}" class="font-semibold text-teal-600 hover:underline">Privacy Policy</a>
                         </label>
                     </div>
 

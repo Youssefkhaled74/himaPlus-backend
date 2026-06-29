@@ -4,6 +4,7 @@ return [
     'home' => 'Home',
     'about_us' => 'About Us',
     'privacy_policy' => 'Privacy Policy',
+    'terms_conditions' => 'Terms and Conditions',
     'service_providers' => 'Service Providers',
     'categories' => 'Categories',
     'orders' => 'Orders',
