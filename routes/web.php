@@ -90,7 +90,7 @@ Route::group(['middleware' => ['limitReq']], function(){
             Route::post('/guide/album', [AuthController::class, 'guideAlbum']);
             Route::get('delete-account', [AuthController::class, 'deleteAccount']);
             Route::get('/statistics', [AuthController::class, 'statistics']);
-            Route::get('/notifications/{offset?}/{limit?}', [AuthController::class, 'notifications']);
+            Route::get('/notifications/{offset?}/{limit?}', [AuthController::class, 'notifications'])->name('user/notifications');
             Route::get('/favorites/remove', [AuthController::class, 'removeFromFavorites']);
         });
         

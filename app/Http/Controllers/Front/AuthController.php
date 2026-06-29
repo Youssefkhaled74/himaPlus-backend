@@ -348,10 +348,39 @@ class AuthController extends Controller
         return view('front.auth.favorites', compact(['report', 'favorites']));
     }
     
-    public function notifications($offset, $limit)
+    public function notifications(Request $request, $offset = 0, $limit = null)
     {
-        $notifications = auth()->user()->notifications()->with('serviceable')->orderByDesc('id')->offset($offset)->limit(PAGINATION_COUNT)->get();
-        return responseJson(200, "success", $notifications);
+        $limit = (int) ($limit ?: PAGINATION_COUNT);
+        $offset = (int) ($offset ?: 0);
+
+        $query = auth()->user()
+            ->notifications()
+            ->with(['serviceable', 'order'])
+            ->orderByDesc('id');
+
+        // Keep backward compatibility for AJAX/API consumers.
+        // Direct browser visits should show a proper UI page instead of raw JSON.
+        if ($request->ajax() || $request->expectsJson()) {
+            $notifications = (clone $query)
+                ->offset($offset)
+                ->limit($limit)
+                ->get();
+
+            return responseJson(200, "success", $notifications);
+        }
+
+        $notifications = (clone $query)
+            ->paginate(PAGINATION_COUNT)
+            ->withQueryString();
+
+        $totalNotifications = auth()->user()->notifications()->count();
+        $unreadNotifications = auth()->user()->notifications()->whereNull('read_at')->count();
+
+        return view('front.auth.notifications', compact(
+            'notifications',
+            'totalNotifications',
+            'unreadNotifications'
+        ));
     }
 
     public function userUpdate(Request $request)

@@ -329,7 +329,7 @@
             </a>
         </div>
         <div class="col-6 col-md-4 col-xl-2">
-            <a href="{{ url('/user/notifications/0/' . PAGINATION_COUNT) }}" class="cd-stat">
+            <a href="{{ route('user/notifications', [0, PAGINATION_COUNT]) }}" class="cd-stat">
                 <div class="cd-stat__icon"><i class="bi bi-bell-fill"></i></div>
                 <div class="cd-stat__body">
                     <div class="label">{{ app()->getLocale() === 'ar' ? 'الإشعارات' : 'Notifications' }}</div>
