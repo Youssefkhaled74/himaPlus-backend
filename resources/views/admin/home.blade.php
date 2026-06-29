@@ -26,7 +26,16 @@
             'icon' => 'ri-shopping-bag-3-line',
             'softClass' => 'bg-primary-subtle text-primary',
             'showIcon' => true,
-                                'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?tab=orders',
+        ],
+        [
+            'label' => __('admin.pages.orders.statuses.confirmed'),
+            'value' => number_format($dashboard['totals']['confirmed_orders'] ?? 0),
+            'growth' => 0,
+            'icon' => null,
+            'softClass' => '',
+            'showIcon' => false,
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=confirmed&tab=',
         ],
         [
             'label' => __('admin.dashboard.accepted_orders'),
@@ -39,16 +48,7 @@
                 'paid' => number_format($dashboard['totals']['accepted_paid_orders'] ?? 0),
                 'unpaid' => number_format($dashboard['totals']['accepted_unpaid_orders'] ?? 0),
             ]),
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=confirmed&tab=',
-        ],
-        [
-            'label' => __('admin.dashboard.rejected_orders'),
-            'value' => number_format($dashboard['totals']['rejected_orders'] ?? 0),
-            'growth' => 0,
-            'icon' => null,
-            'softClass' => '',
-            'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=rejected&tab=',
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=accepted_orders&tab=',
         ],
         [
             'label' => __('admin.dashboard.in_progress_orders'),
@@ -67,6 +67,33 @@
             'softClass' => '',
             'showIcon' => false,
             'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=completed&tab=',
+        ],
+        [
+            'label' => __('admin.pages.orders.statuses.scheduled'),
+            'value' => number_format($dashboard['totals']['scheduled_orders'] ?? 0),
+            'growth' => 0,
+            'icon' => null,
+            'softClass' => '',
+            'showIcon' => false,
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=scheduled&tab=',
+        ],
+        [
+            'label' => __('admin.dashboard.rejected_orders'),
+            'value' => number_format($dashboard['totals']['rejected_orders'] ?? 0),
+            'growth' => 0,
+            'icon' => null,
+            'softClass' => '',
+            'showIcon' => false,
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=rejected&tab=',
+        ],
+        [
+            'label' => __('admin.pages.orders.statuses.canceled'),
+            'value' => number_format($dashboard['totals']['cancelled_orders'] ?? 0),
+            'growth' => 0,
+            'icon' => null,
+            'softClass' => '',
+            'showIcon' => false,
+            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=cancelled&tab=',
         ],
     ];
 @endphp
@@ -358,13 +385,13 @@
                                     </div>
                                     <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['scheduled_orders'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=scheduled&scheduled_status=active" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=active_scheduled" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.active_scheduled_orders') }}</div>
                                     </div>
                                     <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['active_scheduled_orders'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=scheduled&scheduled_status=completed" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=completed_scheduled" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.completed_scheduled_orders') }}</div>
                                     </div>

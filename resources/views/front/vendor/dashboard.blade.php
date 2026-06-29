@@ -279,7 +279,7 @@
             </a>
         </div>
         <div class="col-6 col-md">
-            <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="text-decoration-none" style="color:inherit;">
+            <a href="{{ route('vendor/orders', ['tab' => 'scheduled', 'status' => 'scheduled']) }}" class="text-decoration-none" style="color:inherit;">
                 <div class="vd-card vd-stat">
                     <p class="vd-stat-label">{{ $isAr ? 'الطلبات المجدولة' : 'Scheduled Orders' }}</p>
                     <h4 class="vd-stat-value">{{ $scheduledOrdersCount }}</h4>
@@ -287,7 +287,7 @@
             </a>
         </div>
         <div class="col-6 col-md">
-            <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="text-decoration-none" style="color:inherit;">
+            <a href="{{ route('vendor/orders', ['tab' => 'all', 'status' => 'completed']) }}" class="text-decoration-none" style="color:inherit;">
                 <div class="vd-card vd-stat">
                     <p class="vd-stat-label">{{ $isAr ? 'الطلبات المكتملة' : 'Completed Orders' }}</p>
                     <h4 class="vd-stat-value">{{ $completedOrdersCount }}</h4>
@@ -303,10 +303,10 @@
             </a>
         </div>
         <div class="col-6 col-md">
-            <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="text-decoration-none" style="color:inherit;">
+            <a href="{{ route('vendor/orders', ['tab' => 'all', 'status' => 'confirmed']) }}" class="text-decoration-none" style="color:inherit;">
                 <div class="vd-card vd-stat">
-                    <p class="vd-stat-label">{{ $isAr ? 'عروض معلقة' : 'Pending Offers' }}</p>
-                    <h4 class="vd-stat-value">{{ $pendingOffersCount }}</h4>
+                    <p class="vd-stat-label">{{ $isAr ? 'طلبات مؤكدة' : 'Confirmed Orders' }}</p>
+                    <h4 class="vd-stat-value">{{ $confirmedOrdersCount }}</h4>
                 </div>
             </a>
         </div>

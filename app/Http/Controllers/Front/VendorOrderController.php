@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Offer;
+use App\Services\OrderStatusService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 class VendorOrderController extends Controller
 {
+    public function __construct(private OrderStatusService $orderStatusService)
+    {
+    }
+
     private function normalizeOfferStatus($status): string
     {
         if ((string) $status === '2' || $status === 2 || $status === 'accepted') {
@@ -76,7 +81,10 @@ class VendorOrderController extends Controller
         }
         
         if ($status) {
-            $query->where('payment_status', $status);
+            $this->orderStatusService->applyStatusFilter($query, $status, [
+                'audience' => 'front',
+                'provider_id' => (int) $vendor->id,
+            ]);
         }
         
         if ($search) {
@@ -85,7 +93,15 @@ class VendorOrderController extends Controller
         
         $orders = $query->whereNull('deleted_at')
             ->latest()
-            ->paginate(15);
+            ->paginate(15)
+            ->through(function ($order) use ($vendor) {
+                $order->front_status_state = $order->resolveStatus([
+                    'audience' => 'front',
+                    'provider_id' => (int) $vendor->id,
+                ]);
+
+                return $order;
+            });
         
         $myOffersCount = Offer::where('provider_id', $vendor->id)->count();
         
@@ -104,6 +120,10 @@ class VendorOrderController extends Controller
             'quotations' => (clone $countsBase)->quotations()->notScheduled()->count(),
             'maintenance' => (clone $countsBase)->maintenance()->notScheduled()->count(),
             'scheduled' => (clone $countsBase)->scheduled()->count(),
+            'confirmed' => $this->orderStatusService->countByStatus($countsBase, OrderStatusService::STATUS_CONFIRMED, ['provider_id' => (int) $vendor->id]),
+            'processing' => $this->orderStatusService->countByStatus($countsBase, OrderStatusService::STATUS_PROCESSING, ['provider_id' => (int) $vendor->id]),
+            'completed' => $this->orderStatusService->countByStatus($countsBase, OrderStatusService::STATUS_COMPLETED, ['provider_id' => (int) $vendor->id]),
+            'scheduled_status' => $this->orderStatusService->countByStatus($countsBase, OrderStatusService::STATUS_SCHEDULED, ['provider_id' => (int) $vendor->id]),
         ];
         
         return view('front.vendor.orders.index', compact('orders', 'tab', 'status', 'search', 'myOffersCount', 'counts'));
@@ -132,6 +152,11 @@ class VendorOrderController extends Controller
             ->where('provider_id', $vendor->id)
             ->first();
         
+        $order->front_status_state = $order->resolveStatus([
+            'audience' => 'front',
+            'provider_id' => (int) $vendor->id,
+        ]);
+
         return view('front.vendor.orders.show', compact('order', 'myOffer'));
     }
 

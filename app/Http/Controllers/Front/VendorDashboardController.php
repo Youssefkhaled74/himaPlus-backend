@@ -9,11 +9,16 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\Notification;
 use App\Models\Category;
+use App\Services\OrderStatusService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class VendorDashboardController extends Controller
 {
+    public function __construct(private OrderStatusService $orderStatusService)
+    {
+    }
+
     private function relevantOrdersQuery(int $vendorId): Builder
     {
         return Order::query()
@@ -71,15 +76,10 @@ class VendorDashboardController extends Controller
             ->where('stock_quantity', '<=', 5)
             ->count();
         
-        $scheduledOrdersCount = (clone $ordersBaseQuery)
-            ->scheduled()
-            ->count();
-
-        $completedOrdersCount = (clone $ordersBaseQuery)
-            ->whereHas('timeline', function ($timelineQuery) {
-                $timelineQuery->where('timeline_no', 6);
-            })
-            ->count();
+        $scheduledOrdersCount = $this->orderStatusService->countByStatus($ordersBaseQuery, OrderStatusService::STATUS_SCHEDULED, ['provider_id' => (int) $vendor->id]);
+        $completedOrdersCount = $this->orderStatusService->countByStatus($ordersBaseQuery, OrderStatusService::STATUS_COMPLETED, ['provider_id' => (int) $vendor->id]);
+        $confirmedOrdersCount = $this->orderStatusService->countByStatus($ordersBaseQuery, OrderStatusService::STATUS_CONFIRMED, ['provider_id' => (int) $vendor->id]);
+        $processingOrdersCount = $this->orderStatusService->countByStatus($ordersBaseQuery, OrderStatusService::STATUS_PROCESSING, ['provider_id' => (int) $vendor->id]);
         
         $avgRating = Rating::where('forable_id', $vendor->id)
             ->where('forable_type', 'App\\Models\\User')
@@ -108,14 +108,26 @@ class VendorDashboardController extends Controller
             ->with(['user:id,name,email,mobile', 'offers'])
             ->latest()
             ->take(3)
-            ->get();
+            ->get()
+            ->each(function ($order) use ($vendor) {
+                $order->front_status_state = $order->resolveStatus([
+                    'audience' => 'front',
+                    'provider_id' => (int) $vendor->id,
+                ]);
+            });
         
         $recentScheduledOrders = (clone $ordersBaseQuery)
             ->scheduled()
             ->with(['user:id,name,email,mobile', 'offers'])
             ->latest()
             ->take(3)
-            ->get();
+            ->get()
+            ->each(function ($order) use ($vendor) {
+                $order->front_status_state = $order->resolveStatus([
+                    'audience' => 'front',
+                    'provider_id' => (int) $vendor->id,
+                ]);
+            });
         
         $pendingOffersQuery = Offer::where('provider_id', $vendor->id)
             ->whereNull('deleted_at')
@@ -151,6 +163,8 @@ class VendorDashboardController extends Controller
             'offersCount',
             'productsCount',
             'scheduledOrdersCount',
+            'confirmedOrdersCount',
+            'processingOrdersCount',
             'acceptedOffersCount',
             'acceptanceRate',
             'completedOrdersCount',

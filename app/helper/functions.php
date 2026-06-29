@@ -1,5 +1,6 @@
 <?php
 	use Illuminate\Support\Facades\File;
+    use App\Services\OrderStatusService;
 
 	define('PAGINATION_COUNT', 10);
 	define('PAGINATION_COUNT_FRONT', 10);
@@ -118,66 +119,17 @@
 
 	function timelineNameBackground($timeline_no)
 	{
-		
-        // <div class="chip chip--pending 1">Pending</div>
-        // <div class="chip chip--active 1">Assigned</div>
-        // <div class="chip chip--shipped "4>Shipped</div>
-        // <div class="chip chip--confirmed 2">Confirmed</div>
-        // <div class="chip chip--delivered 5">Delivered</div>
-        // <div class="chip chip--completed 6">Completed</div>
-        // <div class="chip chip--cancelled 12">Cancelled</div>
-        // <div class="chip chip--inprogress 3">In Progress</div>
-        // <div class="chip chip--upcoming 8">Supplier Selected</div>
-        // <div class="chip chip--upcoming 8">Upcoming</div>
-		switch ((int)$timeline_no) {
-			case 1:
-				return 'pending';
-				break;
-			case 7:
-				return 'pending';
-				break;
-			case 9:
-				return 'pending';
-				break;
-			case 10:
-				return 'pending';
-				break;
-			case 11:
-				return 'pending';
-				break;
+		$map = [
+            2 => 'confirmed',
+            3 => 'inprogress',
+            4 => 'shipped',
+            5 => 'delivered',
+            6 => 'completed',
+            8 => 'upcoming',
+            12 => 'canceled',
+        ];
 
-			case 2:
-				return 'confirmed';
-				break;
-			
-			case 3:
-				return 'inprogress';
-				break;
-				
-			case 4:
-				return 'shipped';
-				break;
-				
-			case 5:
-				return 'delivered';
-				break;
-			
-			case 6:
-				return 'completed';
-				break;
-			
-			case 8:
-				return 'upcoming';
-				break;
-
-			case 12:
-				return 'canceled';
-				break;
-			
-			default:
-				return 'pending';
-				break;
-		}
+		return $map[(int) $timeline_no] ?? 'pending';
 	}
 
 
@@ -253,30 +205,63 @@
         return $labels[$timeline_no] ?? timelineName($timeline_no);
     }
 
-    function frontScheduledStatusLabel($status, $isVendor = false)
-    {
-        $ar = app()->getLocale() === 'ar';
+	    function frontScheduledStatusLabel($status, $isVendor = false)
+	    {
+	        $normalized = app(OrderStatusService::class)->normalizeStatus((string) $status);
 
-        if ($isVendor) {
-            $labels = [
-                'upcoming' => $ar ? 'تم اعتماد الجدولة' : 'Schedule Approved',
-                'active' => $ar ? 'سارية' : 'Active',
-                'paused' => $ar ? 'متوقفة' : 'Paused',
-                'completed' => $ar ? 'منتهية' : 'Expired',
-                'cancelled' => $ar ? 'ملغية' : 'Cancelled',
-            ];
-        } else {
-            $labels = [
-                'upcoming' => $ar ? 'تمت الموافقة' : 'Approved',
-                'active' => $ar ? 'قيد التوريد' : 'Supplying',
-                'paused' => $ar ? 'متوقف' : 'Paused',
-                'completed' => $ar ? 'تم الاستلام' : 'Received',
-                'cancelled' => $ar ? 'ملغي' : 'Cancelled',
-            ];
+            if ($normalized === OrderStatusService::STATUS_ACTIVE_SCHEDULED) {
+                $normalized = OrderStatusService::STATUS_ACTIVE_SCHEDULED;
+            } elseif ($normalized === OrderStatusService::STATUS_COMPLETED_SCHEDULED) {
+                $normalized = OrderStatusService::STATUS_COMPLETED_SCHEDULED;
+            } elseif ($normalized === OrderStatusService::STATUS_CANCELLED) {
+                $normalized = OrderStatusService::STATUS_CANCELLED;
+            } else {
+                $normalized = OrderStatusService::STATUS_SCHEDULED;
+            }
+
+            return app(OrderStatusService::class)->makeState($normalized, 'front')['label'];
+	    }
+
+        function orderStatusService()
+        {
+            return app(OrderStatusService::class);
         }
 
-        return $labels[strtolower($status)] ?? ucfirst($status);
-    }
+        function orderStatusOptions($audience = 'admin')
+        {
+            $service = orderStatusService();
+            $statuses = [
+                OrderStatusService::STATUS_PENDING,
+                OrderStatusService::STATUS_CONFIRMED,
+                OrderStatusService::STATUS_ACCEPTED_ORDERS,
+                OrderStatusService::STATUS_PROCESSING,
+                OrderStatusService::STATUS_COMPLETED,
+                OrderStatusService::STATUS_SCHEDULED,
+                OrderStatusService::STATUS_ACTIVE_SCHEDULED,
+                OrderStatusService::STATUS_COMPLETED_SCHEDULED,
+                OrderStatusService::STATUS_CANCELLED,
+                OrderStatusService::STATUS_REJECTED,
+            ];
+
+            $options = [];
+            foreach ($statuses as $status) {
+                $options[$status] = $service->makeState($status, $audience);
+            }
+
+            return $options;
+        }
+
+        function orderStatusChipClass(?string $statusKey): string
+        {
+            return match ((string) $statusKey) {
+                'confirmed', 'accepted_orders' => 'confirmed',
+                'processing' => 'inprogress',
+                'completed', 'completed_scheduled' => 'completed',
+                'scheduled', 'active_scheduled' => 'upcoming',
+                'cancelled', 'rejected' => 'cancelled',
+                default => 'pending',
+            };
+        }
 
     // "autoload": {
     //     "psr-4": {

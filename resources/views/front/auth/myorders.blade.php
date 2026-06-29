@@ -84,12 +84,12 @@
             </a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link {{ request('payment_status') === '0' ? 'active' : '' }}"
-               href="{{ route('user/myorders', 'all') }}?payment_status=0">
-                {{ app()->getLocale() === 'ar' ? 'الطلبات المعلقة' : 'Pending Orders' }}
-            </a>
-        </li>
+	        <li class="nav-item">
+	            <a class="nav-link {{ request('status') === 'processing' ? 'active' : '' }}"
+	               href="{{ route('user/myorders', 'all') }}?status=processing">
+	                {{ app()->getLocale() === 'ar' ? 'طلبات قيد التنفيذ' : 'Processing Orders' }}
+	            </a>
+	        </li>
 
         <li class="nav-item">
             <a class="nav-link {{ $tab == 'purchase-orders' ? 'active' : '' }}"
@@ -125,16 +125,9 @@
 
         @if(isset($orders) && $orders->count() > 0)
             @foreach($orders as $order)
-                @php
-                    $lastTimeline = $order->timeline->last();
-                    // 1 => Order Created, 2 => Confirmed by Supplier, 3 => Processing, 4 => Shipped,
-                    // 5 => Delivered, 6 => Completed, 7 => Offers Received, 8 => Supplier Selected,
-                    // 9 => Converted to Order, 10 => Under Review, 11 => Assigned to Supplier
-                @endphp
-
-                <div class="order-card mb-3 position-relative">
-                    <div class="chip chip--{{ timelineNameBackground($lastTimeline?->timeline_no) }}">{{ customerTimelineName($lastTimeline?->timeline_no, $order->order_type) }}</div>
-                    <div class="order-card__title">{{ orderType($order->order_type) }}</div>
+	                <div class="order-card mb-3 position-relative">
+	                    <div class="chip chip--{{ orderStatusChipClass($order->front_status_state['key'] ?? null) }}">{{ $order->front_status_state['text'] ?? __('products.pending') }}</div>
+	                    <div class="order-card__title">{{ orderType($order->order_type) }}</div>
                     <div class="meta">
                         <div><strong>{{ __('products.order_number_label') }} #{{ $order->id }} – {{ \Carbon\Carbon::parse($order->created_at)->format('M j, Y') }}</strong></div>
                         <div>{{ __('products.supplier_label') }}: {{ $order->provider?->name }}</div>
@@ -204,4 +197,3 @@
     });
 </script>
 @endsection
-

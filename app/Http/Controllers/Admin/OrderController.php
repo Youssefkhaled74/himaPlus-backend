@@ -72,6 +72,7 @@ class OrderController extends Controller
                 'partial_receive',
             ])
             ->findOrFail($id);
+        $order->admin_status_state = $order->resolveAdminStatus();
 
         return view('admin.orders.update', compact('order'));
     }

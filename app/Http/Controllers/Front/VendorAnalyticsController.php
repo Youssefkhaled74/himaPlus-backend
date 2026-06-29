@@ -8,11 +8,16 @@ use App\Models\Order;
 use App\Models\Offer;
 use App\Models\OrderItem;
 use App\Models\Rating;
+use App\Services\OrderStatusService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class VendorAnalyticsController extends Controller
 {
+    public function __construct(private OrderStatusService $orderStatusService)
+    {
+    }
+
     private function acceptedOfferStatuses(): array
     {
         return [2, '2', 'accepted'];
@@ -44,11 +49,9 @@ class VendorAnalyticsController extends Controller
             $ordersQuery->where('created_at', '>=', $startDate);
         }
         $totalOrders = (clone $ordersQuery)->count();
-        $completedOrders = (clone $ordersQuery)
-            ->whereHas('timeline', function ($timelineQuery) {
-                $timelineQuery->where('timeline_no', 6);
-            })
-            ->count();
+        $completedOrders = $this->orderStatusService->countByStatus($ordersQuery, OrderStatusService::STATUS_COMPLETED);
+        $processingOrders = $this->orderStatusService->countByStatus($ordersQuery, OrderStatusService::STATUS_PROCESSING);
+        $confirmedOrders = $this->orderStatusService->countByStatus($ordersQuery, OrderStatusService::STATUS_CONFIRMED);
 
         // Get offers statistics
         $offersQuery = Offer::where('provider_id', $vendorId)->whereNull('deleted_at');
@@ -95,16 +98,11 @@ class VendorAnalyticsController extends Controller
             ->get();
 
         // Orders by status
-        $ordersByStatus = Order::where('provider_id', $vendorId)
-            ->whereNull('deleted_at')
-            ->select('payment_status', DB::raw('count(*) as count'))
-            ->groupBy('payment_status')
-            ->get()
-            ->mapWithKeys(function ($item) {
-                $key = ((int) $item->payment_status === 1) ? 'Paid' : 'Unpaid';
-                return [$key => $item->count];
-            })
-            ->toArray();
+        $ordersByStatus = [
+            'Confirmed' => $confirmedOrders,
+            'Processing' => $processingOrders,
+            'Completed' => $completedOrders,
+        ];
 
         // Monthly orders chart data
         $monthlyOrdersQuery = Order::where('provider_id', $vendorId)->whereNull('deleted_at');
@@ -130,6 +128,8 @@ class VendorAnalyticsController extends Controller
         return view('front.vendor.analytics.index', [
             'totalOrders' => $totalOrders,
             'completedOrders' => $completedOrders,
+            'processingOrders' => $processingOrders,
+            'confirmedOrders' => $confirmedOrders,
             'totalOffers' => $totalOffers,
             'acceptedOffers' => $acceptedOffers,
             'acceptanceRate' => $acceptanceRate,

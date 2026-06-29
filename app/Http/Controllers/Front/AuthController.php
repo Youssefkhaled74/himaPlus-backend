@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Favorite;
 use App\Models\Report;
 use App\Models\Order;
+use App\Services\OrderStatusService;
 
 class AuthController extends Controller
 {
@@ -30,9 +31,10 @@ class AuthController extends Controller
     public $userRepository;
     public $forJawalyService;
     public $order;
+    public $orderStatusService;
     
     public function __construct(
-        User $user, Report $report, Favorite $favorite, Notification $notification, UserRepository $userRepository, ForJawalyService $forJawalyService, Order $order
+        User $user, Report $report, Favorite $favorite, Notification $notification, UserRepository $userRepository, ForJawalyService $forJawalyService, Order $order, OrderStatusService $orderStatusService
     ){
         $this->user = $user;
         $this->report = $report;
@@ -41,6 +43,7 @@ class AuthController extends Controller
         $this->userRepository = $userRepository;
         $this->forJawalyService = $forJawalyService;
         $this->order = $order;
+        $this->orderStatusService = $orderStatusService;
     }
     
     public function register(Request $request)
@@ -316,12 +319,18 @@ class AuthController extends Controller
     {
         $user = auth()->user();
         $ordersQuery = $this->order->where('user_id', $user->id)->whereNull('deleted_at');
-        $orders = (clone $ordersQuery)->with(['provider'])->latest()->take(5)->get();
+        $orders = (clone $ordersQuery)->with(['provider', 'timeline', 'offers'])->latest()->take(5)->get()
+            ->each(function ($order) {
+                $order->front_status_state = $order->resolveStatus(['audience' => 'front']);
+            });
         $counts = [
             'orders' => (clone $ordersQuery)->count(),
             'paid_invoices' => (clone $ordersQuery)->where('payment_status', 1)->count(),
             'pending_orders' => (clone $ordersQuery)->where('payment_status', 0)->count(),
-            'tracking_orders' => (clone $ordersQuery)->where('request_type', 2)->count(),
+            'tracking_orders' => $this->orderStatusService->countByStatus($ordersQuery, OrderStatusService::STATUS_SCHEDULED),
+            'confirmed_orders' => $this->orderStatusService->countByStatus($ordersQuery, OrderStatusService::STATUS_CONFIRMED),
+            'processing_orders' => $this->orderStatusService->countByStatus($ordersQuery, OrderStatusService::STATUS_PROCESSING),
+            'completed_orders' => $this->orderStatusService->countByStatus($ordersQuery, OrderStatusService::STATUS_COMPLETED),
             'favorites' => $this->favorite->where('user_id', $user->id)->count(),
             'notifications' => $this->notification->where('user_id', $user->id)->count(),
         ];
@@ -596,4 +605,3 @@ class AuthController extends Controller
     }
 
 }
-

@@ -211,50 +211,19 @@
         $dateFrom = (string) ($dateFrom ?? request('date_from', ''));
         $dateTo = (string) ($dateTo ?? request('date_to', ''));
 
-        $statusLabels = [
-            'pending' => __('admin.pages.orders.statuses.pending'),
-            'order_created' => __('admin.pages.orders.statuses.order_created'),
-            'confirmed' => __('admin.pages.orders.statuses.confirmed'),
-            'processing' => __('admin.pages.orders.statuses.processing'),
-            'shipped' => __('admin.pages.orders.statuses.shipped'),
-            'delivered' => __('admin.pages.orders.statuses.delivered'),
-            'completed' => __('admin.pages.orders.statuses.completed'),
-            'canceled' => __('admin.pages.orders.statuses.canceled'),
-            'rejected' => __('admin.pages.orders.statuses.rejected'),
-            'offers_received' => __('admin.pages.orders.statuses.offers_received'),
-            'supplier_selected' => __('admin.pages.orders.statuses.supplier_selected'),
-            'converted_to_order' => __('admin.pages.orders.statuses.converted_to_order'),
-            'under_review' => __('admin.pages.orders.statuses.under_review'),
-            'assigned_to_supplier' => __('admin.pages.orders.statuses.assigned_to_supplier'),
-            'scheduled' => __('admin.pages.orders.statuses.scheduled'),
-            'offers_pending' => __('admin.pages.orders.statuses.offers_received'),
-            'accepted' => __('admin.pages.orders.statuses.accepted'),
-            'upcoming' => __('admin.pages.orders.statuses.upcoming'),
-            'active' => __('admin.pages.orders.statuses.active'),
-            'paused' => __('admin.pages.orders.statuses.paused'),
-        ];
-
+        $statusOptions = orderStatusOptions('admin');
+        $statusLabels = collect($statusOptions)->mapWithKeys(fn ($option, $key) => [$key => $option['label']])->all();
         $statusColors = [
             'pending' => '#f59e0b',
-            'order_created' => '#6366f1',
             'confirmed' => '#10b981',
+            'accepted_orders' => '#10b981',
             'processing' => '#3b82f6',
-            'shipped' => '#06b6d4',
-            'delivered' => '#10b981',
             'completed' => '#059669',
-            'canceled' => '#ef4444',
-            'rejected' => '#ef4444',
-            'offers_received' => '#06b6d4',
-            'supplier_selected' => '#6b7280',
-            'converted_to_order' => '#3b82f6',
-            'under_review' => '#6b7280',
-            'assigned_to_supplier' => '#3b82f6',
             'scheduled' => '#8b5cf6',
-            'offers_pending' => '#f59e0b',
-            'accepted' => '#10b981',
-            'upcoming' => '#6b7280',
-            'active' => '#3b82f6',
-            'paused' => '#f59e0b',
+            'active_scheduled' => '#3b82f6',
+            'completed_scheduled' => '#059669',
+            'cancelled' => '#ef4444',
+            'rejected' => '#ef4444',
         ];
 
         $hasActiveFilters = $orderNo !== '' || $status !== '' || $orderType !== '' || $paymentStatus !== '' || $dateFrom !== '' || $dateTo !== '';
@@ -332,13 +301,10 @@
                             <select name="status" class="form-select" style="width:auto;min-width:150px;">
                                 <option value="">{{ __('admin.pages.common.status') }}</option>
                                 @foreach($statusLabels as $key => $label)
-                                    @if($key !== 'upcoming' && $key !== 'active' && $key !== 'paused')
+                                    @if(!in_array($key, ['active_scheduled', 'completed_scheduled'], true))
                                         <option value="{{ $key }}" {{ $status === $key ? 'selected' : '' }}>&#9679; {{ $label }}</option>
                                     @endif
                                 @endforeach
-                                <option value="upcoming" {{ $status === 'upcoming' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.upcoming') }}</option>
-                                <option value="active" {{ $status === 'active' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.active') }}</option>
-                                <option value="paused" {{ $status === 'paused' ? 'selected' : '' }}>&#9679; {{ __('admin.pages.orders.statuses.paused') }}</option>
                             </select>
 
                             <select name="payment_status" class="form-select" style="width:auto;min-width:120px;">
@@ -441,14 +407,14 @@
                             <tbody id="tableShowData">
                                 @isset($orders)
                                     @foreach($orders as $record)
-                                        @php
-                                            $orderType = '---';
-                                            $orderBadge = 'bg-info-subtle text-info';
-                                            $status = $record->resolveAdminStatus((int) ($record->provider_id ?? 0) ?: null);
-                                            if ((int) $record->order_type === 1) {
-                                                $orderType = __('admin.pages.common.order');
-                                                $orderBadge = 'bg-primary-subtle text-primary';
-                                            } elseif ((int) $record->order_type === 2) {
+                                            @php
+                                                $orderType = '---';
+                                                $orderBadge = 'bg-info-subtle text-info';
+                                                $statusState = $record->admin_status_state ?? $record->admin_status ?? $record->resolveAdminStatus((int) ($record->provider_id ?? 0) ?: null);
+                                                if ((int) $record->order_type === 1) {
+                                                    $orderType = __('admin.pages.common.order');
+                                                    $orderBadge = 'bg-primary-subtle text-primary';
+                                                } elseif ((int) $record->order_type === 2) {
                                                 $orderType = __('admin.pages.common.quotation');
                                                 $orderBadge = 'bg-warning-subtle text-warning';
                                             } elseif ((int) $record->order_type === 3) {
@@ -465,7 +431,7 @@
                                                 </a>
                                             </td>
                                             <td>{{ $record->provider?->name }}</td>
-                                            <td><span class="badge {{ $status['class'] }}">{{ $status['text'] }}</span></td>
+                                            <td><span class="badge {{ $statusState['class'] }}">{{ $statusState['text'] }}</span></td>
                                             <td>{{ $record->vat_amount }}</td>
                                             <td class="fw-semibold">{{ $record->total_cost }}</td>
                                             <td>

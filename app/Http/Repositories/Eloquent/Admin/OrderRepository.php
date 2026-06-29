@@ -3,6 +3,7 @@
 namespace App\Http\Repositories\Eloquent\Admin;
 
 use App\Models\Order;
+use App\Services\OrderStatusService;
 use App\Http\Repositories\Eloquent\Admin\BaseAdminRepository;
 
 class OrderRepository extends BaseAdminRepository
@@ -10,7 +11,7 @@ class OrderRepository extends BaseAdminRepository
 
     protected $model;
 
-    public function __construct(Order $model)
+    public function __construct(Order $model, protected OrderStatusService $orderStatusService)
     {
         $this->model = $model;
     }
@@ -47,54 +48,10 @@ class OrderRepository extends BaseAdminRepository
                 $query->whereDate('created_at', '<=', $dateTo);
             })
             ->when($status !== '', function ($query) use ($status) {
-                $timelineMap = [
-                    'confirmed' => 2,
-                    'processing' => 3,
-                    'shipped' => 4,
-                    'delivered' => 5,
-                    'completed' => 6,
-                    'offers_received' => 7,
-                    'supplier_selected' => 8,
-                    'converted_to_order' => 9,
-                    'under_review' => 10,
-                    'assigned_to_supplier' => 11,
-                    'canceled' => 12,
-                ];
-                if ($status === 'pending') {
-                    $query->whereDoesntHave('timeline');
-                } elseif ($status === 'scheduled') {
-                    $query->where('request_type', 2);
-                } elseif ($status === 'offers_pending') {
-                    $query->whereHas('offers', function ($q) {
-                        $q->whereIn('status', [1, '1', 'pending']);
-                    });
-                } elseif ($status === 'accepted') {
-                    $query->whereHas('offers', function ($q) {
-                        $q->whereIn('status', [2, '2', 'accepted']);
-                    });
-                } elseif ($status === 'rejected') {
-                    $query->whereHas('offers', function ($q) {
-                        $q->whereIn('status', [3, '3', 'rejected']);
-                    })->whereDoesntHave('offers', function ($q) {
-                        $q->whereIn('status', [1, '1', 'pending', 2, '2', 'accepted']);
-                    });
-                } elseif (isset($timelineMap[$status])) {
-                    $query->whereHas('timeline', function ($q) use ($timelineMap, $status) {
-                        $q->where('timeline_no', $timelineMap[$status]);
-                    })->whereDoesntHave('timeline', function ($q) use ($timelineMap, $status) {
-                        $q->where('timeline_no', '>', $timelineMap[$status]);
-                    })->whereDoesntHave('offers', function ($q) {
-                        $q->whereIn('status', [2, '2', 'accepted']);
-                    })->where(function ($q) {
-                        $q->whereDoesntHave('offers')
-                            ->orWhereHas('offers', function ($q) {
-                                $q->whereIn('status', [1, '1', 'pending']);
-                            });
-                    });
-                }
+                $this->orderStatusService->applyStatusFilter($query, $status, ['audience' => 'admin']);
             })
             ->when($scheduledStatus !== '', function ($query) use ($scheduledStatus) {
-                $query->where('request_type', 2)->where('scheduled_status', $scheduledStatus);
+                $this->orderStatusService->applyStatusFilter($query, $scheduledStatus, ['audience' => 'admin']);
             })
             ->when($tab === 'requests', function ($query) {
                 $query->whereIn('order_type', [2, 3])
@@ -107,6 +64,11 @@ class OrderRepository extends BaseAdminRepository
             })
             ->orderBy('id', 'DESC')
             ->paginate(PAGINATION_COUNT)
+            ->through(function ($order) {
+                $order->admin_status_state = $order->resolveAdminStatus();
+
+                return $order;
+            })
             ->appends(request()->query());
     }
 

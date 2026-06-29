@@ -99,13 +99,9 @@
     $lastTimelineNo = (int) ($timeline->last()->timeline_no ?? 0);
     $isScheduled = (int)$order->request_type === 2;
     $isQuotation = (int)$order->order_type === 2;
+    $statusState = $order->front_status_state ?? $order->front_status ?? ['key' => 'pending', 'text' => 'Pending', 'class' => 'chip-pending'];
 
-    $currentStatus = 'Pending';
-    if ($isScheduled) {
-        $currentStatus = frontScheduledStatusLabel($order->scheduled_status, true);
-    } elseif ($lastTimelineNo > 0) {
-        $currentStatus = vendorTimelineName($lastTimelineNo, $order->order_type);
-    }
+    $currentStatus = $statusState['text'];
 
     $actionLabel = null;
     $timelineActionNo = null;
@@ -153,11 +149,11 @@
             $timelineActionNo = 6;
         }
     } elseif ($isScheduled) {
-        if (in_array(strtolower($order->scheduled_status), ['upcoming','active','paused'])) {
+        if (in_array($statusState['key'], ['scheduled', 'active_scheduled'], true)) {
             $actionLabel = __('Mark as Shipped') ?? 'Mark as Shipped';
-        } elseif (strtolower($order->scheduled_status) === 'completed') {
+        } elseif ($statusState['key'] === 'completed_scheduled') {
             $actionLabel = __('Mark as Completed') ?? 'Mark as Completed';
-        } elseif (strtolower($order->scheduled_status) === 'cancelled') {
+        } elseif ($statusState['key'] === 'cancelled') {
             $actionLabel = __('Cancelled') ?? 'Cancelled';
         }
     } else {

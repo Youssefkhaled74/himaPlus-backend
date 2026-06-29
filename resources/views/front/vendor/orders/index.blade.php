@@ -72,31 +72,6 @@
 @endsection
 
 @section('content')
-@php
-    $statusClasses = [
-        'pending' => 'chip-pending',
-        'confirmed' => 'chip-confirmed',
-        'under review' => 'chip-under-review',
-        'under_review' => 'chip-under-review',
-        'processing' => 'chip-processing',
-        'shipped' => 'chip-shipped',
-        'delivered' => 'chip-delivered',
-        'completed' => 'chip-completed',
-        'cancelled' => 'chip-cancelled',
-        'canceled' => 'chip-cancelled',
-        'rejected' => 'chip-rejected',
-        'upcoming' => 'chip-upcoming',
-        'active' => 'chip-active',
-        'paused' => 'chip-paused',
-        'converted to order' => 'chip-converted',
-        'offers received' => 'chip-offers-received',
-        'supplier selected' => 'chip-supplier-selected',
-        'assigned to supplier' => 'chip-assigned',
-        'assigned' => 'chip-assigned',
-        'on hold' => 'chip-on-hold',
-    ];
-@endphp
-
 <main class="vendor-orders">
     @include('flash::message')
 
@@ -105,62 +80,39 @@
         <div class="alert alert-info py-2">{{ __('طلبات بانتظار المتابعة') }}: <strong>{{ $counts['all'] }}</strong></div>
     @endif
 
-    <div class="vo-tabs">
-        <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="vo-tab {{ $tab === 'all' ? 'active' : '' }}">{{ __('nav.all') ?? 'All' }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => 'purchase']) }}" class="vo-tab {{ $tab === 'purchase' ? 'active' : '' }}">{{ __('nav.purchase_orders') ?? 'Purchase Orders' }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="vo-tab {{ $tab === 'quotations' ? 'active' : '' }}">{{ __('nav.quotations') ?? 'Quotations' }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => 'maintenance']) }}" class="vo-tab {{ $tab === 'maintenance' ? 'active' : '' }}">{{ __('nav.maintenance') ?? 'Maintenance' }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="vo-tab {{ $tab === 'scheduled' ? 'active' : '' }}">{{ __('nav.scheduled_orders') ?? 'Scheduled Orders' }}</a>
-    </div>
+	    <div class="vo-tabs">
+	        <a href="{{ route('vendor/orders', ['tab' => 'all']) }}" class="vo-tab {{ $tab === 'all' ? 'active' : '' }}">{{ __('nav.all') ?? 'All' }}</a>
+	        <a href="{{ route('vendor/orders', ['tab' => 'purchase']) }}" class="vo-tab {{ $tab === 'purchase' ? 'active' : '' }}">{{ __('nav.purchase_orders') ?? 'Purchase Orders' }}</a>
+	        <a href="{{ route('vendor/orders', ['tab' => 'quotations']) }}" class="vo-tab {{ $tab === 'quotations' ? 'active' : '' }}">{{ __('nav.quotations') ?? 'Quotations' }}</a>
+	        <a href="{{ route('vendor/orders', ['tab' => 'maintenance']) }}" class="vo-tab {{ $tab === 'maintenance' ? 'active' : '' }}">{{ __('nav.maintenance') ?? 'Maintenance' }}</a>
+	        <a href="{{ route('vendor/orders', ['tab' => 'scheduled']) }}" class="vo-tab {{ $tab === 'scheduled' ? 'active' : '' }}">{{ __('nav.scheduled_orders') ?? 'Scheduled Orders' }}</a>
+	    </div>
+
+        <div class="vo-tabs" style="background:#fff;border:1px solid var(--vo-border);padding:8px;">
+            <a href="{{ route('vendor/orders', ['tab' => $tab]) }}" class="vo-tab {{ $status === '' ? 'active' : '' }}">{{ __('nav.all') ?? 'All' }}</a>
+            <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'confirmed']) }}" class="vo-tab {{ $status === 'confirmed' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.confirmed') }}</a>
+            <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'processing']) }}" class="vo-tab {{ $status === 'processing' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.processing') }}</a>
+            <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'completed']) }}" class="vo-tab {{ $status === 'completed' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.completed') }}</a>
+            <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'scheduled']) }}" class="vo-tab {{ $status === 'scheduled' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.scheduled') }}</a>
+        </div>
 
     @include('front.partials.order-workflow-hint', ['role' => 'vendor', 'activeTab' => $tab])
 
     @forelse($orders as $order)
         @php
-            $lastTimelineNo = optional($order->timeline->sortByDesc('timeline_no')->first())->timeline_no;
-            $lastTimelineLabel = strtolower(trim((string) timelineName((int) $lastTimelineNo)));
-            $lastTimelineDisplay = vendorTimelineName((int) $lastTimelineNo, (int)$order->order_type);
-            $myOffer = $order->offers->where('provider_id', auth()->id())->first();
+            $statusState = $order->front_status_state ?? $order->front_status ?? ['text' => 'Pending', 'class' => 'chip-pending'];
             $orderFiles = collect(is_array($order->files) ? $order->files : [])->filter()->values();
-
-            if ((int) $order->request_type === 2) {
-                $statusText = frontScheduledStatusLabel($order->scheduled_status, true);
-                $statusKey = strtolower($order->scheduled_status);
-                $title = __('Scheduled Order') ?? 'Scheduled Order';
-            } else {
-                if ((int) $order->order_type === 1) {
-                    $title = __('Purchase Order') ?? 'Purchase Order';
-                } elseif ((int) $order->order_type === 2) {
-                    $title = __('Quotation Request') ?? 'Quotation Request';
-                } else {
-                    $title = __('Maintenance Request') ?? 'Maintenance Request';
-                }
-
-                if ($myOffer) {
-                    $offerStatus = strtolower((string) $myOffer->status);
-                    if ($offerStatus === '2' || $offerStatus === 'accepted') {
-                        $statusText = 'Confirmed';
-                        $statusKey = 'confirmed';
-                    } elseif ($offerStatus === '3' || $offerStatus === 'rejected') {
-                        $statusText = 'Rejected';
-                        $statusKey = 'rejected';
-                    } else {
-                        $statusText = $lastTimelineDisplay !== '---' ? $lastTimelineDisplay : 'Pending';
-                        $statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
-                    }
-                } else {
-                    $statusText = $lastTimelineDisplay !== '---' ? $lastTimelineDisplay : 'Pending';
-                    $statusKey = $lastTimelineLabel !== '---' ? $lastTimelineLabel : 'pending';
-                }
-            }
-
-            $statusClass = $statusClasses[$statusKey] ?? 'chip-pending';
+            $title = (int) $order->request_type === 2
+                ? __('Scheduled Order') ?? 'Scheduled Order'
+                : ((int) $order->order_type === 1
+                    ? __('Purchase Order') ?? 'Purchase Order'
+                    : ((int) $order->order_type === 2 ? __('Quotation Request') ?? 'Quotation Request' : __('Maintenance Request') ?? 'Maintenance Request'));
         @endphp
 
         <a href="{{ route('vendor/orders/show', $order->id) }}" class="vo-card">
             <div class="vo-card-head">
                 <h6>{{ $title }}</h6>
-                <span class="vo-chip {{ $statusClass }}">{{ $statusText }}</span>
+                <span class="vo-chip {{ $statusState['class'] }}">{{ $statusState['text'] }}</span>
             </div>
             <div class="vo-card-body">
                 <div>

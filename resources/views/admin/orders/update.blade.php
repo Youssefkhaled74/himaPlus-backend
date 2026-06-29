@@ -6,7 +6,7 @@
 
 @section('content')
     @php
-        $status = $order->resolveAdminStatus((int) ($order->provider_id ?? 0) ?: null);
+        $status = $order->admin_status ?? $order->resolveAdminStatus((int) ($order->provider_id ?? 0) ?: null);
         $acceptedOffer = $order->offer;
         $timelineEntries = $order->timeline->sortByDesc('action_at')->values();
         $cancellationEntries = $timelineEntries->where('timeline_no', 12)->values();

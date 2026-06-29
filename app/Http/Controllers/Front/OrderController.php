@@ -17,6 +17,7 @@ use App\Models\OrderItem;
 use Illuminate\Validation\Rule;
 use App\Http\ServicesLayer\PaymobServices\PaymobService;
 use App\Http\ServicesLayer\ArbServices\ArbPaymentService;
+use App\Services\OrderStatusService;
 use App\Traits\PushNotificationsTrait;
 use Illuminate\Support\Facades\Log;
 use ZipArchive;
@@ -36,10 +37,11 @@ class OrderController extends Controller
     public $notification;
     public $paymobService;
     public $arbPaymentService;
+    public $orderStatusService;
 
     public function __construct(
         Order $order, OrderItem $orderItem, Product $product, ProductRepository $productRepository, InfoRepository $infoRepository,
-        Coupon $coupon, Offer $offer, Notification $notification, PaymobService $paymobService, ArbPaymentService $arbPaymentService
+        Coupon $coupon, Offer $offer, Notification $notification, PaymobService $paymobService, ArbPaymentService $arbPaymentService, OrderStatusService $orderStatusService
     ){
         $this->order = $order;
         $this->orderItem = $orderItem;
@@ -51,6 +53,7 @@ class OrderController extends Controller
         $this->offer = $offer;
         $this->paymobService = $paymobService;
         $this->arbPaymentService = $arbPaymentService;
+        $this->orderStatusService = $orderStatusService;
     }
 
     public function myOrders(Request $request, $page_type = 'all')
@@ -78,11 +81,19 @@ class OrderController extends Controller
             ->when($request->schedule_requests, function ($qq) use ($request) {
                 $qq->where('request_type', (int) $request->schedule_requests);
             })
+            ->when($request->filled('status'), function ($q) use ($request) {
+                $this->orderStatusService->applyStatusFilter($q, (string) $request->status, ['audience' => 'front']);
+            })
             ->with([
                 'items.product', 'timeline', 'provider', 'offers', 'offer'
             ])
             ->orderBy('id', 'DESC')
             ->paginate(PAGINATION_COUNT)
+            ->through(function ($order) {
+                $order->front_status_state = $order->resolveStatus(['audience' => 'front']);
+
+                return $order;
+            })
             ->appends($request->query());
 
         return view("front.auth.myorders", compact('orders'));

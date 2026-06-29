@@ -1,4 +1,3 @@
-```blade
 @extends('layouts.front.home')
 
 @section('title')
@@ -684,7 +683,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('user/myorders', 'all') }}?payment_status=0" class="cd-stat">
+            <a href="{{ route('user/myorders', 'all') }}?status=processing" class="cd-stat">
                 <div class="cd-stat__top">
                     <div class="cd-stat__icon">
                         <i class="bi bi-hourglass-split"></i>
@@ -692,8 +691,8 @@
                     <i class="bi bi-arrow-up-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} cd-stat__arrow"></i>
                 </div>
                 <div class="cd-stat__bottom">
-                    <div class="cd-stat__label">{{ app()->getLocale() === 'ar' ? 'معلقة' : 'Pending' }}</div>
-                    <div class="cd-stat__value">{{ $counts['pending_orders'] }}</div>
+                    <div class="cd-stat__label">{{ app()->getLocale() === 'ar' ? 'قيد التنفيذ' : 'Processing' }}</div>
+                    <div class="cd-stat__value">{{ $counts['processing_orders'] }}</div>
                 </div>
             </a>
 
@@ -723,7 +722,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('user/myorders', 'scheduled-orders') }}" class="cd-stat">
+            <a href="{{ route('user/myorders', 'scheduled-orders') }}?status=scheduled" class="cd-stat">
                 <div class="cd-stat__top">
                     <div class="cd-stat__icon">
                         <i class="bi bi-truck"></i>
@@ -815,10 +814,10 @@
                                     </div>
                                 </div>
 
-                                <span class="cd-badge {{ (int)($order->payment_status ?? 0) === 1 ? 'badge-cd-paid' : 'badge-cd-pending' }}">
-                                    {{ (int)($order->payment_status ?? 0) === 1
+                                <span class="cd-badge {{ in_array($order->front_status_state['key'] ?? '', ['completed', 'completed_scheduled'], true) ? 'badge-cd-paid' : 'badge-cd-pending' }}">
+                                    {{ $order->front_status_state['text'] ?? ((int)($order->payment_status ?? 0) === 1
                                         ? (app()->getLocale() === 'ar' ? 'مدفوع' : 'Paid')
-                                        : (app()->getLocale() === 'ar' ? 'معلق' : 'Pending') }}
+                                        : (app()->getLocale() === 'ar' ? 'معلق' : 'Pending')) }}
                                 </span>
                             </a>
                         @empty
@@ -899,4 +898,3 @@
     });
 </script>
 @endsection
-```

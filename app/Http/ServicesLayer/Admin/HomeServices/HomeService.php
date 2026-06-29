@@ -12,11 +12,16 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
 use App\Models\User;
+use App\Services\OrderStatusService;
 use Carbon\Carbon;
 
 class HomeService
 {
     private const LOW_STOCK_THRESHOLD = 20;
+
+    public function __construct(private OrderStatusService $orderStatusService)
+    {
+    }
 
     public function home()
     {
@@ -36,9 +41,6 @@ class HomeService
         $customersCount = (clone $customersBase)->count();
         $vendorsCount = (clone $vendorsBase)->count();
         $usersCount = (clone $usersBase)->count();
-
-        $acceptedOfferStatuses = $this->acceptedOfferStatuses();
-        $pendingOfferStatuses = $this->pendingOfferStatuses();
 
         $ordersCurrentMonth = (clone $ordersBase)->whereBetween('created_at', [$startCurrentMonth, $now])->count();
         $ordersPreviousMonth = (clone $ordersBase)->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
@@ -93,55 +95,25 @@ class HomeService
         $unpaidOrders = (clone $ordersBase)->where('payment_status', 0)->count();
         $avgOrdersPerCustomer = round($totalOrders / max(1, $customersCount), 2);
 
-        $ordersWithStatusCollection = (clone $ordersBase)
-            ->with([
-                'offers:id,order_id,status,provider_id',
-                'timeline:id,order_id,timeline_no',
-            ])
-            ->get();
-
-        $acceptedOrders = 0;
-        $rejectedOrders = 0;
-        $processingOrders = 0;
-        $executedOrders = 0;
-        $acceptedPaidOrders = 0;
-        $acceptedUnpaidOrders = 0;
-
-        foreach ($ordersWithStatusCollection as $order) {
-            $status = $order->resolveAdminStatus();
-            $statusKey = strtolower((string) ($status['key'] ?? ''));
-
-            if ($statusKey === 'confirmed') {
-                $acceptedOrders++;
-                if ((int) ($order->payment_status ?? 0) === 1) {
-                    $acceptedPaidOrders++;
-                } else {
-                    $acceptedUnpaidOrders++;
-                }
-            } elseif ($statusKey === 'rejected') {
-                $rejectedOrders++;
-            } elseif ($statusKey === 'processing') {
-                $processingOrders++;
-            } elseif ($statusKey === 'completed') {
-                $executedOrders++;
-            }
-        }
+        $acceptedOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_ACCEPTED_ORDERS);
+        $confirmedOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_CONFIRMED);
+        $rejectedOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_REJECTED);
+        $processingOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_PROCESSING);
+        $executedOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_COMPLETED);
+        $scheduledOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_SCHEDULED);
+        $activeScheduledOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_ACTIVE_SCHEDULED);
+        $completedScheduledOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_COMPLETED_SCHEDULED);
+        $cancelledOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_CANCELLED);
+        $acceptedPaidOrders = (clone $this->orderStatusService->applyStatusFilter(clone $ordersBase, OrderStatusService::STATUS_ACCEPTED_ORDERS))
+            ->where('payment_status', 1)
+            ->count();
+        $acceptedUnpaidOrders = (clone $this->orderStatusService->applyStatusFilter(clone $ordersBase, OrderStatusService::STATUS_ACCEPTED_ORDERS))
+            ->where('payment_status', 0)
+            ->count();
 
         $totalOffers = (clone $offersBase)->count();
-        $pendingOffers = (clone $offersBase)->whereIn('status', $pendingOfferStatuses)->count();
-        $acceptedOffers = (clone $offersBase)->whereIn('status', $acceptedOfferStatuses)->count();
-
-        $scheduledOrdersCollection = (clone $ordersBase)
-            ->scheduled()
-            ->with(['offers', 'timeline'])
-            ->get();
-        $scheduledOrders = $scheduledOrdersCollection->count();
-        $activeScheduledOrders = $scheduledOrdersCollection
-            ->filter(fn (Order $order) => $order->scheduled_status === 'active')
-            ->count();
-        $completedScheduledOrders = $scheduledOrdersCollection
-            ->filter(fn (Order $order) => $order->scheduled_status === 'completed')
-            ->count();
+        $pendingOffers = (clone $offersBase)->whereIn('status', [1, '1', 'pending'])->count();
+        $acceptedOffers = (clone $offersBase)->whereIn('status', [2, '2', 'accepted'])->count();
 
         $recentOrders = (clone $ordersBase)
             ->with(['user:id,name,email', 'provider:id,name,email'])
@@ -211,10 +183,12 @@ class HomeService
                 'revenue' => (float) (clone $ordersBase)->where('payment_status', 1)->sum('total_cost'),
                 'paid_orders' => $paidOrders,
                 'unpaid_orders' => $unpaidOrders,
+                'confirmed_orders' => $confirmedOrders,
                 'accepted_orders' => $acceptedOrders,
                 'rejected_orders' => $rejectedOrders,
                 'processing_orders' => $processingOrders,
                 'executed_orders' => $executedOrders,
+                'cancelled_orders' => $cancelledOrders,
                 'accepted_paid_orders' => $acceptedPaidOrders,
                 'accepted_unpaid_orders' => $acceptedUnpaidOrders,
                 'categories' => Category::whereNull('deleted_at')->count(),
@@ -281,16 +255,6 @@ class HomeService
         }
 
         return round(($numerator / $denominator) * 100, 2);
-    }
-
-    private function pendingOfferStatuses(): array
-    {
-        return [1, '1', 'pending'];
-    }
-
-    private function acceptedOfferStatuses(): array
-    {
-        return [2, '2', 'accepted'];
     }
 
 }
