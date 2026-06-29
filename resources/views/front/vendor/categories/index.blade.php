@@ -2,200 +2,172 @@
 @extends('layouts.front.home')
 
 @section('title')
-<title>{{ __('providers.categories') ?? 'Vendor Categories' }}</title>
+    <title>{{ __('providers.categories') ?? 'Vendor Categories' }} - Vendor | Hema</title>
 @endsection
 
 @section('css')
 <style>
-    .vc-page {
-        --brand-primary: #0f4bbf;
-        --brand-primary-dark: #0b3a94;
-        --brand-accent: #10c7a5;
-        --shell-bg: #f3f7fc;
-        --card-bg: #ffffff;
-        --card-border: #d8e3f0;
-        --card-shadow: 0 18px 40px rgba(15, 75, 191, .08);
-        --text-main: #10203a;
-        --text-muted: #6d7d93;
-        --soft-blue: #eef5ff;
-        --soft-green: #ecfffb;
-        --soft-slate: #f8fafc;
-
+    .vendor-categories {
+        --vc-bg: #f5f6f8;
+        --vc-card: #ffffff;
+        --vc-border: #e7eaf0;
+        --vc-title: #0f2f7f;
+        --vc-text: #1f2937;
+        --vc-muted: #6b7280;
+        --vc-primary: #0f4bbf;
+        --vc-accent: #0ec6a0;
+        --vc-soft: #eef5ff;
+        --vc-soft-2: #f4fbf9;
         max-width: 95%;
-        margin: 16px auto 32px;
-        padding: 0 10px;
-        color: var(--text-main);
+        margin: 12px auto 0;
+        background: var(--vc-bg);
+        padding: 8px 0 24px;
+        font-family: "Poppins", "Tajawal", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
     }
 
-    .vc-page a {
+    .vendor-categories * {
+        font-family: inherit;
+    }
+
+    .vc-card {
+        background: var(--vc-card);
+        border: 1px solid var(--vc-border);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .vc-breadcrumb {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .vc-breadcrumb a {
         text-decoration: none;
+        color: #6b7280;
     }
 
-    .vc-shell {
-        background:
-            radial-gradient(circle at top left, rgba(16, 199, 165, .10), transparent 26%),
-            radial-gradient(circle at top right, rgba(15, 75, 191, .10), transparent 30%),
-            var(--shell-bg);
-        border: 1px solid rgba(216, 227, 240, .9);
-        border-radius: 28px;
-        padding: 18px;
-        min-height: 70vh;
+    .vc-breadcrumb .active {
+        color: var(--vc-primary);
+        font-weight: 700;
     }
 
     .vc-hero {
-        background: linear-gradient(135deg, var(--brand-primary) 0%, #1565d8 52%, var(--brand-accent) 100%);
-        border-radius: 24px;
-        padding: 26px;
-        color: #fff;
-        position: relative;
-        overflow: hidden;
-        box-shadow: var(--card-shadow);
-        margin-bottom: 18px;
+        padding: 22px;
+        margin-bottom: 16px;
     }
 
-    .vc-hero::before,
-    .vc-hero::after {
-        content: "";
-        position: absolute;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, .10);
-    }
-
-    .vc-hero::before {
-        width: 220px;
-        height: 220px;
-        top: -120px;
-        {{ app()->getLocale() === 'ar' ? 'left' : 'right' }}: -60px;
-    }
-
-    .vc-hero::after {
-        width: 160px;
-        height: 160px;
-        bottom: -70px;
-        {{ app()->getLocale() === 'ar' ? 'right' : 'left' }}: -40px;
-    }
-
-    .vc-hero > * {
-        position: relative;
-        z-index: 1;
-    }
-
-    .vc-hero-title {
-        margin: 0;
-        font-size: 1.8rem;
-        font-weight: 900;
-        letter-spacing: -.02em;
-    }
-
-    .vc-hero-text {
-        margin: 8px 0 0;
-        max-width: 680px;
-        opacity: .92;
-        line-height: 1.8;
-        font-size: .95rem;
-    }
-
-    .vc-hero-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .vc-btn {
-        border-radius: 999px;
+    .vc-title {
+        margin: 0 0 6px;
+        color: var(--vc-title);
+        font-size: 34px;
+        line-height: 1.08;
         font-weight: 800;
-        transition: all .18s ease;
-        border: 1px solid transparent;
+        letter-spacing: -0.01em;
+    }
+
+    .vc-subtitle {
+        margin: 0;
+        color: #475569;
+        font-size: 16px;
+        line-height: 1.55;
+        max-width: 760px;
+    }
+
+    .vc-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .vc-btn-primary,
+    .vc-btn-outline {
+        border-radius: 10px;
+        font-weight: 700;
         padding: 10px 16px;
-        font-size: .84rem;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        cursor: pointer;
-        min-height: 42px;
+        transition: all .2s ease;
+        min-height: 44px;
     }
 
     .vc-btn-primary {
-        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
-        color: #fff;
-        box-shadow: 0 12px 24px rgba(15, 75, 191, .16);
         border: 0;
+        color: #fff;
+        background: linear-gradient(90deg, var(--vc-primary) 0%, var(--vc-accent) 100%);
     }
 
     .vc-btn-primary:hover {
         color: #fff;
         transform: translateY(-1px);
-        box-shadow: 0 16px 28px rgba(15, 75, 191, .18);
+        box-shadow: 0 8px 18px rgba(15, 75, 191, .14);
     }
 
     .vc-btn-outline {
+        border: 1px solid #cbd5e1;
+        color: #1e3a8a;
         background: #fff;
-        color: var(--brand-primary);
-        border-color: rgba(15, 75, 191, .20);
     }
 
     .vc-btn-outline:hover {
-        color: var(--brand-primary-dark);
-        background: var(--soft-blue);
+        color: #1e3a8a;
+        background: var(--vc-soft);
         transform: translateY(-1px);
     }
 
-    .vc-card {
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 22px;
-        box-shadow: 0 10px 25px rgba(16, 32, 58, .05);
-        overflow: hidden;
+    .vc-stat {
+        padding: 16px 18px;
+        height: 100%;
+        transition: all .2s ease;
     }
 
-    .vc-card + .vc-card {
-        margin-top: 18px;
+    .vc-stat:hover {
+        border-color: #93c5fd;
+        box-shadow: 0 4px 12px rgba(15, 75, 191, .08);
+        transform: translateY(-1px);
     }
 
-    .vc-card-head {
-        padding: 18px 20px;
-        border-bottom: 1px solid #edf2f7;
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 14px;
-    }
-
-    .vc-card-head__content {
-        min-width: 0;
-    }
-
-    .vc-card-head__eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        color: var(--brand-primary);
-        background: var(--soft-blue);
-        border: 1px solid rgba(15, 75, 191, .10);
-        font-size: .74rem;
-        font-weight: 900;
-        border-radius: 999px;
-        padding: 5px 10px;
-        margin-bottom: 9px;
-    }
-
-    .vc-card-head__title {
-        color: var(--text-main);
-        font-size: 1rem;
-        font-weight: 900;
+    .vc-stat-label {
         margin: 0;
+        color: var(--vc-muted);
+        font-size: 13px;
+        font-weight: 500;
     }
 
-    .vc-card-head__text {
-        color: var(--text-muted);
-        font-size: .86rem;
-        margin: 5px 0 0;
-        line-height: 1.7;
+    .vc-stat-value {
+        margin: 8px 0 0;
+        color: var(--vc-text);
+        font-size: 40px;
+        line-height: 1;
+        font-weight: 800;
     }
 
-    .vc-card-body {
-        padding: 18px 20px 20px;
+    .vc-panel-head {
+        border-bottom: 1px solid var(--vc-border);
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .vc-panel-title {
+        margin: 0;
+        color: #0f172a;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .vc-panel-subtitle {
+        margin: 4px 0 0;
+        color: var(--vc-muted);
+        font-size: 13px;
+    }
+
+    .vc-body {
+        padding: 18px;
     }
 
     .vc-form-grid {
@@ -207,18 +179,18 @@
 
     .vc-field label {
         display: block;
+        font-size: 13px;
+        font-weight: 700;
         color: #334155;
-        font-size: .82rem;
-        font-weight: 800;
         margin-bottom: 8px;
     }
 
     .vc-field .form-control {
         min-height: 46px;
-        border-radius: 12px;
+        border-radius: 10px;
         border-color: #d5deeb;
         box-shadow: none;
-        color: var(--text-main);
+        color: #334155;
         font-weight: 600;
     }
 
@@ -227,204 +199,186 @@
         box-shadow: 0 0 0 .18rem rgba(15, 75, 191, .08);
     }
 
-    .vc-list {
-        display: grid;
-        gap: 12px;
-    }
-
-    .vc-category-item {
-        background: #fff;
-        border: 1px solid #e5edf6;
-        border-radius: 18px;
-        padding: 14px;
+    .vc-category {
         display: grid;
         grid-template-columns: auto 1fr auto;
-        gap: 14px;
         align-items: center;
-        transition: all .18s ease;
+        gap: 14px;
+        padding: 14px 0;
     }
 
-    .vc-category-item:hover {
-        border-color: #cfe0ff;
-        background: #f8fbff;
-        transform: translateY(-1px);
-        box-shadow: 0 10px 22px rgba(15, 23, 42, .05);
+    .vc-category + .vc-category {
+        border-top: 1px solid #edf2f7;
     }
 
     .vc-category-img {
-        width: 58px;
-        height: 58px;
-        border-radius: 16px;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
         object-fit: cover;
-        border: 1px solid #e5edf6;
-        background: var(--soft-slate);
+        border: 1px solid #e5edf8;
+        background: #f8fbff;
         flex-shrink: 0;
     }
 
-    .vc-category-name {
-        margin: 0;
-        color: var(--text-main);
-        font-size: .98rem;
-        font-weight: 900;
+    .vc-category-title {
+        margin: 0 0 4px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
     }
 
     .vc-category-meta {
+        margin: 0;
+        color: #64748b;
+        font-size: 13px;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 8px;
-        margin-top: 6px;
-        color: var(--text-muted);
-        font-size: .82rem;
-        font-weight: 700;
     }
 
-    .vc-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        border-radius: 999px;
-        padding: 5px 10px;
-        background: var(--soft-green);
-        color: #047857;
-        border: 1px solid #b8efe3;
-        font-size: .74rem;
-        font-weight: 900;
-        white-space: nowrap;
-    }
-
-    .vc-item-icon {
-        width: 38px;
-        height: 38px;
-        border-radius: 14px;
+    .vc-chip {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: var(--soft-blue);
-        color: var(--brand-primary);
+        gap: 6px;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .vc-chip-primary {
+        background: #eaf2ff;
+        color: #1d4ed8;
+    }
+
+    .vc-chip-success {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .vc-category-arrow {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: var(--vc-soft);
+        color: var(--vc-primary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         flex-shrink: 0;
     }
 
     .vc-empty {
-        padding: 48px 20px;
         text-align: center;
+        padding: 38px 20px;
+        color: #64748b;
     }
 
-    .vc-empty__icon {
-        width: 72px;
-        height: 72px;
-        margin: 0 auto 16px;
-        border-radius: 22px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--soft-blue);
-        color: var(--brand-primary);
-        font-size: 1.7rem;
+    .vc-empty i {
+        font-size: 38px;
+        color: #94a3b8;
+        margin-bottom: 10px;
+        display: inline-block;
     }
 
-    .vc-empty__title {
+    .vc-empty-title {
+        margin: 0 0 5px;
+        color: #0f172a;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .vc-empty-text {
         margin: 0;
-        color: var(--text-main);
-        font-size: 1.05rem;
-        font-weight: 900;
-    }
-
-    .vc-empty__text {
-        margin: 8px auto 0;
-        max-width: 460px;
-        color: var(--text-muted);
-        line-height: 1.8;
-        font-size: .88rem;
-    }
-
-    .vc-pagination {
-        margin-top: 20px;
+        color: #64748b;
+        font-size: 14px;
     }
 
     .vc-pagination .pagination {
         justify-content: center;
-        gap: 6px;
     }
 
     .vc-pagination .page-link {
-        border-radius: 10px !important;
-        border: 1px solid #d8e3f0;
-        color: var(--text-main);
-        font-weight: 800;
+        border-radius: 10px;
+        margin: 0 4px;
+        color: var(--vc-primary);
+        font-weight: 700;
         box-shadow: none;
     }
 
     .vc-pagination .page-item.active .page-link {
-        background: var(--brand-primary);
-        border-color: var(--brand-primary);
+        background: var(--vc-primary);
+        border-color: var(--vc-primary);
         color: #fff;
     }
 
-    @media (max-width: 991.98px) {
-        .vc-page {
+    @media (max-width: 992px) {
+        .vendor-categories {
             max-width: 100%;
-            padding: 0 12px;
+            padding: 8px 12px 24px;
         }
 
-        .vc-hero {
-            padding: 22px;
+        .vc-title {
+            font-size: 28px;
         }
 
-        .vc-hero-title {
-            font-size: 1.45rem;
+        .vc-subtitle {
+            font-size: 15px;
+        }
+
+        .vc-stat-value {
+            font-size: 32px;
+        }
+
+        .vc-panel-title {
+            font-size: 18px;
         }
 
         .vc-form-grid {
             grid-template-columns: 1fr;
         }
 
-        .vc-card-head {
-            flex-direction: column;
-        }
-
-        .vc-category-item {
+        .vc-category {
             grid-template-columns: auto 1fr;
         }
 
-        .vc-item-icon {
+        .vc-category-arrow {
             display: none;
         }
     }
 
-    @media (max-width: 575.98px) {
-        .vc-shell {
-            padding: 12px;
-            border-radius: 22px;
-        }
-
+    @media (max-width: 576px) {
         .vc-hero {
-            border-radius: 20px;
             padding: 18px;
         }
 
-        .vc-hero-title {
-            font-size: 1.25rem;
+        .vc-title {
+            font-size: 24px;
         }
 
-        .vc-hero-text {
-            font-size: .86rem;
+        .vc-actions {
+            width: 100%;
         }
 
-        .vc-card {
-            border-radius: 18px;
+        .vc-btn-primary,
+        .vc-btn-outline {
+            width: 100%;
         }
 
-        .vc-card-head,
-        .vc-card-body {
-            padding-left: 14px;
-            padding-right: 14px;
+        .vc-panel-head {
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .vc-category-img {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
         }
     }
 </style>
@@ -433,196 +387,198 @@
 @section('content')
 @php
     $isAr = app()->getLocale() === 'ar';
+    $categoriesCount = isset($categories)
+        ? (method_exists($categories, 'total') ? $categories->total() : $categories->count())
+        : 0;
+
+    $productsCount = 0;
+    if (isset($categories)) {
+        foreach ($categories as $category) {
+            $productsCount += $category->products->count();
+        }
+    }
 @endphp
 
-<main class="vc-page">
+<main class="vendor-categories">
     @include('flash::message')
 
-    <div class="vc-shell">
-        @if ($errors->any())
-            <div class="vc-card mb-3">
-                <div class="vc-card-body">
-                    <ul class="mb-0" dir="ltr">
-                        @foreach ($errors->all() as $error)
-                            <li class="text-danger fw-semibold small">{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+    <nav class="vc-breadcrumb">
+        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
+        <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
+        <span class="active">{{ __('providers.categories') ?? ($isAr ? 'التصنيفات' : 'Vendor Categories') }}</span>
+    </nav>
+
+    @if ($errors->any())
+        <div class="vc-card mb-4">
+            <div class="vc-body">
+                <ul class="mb-0" dir="ltr">
+                    @foreach ($errors->all() as $error)
+                        <li class="text-danger fw-semibold small">{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
-        @endif
+        </div>
+    @endif
 
-        <section class="vc-hero">
-            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
-                <div>
-                    <h1 class="vc-hero-title">
-                        {{ __('providers.categories') ?? ($isAr ? 'التصنيفات' : 'Vendor Categories') }}
-                    </h1>
+    <section class="vc-card vc-hero">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h3 class="vc-title">
+                    {{ __('providers.categories') ?? ($isAr ? 'التصنيفات' : 'Vendor Categories') }}
+                </h3>
 
-                    <p class="vc-hero-text">
-                        {{ __('providers.categories_desc') ?? ($isAr ? 'إدارة تصنيفات المنتجات الخاصة بك وتنظيم منتجاتك بطريقة واضحة للعملاء.' : 'Manage your product categories and keep your catalog organized for customers.') }}
-                    </p>
-                </div>
-
-                <div class="vc-hero-actions">
-                    <a href="{{ route('vendor/dashboard') }}" class="vc-btn vc-btn-outline">
-                        <i class="bi bi-arrow-{{ $isAr ? 'right' : 'left' }}"></i>
-                        {{ __('nav.dashboard') ?? ($isAr ? 'لوحة التحكم' : 'Dashboard') }}
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="vc-card">
-            <div class="vc-card-head">
-                <div class="vc-card-head__content">
-                    <span class="vc-card-head__eyebrow">
-                        <i class="bi bi-plus-circle"></i>
-                        {{ __('providers.add_new') ?? ($isAr ? 'إضافة جديد' : 'Add New') }}
-                    </span>
-
-                    <h5 class="vc-card-head__title">
-                        {{ __('providers.add_category') ?? ($isAr ? 'إضافة تصنيف جديد' : 'Add New Category') }}
-                    </h5>
-
-                    <p class="vc-card-head__text">
-                        {{ __('providers.add_category_desc') ?? ($isAr ? 'أضف تصنيفاً جديداً مع صورة اختيارية لتمييزه داخل منتجاتك.' : 'Add a new category with an optional image to organize your products.') }}
-                    </p>
-                </div>
+                <p class="vc-subtitle">
+                    {{ __('providers.categories_desc') ?? ($isAr ? 'نظّم منتجاتك داخل تصنيفات واضحة ليسهل على العملاء الوصول إليها وإدارتها.' : 'Organize your products into clear categories so customers can find them faster and you can manage them easier.') }}
+                </p>
             </div>
 
-            <div class="vc-card-body">
-                <form method="POST" action="{{ route('vendor/categories/store') }}" enctype="multipart/form-data" class="vc-form-grid">
-                    @csrf
-
-                    <div class="vc-field">
-                        <label>{{ __('providers.category_name') ?? ($isAr ? 'اسم التصنيف' : 'Category Name') }}</label>
-                        <input
-                            type="text"
-                            name="name"
-                            class="form-control"
-                            placeholder="{{ __('providers.category_name') ?? ($isAr ? 'اسم التصنيف' : 'Category Name') }}"
-                            required
-                        >
-                    </div>
-
-                    <div class="vc-field">
-                        <label>{{ $isAr ? 'صورة التصنيف' : 'Category Image' }}</label>
-                        <input type="file" name="img" class="form-control" accept="image/*">
-                    </div>
-
-                    <div class="d-grid">
-                        <button class="vc-btn vc-btn-primary" type="submit">
-                            <i class="bi bi-plus-lg"></i>
-                            {{ __('providers.add') ?? ($isAr ? 'إضافة' : 'Add') }}
-                        </button>
-                    </div>
-                </form>
+            <div class="vc-actions">
+                <a href="{{ route('vendor/dashboard') }}" class="vc-btn-outline">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    {{ __('nav.dashboard') ?? ($isAr ? 'لوحة التحكم' : 'Dashboard') }}
+                </a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="vc-card">
-            <div class="vc-card-head">
-                <div class="vc-card-head__content">
-                    <span class="vc-card-head__eyebrow">
-                        <i class="bi bi-folder2-open"></i>
-                        {{ __('providers.categories') ?? ($isAr ? 'التصنيفات' : 'Categories') }}
-                    </span>
-
-                    <h5 class="vc-card-head__title">
-                        {{ __('providers.all_categories') ?? ($isAr ? 'جميع التصنيفات' : 'All Categories') }}
-                    </h5>
-
-                    <p class="vc-card-head__text">
-                        {{ __('providers.all_categories_desc') ?? ($isAr ? 'التصنيفات المسجلة والمنتجات المرتبطة بكل منها.' : 'Registered categories and the products linked to each one.') }}
-                    </p>
-                </div>
-
-                @if(isset($categories))
-                    <span class="vc-pill">
-                        <i class="bi bi-collection"></i>
-                        {{ method_exists($categories, 'total') ? $categories->total() : $categories->count() }}
-                        {{ __('providers.categories') ?? ($isAr ? 'تصنيف' : 'Categories') }}
-                    </span>
-                @endif
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4">
+            <div class="vc-card vc-stat">
+                <p class="vc-stat-label">{{ $isAr ? 'إجمالي التصنيفات' : 'Total Categories' }}</p>
+                <h4 class="vc-stat-value">{{ number_format($categoriesCount) }}</h4>
             </div>
+        </div>
 
-            <div class="vc-card-body">
-                @if(isset($categories) && $categories->count())
-                    <div class="vc-list">
-                        @foreach($categories as $category)
-                            <article class="vc-category-item">
-                                <img
-                                    src="{{ !empty($category->img) ? asset(ltrim($category->img,'/')) : asset('front/assets/images/emptyproducts.png') }}"
-                                    class="vc-category-img"
-                                    alt="{{ $category->name ?? 'category' }}"
-                                    onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'"
-                                >
+        <div class="col-6 col-md-4">
+            <div class="vc-card vc-stat">
+                <p class="vc-stat-label">{{ $isAr ? 'المنتجات المرتبطة' : 'Linked Products' }}</p>
+                <h4 class="vc-stat-value">{{ number_format($productsCount) }}</h4>
+            </div>
+        </div>
 
-                                <div>
-                                    <h6 class="vc-category-name">{{ $category->name }}</h6>
-
-                                    <div class="vc-category-meta">
-                                        <span>
-                                            <i class="bi bi-box-seam"></i>
-                                            {{ $category->products->count() }}
-                                            {{ __('providers.products_count') ?? __('products.products') }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="vc-item-icon">
-                                    <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
-                                </div>
-                            </article>
-                        @endforeach
-                    </div>
-
-                    @if(isset($categories) && method_exists($categories, 'hasPages') && $categories->hasPages())
-                        <nav class="vc-pagination">
-                            <ul class="pagination flex-wrap justify-content-center align-items-center mb-0">
-                                @if (!$categories->onFirstPage())
-                                    <li class="page-item mt-1">
-                                        <a class="page-link" href="{{ $categories->previousPageUrl() }}" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                @endif
-
-                                @for ($i = 1; $i <= $categories->lastPage(); $i++)
-                                    <li class="page-item mt-1 {{ $i == $categories->currentPage() ? 'active' : '' }}">
-                                        <a class="page-link" href="{{ $categories->url($i) }}" @if ($i == $categories->currentPage()) style="font-weight:bold;" @endif>
-                                            {{ $i }}
-                                        </a>
-                                    </li>
-                                @endfor
-
-                                @if ($categories->hasMorePages())
-                                    <li class="page-item mt-1">
-                                        <a class="page-link" href="{{ $categories->nextPageUrl() }}" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                @endif
-                            </ul>
-                        </nav>
+        <div class="col-12 col-md-4">
+            <div class="vc-card vc-stat">
+                <p class="vc-stat-label">{{ $isAr ? 'آخر تحديث' : 'Latest Update' }}</p>
+                <h4 class="vc-stat-value" style="font-size: 24px;">
+                    @if(isset($categories) && $categories->count())
+                        {{ optional($categories->first()->updated_at ?? $categories->first()->created_at)->format('Y-m-d') }}
+                    @else
+                        —
                     @endif
-                @else
-                    <div class="vc-empty">
-                        <div class="vc-empty__icon">
-                            <i class="bi bi-folder-plus"></i>
-                        </div>
+                </h4>
+            </div>
+        </div>
+    </div>
 
-                        <h5 class="vc-empty__title">
-                            {{ __('providers.no_categories') ?? ($isAr ? 'لا توجد تصنيفات' : 'No categories yet') }}
-                        </h5>
+    <div class="vc-card mb-4">
+        <div class="vc-panel-head">
+            <div>
+                <h5 class="vc-panel-title">
+                    {{ __('providers.add_category') ?? ($isAr ? 'إضافة تصنيف جديد' : 'Add New Category') }}
+                </h5>
+                <p class="vc-panel-subtitle">
+                    {{ __('providers.add_category_desc') ?? ($isAr ? 'أضف تصنيفاً جديداً مع صورة اختيارية.' : 'Add a new category with an optional image.') }}
+                </p>
+            </div>
+        </div>
 
-                        <p class="vc-empty__text">
-                            {{ __('providers.no_categories_desc') ?? ($isAr ? 'أضف تصنيفاً جديداً باستخدام النموذج أعلاه لتنظيم منتجاتك.' : 'Add your first category using the form above to organize your products.') }}
+        <div class="vc-body">
+            <form method="POST" action="{{ route('vendor/categories/store') }}" enctype="multipart/form-data" class="vc-form-grid">
+                @csrf
+
+                <div class="vc-field">
+                    <label>{{ __('providers.category_name') ?? ($isAr ? 'اسم التصنيف' : 'Category Name') }}</label>
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        placeholder="{{ __('providers.category_name') ?? ($isAr ? 'اسم التصنيف' : 'Category Name') }}"
+                        required
+                    >
+                </div>
+
+                <div class="vc-field">
+                    <label>{{ $isAr ? 'صورة التصنيف' : 'Category Image' }}</label>
+                    <input type="file" name="img" class="form-control" accept="image/*">
+                </div>
+
+                <div>
+                    <button class="vc-btn-primary border-0" type="submit">
+                        <i class="bi bi-plus-lg"></i>
+                        {{ __('providers.add') ?? ($isAr ? 'إضافة' : 'Add') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="vc-card">
+        <div class="vc-panel-head">
+            <div>
+                <h5 class="vc-panel-title">
+                    {{ __('providers.all_categories') ?? ($isAr ? 'جميع التصنيفات' : 'All Categories') }}
+                </h5>
+                <p class="vc-panel-subtitle">
+                    {{ __('providers.all_categories_desc') ?? ($isAr ? 'التصنيفات المسجلة والمنتجات المرتبطة بكل منها.' : 'Registered categories and the products linked to each one.') }}
+                </p>
+            </div>
+
+            <span class="vc-chip vc-chip-primary">
+                <i class="bi bi-collection"></i>
+                {{ number_format($categoriesCount) }}
+                {{ __('providers.categories') ?? ($isAr ? 'تصنيف' : 'Categories') }}
+            </span>
+        </div>
+
+        <div class="vc-body">
+            @forelse($categories as $category)
+                <article class="vc-category">
+                    <img
+                        src="{{ !empty($category->img) ? asset(ltrim($category->img,'/')) : asset('front/assets/images/emptyproducts.png') }}"
+                        class="vc-category-img"
+                        alt="{{ $category->name ?? 'category' }}"
+                        onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'"
+                    >
+
+                    <div>
+                        <h6 class="vc-category-title">{{ $category->name }}</h6>
+
+                        <p class="vc-category-meta">
+                            <span>
+                                <i class="bi bi-box-seam"></i>
+                                {{ $category->products->count() }}
+                                {{ __('providers.products_count') ?? __('products.products') }}
+                            </span>
+
+                            <span class="vc-chip vc-chip-success">
+                                <i class="bi bi-check2-circle"></i>
+                                {{ $isAr ? 'نشط' : 'Active' }}
+                            </span>
                         </p>
                     </div>
-                @endif
-            </div>
-        </section>
+
+                    <div class="vc-category-arrow">
+                        <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
+                    </div>
+                </article>
+            @empty
+                <div class="vc-empty">
+                    <i class="bi bi-folder-plus"></i>
+                    <h5 class="vc-empty-title">
+                        {{ __('providers.no_categories') ?? ($isAr ? 'لا توجد تصنيفات' : 'No Categories Yet') }}
+                    </h5>
+                    <p class="vc-empty-text">
+                        {{ __('providers.no_categories_desc') ?? ($isAr ? 'أضف تصنيفاً جديداً باستخدام النموذج أعلاه.' : 'Add your first category using the form above.') }}
+                    </p>
+                </div>
+            @endforelse
+
+            @if(isset($categories) && method_exists($categories, 'hasPages') && $categories->hasPages())
+                <div class="vc-pagination mt-4">
+                    {{ $categories->links('pagination::bootstrap-5') }}
+                </div>
+            @endif
+        </div>
     </div>
 </main>
 @endsection
