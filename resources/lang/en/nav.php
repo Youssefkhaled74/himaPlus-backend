@@ -174,10 +174,14 @@ return [
 
     // Ratings
     'ratings' => 'Ratings',
+    'ratings_reviews' => 'Ratings & Reviews',
     'rating' => 'Rating',
+    'rating_breakdown' => 'Rating Breakdown',
     'stars' => 'Stars',
     'reviews' => 'Reviews',
     'no_ratings' => 'No ratings yet',
+    'total_reviews' => 'Total Reviews',
+    'your_products' => 'Your Products',
     'dashboard_tip_title' => 'Tip:',
     'estimated_revenue' => 'Estimated Revenue',
     'view_analytics' => 'View Analytics',

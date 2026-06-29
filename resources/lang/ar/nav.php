@@ -172,10 +172,14 @@ return [
 
     // Ratings
     'ratings' => 'التقييمات',
+    'ratings_reviews' => 'التقييمات والمراجعات',
     'rating' => 'التقييم',
+    'rating_breakdown' => 'توزيع التقييمات',
     'stars' => 'نجوم',
     'reviews' => 'المراجعات',
     'no_ratings' => 'لا توجد تقييمات حتى الآن',
+    'total_reviews' => 'إجمالي المراجعات',
+    'your_products' => 'منتجاتك',
     'vendor_portal' => 'بوابة الموردين',
     'mark_all_read' => 'وضع علامة على الكل كمقروء',
     'mark_read' => 'وضع علامة كمقروء',
