@@ -66,6 +66,16 @@ class HomeController extends Controller
         return view('front.aboutUs', compact('report'));
     }
 
+    public function privacyPolicy(Request $request)
+    {
+        session()->put('active_nav', 'privacy');
+        $report = $this->report->first();
+        $info = $this->infoRepository->getfirst();
+        $privacyPolicies = array_values($info?->privacy_policies ?? []);
+
+        return view('front.privacyPolicy', compact('report', 'info', 'privacyPolicies'));
+    }
+
     public function contactUs(Request $request)
     {
         session()->put('active_nav', 'contact');

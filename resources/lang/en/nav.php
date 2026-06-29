@@ -3,6 +3,7 @@
 return [
     'home' => 'Home',
     'about_us' => 'About Us',
+    'privacy_policy' => 'Privacy Policy',
     'service_providers' => 'Service Providers',
     'categories' => 'Categories',
     'orders' => 'Orders',

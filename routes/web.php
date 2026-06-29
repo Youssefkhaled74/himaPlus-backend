@@ -43,6 +43,7 @@ Route::group(['middleware' => ['limitReq']], function(){
     Route::get('/', [HomeController::class, 'home']);
     Route::get('/home', [HomeController::class, 'home'])->name('home');
     Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');
+    Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacyPolicy');
     Route::get('/contact-us', [HomeController::class, 'contactUs'])->name('contactUs');
     Route::get('/providers', [HomeController::class, 'providersPage'])->name('providers');
     Route::get('/products', [HomeController::class, 'products'])->name('products');

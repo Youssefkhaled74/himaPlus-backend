@@ -218,7 +218,7 @@
                                         <div class="col-12 d-flex align-items-center justify-content-between mt-1">
                                             <div class="form-check">
                                                 <input name="terms" class="form-check-input" type="checkbox" id="terms" value="1">
-                                                <label class="form-check-label small" for="terms"><span class="required-star">*</span> I agree to <a href="#" class="hp-link">Terms &amp; Privacy Policy</a></label>
+                                                <label class="form-check-label small" for="terms"><span class="required-star">*</span> I agree to the <a href="{{ route('privacyPolicy') }}" class="hp-link">Privacy Policy</a></label>
                                             </div>
                                         </div>
 
