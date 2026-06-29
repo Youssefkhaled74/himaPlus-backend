@@ -602,14 +602,14 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?payment_status=1" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&payment_status=1" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.paid_orders_label') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.paid_badge') }}</div>
                                     </div>
                                     <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['paid_orders'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?payment_status=0" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&payment_status=0" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.pending_payments_label') }}</div>
                                         <div class="text-muted small">{{ __('admin.dashboard.pending_badge') }}</div>

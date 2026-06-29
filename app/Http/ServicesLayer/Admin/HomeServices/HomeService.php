@@ -31,6 +31,10 @@ class HomeService
         $endPreviousMonth = $startCurrentMonth->copy()->subSecond();
 
         $ordersBase = Order::query()->whereNull('deleted_at');
+        $dashboardOrdersBase = (clone $ordersBase)->where(function ($businessQuery) {
+            $businessQuery->where('order_type', 1)
+                ->orWhereNotNull('offer_id');
+        });
         $usersBase = User::query()->whereNull('deleted_at');
         $productsBase = Product::query()->whereNull('deleted_at');
         $offersBase = Offer::query()->whereNull('deleted_at');
@@ -42,14 +46,14 @@ class HomeService
         $vendorsCount = (clone $vendorsBase)->count();
         $usersCount = (clone $usersBase)->count();
 
-        $ordersCurrentMonth = (clone $ordersBase)->whereBetween('created_at', [$startCurrentMonth, $now])->count();
-        $ordersPreviousMonth = (clone $ordersBase)->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
+        $ordersCurrentMonth = (clone $dashboardOrdersBase)->whereBetween('created_at', [$startCurrentMonth, $now])->count();
+        $ordersPreviousMonth = (clone $dashboardOrdersBase)->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])->count();
 
-        $revenueCurrentMonth = (clone $ordersBase)
+        $revenueCurrentMonth = (clone $dashboardOrdersBase)
             ->where('payment_status', 1)
             ->whereBetween('created_at', [$startCurrentMonth, $now])
             ->sum('total_cost');
-        $revenuePreviousMonth = (clone $ordersBase)
+        $revenuePreviousMonth = (clone $dashboardOrdersBase)
             ->where('payment_status', 1)
             ->whereBetween('created_at', [$startPreviousMonth, $endPreviousMonth])
             ->sum('total_cost');
@@ -83,31 +87,31 @@ class HomeService
             $monthEnd = $monthStart->copy()->endOfMonth();
 
             $chartMonths[] = $monthStart->locale(app()->getLocale())->translatedFormat('M Y');
-            $ordersSeries[] = (clone $ordersBase)->whereBetween('created_at', [$monthStart, $monthEnd])->count();
-            $revenueSeries[] = (float) (clone $ordersBase)
+            $ordersSeries[] = (clone $dashboardOrdersBase)->whereBetween('created_at', [$monthStart, $monthEnd])->count();
+            $revenueSeries[] = (float) (clone $dashboardOrdersBase)
                 ->where('payment_status', 1)
                 ->whereBetween('created_at', [$monthStart, $monthEnd])
                 ->sum('total_cost');
         }
 
-        $totalOrders = (clone $ordersBase)->count();
-        $paidOrders = (clone $ordersBase)->where('payment_status', 1)->count();
-        $unpaidOrders = (clone $ordersBase)->where('payment_status', 0)->count();
+        $totalOrders = (clone $dashboardOrdersBase)->count();
+        $paidOrders = (clone $dashboardOrdersBase)->where('payment_status', 1)->count();
+        $unpaidOrders = (clone $dashboardOrdersBase)->where('payment_status', 0)->count();
         $avgOrdersPerCustomer = round($totalOrders / max(1, $customersCount), 2);
 
-        $acceptedOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_ACCEPTED_ORDERS);
-        $confirmedOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_CONFIRMED);
-        $rejectedOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_REJECTED);
-        $processingOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_PROCESSING);
-        $executedOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_COMPLETED);
-        $scheduledOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_SCHEDULED);
-        $activeScheduledOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_ACTIVE_SCHEDULED);
-        $completedScheduledOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_COMPLETED_SCHEDULED);
-        $cancelledOrders = $this->orderStatusService->countByStatus($ordersBase, OrderStatusService::STATUS_CANCELLED);
-        $acceptedPaidOrders = (clone $this->orderStatusService->applyStatusFilter(clone $ordersBase, OrderStatusService::STATUS_ACCEPTED_ORDERS))
+        $acceptedOrders = $this->orderStatusService->countByStatus($dashboardOrdersBase, OrderStatusService::STATUS_ACCEPTED_ORDERS);
+        $confirmedOrders = $this->orderStatusService->countByStatus($dashboardOrdersBase, OrderStatusService::STATUS_CONFIRMED);
+        $rejectedOrders = $this->orderStatusService->countByStatus($dashboardOrdersBase, OrderStatusService::STATUS_REJECTED);
+        $processingOrders = $this->orderStatusService->countByStatus($dashboardOrdersBase, OrderStatusService::STATUS_PROCESSING);
+        $executedOrders = $this->orderStatusService->countByStatus($dashboardOrdersBase, OrderStatusService::STATUS_COMPLETED);
+        $scheduledOrders = $this->orderStatusService->countByStatus($dashboardOrdersBase, OrderStatusService::STATUS_SCHEDULED);
+        $activeScheduledOrders = $this->orderStatusService->countByStatus($dashboardOrdersBase, OrderStatusService::STATUS_ACTIVE_SCHEDULED);
+        $completedScheduledOrders = $this->orderStatusService->countByStatus($dashboardOrdersBase, OrderStatusService::STATUS_COMPLETED_SCHEDULED);
+        $cancelledOrders = $this->orderStatusService->countByStatus($dashboardOrdersBase, OrderStatusService::STATUS_CANCELLED);
+        $acceptedPaidOrders = (clone $this->orderStatusService->applyStatusFilter(clone $dashboardOrdersBase, OrderStatusService::STATUS_ACCEPTED_ORDERS))
             ->where('payment_status', 1)
             ->count();
-        $acceptedUnpaidOrders = (clone $this->orderStatusService->applyStatusFilter(clone $ordersBase, OrderStatusService::STATUS_ACCEPTED_ORDERS))
+        $acceptedUnpaidOrders = (clone $this->orderStatusService->applyStatusFilter(clone $dashboardOrdersBase, OrderStatusService::STATUS_ACCEPTED_ORDERS))
             ->where('payment_status', 0)
             ->count();
 
@@ -115,7 +119,7 @@ class HomeService
         $pendingOffers = (clone $offersBase)->whereIn('status', [1, '1', 'pending'])->count();
         $acceptedOffers = (clone $offersBase)->whereIn('status', [2, '2', 'accepted'])->count();
 
-        $recentOrders = (clone $ordersBase)
+        $recentOrders = (clone $dashboardOrdersBase)
             ->with(['user:id,name,email', 'provider:id,name,email'])
             ->orderByDesc('id')
             ->limit(10)
@@ -180,7 +184,7 @@ class HomeService
                 'vendors_count' => $vendorsCount,
                 'avg_orders_per_customer' => $avgOrdersPerCustomer,
                 'products' => (clone $productsBase)->count(),
-                'revenue' => (float) (clone $ordersBase)->where('payment_status', 1)->sum('total_cost'),
+                'revenue' => (float) (clone $dashboardOrdersBase)->where('payment_status', 1)->sum('total_cost'),
                 'paid_orders' => $paidOrders,
                 'unpaid_orders' => $unpaidOrders,
                 'confirmed_orders' => $confirmedOrders,
