@@ -5,311 +5,521 @@
 @endsection
 
 @section('css')
-    <style>
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+<style>
+    .vendor-analytics {
+        --va-bg: #f5f6f8;
+        --va-card: #ffffff;
+        --va-border: #e7eaf0;
+        --va-title: #0f2f7f;
+        --va-text: #1f2937;
+        --va-muted: #6b7280;
+        --va-primary: #0f4bbf;
+        --va-accent: #0ec6a0;
+        --va-soft: #eef5ff;
+        --va-soft-2: #f4fbf9;
+        max-width: 95%;
+        margin: 12px auto 0;
+        background: var(--va-bg);
+        padding: 8px 0 24px;
+        font-family: "Poppins", "Tajawal", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    }
+
+    .vendor-analytics * {
+        font-family: inherit;
+    }
+
+    .va-card {
+        background: var(--va-card);
+        border: 1px solid var(--va-border);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .va-breadcrumb {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .va-breadcrumb a {
+        text-decoration: none;
+        color: #6b7280;
+    }
+
+    .va-breadcrumb .active {
+        color: var(--va-primary);
+        font-weight: 700;
+    }
+
+    .va-hero {
+        padding: 22px;
+        margin-bottom: 16px;
+    }
+
+    .va-title {
+        margin: 0 0 6px;
+        color: var(--va-title);
+        font-size: 34px;
+        line-height: 1.08;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
+
+    .va-subtitle {
+        margin: 0;
+        color: #475569;
+        font-size: 16px;
+        line-height: 1.55;
+        max-width: 760px;
+    }
+
+    .va-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .va-btn-primary,
+    .va-btn-outline,
+    .va-period {
+        border-radius: 10px;
+        font-weight: 700;
+        padding: 10px 16px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all .2s ease;
+    }
+
+    .va-btn-primary {
+        border: 0;
+        color: #fff;
+        background: linear-gradient(90deg, var(--va-primary) 0%, var(--va-accent) 100%);
+    }
+
+    .va-btn-outline {
+        border: 1px solid #cbd5e1;
+        color: #1e3a8a;
+        background: #fff;
+    }
+
+    .va-period {
+        border: 1px solid #dbe4f0;
+        background: #fff;
+        color: #334155;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    .va-period.is-active {
+        color: #fff;
+        border-color: transparent;
+        background: linear-gradient(90deg, var(--va-primary) 0%, var(--va-accent) 100%);
+    }
+
+    .va-periods {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .va-stat {
+        padding: 16px 18px;
+        height: 100%;
+        transition: all .2s ease;
+    }
+
+    .va-stat:hover {
+        border-color: #93c5fd;
+        box-shadow: 0 4px 12px rgba(15, 75, 191, .08);
+        transform: translateY(-1px);
+    }
+
+    .va-stat-label {
+        margin: 0;
+        color: var(--va-muted);
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .va-stat-value {
+        margin: 8px 0 0;
+        color: var(--va-text);
+        font-size: 40px;
+        line-height: 1;
+        font-weight: 800;
+    }
+
+    .va-panel-head {
+        border-bottom: 1px solid var(--va-border);
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .va-panel-title {
+        margin: 0;
+        color: #0f172a;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .va-panel-subtitle {
+        margin: 4px 0 0;
+        color: var(--va-muted);
+        font-size: 13px;
+    }
+
+    .va-body {
+        padding: 18px;
+    }
+
+    .va-chart {
+        position: relative;
+        height: 320px;
+    }
+
+    .va-mini-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .va-mini-table tr + tr {
+        border-top: 1px solid #edf2f7;
+    }
+
+    .va-mini-table td {
+        padding: 12px 0;
+        font-size: 14px;
+        color: #334155;
+    }
+
+    .va-mini-table td:last-child {
+        text-align: end;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .va-product {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 0;
+    }
+
+    .va-product + .va-product {
+        border-top: 1px solid #edf2f7;
+    }
+
+    .va-rank {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(90deg, var(--va-primary), var(--va-accent));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .va-product-title {
+        margin: 0 0 3px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .va-product-meta {
+        margin: 0;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .va-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .va-chip-primary {
+        background: #eaf2ff;
+        color: #1d4ed8;
+    }
+
+    .va-chip-success {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .va-chip-warning {
+        background: #fff7ed;
+        color: #9a3412;
+    }
+
+    .va-empty {
+        text-align: center;
+        padding: 38px 20px;
+        color: #64748b;
+    }
+
+    .va-empty i {
+        font-size: 38px;
+        color: #94a3b8;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    @media (max-width: 992px) {
+        .vendor-analytics {
+            max-width: 100%;
+            padding: 8px 12px 24px;
         }
-        .stat-card.secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+
+        .va-title {
+            font-size: 28px;
         }
-        .stat-card.tertiary {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+
+        .va-subtitle {
+            font-size: 15px;
         }
-        .stat-card.quaternary {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+
+        .va-stat-value {
+            font-size: 32px;
         }
-        .stat-number {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 8px;
+
+        .va-panel-title {
+            font-size: 18px;
         }
-        .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
+
+        .va-chart {
+            height: 260px;
         }
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin-bottom: 30px;
-        }
-        .card-header.bg-gradient {
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .table-hover tbody tr:hover {
-            background-color: #f5f5f5;
-        }
-        .top-product {
-            display: flex;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .top-product:last-child {
-            border-bottom: none;
-        }
-        .top-product-rank {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
-        }
-        .top-product-info {
-            flex: 1;
-        }
-        .top-product-count {
-            background: #e7f3ff;
-            color: #0066cc;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .period-btn {
-            padding: 8px 16px;
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
-        .period-btn.active {
-            background: #007bff;
-            color: white;
-        }
-    </style>
+    }
+</style>
 @endsection
 
 @section('content')
-    <main class="container-fluid my-4" style="margin-top: 8% !important;">
-        @include('flash::message')
-        
-        <!-- Breadcrumb -->
-        <nav class="breadcrumb-custom mb-3 ps-3">
-            <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ __('nav.dashboard') ?? 'Dashboard' }}</a>
-            <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
-            <span class="text-primary fw-semibold">{{ __('nav.analytics') ?? 'Analytics' }}</span>
-        </nav>
+@php
+    $isAr = app()->getLocale() === 'ar';
+    $completionRate = $totalOrders > 0 ? round(($completedOrders / $totalOrders) * 100, 2) : 0;
+@endphp
+<main class="vendor-analytics">
+    @include('flash::message')
 
-        <div class="px-3">
-            <!-- Header with Period Selection -->
-            <div class="card mb-4">
-                <div class="card-header bg-gradient d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0"><i class="bi bi-graph-up me-2"></i>{{ __('nav.analytics_dashboard') ?? 'Analytics Dashboard' }}</h4>
+    <nav class="va-breadcrumb">
+        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
+        <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
+        <span class="active">{{ __('nav.analytics') ?? 'Analytics' }}</span>
+    </nav>
+
+    <section class="va-card va-hero">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h3 class="va-title">{{ __('nav.analytics') ?? 'Analytics' }}</h3>
+                <p class="va-subtitle">
+                    {{ $isAr ? 'تابع أداء الطلبات والعروض، راقب معدلات الإنجاز والقبول، وحدد المنتجات الأكثر حركة خلال الفترة التي تهمك.' : 'Track orders and offers performance, monitor completion and acceptance rates, and identify your most active products for the period that matters most.' }}
+                </p>
+            </div>
+            <div class="va-actions">
+                <a href="{{ route('vendor/dashboard') }}" class="va-btn-outline">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    {{ __('nav.dashboard') ?? 'Dashboard' }}
+                </a>
+                <a href="{{ route('vendor/orders') }}" class="va-btn-primary">
+                    <i class="bi bi-bag-check"></i>
+                    {{ __('nav.orders') ?? 'Orders' }}
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="va-card mb-4">
+        <div class="va-body">
+            <div class="va-periods">
+                <a href="{{ route('vendor/analytics', ['period' => '7']) }}" class="va-period {{ $period === '7' ? 'is-active' : '' }}">{{ $isAr ? 'آخر 7 أيام' : 'Last 7 Days' }}</a>
+                <a href="{{ route('vendor/analytics', ['period' => '30']) }}" class="va-period {{ $period === '30' ? 'is-active' : '' }}">{{ $isAr ? 'آخر 30 يومًا' : 'Last 30 Days' }}</a>
+                <a href="{{ route('vendor/analytics', ['period' => '90']) }}" class="va-period {{ $period === '90' ? 'is-active' : '' }}">{{ $isAr ? 'آخر 90 يومًا' : 'Last 90 Days' }}</a>
+                <a href="{{ route('vendor/analytics', ['period' => 'all']) }}" class="va-period {{ $period === 'all' ? 'is-active' : '' }}">{{ $isAr ? 'كل الفترات' : 'All Time' }}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="va-card va-stat">
+                <p class="va-stat-label">{{ $isAr ? 'إجمالي الطلبات' : 'Total Orders' }}</p>
+                <h4 class="va-stat-value">{{ number_format($totalOrders) }}</h4>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="va-card va-stat">
+                <p class="va-stat-label">{{ $isAr ? 'إجمالي العروض' : 'Total Offers' }}</p>
+                <h4 class="va-stat-value">{{ number_format($totalOffers) }}</h4>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="va-card va-stat">
+                <p class="va-stat-label">{{ $isAr ? 'معدل القبول' : 'Acceptance Rate' }}</p>
+                <h4 class="va-stat-value">{{ number_format((float) $acceptanceRate, 1) }}%</h4>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="va-card va-stat">
+                <p class="va-stat-label">{{ $isAr ? 'متوسط التقييم' : 'Average Rating' }}</p>
+                <h4 class="va-stat-value">{{ number_format((float) $avgProductRating, 1) }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+            <div class="va-card">
+                <div class="va-panel-head">
                     <div>
-                        <a href="{{ route('vendor/analytics', ['period' => '7']) }}" class="btn btn-sm {{ $period == '7' ? 'btn-light' : 'btn-outline-light' }}">
-                            {{ __('nav.last_7_days') ?? '7 Days' }}
-                        </a>
-                        <a href="{{ route('vendor/analytics', ['period' => '30']) }}" class="btn btn-sm {{ $period == '30' ? 'btn-light' : 'btn-outline-light' }}">
-                            {{ __('nav.last_30_days') ?? '30 Days' }}
-                        </a>
-                        <a href="{{ route('vendor/analytics', ['period' => '90']) }}" class="btn btn-sm {{ $period == '90' ? 'btn-light' : 'btn-outline-light' }}">
-                            {{ __('nav.last_90_days') ?? '90 Days' }}
-                        </a>
-                        <a href="{{ route('vendor/analytics', ['period' => 'all']) }}" class="btn btn-sm {{ $period == 'all' ? 'btn-light' : 'btn-outline-light' }}">
-                            {{ __('nav.all_time') ?? 'All Time' }}
-                        </a>
+                        <h5 class="va-panel-title">{{ $isAr ? 'اتجاه الطلبات' : 'Orders Trend' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'حركة الطلبات عبر الأشهر الحالية داخل الرسم البياني.' : 'Order movement across the current months.' }}</p>
+                    </div>
+                    <span class="va-chip va-chip-primary">{{ $period === 'all' ? ($isAr ? 'كل الفترات' : 'All Time') : ($isAr ? 'فترة مفلترة' : 'Filtered Period') }}</span>
+                </div>
+                <div class="va-body">
+                    <div class="va-chart">
+                        <canvas id="ordersChart"></canvas>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Key Statistics -->
-            <div class="row">
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card">
-                        <div class="stat-number">{{ $totalOrders }}</div>
-                        <div class="stat-label">{{ __('nav.total_orders') ?? 'Total Orders' }}</div>
+        <div class="col-lg-4">
+            <div class="va-card">
+                <div class="va-panel-head">
+                    <div>
+                        <h5 class="va-panel-title">{{ $isAr ? 'توزيع الحالات' : 'Status Mix' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'مقارنة سريعة بين الطلبات المؤكدة وقيد التنفيذ والمكتملة.' : 'A quick comparison of confirmed, processing, and completed orders.' }}</p>
                     </div>
                 </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card secondary">
-                        <div class="stat-number">{{ $totalOffers }}</div>
-                        <div class="stat-label">{{ __('nav.offers_submitted') ?? 'Offers Submitted' }}</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card tertiary">
-                        <div class="stat-number">{{ $acceptanceRate }}%</div>
-                        <div class="stat-label">{{ __('nav.acceptance_rate') ?? 'Acceptance Rate' }}</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card quaternary">
-                        <div class="stat-number">{{ $avgProductRating }}</div>
-                        <div class="stat-label">{{ __('nav.avg_rating') ?? 'Avg Rating' }}</div>
+                <div class="va-body">
+                    <div class="va-chart">
+                        <canvas id="statusChart"></canvas>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Charts Row -->
-            <div class="row mt-4">
-                <!-- Monthly Orders Chart -->
-                <div class="col-lg-8">
-                    <div class="card mb-4">
-                        <div class="card-header bg-gradient">
-                            <h5 class="mb-0">{{ __('nav.monthly_orders') ?? 'Monthly Orders' }}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="ordersChart"></canvas>
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="va-card">
+                <div class="va-panel-head">
+                    <div>
+                        <h5 class="va-panel-title">{{ $isAr ? 'أفضل المنتجات' : 'Top Products' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'المنتجات الأكثر توليدًا للطلبات خلال الفترة.' : 'Products generating the most orders in the selected period.' }}</p>
+                    </div>
+                </div>
+                <div class="va-body">
+                    @forelse($topProducts as $index => $item)
+                        <div class="va-product">
+                            <div class="va-rank">{{ $index + 1 }}</div>
+                            <div class="flex-grow-1">
+                                <p class="va-product-title">{{ $item->product_name ?? ($isAr ? 'منتج' : 'Product') }}</p>
+                                <p class="va-product-meta">{{ $isAr ? 'عدد الطلبات المرتبطة بهذا المنتج.' : 'Orders generated by this product.' }}</p>
                             </div>
+                            <span class="va-chip va-chip-primary">{{ $item->order_count }} {{ __('nav.orders') ?? 'Orders' }}</span>
                         </div>
+                    @empty
+                        <div class="va-empty">
+                            <i class="bi bi-box-seam"></i>
+                            <div>{{ $isAr ? 'لا توجد بيانات منتجات كافية لعرض الترتيب.' : 'Not enough product data to display rankings yet.' }}</div>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="va-card mb-4">
+                <div class="va-panel-head">
+                    <div>
+                        <h5 class="va-panel-title">{{ $isAr ? 'ملخص الأداء' : 'Performance Summary' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'ملخص سريع لأهم مؤشرات التشغيل والمراجعات.' : 'A fast view of key operations and review metrics.' }}</p>
                     </div>
                 </div>
-
-                <!-- Orders by Status -->
-                <div class="col-lg-4">
-                    <div class="card mb-4">
-                        <div class="card-header bg-gradient">
-                            <h5 class="mb-0">{{ __('nav.orders_by_status') ?? 'Orders by Status' }}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="statusChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
+                <div class="va-body">
+                    <table class="va-mini-table">
+                        <tr>
+                            <td>{{ $isAr ? 'طلبات مكتملة' : 'Completed Orders' }}</td>
+                            <td>{{ number_format($completedOrders) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ $isAr ? 'طلبات مؤكدة' : 'Confirmed Orders' }}</td>
+                            <td>{{ number_format($confirmedOrders) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ $isAr ? 'طلبات قيد التنفيذ' : 'Processing Orders' }}</td>
+                            <td>{{ number_format($processingOrders) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ $isAr ? 'عروض مقبولة' : 'Accepted Offers' }}</td>
+                            <td>{{ number_format($acceptedOffers) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ $isAr ? 'إجمالي التقييمات' : 'Total Ratings' }}</td>
+                            <td>{{ number_format($totalProductRatings) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ $isAr ? 'منتجات نشطة' : 'Active Products' }}</td>
+                            <td>{{ number_format($products->count()) }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ $isAr ? 'معدل الإنجاز' : 'Completion Rate' }}</td>
+                            <td>{{ number_format((float) $completionRate, 1) }}%</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
-            <!-- Top Products & Statistics Row -->
-            <div class="row">
-                <!-- Top Products by Orders -->
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-header bg-gradient">
-                            <h5 class="mb-0"><i class="bi bi-fire me-2"></i>{{ __('nav.top_products') ?? 'Top Products by Orders' }}</h5>
-                        </div>
-                        <div class="card-body">
-                            @if($topProducts->count() > 0)
-                                @foreach($topProducts as $index => $item)
-                                    <div class="top-product">
-                                        <div class="top-product-rank">{{ $index + 1 }}</div>
-                                        <div class="top-product-info">
-                                            <strong>{{ $item->product_name ?? 'Product' }}</strong>
-                                        </div>
-                                        <div class="top-product-count">{{ $item->order_count }} {{ __('nav.orders') }}</div>
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="alert alert-info">{{ __('messages.no_data') ?? 'No data available' }}</div>
-                            @endif
-                        </div>
+            <div class="va-card">
+                <div class="va-panel-head">
+                    <div>
+                        <h5 class="va-panel-title">{{ $isAr ? 'مؤشرات الحالات' : 'Status Signals' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'مقارنة مباشرة بين الحالات الأهم لتقييم سرعة التنفيذ.' : 'Direct status comparison to assess execution velocity.' }}</p>
                     </div>
                 </div>
-
-                <!-- Summary Statistics -->
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-header bg-gradient">
-                            <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>{{ __('nav.summary') ?? 'Summary' }}</h5>
+                <div class="va-body">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>{{ $isAr ? 'مؤكد' : 'Confirmed' }}</span>
+                            <span class="va-chip va-chip-primary">{{ $confirmedOrders }}</span>
                         </div>
-                        <div class="card-body">
-                            <table class="table table-sm">
-                                <tr>
-                                    <td>{{ __('nav.completed_orders') ?? 'Completed Orders' }}</td>
-                                    <td class="text-end"><strong>{{ $completedOrders }}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>{{ __('nav.accepted_offers') ?? 'Accepted Offers' }}</td>
-                                    <td class="text-end"><strong>{{ $acceptedOffers }}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>{{ __('nav.total_ratings') ?? 'Total Ratings' }}</td>
-                                    <td class="text-end"><strong>{{ $totalProductRatings }}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>{{ __('nav.active_products') ?? 'Active Products' }}</td>
-                                    <td class="text-end"><strong>{{ $products->count() }}</strong></td>
-                                </tr>
-                                <tr class="table-active">
-                                    <td><strong>{{ __('nav.completion_rate') ?? 'Completion Rate' }}</strong></td>
-                                    <td class="text-end"><strong>
-                                        @php
-                                            $completionRate = $totalOrders > 0 ? round(($completedOrders / $totalOrders) * 100, 2) : 0;
-                                        @endphp
-                                        {{ $completionRate }}%
-                                    </strong></td>
-                                </tr>
-                            </table>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>{{ $isAr ? 'قيد التنفيذ' : 'Processing' }}</span>
+                            <span class="va-chip va-chip-warning">{{ $processingOrders }}</span>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detailed Stats Table -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header bg-gradient">
-                            <h5 class="mb-0">{{ __('nav.detailed_statistics') ?? 'Detailed Statistics' }}</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>{{ __('nav.metric') ?? 'Metric' }}</th>
-                                            <th class="text-end">{{ __('nav.value') ?? 'Value' }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{{ __('nav.total_orders') ?? 'Total Orders' }}</td>
-                                            <td class="text-end"><strong>{{ $totalOrders }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ __('nav.completed_orders') ?? 'Completed Orders' }}</td>
-                                            <td class="text-end"><strong>{{ $completedOrders }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ __('nav.total_offers') ?? 'Total Offers' }}</td>
-                                            <td class="text-end"><strong>{{ $totalOffers }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ __('nav.accepted_offers') ?? 'Accepted Offers' }}</td>
-                                            <td class="text-end"><strong>{{ $acceptedOffers }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ __('nav.acceptance_rate') ?? 'Acceptance Rate' }}</td>
-                                            <td class="text-end"><strong>{{ $acceptanceRate }}%</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ __('nav.avg_rating') ?? 'Average Rating' }}</td>
-                                            <td class="text-end"><strong>{{ $avgProductRating }}/5</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ __('nav.total_reviews') ?? 'Total Reviews' }}</td>
-                                            <td class="text-end"><strong>{{ $totalProductRatings }}</strong></td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ __('nav.products') ?? 'Products' }}</td>
-                                            <td class="text-end"><strong>{{ $products->count() }}</strong></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>{{ $isAr ? 'مكتمل' : 'Completed' }}</span>
+                            <span class="va-chip va-chip-success">{{ $completedOrders }}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 @endsection
 
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script>
-        // Monthly Orders Chart
+        const analyticsIsRtl = @json(app()->getLocale() === 'ar');
+
         const ordersCtx = document.getElementById('ordersChart');
         if (ordersCtx) {
             new Chart(ordersCtx, {
@@ -317,18 +527,18 @@
                 data: {
                     labels: @json($chartMonths),
                     datasets: [{
-                        label: '{{ __("nav.orders") ?? "Orders" }}',
+                        label: analyticsIsRtl ? 'الطلبات' : 'Orders',
                         data: @json($chartOrdersCount),
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        borderWidth: 2,
+                        borderColor: '#0f4bbf',
+                        backgroundColor: 'rgba(15, 75, 191, 0.12)',
+                        borderWidth: 3,
                         fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#667eea',
-                        pointBorderColor: '#fff',
+                        tension: 0.35,
+                        pointBackgroundColor: '#0ec6a0',
+                        pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
+                        pointRadius: 4,
+                        pointHoverRadius: 6
                     }]
                 },
                 options: {
@@ -337,7 +547,8 @@
                     plugins: {
                         legend: {
                             display: true,
-                            position: 'top'
+                            position: 'top',
+                            rtl: analyticsIsRtl
                         }
                     },
                     scales: {
@@ -345,6 +556,14 @@
                             beginAtZero: true,
                             ticks: {
                                 stepSize: 1
+                            },
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.18)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
                             }
                         }
                     }
@@ -352,22 +571,18 @@
             });
         }
 
-        // Orders by Status Chart
         const statusCtx = document.getElementById('statusChart');
         if (statusCtx) {
             const statusData = @json($ordersByStatus);
             new Chart(statusCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: Object.keys(statusData),
+                    labels: analyticsIsRtl
+                        ? ['مؤكد', 'قيد التنفيذ', 'مكتمل']
+                        : Object.keys(statusData),
                     datasets: [{
                         data: Object.values(statusData),
-                        backgroundColor: [
-                            '#667eea',
-                            '#f093fb',
-                            '#f5576c',
-                            '#43e97b'
-                        ],
+                        backgroundColor: ['#0f4bbf', '#f59e0b', '#10b981'],
                         borderColor: '#fff',
                         borderWidth: 2
                     }]
@@ -377,7 +592,8 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            rtl: analyticsIsRtl
                         }
                     }
                 }
@@ -385,4 +601,3 @@
         }
     </script>
 @endsection
-

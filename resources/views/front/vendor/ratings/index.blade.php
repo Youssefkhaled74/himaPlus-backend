@@ -423,9 +423,9 @@
                     <form method="GET" action="{{ route('vendor/ratings') }}">
                         <div class="vr-filter-grid">
                             <div class="vr-field">
-                                <label>{{ __('profile.product') ?? 'Product' }}</label>
+                                <label>{{ __('nav.products') ?? 'Products' }}</label>
                                 <select name="product_id" class="form-select">
-                                    <option value="">{{ __('profile.all') ?? 'All Products' }}</option>
+                                    <option value="">{{ __('nav.all') ?? 'All Products' }}</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}" {{ (string) request('product_id') === (string) $product->id ? 'selected' : '' }}>
                                             {{ $product->name }}
@@ -436,7 +436,7 @@
                             <div class="vr-field">
                                 <label>{{ __('nav.rating') ?? 'Rating' }}</label>
                                 <select name="rating" class="form-select">
-                                    <option value="">{{ __('profile.all') ?? 'All' }}</option>
+                                    <option value="">{{ __('nav.all') ?? 'All' }}</option>
                                     @for ($i = 5; $i >= 1; $i--)
                                         <option value="{{ $i }}" {{ (string) request('rating') === (string) $i ? 'selected' : '' }}>
                                             {{ $i }} / 5
@@ -451,7 +451,7 @@
                                 </button>
                                 <a href="{{ route('vendor/ratings') }}" class="vr-btn-outline">
                                     <i class="bi bi-arrow-clockwise"></i>
-                                    {{ __('profile.reset') ?? 'Reset' }}
+                                    {{ __('nav.reset') ?? 'Reset' }}
                                 </a>
                             </div>
                         </div>
