@@ -122,11 +122,13 @@ class HomeService
             ->where('order_type', 3)
             ->whereNull('offer_id')
             ->count();
-        $scheduledRequestsCount = (clone $ordersBase)
+        $requestsBase = (clone $ordersBase)
             ->whereIn('order_type', [2, 3])
-            ->whereNull('offer_id')
-            ->where('request_type', 2)
-            ->count();
+            ->whereNull('offer_id');
+        $scheduledRequestsCount = $this->orderStatusService->countByStatus(
+            $requestsBase,
+            OrderStatusService::STATUS_SCHEDULED
+        );
 
         $totalOffers = (clone $offersBase)->count();
         $pendingOffers = (clone $offersBase)->whereIn('status', [1, '1', 'pending'])->count();
