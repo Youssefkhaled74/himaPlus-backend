@@ -9,7 +9,7 @@ return [
         'hospital' => 'المستشفيات',
         'factory' => 'المصانع',
         'supplier' => 'الموردون',
-        'items' => 'العناصر',
+        'items' => 'المنتجات',
         'orders' => 'الطلبات',
         'settings' => 'الإعدادات',
         'dashboard' => 'لوحة التحكم',

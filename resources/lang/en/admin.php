@@ -9,7 +9,7 @@ return [
         'hospital' => 'Hospital',
         'factory' => 'Factory',
         'supplier' => 'Supplier',
-        'items' => 'Items',
+        'items' => 'Products',
         'orders' => 'Orders',
         'settings' => 'Settings',
         'dashboard' => 'Dashboard',
