@@ -43,10 +43,10 @@
                             <a class="nav-link {{ request()->routeIs('vendor/categories') ? 'active' : '' }}" href="{{ route('vendor/categories') }}">{{ __('nav.categories') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('vendor/analytics') ? 'active' : '' }}" href="{{ route('vendor/analytics') }}">{{ trans_or_fallback('', '') }}</a>
+                            <a class="nav-link {{ request()->routeIs('vendor/analytics') ? 'active' : '' }}" href="{{ route('vendor/analytics') }}">{{ __('nav.analytics') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('vendor/ratings') ? 'active' : '' }}" href="{{ route('vendor/ratings') }}">{{ trans_or_fallback('', '') }}</a>
+                            <a class="nav-link {{ request()->routeIs('vendor/ratings') ? 'active' : '' }}" href="{{ route('vendor/ratings') }}">{{ __('nav.ratings_reviews') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('contactUs') ? 'active' : '' }}" href="{{ route('contactUs') }}">{{ __('nav.contact_us') }}</a>
@@ -70,7 +70,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('vendor/profile') }}">{{ __('profile.my_profile') }}</a></li>
-                                <li><a class="dropdown-item" href="{{ route('vendor/notifications') }}">{{ trans_or_fallback('', '') }}</a></li>
+                                <li><a class="dropdown-item" href="{{ route('vendor/notifications') }}">{{ __('nav.notifications') }}</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="POST" action="{{ route('vendor/logout') }}">

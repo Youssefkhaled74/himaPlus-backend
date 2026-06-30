@@ -1,7 +1,7 @@
 ﻿@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ trans_or_fallback('', '') }} - Vendor | Hema</title>
+    <title>{{ __('nav.my_offers') }} - Vendor | Hema</title>
 @endsection
 
 @section('css')
@@ -181,44 +181,44 @@
     <div class="offers-page">
 
         {{-- Title like screenshot --}}
-        <div class="page-title">Requests</div>
+        <div class="page-title">{{ __('nav.my_offers') }}</div>
 
         {{-- Breadcrumb (keep it small) --}}
         <nav class="mb-2" style="font-size:12px;">
-            <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ trans_or_fallback('', '') }}</a>
+            <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ __('nav.dashboard') }}</a>
             <span class="text-muted mx-1">/</span>
-            <a href="{{ route('vendor/orders') }}" class="text-decoration-none text-muted">{{ trans_or_fallback('', '') }}</a>
+            <a href="{{ route('vendor/orders') }}" class="text-decoration-none text-muted">{{ __('nav.orders') }}</a>
             <span class="text-muted mx-1">/</span>
-            <span class="text-primary fw-bold">{{ trans_or_fallback('', '') }}</span>
+            <span class="text-primary fw-bold">{{ __('nav.my_offers') }}</span>
         </nav>
 
         <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 class="m-0 fw-bold">{{ trans_or_fallback('', '') }}</h5>
+            <h5 class="m-0 fw-bold">{{ __('nav.my_offers') }}</h5>
             <a href="{{ route('vendor/orders') }}" class="btn btn-outline-primary btn-sm" style="border-radius:10px;font-weight:800;">
-                <i class="bi bi-arrow-left"></i> {{ trans_or_fallback('', '') }}
+                <i class="bi bi-arrow-left"></i> {{ __('nav.back_to_orders') }}
             </a>
         </div>
-        <p class="page-subtitle">{{ trans_or_fallback('', '') }}</p>
+        <p class="page-subtitle">{{ __('nav.my_offers_description') }}</p>
 
         {{-- Filters (simple toolbar) --}}
         <div class="filters-bar">
             <form method="GET" action="{{ route('vendor/orders/my-offers') }}" class="row g-2 align-items-center">
                 <div class="col-12 col-md-4">
                     <select name="status" class="form-select">
-                        <option value="">{{ trans_or_fallback('', '') }}</option>
-                        <option value="pending"  {{ request('status') === 'pending' ? 'selected' : '' }}>{{ trans_or_fallback('', '') }}</option>
-                        <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>{{ trans_or_fallback('', '') }}</option>
-                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>{{ trans_or_fallback('', '') }}</option>
+                        <option value="">{{ __('nav.all_statuses') }}</option>
+                        <option value="pending"  {{ request('status') === 'pending' ? 'selected' : '' }}>{{ __('nav.pending') }}</option>
+                        <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>{{ __('nav.accepted') }}</option>
+                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>{{ __('nav.rejected') }}</option>
                     </select>
                 </div>
                 <div class="col-12 col-md-5">
                     <input type="text" name="search" class="form-control"
-                           placeholder="{{ trans_or_fallback('', '') }}"
+                           placeholder="{{ __('nav.search_order_id') }}"
                            value="{{ request('search') }}">
                 </div>
                 <div class="col-12 col-md-3">
                     <button type="submit" class="btn btn-primary w-100" style="border-radius:10px;font-weight:800;">
-                        <i class="bi bi-search"></i> {{ trans_or_fallback('', '') }}
+                        <i class="bi bi-search"></i> {{ __('nav.search') }}
                     </button>
                 </div>
             </form>
@@ -230,10 +230,10 @@
                 @php
                     $status = strtolower($offer->status_label ?? 'pending');
                     $statusLabel = $status === 'pending'
-                        ? (trans_or_fallback('', ''))
+                        ? __('nav.pending')
                         : ($status === 'accepted'
-                            ? (trans_or_fallback('', ''))
-                            : (trans_or_fallback('', '')));
+                            ? __('nav.accepted')
+                            : __('nav.rejected'));
 
                     $typeTitle = match((int)($offer->order->order_type ?? 0)) {
                         1 => 'Purchase Order',
@@ -251,19 +251,19 @@
                         </div>
 
                         <p class="rq-meta">
-                            <strong>{{ trans_or_fallback('', '') }} #{{ $offer->id }}</strong>
-                            <span class="text-muted"> â€” {{ trans_or_fallback('', '') }} #{{ $offer->order_id }}</span>
+                            <strong>{{ __('nav.offer_id') }} #{{ $offer->id }}</strong>
+                            <span class="text-muted"> â€” {{ __('nav.order_id') }} #{{ $offer->order_id }}</span>
                         </p>
 
                         <p class="rq-meta mb-0">
-                            {{ trans_or_fallback('', '') }}: {{ $offer->order->user->name ?? 'N/A' }}<br>
-                            {{ trans_or_fallback('', '') }}: {{ number_format((float)($offer->cost ?? 0), 2) }} {{ trans_or_fallback('', '') }}<br>
-                            {{ trans_or_fallback('', '') }}: {{ $offer->delivery_time ?? 'N/A' }}
+                            {{ __('nav.client') }}: {{ $offer->order->user->name ?? 'N/A' }}<br>
+                            {{ __('nav.price') }}: {{ number_format((float)($offer->cost ?? 0), 2) }} {{ __('nav.sar') }}<br>
+                            {{ __('nav.delivery_time') }}: {{ $offer->delivery_time ?? 'N/A' }}
                             @if($offer->warranty)
-                                â€” {{ trans_or_fallback('', '') }}: {{ $offer->warranty }}
+                                â€” {{ __('nav.warranty') }}: {{ $offer->warranty }}
                             @endif
                             <br>
-                            {{ trans_or_fallback('', '') }}: {{ $offer->created_at->format('M d, Y') }}
+                            {{ __('nav.created_at') }}: {{ $offer->created_at->format('M d, Y') }}
                         </p>
 
                         {{-- Optional mini actions (small, not noisy) --}}
@@ -274,15 +274,15 @@
 
                             @if(($offer->status_label ?? 'pending') === 'pending')
                                 <a href="{{ route('vendor/orders/offer-edit', $offer->id) }}" class="btn btn-outline-warning btn-sm" onclick="event.stopPropagation();">
-                                    <i class="bi bi-pencil"></i> {{ trans_or_fallback('', '') }}
+                                    <i class="bi bi-pencil"></i> {{ __('nav.edit_offer') }}
                                 </a>
                                 <form action="{{ route('vendor/orders/offer-delete', $offer->id) }}"
                                       method="POST"
-                                      onsubmit="event.stopPropagation(); return confirm('{{ trans_or_fallback('', '') }}');">
+                                      onsubmit="event.stopPropagation(); return confirm('{{ __('nav.delete_this_offer') }}');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-outline-danger btn-sm">
-                                        <i class="bi bi-trash"></i> {{ trans_or_fallback('', '') }}
+                                        <i class="bi bi-trash"></i> {{ __('nav.cancel_offer') }}
                                     </button>
                                 </form>
                             @endif
@@ -303,11 +303,11 @@
             <div class="v-card p-4 text-center" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);">
                 <div class="text-muted">
                     <i class="bi bi-info-circle me-1"></i>
-                    {{ trans_or_fallback('', '') }}
+                    {{ __('nav.no_offers_yet') }}
                 </div>
                 <div class="mt-2">
                     <a href="{{ route('vendor/orders') }}" class="text-decoration-none fw-bold">
-                        {{ trans_or_fallback('', '') }}
+                        {{ __('nav.start_offers') }}
                     </a>
                 </div>
             </div>
