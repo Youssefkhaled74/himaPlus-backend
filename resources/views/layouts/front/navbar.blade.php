@@ -1,4 +1,4 @@
-﻿@php
+@php
     $isVendorAuthed = auth()->check() && (int) auth()->user()->user_type === 2;
     $routeName = request()->route() ? request()->route()->getName() : '';
     $cartCount = 0;
@@ -60,7 +60,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}" href="{{ url('locale/en') }}">English</a></li>
-                                <li><a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}" href="{{ url('locale/ar') }}">Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</a></li>
+                                <li><a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}" href="{{ url('locale/ar') }}">العربية</a></li>
                             </ul>
                         </div>
                         <div class="dropdown">
@@ -125,7 +125,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}" href="{{ url('locale/en') }}">English</a></li>
-                                <li><a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}" href="{{ url('locale/ar') }}">Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</a></li>
+                                <li><a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}" href="{{ url('locale/ar') }}">العربية</a></li>
                             </ul>
                         </div>
                     </div>

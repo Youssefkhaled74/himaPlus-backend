@@ -1,4 +1,4 @@
-﻿@extends('layouts.front.home')
+@extends('layouts.front.home')
 
 @section('title')
     <title>{{ __('nav.home') }} - Vendor Dashboard</title>
@@ -251,20 +251,20 @@
     @include('flash::message')
 
     <nav class="vd-breadcrumb">
-        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©' : 'Home' }}</a>
+        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
         <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
-        <span class="active">{{ $isAr ? 'Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…' : 'Dashboard' }}</span>
+        <span class="active">{{ $isAr ? 'لوحة التحكم' : 'Dashboard' }}</span>
     </nav>
 
     <div class="vd-card vd-hero">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
-                <h3 class="vd-title">{{ $isAr ? 'Ø£Ù‡Ù„Ø§Ù‹ Ø¨ÙƒÙ… Ø´Ø±ÙƒØ§Ø¡ Ø§Ù„Ù†Ø¬Ø§Ø­' : 'Welcome Success Partners' }}</h3>
-                <p class="vd-subtitle">{{ $isAr ? 'Ù„ÙˆØ­Ø© ØªØ­ÙƒÙ… Ø§Ù„Ù…ÙˆØ±Ø¯ Ù„Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª ÙˆØ§Ù„Ø·Ù„Ø¨Ø§Øª ÙˆØ§Ù„ÙÙˆØ§ØªÙŠØ± Ø¨Ø³Ù‡ÙˆÙ„Ø©.' : 'Vendor dashboard for products, orders, and invoices.' }}</p>
+                <h3 class="vd-title">{{ $isAr ? 'أهلاً بكم شركاء النجاح' : 'Welcome Success Partners' }}</h3>
+                <p class="vd-subtitle">{{ $isAr ? 'لوحة تحكم المورد لإدارة المنتجات والطلبات والفواتير بسهولة.' : 'Vendor dashboard for products, orders, and invoices.' }}</p>
             </div>
             <div class="vd-actions">
-                <a href="{{ route('vendor/products/create') }}" class="vd-btn-primary">{{ $isAr ? 'Ø¥Ø¶Ø§ÙØ© Ù…Ù†ØªØ¬' : 'Add Product' }}</a>
-                <a href="{{ route('vendor/orders') }}" class="vd-btn-outline">{{ $isAr ? 'Ø§Ù„Ø·Ù„Ø¨Ø§Øª' : 'Orders' }}</a>
+                <a href="{{ route('vendor/products/create') }}" class="vd-btn-primary">{{ $isAr ? 'إضافة منتج' : 'Add Product' }}</a>
+                <a href="{{ route('vendor/orders') }}" class="vd-btn-outline">{{ $isAr ? 'الطلبات' : 'Orders' }}</a>
             </div>
         </div>
     </div>
@@ -273,7 +273,7 @@
         <div class="col-6 col-md">
             <a href="{{ route('vendor/orders') }}" class="text-decoration-none" style="color:inherit;">
                 <div class="vd-card vd-stat">
-                    <p class="vd-stat-label">{{ $isAr ? 'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø·Ù„Ø¨Ø§Øª' : 'Total Orders' }}</p>
+                    <p class="vd-stat-label">{{ $isAr ? 'إجمالي الطلبات' : 'Total Orders' }}</p>
                     <h4 class="vd-stat-value">{{ $ordersCount }}</h4>
                 </div>
             </a>
@@ -281,7 +281,7 @@
         <div class="col-6 col-md">
             <a href="{{ route('vendor/orders', ['tab' => 'scheduled', 'status' => 'scheduled']) }}" class="text-decoration-none" style="color:inherit;">
                 <div class="vd-card vd-stat">
-                    <p class="vd-stat-label">{{ $isAr ? 'Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…Ø¬Ø¯ÙˆÙ„Ø©' : 'Scheduled Orders' }}</p>
+                    <p class="vd-stat-label">{{ $isAr ? 'الطلبات المجدولة' : 'Scheduled Orders' }}</p>
                     <h4 class="vd-stat-value">{{ $scheduledOrdersCount }}</h4>
                 </div>
             </a>
@@ -289,7 +289,7 @@
         <div class="col-6 col-md">
             <a href="{{ route('vendor/orders', ['tab' => 'all', 'status' => 'completed']) }}" class="text-decoration-none" style="color:inherit;">
                 <div class="vd-card vd-stat">
-                    <p class="vd-stat-label">{{ $isAr ? 'Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…ÙƒØªÙ…Ù„Ø©' : 'Completed Orders' }}</p>
+                    <p class="vd-stat-label">{{ $isAr ? 'الطلبات المكتملة' : 'Completed Orders' }}</p>
                     <h4 class="vd-stat-value">{{ $completedOrdersCount }}</h4>
                 </div>
             </a>
@@ -298,14 +298,14 @@
             <a href="{{ route('vendor/analytics') }}" class="text-decoration-none" style="color:inherit;">
                 <div class="vd-card vd-stat">
                     <p class="vd-stat-label">{{ trans_or_fallback('', '') }}</p>
-                    <h4 class="vd-stat-value" style="font-size:28px;">{{ number_format((float)($estimatedRevenue ?? 0), 0) }} {{ $isAr ? 'Ø±.Ø³' : 'SAR' }}</h4>
+                    <h4 class="vd-stat-value" style="font-size:28px;">{{ number_format((float)($estimatedRevenue ?? 0), 0) }} {{ $isAr ? 'ر.س' : 'SAR' }}</h4>
                 </div>
             </a>
         </div>
         <div class="col-6 col-md">
             <a href="{{ route('vendor/orders', ['tab' => 'all', 'status' => 'confirmed']) }}" class="text-decoration-none" style="color:inherit;">
                 <div class="vd-card vd-stat">
-                    <p class="vd-stat-label">{{ $isAr ? 'Ø·Ù„Ø¨Ø§Øª Ù…Ø¤ÙƒØ¯Ø©' : 'Confirmed Orders' }}</p>
+                    <p class="vd-stat-label">{{ $isAr ? 'طلبات مؤكدة' : 'Confirmed Orders' }}</p>
                     <h4 class="vd-stat-value">{{ $confirmedOrdersCount }}</h4>
                 </div>
             </a>
@@ -313,7 +313,7 @@
         <div class="col-6 col-md">
             <a href="{{ route('vendor/products') }}" class="text-decoration-none" style="color:inherit;">
                 <div class="vd-card vd-stat">
-                    <p class="vd-stat-label">{{ $isAr ? 'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…ÙØ¹Ù„Ø©' : 'Active Products' }}</p>
+                    <p class="vd-stat-label">{{ $isAr ? 'المنتجات المفعلة' : 'Active Products' }}</p>
                     <h4 class="vd-stat-value">{{ $productsCount }}</h4>
                 </div>
             </a>
@@ -324,19 +324,19 @@
         <div class="col-lg-7">
             <div class="vd-card h-100">
                 <div class="vd-panel-head">
-                    <h5 class="vd-panel-title">{{ $isAr ? 'Ø¢Ø®Ø± Ø§Ù„Ø·Ù„Ø¨Ø§Øª' : 'Recent Orders' }}</h5>
-                    <a class="vd-link" href="{{ route('vendor/orders') }}">{{ $isAr ? 'Ø¹Ø±Ø¶ Ø§Ù„ÙƒÙ„' : 'View all' }}</a>
+                    <h5 class="vd-panel-title">{{ $isAr ? 'آخر الطلبات' : 'Recent Orders' }}</h5>
+                    <a class="vd-link" href="{{ route('vendor/orders') }}">{{ $isAr ? 'عرض الكل' : 'View all' }}</a>
                 </div>
                 <div class="vd-list">
                     @forelse($recentOrders as $order)
                         @php
                             $isPaid = (string)($order->payment_status ?? '') === '1' || (string)($order->payment_status ?? '') === 'paid';
                             $typeLabels = [
-                                1 => $isAr ? 'Ø´Ø±Ø§Ø¡' : 'Purchase',
-                                2 => $isAr ? 'ØªØ³Ø¹ÙŠØ±' : 'Quotation',
-                                3 => $isAr ? 'ØµÙŠØ§Ù†Ø©' : 'Maintenance',
+                                1 => $isAr ? 'شراء' : 'Purchase',
+                                2 => $isAr ? 'تسعير' : 'Quotation',
+                                3 => $isAr ? 'صيانة' : 'Maintenance',
                             ];
-                            $orderTypeLabel = $typeLabels[(int)($order->order_type ?? 0)] ?? ($isAr ? 'Ø·Ù„Ø¨' : 'Order');
+                            $orderTypeLabel = $typeLabels[(int)($order->order_type ?? 0)] ?? ($isAr ? 'طلب' : 'Order');
                         @endphp
                         <a href="{{ route('vendor/orders/show', $order->id) }}" class="text-decoration-none" style="color:inherit;">
                             <div class="vd-item d-flex justify-content-between align-items-start gap-3">
@@ -345,13 +345,13 @@
                                     <p class="vd-item-sub">{{ $order->user->name ?? '-' }}</p>
                                 </div>
                                 <div class="text-end">
-                                    <span class="vd-chip {{ $isPaid ? 'vd-chip-paid' : 'vd-chip-pending' }}">{{ $isPaid ? ($isAr ? 'Ù…Ø¯ÙÙˆØ¹' : 'Paid') : ($isAr ? 'Ù‚ÙŠØ¯ Ø§Ù„Ø§Ù†ØªØ¸Ø§Ø±' : 'Pending') }}</span>
+                                    <span class="vd-chip {{ $isPaid ? 'vd-chip-paid' : 'vd-chip-pending' }}">{{ $isPaid ? ($isAr ? 'مدفوع' : 'Paid') : ($isAr ? 'قيد الانتظار' : 'Pending') }}</span>
                                     <div class="small text-muted mt-2">{{ number_format((float)($order->total_cost ?? 0), 2) }} SAR</div>
                                 </div>
                             </div>
                         </a>
                     @empty
-                        <div class="vd-empty">{{ $isAr ? 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø·Ù„Ø¨Ø§Øª Ø­Ø§Ù„ÙŠØ§.' : 'No orders yet.' }}</div>
+                        <div class="vd-empty">{{ $isAr ? 'لا توجد طلبات حاليا.' : 'No orders yet.' }}</div>
                     @endforelse
                 </div>
             </div>
@@ -360,19 +360,19 @@
         <div class="col-lg-5">
             <div class="vd-card mb-4">
                 <div class="vd-panel-head">
-                    <h5 class="vd-panel-title">{{ $isAr ? 'Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ù…Ù‡Ù…Ø©' : 'Important Notifications' }}</h5>
-                    <a class="vd-link" href="{{ route('vendor/notifications') }}">{{ $isAr ? 'Ø¹Ø±Ø¶ Ø§Ù„ÙƒÙ„' : 'View all' }}</a>
+                    <h5 class="vd-panel-title">{{ $isAr ? 'الإشعارات المهمة' : 'Important Notifications' }}</h5>
+                    <a class="vd-link" href="{{ route('vendor/notifications') }}">{{ $isAr ? 'عرض الكل' : 'View all' }}</a>
                 </div>
                 <div class="vd-list">
                     @forelse($recentNotifications as $n)
                         <a href="{{ route('vendor/notifications') }}" class="text-decoration-none" style="color:inherit;">
                             <div class="vd-item">
-                                <p class="vd-item-title">{{ $n->title ?? ($isAr ? 'ØªÙ†Ø¨ÙŠÙ‡' : 'Alert') }}</p>
+                                <p class="vd-item-title">{{ $n->title ?? ($isAr ? 'تنبيه' : 'Alert') }}</p>
                                 <p class="vd-item-sub">{{ \Illuminate\Support\Str::limit($n->message ?? $n->content, 60) }}</p>
                             </div>
                         </a>
                     @empty
-                        <div class="vd-empty">{{ $isAr ? 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ù…Ù‡Ù…Ø©.' : 'No important notifications.' }}</div>
+                        <div class="vd-empty">{{ $isAr ? 'لا توجد إشعارات مهمة.' : 'No important notifications.' }}</div>
                     @endforelse
                 </div>
             </div>
@@ -381,14 +381,14 @@
 
             <div class="vd-card">
                 <div class="vd-panel-head">
-                    <h5 class="vd-panel-title">{{ $isAr ? 'Ø§Ø®ØªØµØ§Ø±Ø§Øª' : 'Quick Links' }}</h5>
+                    <h5 class="vd-panel-title">{{ $isAr ? 'اختصارات' : 'Quick Links' }}</h5>
                 </div>
                 <div class="vd-quick">
-                    <a href="{{ route('vendor/invoices') }}">{{ $isAr ? 'Ø§Ù„ÙÙˆØ§ØªÙŠØ±' : 'Invoices' }}</a>
+                    <a href="{{ route('vendor/invoices') }}">{{ $isAr ? 'الفواتير' : 'Invoices' }}</a>
                     <a href="{{ route('vendor/analytics') }}">{{ trans_or_fallback('', '') }}</a>
                     <a href="{{ route('vendor/ratings') }}">{{ trans_or_fallback('', '') }}</a>
-                    <a href="{{ route('vendor/categories') }}">{{ $isAr ? 'Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª' : 'Categories' }}</a>
-                    <a href="{{ route('vendor/products') }}">{{ $isAr ? 'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª' : 'Products' }}</a>
+                    <a href="{{ route('vendor/categories') }}">{{ $isAr ? 'التصنيفات' : 'Categories' }}</a>
+                    <a href="{{ route('vendor/products') }}">{{ $isAr ? 'المنتجات' : 'Products' }}</a>
                 </div>
             </div>
         </div>

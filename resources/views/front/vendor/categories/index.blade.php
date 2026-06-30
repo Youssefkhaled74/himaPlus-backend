@@ -1,4 +1,4 @@
-﻿```blade
+```blade
 @extends('layouts.front.home')
 
 @section('title')
@@ -403,9 +403,9 @@
     @include('flash::message')
 
     <nav class="vc-breadcrumb">
-        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©' : 'Home' }}</a>
+        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
         <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
-        <span class="active">{{ __('providers.categories') ?? ($isAr ? 'Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª' : 'Vendor Categories') }}</span>
+        <span class="active">{{ __('providers.categories') ?? ($isAr ? 'التصنيفات' : 'Vendor Categories') }}</span>
     </nav>
 
     @if ($errors->any())
@@ -424,18 +424,18 @@
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
                 <h3 class="vc-title">
-                    {{ __('providers.categories') ?? ($isAr ? 'Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª' : 'Vendor Categories') }}
+                    {{ __('providers.categories') ?? ($isAr ? 'التصنيفات' : 'Vendor Categories') }}
                 </h3>
 
                 <p class="vc-subtitle">
-                    {{ __('providers.categories_desc') ?? ($isAr ? 'Ù†Ø¸Ù‘Ù… Ù…Ù†ØªØ¬Ø§ØªÙƒ Ø¯Ø§Ø®Ù„ ØªØµÙ†ÙŠÙØ§Øª ÙˆØ§Ø¶Ø­Ø© Ù„ÙŠØ³Ù‡Ù„ Ø¹Ù„Ù‰ Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡ Ø§Ù„ÙˆØµÙˆÙ„ Ø¥Ù„ÙŠÙ‡Ø§ ÙˆØ¥Ø¯Ø§Ø±ØªÙ‡Ø§.' : 'Organize your products into clear categories so customers can find them faster and you can manage them easier.') }}
+                    {{ __('providers.categories_desc') ?? ($isAr ? 'نظّم منتجاتك داخل تصنيفات واضحة ليسهل على العملاء الوصول إليها وإدارتها.' : 'Organize your products into clear categories so customers can find them faster and you can manage them easier.') }}
                 </p>
             </div>
 
             <div class="vc-actions">
                 <a href="{{ route('vendor/dashboard') }}" class="vc-btn-outline">
                     <i class="bi bi-grid-1x2-fill"></i>
-                    {{ __('nav.dashboard') ?? ($isAr ? 'Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…' : 'Dashboard') }}
+                    {{ __('nav.dashboard') ?? ($isAr ? 'لوحة التحكم' : 'Dashboard') }}
                 </a>
             </div>
         </div>
@@ -444,26 +444,26 @@
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-4">
             <div class="vc-card vc-stat">
-                <p class="vc-stat-label">{{ $isAr ? 'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª' : 'Total Categories' }}</p>
+                <p class="vc-stat-label">{{ $isAr ? 'إجمالي التصنيفات' : 'Total Categories' }}</p>
                 <h4 class="vc-stat-value">{{ number_format($categoriesCount) }}</h4>
             </div>
         </div>
 
         <div class="col-6 col-md-4">
             <div class="vc-card vc-stat">
-                <p class="vc-stat-label">{{ $isAr ? 'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ø±ØªØ¨Ø·Ø©' : 'Linked Products' }}</p>
+                <p class="vc-stat-label">{{ $isAr ? 'المنتجات المرتبطة' : 'Linked Products' }}</p>
                 <h4 class="vc-stat-value">{{ number_format($productsCount) }}</h4>
             </div>
         </div>
 
         <div class="col-12 col-md-4">
             <div class="vc-card vc-stat">
-                <p class="vc-stat-label">{{ $isAr ? 'Ø¢Ø®Ø± ØªØ­Ø¯ÙŠØ«' : 'Latest Update' }}</p>
+                <p class="vc-stat-label">{{ $isAr ? 'آخر تحديث' : 'Latest Update' }}</p>
                 <h4 class="vc-stat-value" style="font-size: 24px;">
                     @if(isset($categories) && $categories->count())
                         {{ optional($categories->first()->updated_at ?? $categories->first()->created_at)->format('Y-m-d') }}
                     @else
-                        â€”
+                        —
                     @endif
                 </h4>
             </div>
@@ -474,10 +474,10 @@
         <div class="vc-panel-head">
             <div>
                 <h5 class="vc-panel-title">
-                    {{ __('providers.add_category') ?? ($isAr ? 'Ø¥Ø¶Ø§ÙØ© ØªØµÙ†ÙŠÙ Ø¬Ø¯ÙŠØ¯' : 'Add New Category') }}
+                    {{ __('providers.add_category') ?? ($isAr ? 'إضافة تصنيف جديد' : 'Add New Category') }}
                 </h5>
                 <p class="vc-panel-subtitle">
-                    {{ __('providers.add_category_desc') ?? ($isAr ? 'Ø£Ø¶Ù ØªØµÙ†ÙŠÙØ§Ù‹ Ø¬Ø¯ÙŠØ¯Ø§Ù‹ Ù…Ø¹ ØµÙˆØ±Ø© Ø§Ø®ØªÙŠØ§Ø±ÙŠØ©.' : 'Add a new category with an optional image.') }}
+                    {{ __('providers.add_category_desc') ?? ($isAr ? 'أضف تصنيفاً جديداً مع صورة اختيارية.' : 'Add a new category with an optional image.') }}
                 </p>
             </div>
         </div>
@@ -487,25 +487,25 @@
                 @csrf
 
                 <div class="vc-field">
-                    <label>{{ __('providers.category_name') ?? ($isAr ? 'Ø§Ø³Ù… Ø§Ù„ØªØµÙ†ÙŠÙ' : 'Category Name') }}</label>
+                    <label>{{ __('providers.category_name') ?? ($isAr ? 'اسم التصنيف' : 'Category Name') }}</label>
                     <input
                         type="text"
                         name="name"
                         class="form-control"
-                        placeholder="{{ __('providers.category_name') ?? ($isAr ? 'Ø§Ø³Ù… Ø§Ù„ØªØµÙ†ÙŠÙ' : 'Category Name') }}"
+                        placeholder="{{ __('providers.category_name') ?? ($isAr ? 'اسم التصنيف' : 'Category Name') }}"
                         required
                     >
                 </div>
 
                 <div class="vc-field">
-                    <label>{{ $isAr ? 'ØµÙˆØ±Ø© Ø§Ù„ØªØµÙ†ÙŠÙ' : 'Category Image' }}</label>
+                    <label>{{ $isAr ? 'صورة التصنيف' : 'Category Image' }}</label>
                     <input type="file" name="img" class="form-control" accept="image/*">
                 </div>
 
                 <div>
                     <button class="vc-btn-primary border-0" type="submit">
                         <i class="bi bi-plus-lg"></i>
-                        {{ __('providers.add') ?? ($isAr ? 'Ø¥Ø¶Ø§ÙØ©' : 'Add') }}
+                        {{ __('providers.add') ?? ($isAr ? 'إضافة' : 'Add') }}
                     </button>
                 </div>
             </form>
@@ -516,17 +516,17 @@
         <div class="vc-panel-head">
             <div>
                 <h5 class="vc-panel-title">
-                    {{ __('providers.all_categories') ?? ($isAr ? 'Ø¬Ù…ÙŠØ¹ Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª' : 'All Categories') }}
+                    {{ __('providers.all_categories') ?? ($isAr ? 'جميع التصنيفات' : 'All Categories') }}
                 </h5>
                 <p class="vc-panel-subtitle">
-                    {{ __('providers.all_categories_desc') ?? ($isAr ? 'Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª Ø§Ù„Ù…Ø³Ø¬Ù„Ø© ÙˆØ§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ø±ØªØ¨Ø·Ø© Ø¨ÙƒÙ„ Ù…Ù†Ù‡Ø§.' : 'Registered categories and the products linked to each one.') }}
+                    {{ __('providers.all_categories_desc') ?? ($isAr ? 'التصنيفات المسجلة والمنتجات المرتبطة بكل منها.' : 'Registered categories and the products linked to each one.') }}
                 </p>
             </div>
 
             <span class="vc-chip vc-chip-primary">
                 <i class="bi bi-collection"></i>
                 {{ number_format($categoriesCount) }}
-                {{ __('providers.categories') ?? ($isAr ? 'ØªØµÙ†ÙŠÙ' : 'Categories') }}
+                {{ __('providers.categories') ?? ($isAr ? 'تصنيف' : 'Categories') }}
             </span>
         </div>
 
@@ -552,7 +552,7 @@
 
                             <span class="vc-chip vc-chip-success">
                                 <i class="bi bi-check2-circle"></i>
-                                {{ $isAr ? 'Ù†Ø´Ø·' : 'Active' }}
+                                {{ $isAr ? 'نشط' : 'Active' }}
                             </span>
                         </p>
                     </div>
@@ -565,10 +565,10 @@
                 <div class="vc-empty">
                     <i class="bi bi-folder-plus"></i>
                     <h5 class="vc-empty-title">
-                        {{ __('providers.no_categories') ?? ($isAr ? 'Ù„Ø§ ØªÙˆØ¬Ø¯ ØªØµÙ†ÙŠÙØ§Øª' : 'No Categories Yet') }}
+                        {{ __('providers.no_categories') ?? ($isAr ? 'لا توجد تصنيفات' : 'No Categories Yet') }}
                     </h5>
                     <p class="vc-empty-text">
-                        {{ __('providers.no_categories_desc') ?? ($isAr ? 'Ø£Ø¶Ù ØªØµÙ†ÙŠÙØ§Ù‹ Ø¬Ø¯ÙŠØ¯Ø§Ù‹ Ø¨Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„Ù†Ù…ÙˆØ°Ø¬ Ø£Ø¹Ù„Ø§Ù‡.' : 'Add your first category using the form above.') }}
+                        {{ __('providers.no_categories_desc') ?? ($isAr ? 'أضف تصنيفاً جديداً باستخدام النموذج أعلاه.' : 'Add your first category using the form above.') }}
                     </p>
                 </div>
             @endforelse

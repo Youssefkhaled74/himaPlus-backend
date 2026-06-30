@@ -1,4 +1,4 @@
-﻿@extends('layouts.front.home')
+@extends('layouts.front.home')
 
 <!-- title page -->
 @section('title')
@@ -167,7 +167,7 @@
                                 <label class="form-label">{{ trans_or_fallback('', '') }}</label>
                                 <select name="lang" class="form-select">
                                     <option value="en" {{ $user?->lang == 'en' ? 'selected' : '' }}>English</option>
-                                    <option value="ar" {{ $user?->lang == 'ar' ? 'selected' : '' }}>Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</option>
+                                    <option value="ar" {{ $user?->lang == 'ar' ? 'selected' : '' }}>العربية</option>
                                 </select>
                             </div>
                         </div>

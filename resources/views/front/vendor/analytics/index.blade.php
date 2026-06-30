@@ -1,4 +1,4 @@
-﻿@extends('layouts.front.home')
+@extends('layouts.front.home')
 
 @section('title')
     <title>{{ trans_or_fallback('', '') }} - Vendor | Hema</title>
@@ -316,7 +316,7 @@
     @include('flash::message')
 
     <nav class="va-breadcrumb">
-        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©' : 'Home' }}</a>
+        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
         <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
         <span class="active">{{ trans_or_fallback('', '') }}</span>
     </nav>
@@ -326,7 +326,7 @@
             <div>
                 <h3 class="va-title">{{ trans_or_fallback('', '') }}</h3>
                 <p class="va-subtitle">
-                    {{ $isAr ? 'ØªØ§Ø¨Ø¹ Ø£Ø¯Ø§Ø¡ Ø§Ù„Ø·Ù„Ø¨Ø§Øª ÙˆØ§Ù„Ø¹Ø±ÙˆØ¶ØŒ Ø±Ø§Ù‚Ø¨ Ù…Ø¹Ø¯Ù„Ø§Øª Ø§Ù„Ø¥Ù†Ø¬Ø§Ø² ÙˆØ§Ù„Ù‚Ø¨ÙˆÙ„ØŒ ÙˆØ­Ø¯Ø¯ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø£ÙƒØ«Ø± Ø­Ø±ÙƒØ© Ø®Ù„Ø§Ù„ Ø§Ù„ÙØªØ±Ø© Ø§Ù„ØªÙŠ ØªÙ‡Ù…Ùƒ.' : 'Track orders and offers performance, monitor completion and acceptance rates, and identify your most active products for the period that matters most.' }}
+                    {{ $isAr ? 'تابع أداء الطلبات والعروض، راقب معدلات الإنجاز والقبول، وحدد المنتجات الأكثر حركة خلال الفترة التي تهمك.' : 'Track orders and offers performance, monitor completion and acceptance rates, and identify your most active products for the period that matters most.' }}
                 </p>
             </div>
             <div class="va-actions">
@@ -345,10 +345,10 @@
     <div class="va-card mb-4">
         <div class="va-body">
             <div class="va-periods">
-                <a href="{{ route('vendor/analytics', ['period' => '7']) }}" class="va-period {{ $period === '7' ? 'is-active' : '' }}">{{ $isAr ? 'Ø¢Ø®Ø± 7 Ø£ÙŠØ§Ù…' : 'Last 7 Days' }}</a>
-                <a href="{{ route('vendor/analytics', ['period' => '30']) }}" class="va-period {{ $period === '30' ? 'is-active' : '' }}">{{ $isAr ? 'Ø¢Ø®Ø± 30 ÙŠÙˆÙ…Ù‹Ø§' : 'Last 30 Days' }}</a>
-                <a href="{{ route('vendor/analytics', ['period' => '90']) }}" class="va-period {{ $period === '90' ? 'is-active' : '' }}">{{ $isAr ? 'Ø¢Ø®Ø± 90 ÙŠÙˆÙ…Ù‹Ø§' : 'Last 90 Days' }}</a>
-                <a href="{{ route('vendor/analytics', ['period' => 'all']) }}" class="va-period {{ $period === 'all' ? 'is-active' : '' }}">{{ $isAr ? 'ÙƒÙ„ Ø§Ù„ÙØªØ±Ø§Øª' : 'All Time' }}</a>
+                <a href="{{ route('vendor/analytics', ['period' => '7']) }}" class="va-period {{ $period === '7' ? 'is-active' : '' }}">{{ $isAr ? 'آخر 7 أيام' : 'Last 7 Days' }}</a>
+                <a href="{{ route('vendor/analytics', ['period' => '30']) }}" class="va-period {{ $period === '30' ? 'is-active' : '' }}">{{ $isAr ? 'آخر 30 يومًا' : 'Last 30 Days' }}</a>
+                <a href="{{ route('vendor/analytics', ['period' => '90']) }}" class="va-period {{ $period === '90' ? 'is-active' : '' }}">{{ $isAr ? 'آخر 90 يومًا' : 'Last 90 Days' }}</a>
+                <a href="{{ route('vendor/analytics', ['period' => 'all']) }}" class="va-period {{ $period === 'all' ? 'is-active' : '' }}">{{ $isAr ? 'كل الفترات' : 'All Time' }}</a>
             </div>
         </div>
     </div>
@@ -356,25 +356,25 @@
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
             <div class="va-card va-stat">
-                <p class="va-stat-label">{{ $isAr ? 'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø·Ù„Ø¨Ø§Øª' : 'Total Orders' }}</p>
+                <p class="va-stat-label">{{ $isAr ? 'إجمالي الطلبات' : 'Total Orders' }}</p>
                 <h4 class="va-stat-value">{{ number_format($totalOrders) }}</h4>
             </div>
         </div>
         <div class="col-6 col-md-3">
             <div class="va-card va-stat">
-                <p class="va-stat-label">{{ $isAr ? 'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø¹Ø±ÙˆØ¶' : 'Total Offers' }}</p>
+                <p class="va-stat-label">{{ $isAr ? 'إجمالي العروض' : 'Total Offers' }}</p>
                 <h4 class="va-stat-value">{{ number_format($totalOffers) }}</h4>
             </div>
         </div>
         <div class="col-6 col-md-3">
             <div class="va-card va-stat">
-                <p class="va-stat-label">{{ $isAr ? 'Ù…Ø¹Ø¯Ù„ Ø§Ù„Ù‚Ø¨ÙˆÙ„' : 'Acceptance Rate' }}</p>
+                <p class="va-stat-label">{{ $isAr ? 'معدل القبول' : 'Acceptance Rate' }}</p>
                 <h4 class="va-stat-value">{{ number_format((float) $acceptanceRate, 1) }}%</h4>
             </div>
         </div>
         <div class="col-6 col-md-3">
             <div class="va-card va-stat">
-                <p class="va-stat-label">{{ $isAr ? 'Ù…ØªÙˆØ³Ø· Ø§Ù„ØªÙ‚ÙŠÙŠÙ…' : 'Average Rating' }}</p>
+                <p class="va-stat-label">{{ $isAr ? 'متوسط التقييم' : 'Average Rating' }}</p>
                 <h4 class="va-stat-value">{{ number_format((float) $avgProductRating, 1) }}</h4>
             </div>
         </div>
@@ -385,10 +385,10 @@
             <div class="va-card">
                 <div class="va-panel-head">
                     <div>
-                        <h5 class="va-panel-title">{{ $isAr ? 'Ø§ØªØ¬Ø§Ù‡ Ø§Ù„Ø·Ù„Ø¨Ø§Øª' : 'Orders Trend' }}</h5>
-                        <p class="va-panel-subtitle">{{ $isAr ? 'Ø­Ø±ÙƒØ© Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø¹Ø¨Ø± Ø§Ù„Ø£Ø´Ù‡Ø± Ø§Ù„Ø­Ø§Ù„ÙŠØ© Ø¯Ø§Ø®Ù„ Ø§Ù„Ø±Ø³Ù… Ø§Ù„Ø¨ÙŠØ§Ù†ÙŠ.' : 'Order movement across the current months.' }}</p>
+                        <h5 class="va-panel-title">{{ $isAr ? 'اتجاه الطلبات' : 'Orders Trend' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'حركة الطلبات عبر الأشهر الحالية داخل الرسم البياني.' : 'Order movement across the current months.' }}</p>
                     </div>
-                    <span class="va-chip va-chip-primary">{{ $period === 'all' ? ($isAr ? 'ÙƒÙ„ Ø§Ù„ÙØªØ±Ø§Øª' : 'All Time') : ($isAr ? 'ÙØªØ±Ø© Ù…ÙÙ„ØªØ±Ø©' : 'Filtered Period') }}</span>
+                    <span class="va-chip va-chip-primary">{{ $period === 'all' ? ($isAr ? 'كل الفترات' : 'All Time') : ($isAr ? 'فترة مفلترة' : 'Filtered Period') }}</span>
                 </div>
                 <div class="va-body">
                     <div class="va-chart">
@@ -402,8 +402,8 @@
             <div class="va-card">
                 <div class="va-panel-head">
                     <div>
-                        <h5 class="va-panel-title">{{ $isAr ? 'ØªÙˆØ²ÙŠØ¹ Ø§Ù„Ø­Ø§Ù„Ø§Øª' : 'Status Mix' }}</h5>
-                        <p class="va-panel-subtitle">{{ $isAr ? 'Ù…Ù‚Ø§Ø±Ù†Ø© Ø³Ø±ÙŠØ¹Ø© Ø¨ÙŠÙ† Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…Ø¤ÙƒØ¯Ø© ÙˆÙ‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ° ÙˆØ§Ù„Ù…ÙƒØªÙ…Ù„Ø©.' : 'A quick comparison of confirmed, processing, and completed orders.' }}</p>
+                        <h5 class="va-panel-title">{{ $isAr ? 'توزيع الحالات' : 'Status Mix' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'مقارنة سريعة بين الطلبات المؤكدة وقيد التنفيذ والمكتملة.' : 'A quick comparison of confirmed, processing, and completed orders.' }}</p>
                     </div>
                 </div>
                 <div class="va-body">
@@ -420,8 +420,8 @@
             <div class="va-card">
                 <div class="va-panel-head">
                     <div>
-                        <h5 class="va-panel-title">{{ $isAr ? 'Ø£ÙØ¶Ù„ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª' : 'Top Products' }}</h5>
-                        <p class="va-panel-subtitle">{{ $isAr ? 'Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ø£ÙƒØ«Ø± ØªÙˆÙ„ÙŠØ¯Ù‹Ø§ Ù„Ù„Ø·Ù„Ø¨Ø§Øª Ø®Ù„Ø§Ù„ Ø§Ù„ÙØªØ±Ø©.' : 'Products generating the most orders in the selected period.' }}</p>
+                        <h5 class="va-panel-title">{{ $isAr ? 'أفضل المنتجات' : 'Top Products' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'المنتجات الأكثر توليدًا للطلبات خلال الفترة.' : 'Products generating the most orders in the selected period.' }}</p>
                     </div>
                 </div>
                 <div class="va-body">
@@ -429,15 +429,15 @@
                         <div class="va-product">
                             <div class="va-rank">{{ $index + 1 }}</div>
                             <div class="flex-grow-1">
-                                <p class="va-product-title">{{ $item->product_name ?? ($isAr ? 'Ù…Ù†ØªØ¬' : 'Product') }}</p>
-                                <p class="va-product-meta">{{ $isAr ? 'Ø¹Ø¯Ø¯ Ø§Ù„Ø·Ù„Ø¨Ø§Øª Ø§Ù„Ù…Ø±ØªØ¨Ø·Ø© Ø¨Ù‡Ø°Ø§ Ø§Ù„Ù…Ù†ØªØ¬.' : 'Orders generated by this product.' }}</p>
+                                <p class="va-product-title">{{ $item->product_name ?? ($isAr ? 'منتج' : 'Product') }}</p>
+                                <p class="va-product-meta">{{ $isAr ? 'عدد الطلبات المرتبطة بهذا المنتج.' : 'Orders generated by this product.' }}</p>
                             </div>
                             <span class="va-chip va-chip-primary">{{ $item->order_count }} {{ trans_or_fallback('', '') }}</span>
                         </div>
                     @empty
                         <div class="va-empty">
                             <i class="bi bi-box-seam"></i>
-                            <div>{{ $isAr ? 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª Ù…Ù†ØªØ¬Ø§Øª ÙƒØ§ÙÙŠØ© Ù„Ø¹Ø±Ø¶ Ø§Ù„ØªØ±ØªÙŠØ¨.' : 'Not enough product data to display rankings yet.' }}</div>
+                            <div>{{ $isAr ? 'لا توجد بيانات منتجات كافية لعرض الترتيب.' : 'Not enough product data to display rankings yet.' }}</div>
                         </div>
                     @endforelse
                 </div>
@@ -448,38 +448,38 @@
             <div class="va-card mb-4">
                 <div class="va-panel-head">
                     <div>
-                        <h5 class="va-panel-title">{{ $isAr ? 'Ù…Ù„Ø®Øµ Ø§Ù„Ø£Ø¯Ø§Ø¡' : 'Performance Summary' }}</h5>
-                        <p class="va-panel-subtitle">{{ $isAr ? 'Ù…Ù„Ø®Øµ Ø³Ø±ÙŠØ¹ Ù„Ø£Ù‡Ù… Ù…Ø¤Ø´Ø±Ø§Øª Ø§Ù„ØªØ´ØºÙŠÙ„ ÙˆØ§Ù„Ù…Ø±Ø§Ø¬Ø¹Ø§Øª.' : 'A fast view of key operations and review metrics.' }}</p>
+                        <h5 class="va-panel-title">{{ $isAr ? 'ملخص الأداء' : 'Performance Summary' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'ملخص سريع لأهم مؤشرات التشغيل والمراجعات.' : 'A fast view of key operations and review metrics.' }}</p>
                     </div>
                 </div>
                 <div class="va-body">
                     <table class="va-mini-table">
                         <tr>
-                            <td>{{ $isAr ? 'Ø·Ù„Ø¨Ø§Øª Ù…ÙƒØªÙ…Ù„Ø©' : 'Completed Orders' }}</td>
+                            <td>{{ $isAr ? 'طلبات مكتملة' : 'Completed Orders' }}</td>
                             <td>{{ number_format($completedOrders) }}</td>
                         </tr>
                         <tr>
-                            <td>{{ $isAr ? 'Ø·Ù„Ø¨Ø§Øª Ù…Ø¤ÙƒØ¯Ø©' : 'Confirmed Orders' }}</td>
+                            <td>{{ $isAr ? 'طلبات مؤكدة' : 'Confirmed Orders' }}</td>
                             <td>{{ number_format($confirmedOrders) }}</td>
                         </tr>
                         <tr>
-                            <td>{{ $isAr ? 'Ø·Ù„Ø¨Ø§Øª Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°' : 'Processing Orders' }}</td>
+                            <td>{{ $isAr ? 'طلبات قيد التنفيذ' : 'Processing Orders' }}</td>
                             <td>{{ number_format($processingOrders) }}</td>
                         </tr>
                         <tr>
-                            <td>{{ $isAr ? 'Ø¹Ø±ÙˆØ¶ Ù…Ù‚Ø¨ÙˆÙ„Ø©' : 'Accepted Offers' }}</td>
+                            <td>{{ $isAr ? 'عروض مقبولة' : 'Accepted Offers' }}</td>
                             <td>{{ number_format($acceptedOffers) }}</td>
                         </tr>
                         <tr>
-                            <td>{{ $isAr ? 'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„ØªÙ‚ÙŠÙŠÙ…Ø§Øª' : 'Total Ratings' }}</td>
+                            <td>{{ $isAr ? 'إجمالي التقييمات' : 'Total Ratings' }}</td>
                             <td>{{ number_format($totalProductRatings) }}</td>
                         </tr>
                         <tr>
-                            <td>{{ $isAr ? 'Ù…Ù†ØªØ¬Ø§Øª Ù†Ø´Ø·Ø©' : 'Active Products' }}</td>
+                            <td>{{ $isAr ? 'منتجات نشطة' : 'Active Products' }}</td>
                             <td>{{ number_format($products->count()) }}</td>
                         </tr>
                         <tr>
-                            <td>{{ $isAr ? 'Ù…Ø¹Ø¯Ù„ Ø§Ù„Ø¥Ù†Ø¬Ø§Ø²' : 'Completion Rate' }}</td>
+                            <td>{{ $isAr ? 'معدل الإنجاز' : 'Completion Rate' }}</td>
                             <td>{{ number_format((float) $completionRate, 1) }}%</td>
                         </tr>
                     </table>
@@ -489,22 +489,22 @@
             <div class="va-card">
                 <div class="va-panel-head">
                     <div>
-                        <h5 class="va-panel-title">{{ $isAr ? 'Ù…Ø¤Ø´Ø±Ø§Øª Ø§Ù„Ø­Ø§Ù„Ø§Øª' : 'Status Signals' }}</h5>
-                        <p class="va-panel-subtitle">{{ $isAr ? 'Ù…Ù‚Ø§Ø±Ù†Ø© Ù…Ø¨Ø§Ø´Ø±Ø© Ø¨ÙŠÙ† Ø§Ù„Ø­Ø§Ù„Ø§Øª Ø§Ù„Ø£Ù‡Ù… Ù„ØªÙ‚ÙŠÙŠÙ… Ø³Ø±Ø¹Ø© Ø§Ù„ØªÙ†ÙÙŠØ°.' : 'Direct status comparison to assess execution velocity.' }}</p>
+                        <h5 class="va-panel-title">{{ $isAr ? 'مؤشرات الحالات' : 'Status Signals' }}</h5>
+                        <p class="va-panel-subtitle">{{ $isAr ? 'مقارنة مباشرة بين الحالات الأهم لتقييم سرعة التنفيذ.' : 'Direct status comparison to assess execution velocity.' }}</p>
                     </div>
                 </div>
                 <div class="va-body">
                     <div class="d-flex flex-column gap-3">
                         <div class="d-flex justify-content-between align-items-center">
-                            <span>{{ $isAr ? 'Ù…Ø¤ÙƒØ¯' : 'Confirmed' }}</span>
+                            <span>{{ $isAr ? 'مؤكد' : 'Confirmed' }}</span>
                             <span class="va-chip va-chip-primary">{{ $confirmedOrders }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span>{{ $isAr ? 'Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°' : 'Processing' }}</span>
+                            <span>{{ $isAr ? 'قيد التنفيذ' : 'Processing' }}</span>
                             <span class="va-chip va-chip-warning">{{ $processingOrders }}</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span>{{ $isAr ? 'Ù…ÙƒØªÙ…Ù„' : 'Completed' }}</span>
+                            <span>{{ $isAr ? 'مكتمل' : 'Completed' }}</span>
                             <span class="va-chip va-chip-success">{{ $completedOrders }}</span>
                         </div>
                     </div>
@@ -527,7 +527,7 @@
                 data: {
                     labels: @json($chartMonths),
                     datasets: [{
-                        label: analyticsIsRtl ? 'Ø§Ù„Ø·Ù„Ø¨Ø§Øª' : 'Orders',
+                        label: analyticsIsRtl ? 'الطلبات' : 'Orders',
                         data: @json($chartOrdersCount),
                         borderColor: '#0f4bbf',
                         backgroundColor: 'rgba(15, 75, 191, 0.12)',
@@ -578,7 +578,7 @@
                 type: 'doughnut',
                 data: {
                     labels: analyticsIsRtl
-                        ? ['Ù…Ø¤ÙƒØ¯', 'Ù‚ÙŠØ¯ Ø§Ù„ØªÙ†ÙÙŠØ°', 'Ù…ÙƒØªÙ…Ù„']
+                        ? ['مؤكد', 'قيد التنفيذ', 'مكتمل']
                         : Object.keys(statusData),
                     datasets: [{
                         data: Object.values(statusData),

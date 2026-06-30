@@ -1,4 +1,4 @@
-﻿@extends('layouts.front.home')
+@extends('layouts.front.home')
 
 @section('title')
 <title>{{ trans_or_fallback('', '') }} - Vendor | Hema</title>
@@ -160,7 +160,7 @@
 
         @if ($errors->any())
         <div class="alert alert-danger">
-            <strong>{{ app()->getLocale() == 'ar' ? 'Ø®Ø·Ø£ ÙÙŠ Ø§Ù„ØªØ­Ù‚Ù‚:' : 'Validation Error:' }}</strong>
+            <strong>{{ app()->getLocale() == 'ar' ? 'خطأ في التحقق:' : 'Validation Error:' }}</strong>
             <ul class="mb-0">
                 @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -199,13 +199,13 @@
                         {{-- Product Name --}}
                         <div class="mb-3">
                             <label for="name" class="form-label fw-semibold">
-                                {{ app()->getLocale() == 'ar' ? 'Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬' : 'Product Name' }}
+                                {{ app()->getLocale() == 'ar' ? 'اسم المنتج' : 'Product Name' }}
                                 <span class="text-danger">*</span>
                             </label>
                             <input type="text"
                                 class="form-control hp-input @error('name') is-invalid @enderror"
                                 id="name" name="name" value="{{ old('name') }}" required
-                                placeholder="{{ app()->getLocale() == 'ar' ? 'Ø§Ø¯Ø®Ù„ Ø§Ø³Ù… Ø§Ù„Ù…Ù†ØªØ¬' : 'Enter product name' }}">
+                                placeholder="{{ app()->getLocale() == 'ar' ? 'ادخل اسم المنتج' : 'Enter product name' }}">
                             @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -214,12 +214,12 @@
                         {{-- Category --}}
                         <div class="mb-3">
                             <label for="category_id" class="form-label fw-semibold">
-                                {{ app()->getLocale() == 'ar' ? 'Ø§Ù„ÙØ¦Ø©' : 'Category' }}
+                                {{ app()->getLocale() == 'ar' ? 'الفئة' : 'Category' }}
                                 <span class="text-danger">*</span>
                             </label>
                             <select class="form-select hp-select @error('category_id') is-invalid @enderror"
                                 id="category_id" name="category_id" required>
-                                <option value="">{{ app()->getLocale() == 'ar' ? 'Ø§Ø®ØªØ± Ø§Ù„ÙØ¦Ø©' : 'Select category' }}</option>
+                                <option value="">{{ app()->getLocale() == 'ar' ? 'اختر الفئة' : 'Select category' }}</option>
                                 @foreach($categories as $category)
                                 <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
@@ -234,12 +234,12 @@
                         {{-- Description --}}
                         <div class="mb-3">
                             <label for="description" class="form-label fw-semibold">
-                                {{ app()->getLocale() == 'ar' ? 'Ø§Ù„ÙˆØµÙ' : 'Description' }}
+                                {{ app()->getLocale() == 'ar' ? 'الوصف' : 'Description' }}
                                 <span class="text-danger">*</span>
                             </label>
                             <textarea class="form-control hp-textarea @error('description') is-invalid @enderror"
                                 id="description" name="description" rows="4" required
-                                placeholder="{{ app()->getLocale() == 'ar' ? 'Ø§ÙƒØªØ¨ ÙˆØµÙ Ø§Ù„Ù…Ù†ØªØ¬' : 'Add product details, specifications, features' }}">{{ old('description') }}</textarea>
+                                placeholder="{{ app()->getLocale() == 'ar' ? 'اكتب وصف المنتج' : 'Add product details, specifications, features' }}">{{ old('description') }}</textarea>
                             @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -249,14 +249,14 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="price" class="form-label fw-semibold">
-                                    {{ app()->getLocale() == 'ar' ? 'Ø§Ù„Ø³Ø¹Ø± (Ù„Ù„ÙˆØ­Ø¯Ø©)' : 'Price (per unit)' }}
+                                    {{ app()->getLocale() == 'ar' ? 'السعر (للوحدة)' : 'Price (per unit)' }}
                                     <span class="text-danger">*</span>
                                 </label>
                                 <div class="input-group">
                                     <input type="number" step="0.01"
                                         class="form-control hp-input @error('price') is-invalid @enderror"
                                         id="price" name="price" value="{{ old('price') }}" required
-                                        placeholder="{{ app()->getLocale() == 'ar' ? 'Ø§Ø¯Ø®Ù„ Ø§Ù„Ø³Ø¹Ø±' : 'Enter price' }}">
+                                        placeholder="{{ app()->getLocale() == 'ar' ? 'ادخل السعر' : 'Enter price' }}">
                                     <span class="input-group-text">SAR</span>
                                 </div>
                                 @error('price')
@@ -266,13 +266,13 @@
 
                             <div class="col-md-6 mb-3">
                                 <label for="quantity" class="form-label fw-semibold">
-                                    {{ app()->getLocale() == 'ar' ? 'Ø§Ù„Ù…Ø®Ø²ÙˆÙ† / Ø§Ù„ÙƒÙ…ÙŠØ© Ø§Ù„Ù…ØªØ§Ø­Ø©' : 'Stock / Available Quantity' }}
+                                    {{ app()->getLocale() == 'ar' ? 'المخزون / الكمية المتاحة' : 'Stock / Available Quantity' }}
                                     <span class="text-danger">*</span>
                                 </label>
                                 <input type="number"
                                     class="form-control hp-input @error('quantity') is-invalid @enderror"
                                     id="quantity" name="quantity" value="{{ old('quantity') }}" required
-                                    placeholder="{{ app()->getLocale() == 'ar' ? 'Ø§Ø¯Ø®Ù„ Ø§Ù„ÙƒÙ…ÙŠØ©' : 'Enter available quantity' }}">
+                                    placeholder="{{ app()->getLocale() == 'ar' ? 'ادخل الكمية' : 'Enter available quantity' }}">
                                 @error('quantity')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -282,7 +282,7 @@
                         {{-- Upload Images --}}
                         <div class="mb-3">
                             <label for="images" class="form-label fw-semibold">
-                                {{ app()->getLocale() == 'ar' ? 'Ø±ÙØ¹ Ø§Ù„ØµÙˆØ±' : 'Upload Images' }}
+                                {{ app()->getLocale() == 'ar' ? 'رفع الصور' : 'Upload Images' }}
                                 <span class="text-danger">*</span>
                             </label>
 
@@ -292,7 +292,7 @@
                                     id="images" name="images[]" multiple accept="image/*" required>
                                 <div class="mt-2">
                                     <small>{{ app()->getLocale() == 'ar'
-                                            ? 'Ø±ÙØ¹ ØµÙˆØ± Ø§Ù„Ù…Ù†ØªØ¬ (JPG / PNG) - Ø­Ø¯ Ø£Ù‚ØµÙ‰ 5 ØµÙˆØ±'
+                                            ? 'رفع صور المنتج (JPG / PNG) - حد أقصى 5 صور'
                                             : 'Upload product images (JPG / PNG) - up to 5 images' }}</small>
                                 </div>
                                 @error('images')
@@ -305,27 +305,27 @@
                         {{-- ===== Specifications (Optional) ===== --}}
                         <div class="mb-3 mt-4">
                             <h6 class="fw-bold mb-3" style="color:#0f172a;">
-                                {{ app()->getLocale() == 'ar' ? 'Ø§Ù„Ù…ÙˆØ§ØµÙØ§Øª' : 'Specifications' }}
+                                {{ app()->getLocale() == 'ar' ? 'المواصفات' : 'Specifications' }}
                             </h6>
 
                             <div class="row">
                                 {{-- Imaging Type --}}
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label fw-semibold">
-                                        {{ app()->getLocale() == 'ar' ? 'Ù†ÙˆØ¹ Ø§Ù„ØªØµÙˆÙŠØ±' : 'Imaging Type' }}
+                                        {{ app()->getLocale() == 'ar' ? 'نوع التصوير' : 'Imaging Type' }}
                                         <span class="text-muted">(option)</span>
                                     </label>
                                     <input type="text"
                                         name="imaging_type"
                                         value="{{ old('imaging_type') }}"
                                         class="form-control hp-input"
-                                        placeholder="{{ app()->getLocale() == 'ar' ? 'Ø§Ø¯Ø®Ù„ Ù†ÙˆØ¹ Ø§Ù„ØªØµÙˆÙŠØ±' : 'Enter imaging type' }}">
+                                        placeholder="{{ app()->getLocale() == 'ar' ? 'ادخل نوع التصوير' : 'Enter imaging type' }}">
                                 </div>
 
                                 {{-- Production Date --}}
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label fw-semibold">
-                                        {{ app()->getLocale() == 'ar' ? 'ØªØ§Ø±ÙŠØ® Ø§Ù„Ø¥Ù†ØªØ§Ø¬ (MFG Date)' : 'Production Date (MFG Date)' }}
+                                        {{ app()->getLocale() == 'ar' ? 'تاريخ الإنتاج (MFG Date)' : 'Production Date (MFG Date)' }}
                                         <span class="text-muted">(option)</span>
                                     </label>
                                     <div class="input-group">
@@ -342,7 +342,7 @@
                                 {{-- Expiry Date --}}
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label fw-semibold">
-                                        {{ app()->getLocale() == 'ar' ? 'ØªØ§Ø±ÙŠØ® Ø§Ù„Ø§Ù†ØªÙ‡Ø§Ø¡ (EXP Date)' : 'Expiry Date (EXP Date)' }}
+                                        {{ app()->getLocale() == 'ar' ? 'تاريخ الانتهاء (EXP Date)' : 'Expiry Date (EXP Date)' }}
                                         <span class="text-muted">(option)</span>
                                     </label>
                                     <div class="input-group">
@@ -359,40 +359,40 @@
                                 {{-- Weight --}}
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label fw-semibold">
-                                        {{ app()->getLocale() == 'ar' ? 'Ø§Ù„ÙˆØ²Ù†' : 'Weight' }}
+                                        {{ app()->getLocale() == 'ar' ? 'الوزن' : 'Weight' }}
                                         <span class="text-muted">(option)</span>
                                     </label>
                                     <input type="text"
                                         name="weight"
                                         value="{{ old('weight') }}"
                                         class="form-control hp-input"
-                                        placeholder="{{ app()->getLocale() == 'ar' ? 'Ø§Ø¯Ø®Ù„ Ø§Ù„ÙˆØ²Ù†' : 'Enter weight' }}">
+                                        placeholder="{{ app()->getLocale() == 'ar' ? 'ادخل الوزن' : 'Enter weight' }}">
                                 </div>
 
                                 {{-- Dimensions --}}
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label fw-semibold">
-                                        {{ app()->getLocale() == 'ar' ? 'Ø§Ù„Ø£Ø¨Ø¹Ø§Ø¯' : 'Dimensions' }}
+                                        {{ app()->getLocale() == 'ar' ? 'الأبعاد' : 'Dimensions' }}
                                         <span class="text-muted">(option)</span>
                                     </label>
                                     <input type="text"
                                         name="dimensions"
                                         value="{{ old('dimensions') }}"
                                         class="form-control hp-input"
-                                        placeholder="{{ app()->getLocale() == 'ar' ? 'Ø§Ø¯Ø®Ù„ Ø§Ù„Ø£Ø¨Ø¹Ø§Ø¯' : 'Enter dimensions' }}">
+                                        placeholder="{{ app()->getLocale() == 'ar' ? 'ادخل الأبعاد' : 'Enter dimensions' }}">
                                 </div>
 
                                 {{-- Warranty --}}
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label fw-semibold">
-                                        {{ app()->getLocale() == 'ar' ? 'Ø§Ù„Ø¶Ù…Ø§Ù†' : 'Warranty' }}
+                                        {{ app()->getLocale() == 'ar' ? 'الضمان' : 'Warranty' }}
                                         <span class="text-muted">(option)</span>
                                     </label>
                                     <input type="text"
                                         name="warranty"
                                         value="{{ old('warranty') }}"
                                         class="form-control hp-input"
-                                        placeholder="{{ app()->getLocale() == 'ar' ? 'Ù…Ø«Ø§Ù„: Ø³Ù†Ø©' : 'Ex: 1 Year' }}">
+                                        placeholder="{{ app()->getLocale() == 'ar' ? 'مثال: سنة' : 'Ex: 1 Year' }}">
                                 </div>
                             </div>
                         </div>
@@ -447,7 +447,7 @@
                         {{-- Actions --}}
                         <div class="d-flex justify-content-end mt-4">
                             <button type="submit" class="hp-btn-gradient px-5">
-                                {{ app()->getLocale() == 'ar' ? 'Ø­ÙØ¸ Ø§Ù„Ù…Ù†ØªØ¬' : 'Save Product' }}
+                                {{ app()->getLocale() == 'ar' ? 'حفظ المنتج' : 'Save Product' }}
                             </button>
                         </div>
 
