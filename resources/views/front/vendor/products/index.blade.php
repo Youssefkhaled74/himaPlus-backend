@@ -282,18 +282,27 @@
             <div class="vendor-products__bar">
                 <h2 class="vendor-products__title">{{ trans_or_fallback('', '') }}</h2>
 
-                <div class="vendor-tools">
-                    <form method="GET" action="{{ route('vendor/products') }}">
-                        <div class="vendor-search">
-                            <i class="bi bi-search"></i>
-                            <input
-                                type="text"
-                                name="search"
-                                value="{{ request('search', $search ?? '') }}"
-                                placeholder="{{ trans_or_fallback('', '') }}"
-                            >
-                        </div>
-                    </form>
+	                <div class="vendor-tools">
+	                    <form method="GET" action="{{ route('vendor/products') }}">
+                            <div class="d-flex flex-column flex-lg-row gap-3 align-items-stretch align-items-lg-center">
+	                            <div class="vendor-search">
+	                                <i class="bi bi-search"></i>
+	                                <input
+	                                    type="text"
+	                                    name="search"
+	                                    value="{{ request('search', $search ?? '') }}"
+	                                    placeholder="{{ trans_or_fallback('', '') }}"
+	                                >
+	                            </div>
+                                <select name="status" class="form-select" onchange="this.form.submit()" style="min-width: 220px; height: 50px; border-radius: 12px; border: 1px solid #DCE4F0;">
+                                    <option value="">{{ app()->getLocale() == 'ar' ? 'كل الحالات' : 'All statuses' }}</option>
+                                    <option value="active" {{ ($status ?? '') === 'active' ? 'selected' : '' }}>{{ app()->getLocale() == 'ar' ? 'المنتجات النشطة' : 'Active products' }}</option>
+                                    <option value="inactive" {{ ($status ?? '') === 'inactive' ? 'selected' : '' }}>{{ app()->getLocale() == 'ar' ? 'المنتجات غير النشطة' : 'Inactive products' }}</option>
+                                    <option value="low_stock" {{ ($status ?? '') === 'low_stock' ? 'selected' : '' }}>{{ app()->getLocale() == 'ar' ? 'مخزون منخفض' : 'Low stock' }}</option>
+                                    <option value="critical_stock" {{ ($status ?? '') === 'critical_stock' ? 'selected' : '' }}>{{ app()->getLocale() == 'ar' ? 'مخزون حرج' : 'Critical stock' }}</option>
+                                </select>
+                            </div>
+	                    </form>
 
                     <a href="{{ route('vendor/products/create') }}" class="btn-add-product">
                         <i class="bi bi-plus-lg"></i>
@@ -327,11 +336,16 @@
                                     @endif
                                 </div>
 
-                                <div class="product-body">
-                                    <h3 class="product-name">{{ $product->name }}</h3>
-                                    <p class="product-price">
-                                        {{ number_format((float) $product->price, 2) }}
-                                        SAR
+	                                <div class="product-body">
+	                                    <h3 class="product-name">{{ $product->name }}</h3>
+                                        <div class="d-flex align-items-center justify-content-between gap-2 mt-3">
+                                            <span class="badge {{ $product->stockBadgeClass() }}">
+                                                {{ app()->getLocale() == 'ar' ? 'المخزون' : 'Stock' }}: {{ (int) $product->stock_quantity }}
+                                            </span>
+                                        </div>
+	                                    <p class="product-price">
+	                                        {{ number_format((float) $product->price, 2) }}
+	                                        SAR
                                     </p>
                                 </div>
                             </a>

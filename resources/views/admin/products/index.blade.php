@@ -298,7 +298,7 @@
                         <div class="admin-card-head__actions"></div>
                     </div>
                 </div>
-                @php $hasActiveFilters = ($search ?? '') !== ''; @endphp
+                @php $hasActiveFilters = ($search ?? '') !== '' || ($lowStock ?? '') !== ''; @endphp
                 <div class="card-body" style="padding-bottom:0;">
                     <form method="GET" action="{{ route('admin/products/index', ['offset' => 0, 'limit' => PAGINATION_COUNT]) }}" id="productsFilterForm">
                         <div class="admin-filter-bar">
@@ -312,6 +312,20 @@
                             <button type="submit" class="btn btn-primary btn-filter">
                                 <i class="ri-search-2-line align-bottom"></i>
                             </button>
+                            <div class="form-check form-switch ms-2">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    role="switch"
+                                    id="lowStockOnly"
+                                    name="low_stock"
+                                    value="1"
+                                    {{ ($lowStock ?? '') !== '' ? 'checked' : '' }}
+                                >
+                                <label class="form-check-label" for="lowStockOnly">
+                                    {{ __('admin.dashboard.low_stock_only') }}
+                                </label>
+                            </div>
                             @if($hasActiveFilters)
                                 <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="btn btn-light btn-filter">
                                     <i class="ri-close-line align-bottom"></i>
@@ -329,6 +343,13 @@
                                 <i class="ri-search-line tag-icon"></i>
                                 {{ $search }}
                                 <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="btn-close-sm">&times;</a>
+                            </span>
+                            @endif
+                            @if(($lowStock ?? '') !== '')
+                            <span class="admin-filter-tag">
+                                <i class="ri-alert-line tag-icon"></i>
+                                {{ __('admin.dashboard.low_stock_only') }}
+                                <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}{{ ($search ?? '') !== '' ? '?search=' . urlencode($search) : '' }}" class="btn-close-sm">&times;</a>
                             </span>
                             @endif
                             <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="admin-filter-tag is-reset">
@@ -361,7 +382,7 @@
                                             $activationClass = $record->is_activate == 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
                                             $activationLabel = $record->is_activate == 1 ? __('admin.pages.common.active') : __('admin.pages.common.inactive');
                                             $activationTone = $record->is_activate == 1 ? 'is-active' : 'is-inactive';
-                                            $stockClass = (int) $record->stock_quantity > 10 ? 'bg-success-subtle text-success' : ((int) $record->stock_quantity > 0 ? 'bg-warning-subtle text-warning' : 'bg-danger-subtle text-danger');
+                                            $stockClass = $record->stockBadgeClass();
                                         @endphp
                                         <tr class="text-center">
                                             <td class="fw-semibold">#{{ $record->id }}</td>

@@ -17,8 +17,6 @@ use Carbon\Carbon;
 
 class HomeService
 {
-    private const LOW_STOCK_THRESHOLD = 20;
-
     public function __construct(private OrderStatusService $orderStatusService)
     {
     }
@@ -164,7 +162,7 @@ class HomeService
 
         $lowStockProducts = Product::query()
             ->whereNull('deleted_at')
-            ->where('stock_quantity', '<', self::LOW_STOCK_THRESHOLD)
+            ->lowStock()
             ->with(['provider:id,name,email,mobile'])
             ->select(['id', 'name', 'stock_quantity', 'price', 'provider_id'])
             ->orderBy('stock_quantity')
@@ -173,7 +171,7 @@ class HomeService
 
         $vendorsWithLowStockProducts = Product::query()
             ->whereNull('deleted_at')
-            ->where('stock_quantity', '<', self::LOW_STOCK_THRESHOLD)
+            ->lowStock()
             ->whereNotNull('provider_id')
             ->distinct('provider_id')
             ->count('provider_id');
@@ -215,7 +213,7 @@ class HomeService
                 'ratings' => Rating::whereNull('deleted_at')->count(),
                 'contacts' => Contact::whereNull('deleted_at')->count(),
                 'countries' => Country::whereNull('deleted_at')->count(),
-                'low_stock' => (clone $productsBase)->where('stock_quantity', '<', self::LOW_STOCK_THRESHOLD)->count(),
+                'low_stock' => (clone $productsBase)->lowStock()->count(),
                 'total_offers' => $totalOffers,
                 'pending_offers' => $pendingOffers,
                 'accepted_offers' => $acceptedOffers,
@@ -231,6 +229,8 @@ class HomeService
                 'completed_scheduled_orders' => $completedScheduledOrders,
                 'total_unread_notifications' => $totalUnreadNotifications,
                 'vendor_unread_notifications' => $vendorUnreadNotifications,
+                'low_stock_warning_threshold' => Product::warningStockThreshold(),
+                'low_stock_critical_threshold' => Product::criticalStockThreshold(),
             ],
             'growth' => [
                 'orders' => $this->growthRate($ordersCurrentMonth, $ordersPreviousMonth),

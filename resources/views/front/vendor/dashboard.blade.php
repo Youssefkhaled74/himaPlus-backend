@@ -318,6 +318,14 @@
                 </div>
             </a>
         </div>
+        <div class="col-6 col-md">
+            <a href="{{ route('vendor/products', ['status' => 'low_stock']) }}" class="text-decoration-none" style="color:inherit;">
+                <div class="vd-card vd-stat">
+                    <p class="vd-stat-label">{{ $isAr ? 'المخزون المنخفض' : 'Low Stock Products' }}</p>
+                    <h4 class="vd-stat-value">{{ $lowStockProductsCount }}</h4>
+                </div>
+            </a>
+        </div>
     </div>
 
     <div class="row g-4">

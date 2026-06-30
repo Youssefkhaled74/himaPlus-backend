@@ -38,7 +38,7 @@ class ProductRepository extends BaseAdminRepository
                 });
             })
             ->when($lowStock !== '', function ($query) {
-                $query->where('stock_quantity', '<', 20);
+                $query->lowStock();
             })
             ->orderBy('id', 'DESC')
             ->paginate(PAGINATION_COUNT)

@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+	public const STOCK_LEVEL_HEALTHY = 'healthy';
+	public const STOCK_LEVEL_WARNING = 'warning';
+	public const STOCK_LEVEL_CRITICAL = 'critical';
+
     protected $table = 'products';
 	protected $fillable = [
 		'name',
@@ -108,6 +112,50 @@ class Product extends Model
 	
 	public function scopeUnArchive($query){
 		return $query->whereNull('deleted_at');
+	}
+
+	public function scopeLowStock($query)
+	{
+		return $query->where('stock_quantity', '<', static::warningStockThreshold());
+	}
+
+	public function scopeCriticalStock($query)
+	{
+		return $query->where('stock_quantity', '<=', static::criticalStockThreshold());
+	}
+
+	public static function warningStockThreshold(): int
+	{
+		return (int) config('stock.warning_threshold', 20);
+	}
+
+	public static function criticalStockThreshold(): int
+	{
+		return (int) config('stock.critical_threshold', 5);
+	}
+
+	public function stockLevel(): string
+	{
+		$quantity = (int) ($this->stock_quantity ?? 0);
+
+		if ($quantity <= static::criticalStockThreshold()) {
+			return static::STOCK_LEVEL_CRITICAL;
+		}
+
+		if ($quantity < static::warningStockThreshold()) {
+			return static::STOCK_LEVEL_WARNING;
+		}
+
+		return static::STOCK_LEVEL_HEALTHY;
+	}
+
+	public function stockBadgeClass(): string
+	{
+		return match ($this->stockLevel()) {
+			static::STOCK_LEVEL_CRITICAL => 'bg-danger-subtle text-danger',
+			static::STOCK_LEVEL_WARNING => 'bg-warning-subtle text-warning',
+			default => 'bg-success-subtle text-success',
+		};
 	}
 	
 	public function fildes(){

@@ -512,7 +512,7 @@
                         <span>{{ __('admin.dashboard.inventory_alert') }}</span>
                     </div>
                     <h4 class="mb-2" style="color: white;">{{ __('admin.dashboard.low_stock_items', ['count' => number_format($dashboard['totals']['low_stock'] ?? 0)]) }}</h4>
-                    <p class="mb-3" style="color: rgba(255,255,255,0.8);">{{ __('admin.dashboard.inventory_alert_text') }}</p>
+                    <p class="mb-3" style="color: rgba(255,255,255,0.8);">{{ __('admin.dashboard.inventory_alert_text', ['warning' => $dashboard['totals']['low_stock_warning_threshold'] ?? 20, 'critical' => $dashboard['totals']['low_stock_critical_threshold'] ?? 5]) }}</p>
                     <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}?low_stock=1" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
                 </article>
 
@@ -588,9 +588,9 @@
                             <div class="dashboard-section-heading mb-0">
                                 <div>
                                     <h5 class="card-title mb-1">{{ __('admin.dashboard.low_stock_alerts') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.low_stock_threshold_hint') }}</p>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.low_stock_threshold_hint', ['warning' => $dashboard['totals']['low_stock_warning_threshold'] ?? 20, 'critical' => $dashboard['totals']['low_stock_critical_threshold'] ?? 5]) }}</p>
                                 </div>
-                                <span class="badge bg-danger-subtle text-danger">{{ count($dashboard['low_stock_products'] ?? []) }}</span>
+                                <span class="badge bg-danger-subtle text-danger">{{ number_format($dashboard['totals']['low_stock'] ?? 0) }}</span>
                             </div>
                         </div>
                         <div class="card-body">

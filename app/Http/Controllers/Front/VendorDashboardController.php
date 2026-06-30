@@ -65,7 +65,7 @@ class VendorDashboardController extends Controller
         $lowStockProductsCount = Product::where('provider_id', $vendor->id)
             ->whereNull('deleted_at')
             ->where('is_activate', 1)
-            ->where('stock_quantity', '<=', 5)
+            ->lowStock()
             ->count();
         
         $scheduledOrdersCount = $this->orderStatusService->countByStatus($ordersBaseQuery, OrderStatusService::STATUS_SCHEDULED, ['provider_id' => (int) $vendor->id]);

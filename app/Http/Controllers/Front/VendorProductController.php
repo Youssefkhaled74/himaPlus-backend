@@ -33,6 +33,10 @@ class VendorProductController extends Controller
             $query->where('is_activate', 1);
         } elseif ($status === 'inactive') {
             $query->where('is_activate', 0);
+        } elseif ($status === 'low_stock') {
+            $query->lowStock();
+        } elseif ($status === 'critical_stock') {
+            $query->criticalStock();
         }
         
         $products = $query->with('category')
