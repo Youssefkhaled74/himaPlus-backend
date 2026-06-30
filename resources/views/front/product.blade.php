@@ -168,7 +168,7 @@
                             <p class="text-muted-soft">{{ $product->desc }}</p>
                             <div class="small mb-3">
                                 <span class="fw-semibold">{{ __('products.stock_status') }}:</span>
-                                <a href="#" class="hp-link">{{ $product->stock_quantity }} {{ __('products.units_available') }}</a>
+                                <span class="hp-link">{{ $product->stock_quantity }} {{ __('products.units_available') }}</span>
                             </div>
                             <div class="d-flex align-items-center gap-2 mb-4">
                                 <img src="{{ $product?->provider?->img ?: 'https://i.pravatar.cc/44?img=13' }}" class="rounded-circle" width="44" height="44" alt="Supplier avatar">
@@ -183,7 +183,7 @@
                                     <div class="h4 mb-0">{{ $product->price }} SAR</div>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <a href="#" class="btn btn-gradient px-4">{{ __('products.add_to_cart') }}</a>
+                                    <a href="{{ auth()->check() ? url('user/cart/add/' . $product->id) : route('user/loginForm') }}" class="btn btn-gradient px-4">{{ __('products.add_to_cart') }}</a>
                                     {{-- <button class="hp-pill-btn ms-auto me-2 add-to-cart" data-id="{{ $product->id }}" data-img="{{ asset($product->img) }}" title="Add to cart">
                                         <i class="bi bi-cart-plus-fill"></i>
                                     </button> --}}

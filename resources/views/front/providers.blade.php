@@ -146,7 +146,7 @@
                 <!-- Cards -->
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-5" data-aos="fade-up" data-aos-once="false" data-aos-mirror="true">
-                        <a class="nc-card" href="#">
+                        <a class="nc-card" href="{{ route('vendor/register/form') }}">
                             <div class="nc-card__media">
                                 <img src="{{ asset('front/assets/images/empty-medical-office-with-desktop-pc 11111.png') }}" alt="Medical Suppliers">
                                 <span class="nc-card__overlay"></span>
@@ -155,7 +155,7 @@
                         </a>
                     </div>
                     <div class="col-md-5" data-aos="fade-up" data-aos-once="false" data-aos-mirror="true" data-aos-delay="100">
-                        <a class="nc-card" href="#">
+                        <a class="nc-card" href="{{ route('vendor/register/form') }}">
                             <div class="nc-card__media">
                                 <img src="{{ asset('front/assets/images/acoustic-engineering-hospitals-minimize-noise-pollution 1.png') }}" alt="Medical Suppliers">
                                 <span class="nc-card__overlay"></span>
@@ -192,7 +192,7 @@
                         </a>
                     </div>
                     <div class="col-md-4"  data-aos-once="false" data-aos-mirror="true" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="#" class="rq-card text-decoration-none" data-bs-toggle="modal" data-bs-target="#rqModal">
+                        <button type="button" class="rq-card text-decoration-none border-0 bg-transparent w-100 p-0" data-bs-toggle="modal" data-bs-target="#rqModal">
                             <div class="hp-service-card h-100 text-center mt-3" style="padding: 44px 30px;">
                                 <div class="rq-icon">
                                     <span class="hp-service-icon">
@@ -202,10 +202,10 @@
                                 <h6 class="rq-title">{{ __('providers.receive_requests') }}</h6>
                                 <p class="rq-sub text-muted">{{ __('providers.receive_requests_desc') }}</p>
                             </div>
-                        </a>
+                        </button>
                     </div>
                     <div class="col-md-4"  data-aos-once="false" data-aos-mirror="true" data-aos="zoom-in" data-aos-delay="200">
-                        <a href="#" class="rq-card text-decoration-none" data-bs-toggle="modal" data-bs-target="#mtModal">
+                        <button type="button" class="rq-card text-decoration-none border-0 bg-transparent w-100 p-0" data-bs-toggle="modal" data-bs-target="#mtModal">
                             <div class="hp-service-card h-100 text-center mt-3" style="padding: 44px 30px;">
                                 <div class="rq-icon">
                                     <span class="hp-service-icon">
@@ -215,7 +215,7 @@
                                 <h6 class="rq-title">{{ __('providers.secure_payments') }}</h6>
                                 <p class="rq-sub text-muted">{{ __('providers.secure_payments_desc') }}</p>
                             </div>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>

@@ -27,7 +27,7 @@
             </div>
         @endif
         <nav class="breadcrumb-custom mb-3" style="margin-top: 8%;">
-            <a href="#" class="text-decoration-none text-muted">{{ __('profile.my_profile') }}</a>
+            <span class="text-decoration-none text-muted">{{ __('profile.my_profile') }}</span>
             <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
             <span class="text-primary fw-semibold" id="section-area-name">{{ __('profile.personal_info') }}</span>
         </nav>
@@ -39,12 +39,12 @@
                         <i class="bi bi-person"></i> <span>{{ __('profile.personal_info_short') }}</span>
                     </a>
 
-                    <a class="btn-tab" section-name="{{ __('profile.change_password') }}" data-target="#password-pane" href="#password-pane">
+                    <button type="button" class="btn-tab" section-name="{{ __('profile.change_password') }}" data-target="#password-pane">
                         <i class="bi bi-shield-lock"></i> <span>{{ __('profile.change_password') }}</span>
-                    </a>
-                    <a class="btn-tab" section-name="{{ __('profile.language') }}" data-target="#language-pane" href="#language-pane">
+                    </button>
+                    <button type="button" class="btn-tab" section-name="{{ __('profile.language') }}" data-target="#language-pane">
                         <i class="bi bi-translate"></i> <span>{{ __('profile.language') }}</span>
-                    </a>
+                    </button>
                     <a class="custom-btn-tab" href="{{ route('user/logout') }}">
                         <i class="bi bi-box-arrow-right"></i> <span>{{ __('profile.logout') }}</span>
                     </a>

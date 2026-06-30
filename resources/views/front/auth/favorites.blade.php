@@ -32,9 +32,7 @@
                     <nav class="hp-breadcrumb small mb-4">
                         <a href="{{ route('categories') }}" class="hp-crumb">{{ __('products.home') }}</a>
                         <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
-                        <span class="hp-crumb text-body-secondary">
-                            <a href="#" style="color: #053594; font-weight: bold;">{{ __('products.favorites') }}</a>
-                        </span>
+                        <span class="hp-crumb text-body-secondary" style="color: #053594; font-weight: bold;">{{ __('products.favorites') }}</span>
                     </nav>
                     <div class="row g-4">
                         @foreach ($favorites as $g => $favorite)

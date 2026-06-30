@@ -270,6 +270,12 @@
         font-size: 26px;
     }
 
+    .contact-social .is-disabled {
+        pointer-events: none;
+        opacity: .55;
+        filter: grayscale(1);
+    }
+
     @media (max-width: 991.98px) {
         .contact-hero {
             min-height: 300px;
@@ -431,10 +437,10 @@
                         <span>{{ __('contact.stay_connected') }}</span>
                     </div>
                     <div class="contact-social">
-                        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="#" aria-label="X"><i class="bi bi-twitter-x"></i></a>
-                        <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <span aria-label="Instagram" class="is-disabled" aria-disabled="true" tabindex="-1"><i class="bi bi-instagram"></i></span>
+                        <span aria-label="Facebook" class="is-disabled" aria-disabled="true" tabindex="-1"><i class="bi bi-facebook"></i></span>
+                        <span aria-label="X" class="is-disabled" aria-disabled="true" tabindex="-1"><i class="bi bi-twitter-x"></i></span>
+                        <span aria-label="LinkedIn" class="is-disabled" aria-disabled="true" tabindex="-1"><i class="bi bi-linkedin"></i></span>
                     </div>
                 </div>
             </aside>

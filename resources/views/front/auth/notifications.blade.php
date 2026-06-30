@@ -1,417 +1,689 @@
 @extends('layouts.front.home')
 
 @section('title')
-<title>{{ app()->getLocale() === 'ar' ? 'الإشعارات' : 'Notifications' }}</title>
+<title>{{ __('nav.notifications') }} - {{ __('nav.dashboard') }}</title>
 @endsection
 
 @section('css')
 <style>
-    .notif-page {
+    .user-notifications-page {
         --brand-primary: #0f4bbf;
         --brand-primary-dark: #0b3a94;
         --brand-accent: #10c7a5;
-        --dash-bg: #f3f7fc;
-        --dash-card: #ffffff;
-        --dash-border: #d8e3f0;
-        --dash-title: #10203a;
-        --dash-text: #1f2937;
-        --dash-muted: #6d7d93;
-        --dash-soft: #eef6ff;
-        --dash-shadow: 0 14px 35px rgba(15, 75, 191, 0.08);
-        margin-top: 1.5rem;
-        margin-bottom: 3rem;
-        color: var(--dash-text);
+        --shell-bg: #f3f7fc;
+        --card-bg: #ffffff;
+        --card-border: #d8e3f0;
+        --text-main: #10203a;
+        --text-muted: #6d7d93;
+        --soft-blue: #eef5ff;
+        --soft-green: #ecfffb;
+        --soft-slate: #f8fafc;
+        --shadow: 0 18px 40px rgba(15, 75, 191, .08);
+        max-width: 95%;
+        margin: 16px auto 32px;
+        padding: 0 10px;
     }
 
-    .notif-shell {
+    .un-shell {
         background:
-            radial-gradient(circle at top left, rgba(16, 199, 165, .12), transparent 32%),
-            radial-gradient(circle at top right, rgba(15, 75, 191, .11), transparent 35%),
-            var(--dash-bg);
-        border: 1px solid rgba(216, 227, 240, .8);
-        border-radius: 26px;
-        padding: 1.2rem;
+            radial-gradient(circle at top left, rgba(16, 199, 165, .10), transparent 26%),
+            radial-gradient(circle at top right, rgba(15, 75, 191, .10), transparent 30%),
+            var(--shell-bg);
+        border: 1px solid rgba(216, 227, 240, .9);
+        border-radius: 28px;
+        padding: 18px;
     }
 
-    .notif-hero {
-        background: linear-gradient(135deg, var(--brand-primary) 0%, #1565d8 52%, var(--brand-accent) 100%);
+    .un-hero,
+    .un-toolbar,
+    .un-list-shell {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
         border-radius: 22px;
-        padding: 1.6rem 1.8rem;
+        box-shadow: 0 10px 25px rgba(16, 32, 58, .05);
+    }
+
+    .un-hero {
+        background: linear-gradient(135deg, var(--brand-primary) 0%, #1565d8 52%, var(--brand-accent) 100%);
         color: #fff;
+        border: 0;
+        padding: 26px;
         position: relative;
         overflow: hidden;
-        box-shadow: var(--dash-shadow);
+        box-shadow: var(--shadow);
     }
 
-    .notif-hero::before {
-        content: '';
+    .un-hero::before {
+        content: "";
         position: absolute;
-        width: 230px;
-        height: 230px;
-        border-radius: 50%;
-        background: rgba(255,255,255,.11);
-        top: -110px;
-        {{ app()->getLocale() === 'ar' ? 'left' : 'right' }}: -70px;
+        width: 220px;
+        height: 220px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .10);
+        top: -120px;
+        {{ app()->getLocale() === 'ar' ? 'left' : 'right' }}: -60px;
     }
 
-    .notif-hero > * {
+    .un-hero > * {
         position: relative;
         z-index: 1;
     }
 
-    .notif-title {
+    .un-hero-title {
         margin: 0;
-        font-size: 1.45rem;
-        font-weight: 850;
-        letter-spacing: -.02em;
-    }
-
-    .notif-subtitle {
-        margin: .4rem 0 0;
-        max-width: 650px;
-        opacity: .9;
-        font-size: .92rem;
-        line-height: 1.7;
-    }
-
-    .notif-summary {
-        display: flex;
-        flex-wrap: wrap;
-        gap: .75rem;
-        justify-content: flex-end;
-    }
-
-    .notif-pill {
-        min-width: 120px;
-        border: 1px solid rgba(255,255,255,.26);
-        background: rgba(255,255,255,.13);
-        border-radius: 16px;
-        padding: .75rem .95rem;
-        backdrop-filter: blur(8px);
-    }
-
-    .notif-pill span {
-        display: block;
-        font-size: .72rem;
-        font-weight: 750;
-        opacity: .85;
-        margin-bottom: .2rem;
-    }
-
-    .notif-pill strong {
-        display: block;
-        font-size: 1.35rem;
-        line-height: 1;
+        font-size: 1.8rem;
         font-weight: 900;
     }
 
-    .notif-card {
-        background: var(--dash-card);
-        border: 1px solid var(--dash-border);
-        border-radius: 20px;
-        box-shadow: 0 8px 22px rgba(16, 32, 58, .04);
+    .un-hero-text {
+        margin: 8px 0 0;
+        max-width: 680px;
+        opacity: .94;
+        line-height: 1.8;
+        font-size: .95rem;
+    }
+
+    .un-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+    }
+
+    .un-summary-card {
+        background: rgba(255, 255, 255, .14);
+        border: 1px solid rgba(255, 255, 255, .24);
+        border-radius: 18px;
+        padding: 16px;
+        backdrop-filter: blur(8px);
+    }
+
+    .un-summary-card span {
+        display: block;
+        font-size: .78rem;
+        font-weight: 700;
+        opacity: .88;
+        margin-bottom: 6px;
+    }
+
+    .un-summary-card strong {
+        display: block;
+        font-size: 1.7rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .un-toolbar {
+        margin-top: 18px;
+        padding: 18px;
+    }
+
+    .un-toolbar-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .un-toolbar-title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 900;
+        color: var(--text-main);
+    }
+
+    .un-toolbar-text {
+        margin: 4px 0 0;
+        color: var(--text-muted);
+        font-size: .86rem;
+    }
+
+    .un-toolbar-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .un-btn,
+    .un-pill,
+    .un-action-btn {
+        border-radius: 999px;
+        font-weight: 800;
+        transition: all .18s ease;
+    }
+
+    .un-btn {
+        border: 1px solid transparent;
+        padding: 10px 16px;
+        font-size: .84rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .un-btn-primary {
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(15, 75, 191, .16);
+    }
+
+    .un-btn-outline {
+        background: #fff;
+        color: var(--brand-primary);
+        border-color: rgba(15, 75, 191, .20);
+    }
+
+    .un-btn-outline:hover,
+    .un-btn-primary:hover,
+    .un-action-btn:hover,
+    .un-pill:hover {
+        transform: translateY(-1px);
+        text-decoration: none;
+    }
+
+    .un-filter-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+    }
+
+    .un-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border: 1px solid var(--card-border);
+        background: #fff;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: .82rem;
+    }
+
+    .un-pill.active,
+    .un-pill:hover {
+        color: var(--brand-primary);
+        border-color: rgba(15, 75, 191, .24);
+        background: var(--soft-blue);
+        text-decoration: none;
+    }
+
+    .un-pill-count {
+        display: inline-flex;
+        min-width: 26px;
+        justify-content: center;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(15, 75, 191, .08);
+        color: var(--brand-primary);
+        font-size: .75rem;
+        font-weight: 900;
+    }
+
+    .un-list-shell {
+        margin-top: 18px;
         overflow: hidden;
     }
 
-    .notif-card-header {
-        padding: 1.05rem 1.15rem;
+    .un-list-head {
+        padding: 18px 20px;
         border-bottom: 1px solid #edf2f7;
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        gap: 1rem;
-    }
-
-    .notif-card-header strong {
-        color: var(--dash-title);
-        font-weight: 850;
-        display: flex;
         align-items: center;
-        gap: .5rem;
+        gap: 12px;
     }
 
-    .notif-card-header strong i {
-        color: var(--brand-primary);
+    .un-list-title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 900;
+        color: var(--text-main);
     }
 
-    .notif-back {
-        display: inline-flex;
-        align-items: center;
-        gap: .35rem;
-        color: var(--brand-primary);
+    .un-list-subtitle {
+        margin: 4px 0 0;
+        color: var(--text-muted);
         font-size: .84rem;
-        font-weight: 800;
-        text-decoration: none;
     }
 
-    .notif-back:hover {
-        color: var(--brand-primary-dark);
-        text-decoration: none;
+    .un-list {
+        padding: 18px;
+        display: grid;
+        gap: 14px;
     }
 
-    .notif-list {
-        display: flex;
-        flex-direction: column;
+    .un-item {
+        background: #fff;
+        border: 1px solid #e5edf6;
+        border-radius: 20px;
+        padding: 18px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 16px;
+        align-items: start;
+        position: relative;
     }
 
-    .notif-item {
-        display: flex;
-        align-items: flex-start;
-        gap: .85rem;
-        padding: 1rem 1.15rem;
-        border-bottom: 1px solid #edf2f7;
-        color: inherit;
-        text-decoration: none;
-        transition: background .18s ease;
+    .un-item.unread {
+        background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+        border-color: #cfe0ff;
+        box-shadow: inset 4px 0 0 var(--brand-primary);
     }
 
-    .notif-item:last-child {
-        border-bottom: 0;
-    }
-
-    .notif-item:hover {
-        background: #f8fbff;
-        color: inherit;
-        text-decoration: none;
-    }
-
-    .notif-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 14px;
+    .un-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0;
-        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
+        font-size: 1.25rem;
         color: #fff;
-        box-shadow: 0 10px 20px rgba(15, 75, 191, .14);
+        box-shadow: 0 12px 24px rgba(15, 23, 42, .12);
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
     }
 
-    .notif-body {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .notif-name {
-        color: var(--dash-title);
-        font-weight: 850;
-        font-size: .92rem;
-        margin-bottom: .25rem;
-    }
-
-    .notif-message {
-        color: var(--dash-muted);
-        font-size: .82rem;
-        line-height: 1.65;
-        margin-bottom: .45rem;
-        word-break: break-word;
-    }
-
-    .notif-meta {
+    .un-item-head {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: .55rem;
-        color: #8a99ad;
-        font-size: .75rem;
-        font-weight: 650;
+        gap: 10px;
+        margin-bottom: 6px;
     }
 
-    .notif-status {
+    .un-item-title {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 1rem;
+        font-weight: 900;
+    }
+
+    .un-badge {
         display: inline-flex;
         align-items: center;
-        gap: .25rem;
+        gap: 6px;
+        padding: 5px 10px;
         border-radius: 999px;
-        padding: .25rem .62rem;
-        font-size: .7rem;
-        font-weight: 850;
+        font-size: .72rem;
+        font-weight: 900;
     }
 
-    .notif-status.unread {
-        background: #ecfffb;
-        color: #047b68;
+    .un-badge.unread {
+        background: var(--soft-green);
+        color: #047857;
         border: 1px solid #b8efe3;
     }
 
-    .notif-status.read {
-        background: #f1f5f9;
+    .un-badge.read {
+        background: var(--soft-slate);
         color: #64748b;
         border: 1px solid #e2e8f0;
     }
 
-    .notif-empty {
-        text-align: center;
-        padding: 2.4rem 1rem;
-        color: var(--dash-muted);
+    .un-message {
+        margin: 0;
+        color: var(--text-muted);
+        line-height: 1.8;
+        font-size: .9rem;
+        word-break: break-word;
     }
 
-    .notif-empty-icon {
-        width: 58px;
-        height: 58px;
+    .un-meta {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        color: #8a99ad;
+        font-size: .78rem;
+        font-weight: 700;
+    }
+
+    .un-item-side {
+        min-width: 180px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .un-time {
+        color: var(--text-muted);
+        font-size: .78rem;
+        font-weight: 700;
+    }
+
+    .un-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .un-action-btn {
+        border: 1px solid #d8e3f0;
+        background: #fff;
+        color: var(--text-main);
+        border-radius: 12px;
+        padding: 8px 12px;
+        font-size: .78rem;
+        font-weight: 800;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        border-radius: 18px;
+        gap: 6px;
+    }
+
+    .un-action-btn.primary {
         color: var(--brand-primary);
-        background: var(--dash-soft);
-        font-size: 1.45rem;
-        margin-bottom: .8rem;
+        border-color: rgba(15, 75, 191, .18);
+        background: var(--soft-blue);
     }
 
-    .notif-empty h6 {
-        color: var(--dash-title);
-        font-weight: 850;
-        margin-bottom: .25rem;
+    .un-action-btn.danger {
+        color: #b91c1c;
+        border-color: rgba(220, 38, 38, .18);
+        background: #fff5f5;
     }
 
-    .notif-pagination {
-        padding: 1rem 1.15rem;
-        border-top: 1px solid #edf2f7;
+    .un-empty {
+        padding: 48px 20px;
+        text-align: center;
     }
 
-    @media (max-width: 767.98px) {
-        .notif-page {
-            margin-top: .75rem;
+    .un-empty-icon {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 16px;
+        border-radius: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--soft-blue);
+        color: var(--brand-primary);
+        font-size: 1.7rem;
+    }
+
+    .un-empty-title {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 1.05rem;
+        font-weight: 900;
+    }
+
+    .un-empty-text {
+        margin: 8px auto 0;
+        max-width: 460px;
+        color: var(--text-muted);
+        line-height: 1.8;
+        font-size: .88rem;
+    }
+
+    .un-pagination {
+        padding: 0 18px 18px;
+    }
+
+    .un-pagination .pagination {
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .un-pagination .page-link {
+        border-radius: 10px !important;
+        border: 1px solid #d8e3f0;
+        color: var(--text-main);
+        font-weight: 800;
+        box-shadow: none;
+    }
+
+    .un-pagination .page-item.active .page-link {
+        background: var(--brand-primary);
+        border-color: var(--brand-primary);
+        color: #fff;
+    }
+
+    @media (max-width: 991.98px) {
+        .un-summary-grid {
+            grid-template-columns: 1fr;
         }
 
-        .notif-shell {
-            padding: .75rem;
-            border-radius: 20px;
+        .un-item {
+            grid-template-columns: 1fr;
         }
 
-        .notif-hero {
-            padding: 1.25rem;
-            border-radius: 18px;
-        }
-
-        .notif-title {
-            font-size: 1.18rem;
-        }
-
-        .notif-summary {
-            justify-content: flex-start;
-            width: 100%;
-        }
-
-        .notif-pill {
+        .un-item-side {
             min-width: 0;
-            flex: 1;
-        }
-
-        .notif-card-header {
             align-items: flex-start;
         }
 
-        .notif-item {
-            padding: .9rem;
+        .un-actions {
+            justify-content: flex-start;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .user-notifications-page {
+            margin-top: 10px;
+        }
+
+        .un-shell {
+            padding: 12px;
+            border-radius: 22px;
+        }
+
+        .un-hero {
+            padding: 20px;
+            border-radius: 18px;
+        }
+
+        .un-hero-title {
+            font-size: 1.25rem;
+        }
+
+        .un-toolbar-head {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .un-list-head {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .un-item {
+            padding: 14px;
         }
     }
 </style>
 @endsection
 
 @section('content')
-<main class="container notif-page">
+<main class="container user-notifications-page">
     @include('flash::message')
 
-    <div class="notif-shell">
-        <section class="notif-hero mb-4">
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+    @php
+        $currentFilter = $filter ?? request('filter', 'all');
+        $allNotificationsUrl = route('user/notifications', [0, PAGINATION_COUNT]);
+        $resetNotificationsUrl = request()->url();
+        $allTabUrl = $allNotificationsUrl;
+        $readTabUrl = request()->url() . '?filter=read';
+        $unreadTabUrl = request()->url() . '?filter=unread';
+    @endphp
+
+    <div class="un-shell">
+        <section class="un-hero">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
                 <div>
-                    <h4 class="notif-title">
-                        {{ app()->getLocale() === 'ar' ? 'الإشعارات' : 'Notifications' }}
-                    </h4>
-                    <p class="notif-subtitle">
-                        {{ app()->getLocale() === 'ar'
-                            ? 'تابع آخر تحديثات طلباتك وحسابك من مكان واحد.'
-                            : 'Follow the latest updates about your orders and account from one place.' }}
-                    </p>
+                    <h1 class="un-hero-title">{{ __('nav.notifications') }}</h1>
+                    <p class="un-hero-text">{{ __('nav.notifications_description') }}</p>
                 </div>
 
-                <div class="notif-summary">
-                    <div class="notif-pill">
-                        <span>{{ app()->getLocale() === 'ar' ? 'كل الإشعارات' : 'Total' }}</span>
-                        <strong>{{ $totalNotifications }}</strong>
-                    </div>
-                    <div class="notif-pill">
-                        <span>{{ app()->getLocale() === 'ar' ? 'غير مقروءة' : 'Unread' }}</span>
-                        <strong>{{ $unreadNotifications }}</strong>
-                    </div>
+                <a href="{{ route('user/dashboard') }}" class="un-btn un-btn-outline">
+                    <i class="bi bi-arrow-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i>
+                    {{ __('nav.dashboard') }}
+                </a>
+            </div>
+
+            <div class="un-summary-grid">
+                <div class="un-summary-card">
+                    <span>{{ __('nav.all') }}</span>
+                    <strong>{{ $totalNotifications }}</strong>
+                </div>
+                <div class="un-summary-card">
+                    <span>{{ __('nav.unread') }}</span>
+                    <strong>{{ $unreadNotifications }}</strong>
+                </div>
+                <div class="un-summary-card">
+                    <span>{{ __('nav.read') }}</span>
+                    <strong>{{ max($totalNotifications - $unreadNotifications, 0) }}</strong>
                 </div>
             </div>
         </section>
 
-        <section class="notif-card">
-            <div class="notif-card-header">
-                <strong>
-                    <i class="bi bi-bell-fill"></i>
-                    {{ app()->getLocale() === 'ar' ? 'قائمة الإشعارات' : 'Notification List' }}
-                </strong>
+        <section class="un-toolbar">
+            <div class="un-toolbar-head">
+                <div>
+                    <h2 class="un-toolbar-title">{{ __('nav.recent_notifications') }}</h2>
+                    <p class="un-toolbar-text">{{ __('nav.notifications_description') }}</p>
+                </div>
 
-                <a href="{{ route('user/dashboard') }}" class="notif-back">
-                    <i class="bi bi-chevron-{{ app()->getLocale() === 'ar' ? 'right' : 'left' }}"></i>
-                    {{ app()->getLocale() === 'ar' ? 'الرجوع للوحة التحكم' : 'Back to Dashboard' }}
+                <div class="un-toolbar-actions">
+                    @if($unreadNotifications > 0)
+                        <form method="POST" action="{{ route('user/notifications/mark-all-as-read') }}">
+                            @csrf
+                            <button type="submit" class="un-btn un-btn-primary">
+                                <i class="bi bi-check2-all"></i>
+                                {{ __('nav.mark_all_as_read') }}
+                            </button>
+                        </form>
+                    @endif
+
+                    @if($currentFilter !== 'all')
+                        <a href="{{ $resetNotificationsUrl }}" class="un-btn un-btn-outline">
+                            <i class="bi bi-arrow-clockwise"></i>
+                            {{ __('nav.reset') }}
+                        </a>
+                    @endif
+                </div>
+            </div>
+
+            <div class="un-filter-group">
+                <a href="{{ $allTabUrl }}" class="un-pill {{ $currentFilter === 'all' ? 'active' : '' }}">
+                    {{ __('nav.all') }}
+                    <span class="un-pill-count">{{ $totalNotifications }}</span>
                 </a>
+                <a href="{{ $readTabUrl }}" class="un-pill {{ $currentFilter === 'read' ? 'active' : '' }}">
+                    {{ __('nav.read') }}
+                    <span class="un-pill-count">{{ max($totalNotifications - $unreadNotifications, 0) }}</span>
+                </a>
+                <a href="{{ $unreadTabUrl }}" class="un-pill {{ $currentFilter === 'unread' ? 'active' : '' }}">
+                    {{ __('nav.unread') }}
+                    <span class="un-pill-count">{{ $unreadNotifications }}</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="un-list-shell">
+            <div class="un-list-head">
+                <div>
+                    <h3 class="un-list-title">{{ __('nav.notification') }}</h3>
+                    <p class="un-list-subtitle">{{ __('nav.notifications_description') }}</p>
+                </div>
             </div>
 
             @if($notifications->count())
-                <div class="notif-list">
+                <div class="un-list">
                     @foreach($notifications as $notification)
                         @php
-                            $title = $notification->title ?: (app()->getLocale() === 'ar' ? 'إشعار جديد' : 'New notification');
-                            $message = $notification->content ?: ($notification->message ?: '');
                             $isUnread = is_null($notification->read_at);
-                            $url = $notification->action_url;
-
-                            if (!$url && $notification->order_id) {
-                                $url = route('user/get/order', $notification->order_id);
-                            }
+                            $title = $notification->display_title ?? ($notification->title ?: __('nav.notification'));
+                            $message = $notification->display_message ?? ($notification->content ?: ($notification->message ?: ''));
+                            $actionUrl = $notification->display_url ?? $notification->action_url;
+                            $timestamp = $notification->created_at;
+                            $timeLabel = $timestamp ? $timestamp->diffForHumans() : '';
                         @endphp
 
-                        <a href="{{ $url ?: 'javascript:void(0)' }}" class="notif-item">
-                            <div class="notif-icon">
-                                <i class="bi {{ $isUnread ? 'bi-bell-fill' : 'bi-bell' }}"></i>
+                        <article class="un-item {{ $isUnread ? 'unread' : '' }}">
+                            <div class="un-icon">
+                                <i class="bi {{ $notification->icon ?? ($isUnread ? 'bi-bell-fill' : 'bi-bell') }}"></i>
                             </div>
 
-                            <div class="notif-body">
-                                <div class="notif-name">{{ $title }}</div>
-
-                                @if($message)
-                                    <div class="notif-message">{{ $message }}</div>
-                                @endif
-
-                                <div class="notif-meta">
-                                    <span>
-                                        <i class="bi bi-calendar2-week"></i>
-                                        {{ optional($notification->created_at)->format('Y-m-d H:i') }}
-                                    </span>
-
-                                    <span class="notif-status {{ $isUnread ? 'unread' : 'read' }}">
+                            <div>
+                                <div class="un-item-head">
+                                    <h4 class="un-item-title">{{ $title }}</h4>
+                                    <span class="un-badge {{ $isUnread ? 'unread' : 'read' }}">
                                         <i class="bi {{ $isUnread ? 'bi-circle-fill' : 'bi-check2-circle' }}"></i>
-                                        {{ $isUnread
-                                            ? (app()->getLocale() === 'ar' ? 'غير مقروء' : 'Unread')
-                                            : (app()->getLocale() === 'ar' ? 'مقروء' : 'Read') }}
+                                        {{ $isUnread ? __('nav.unread') : __('nav.read') }}
                                     </span>
                                 </div>
+
+                                @if($message)
+                                    <p class="un-message">{{ $message }}</p>
+                                @endif
+
+                                <div class="un-meta">
+                                    <span>
+                                        <i class="bi bi-clock-history"></i>
+                                        {{ $timeLabel }}
+                                    </span>
+                                    @if($notification->created_at)
+                                        <span>
+                                            <i class="bi bi-calendar2-week"></i>
+                                            {{ $timestamp->format('Y-m-d H:i') }}
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
-                        </a>
+
+                            <div class="un-item-side">
+                                <div class="un-time">{{ $timeLabel }}</div>
+
+                                <div class="un-actions">
+                                    @if($actionUrl)
+                                        <a href="{{ $actionUrl }}" class="un-action-btn primary">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                            {{ __('nav.view') }}
+                                        </a>
+                                    @endif
+
+                                    @if($isUnread)
+                                        <form method="POST" action="{{ route('user/notifications/mark-as-read', $notification->id) }}">
+                                            @csrf
+                                            <button type="submit" class="un-action-btn">
+                                                <i class="bi bi-check2"></i>
+                                                {{ __('nav.mark_as_read') }}
+                                            </button>
+                                        </form>
+                                    @endif
+
+                                    <form method="POST" action="{{ route('user/notifications/delete', $notification->id) }}" onsubmit="return confirm('{{ __('nav.confirm_delete') }}?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="un-action-btn danger">
+                                            <i class="bi bi-trash3"></i>
+                                            {{ __('nav.delete') }}
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </article>
                     @endforeach
                 </div>
 
-                <div class="notif-pagination">
-                    {{ $notifications->links() }}
-                </div>
+                @if($notifications->hasPages())
+                    <div class="un-pagination">
+                        {{ $notifications->links('pagination::bootstrap-5') }}
+                    </div>
+                @endif
             @else
-                <div class="notif-empty">
-                    <div class="notif-empty-icon">
+                <div class="un-empty">
+                    <div class="un-empty-icon">
                         <i class="bi bi-bell-slash"></i>
                     </div>
-                    <h6>{{ app()->getLocale() === 'ar' ? 'لا توجد إشعارات' : 'No notifications' }}</h6>
-                    <p class="mb-0 small">
-                        {{ app()->getLocale() === 'ar'
-                            ? 'عند وصول أي تحديث جديد سيظهر هنا.'
-                            : 'When new updates arrive, they will appear here.' }}
-                    </p>
+                    <h4 class="un-empty-title">{{ __('nav.no_notifications') }}</h4>
+                    <p class="un-empty-text">{{ __('nav.notifications_description') }}</p>
                 </div>
             @endif
         </section>

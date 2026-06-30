@@ -91,6 +91,9 @@ Route::group(['middleware' => ['limitReq']], function(){
             Route::get('delete-account', [AuthController::class, 'deleteAccount']);
             Route::get('/statistics', [AuthController::class, 'statistics']);
             Route::get('/notifications/{offset?}/{limit?}', [AuthController::class, 'notifications'])->name('user/notifications');
+            Route::post('/notifications/{id}/mark-as-read', [AuthController::class, 'markNotificationAsRead'])->name('user/notifications/mark-as-read');
+            Route::delete('/notifications/{id}', [AuthController::class, 'deleteNotification'])->name('user/notifications/delete');
+            Route::post('/notifications/mark-all-as-read', [AuthController::class, 'markAllNotificationsAsRead'])->name('user/notifications/mark-all-as-read');
             Route::get('/favorites/remove', [AuthController::class, 'removeFromFavorites']);
         });
         

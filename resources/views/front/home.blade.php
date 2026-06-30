@@ -49,8 +49,8 @@
                             {{ __('home.hero_description') }}
                         </p>
                         <div class="d-flex flex-wrap gap-3"  data-aos-once="false" data-aos-mirror="true" data-aos="fade-up" data-aos-delay="200">
-                            <a href="#" class="btn btn-gradient px-4 py-2">{{ __('home.hero_btn_explore') }}</a>
-                            <a href="#" class="btn btn-outline-light px-4 py-2">{{ __('home.hero_btn_maintenance') }}</a>
+                            <a href="{{ route('products') }}" class="btn btn-gradient px-4 py-2">{{ __('home.hero_btn_explore') }}</a>
+                            <button type="button" class="btn btn-outline-light px-4 py-2" data-bs-toggle="modal" data-bs-target="#mtModal">{{ __('home.hero_btn_maintenance') }}</button>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                         </a>
                     </div>
                     <div class="col-md-4"  data-aos-once="false" data-aos-mirror="true" data-aos="zoom-in" data-aos-delay="100">
-                        <a href="#" class="rq-card text-decoration-none" data-bs-toggle="modal" data-bs-target="#rqModal">
+                        <button type="button" class="rq-card text-decoration-none border-0 bg-transparent w-100 p-0" data-bs-toggle="modal" data-bs-target="#rqModal">
                             <div class="hp-service-card h-100 text-center mt-3" style="padding: 44px 30px;">
                                 <div class="rq-icon">
                                     <span class="hp-service-icon">
@@ -100,10 +100,10 @@
                                     {{ __('home.service_quotation_desc') }}
                                 </p>
                             </div>
-                        </a>
+                        </button>
                     </div>
                     <div class="col-md-4"  data-aos-once="false" data-aos-mirror="true" data-aos="zoom-in" data-aos-delay="200">
-                        <a href="#" class="rq-card text-decoration-none" data-bs-toggle="modal" data-bs-target="#mtModal">
+                        <button type="button" class="rq-card text-decoration-none border-0 bg-transparent w-100 p-0" data-bs-toggle="modal" data-bs-target="#mtModal">
                             <div class="hp-service-card h-100 text-center mt-3" style="padding: 44px 30px;">
                                 <div class="rq-icon">
                                     <span class="hp-service-icon">
@@ -113,7 +113,7 @@
                                 <h6 class="rq-title">{{ __('home.service_maintenance_title') }}</h6>
                                 <p class="rq-sub text-muted">{{ __('home.service_maintenance_desc') }}</p>
                             </div>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -409,7 +409,7 @@
                         <p class="nb__subtitle"> 
                             {{ __('home.banner_desc') }}
                         </p>
-                        <a href="#" class="nb-btn" aria-label="View Offers" style="text-decoration: none;"><span>{{ __('home.view_offers') }}</span></a>
+                        <a href="{{ auth()->check() ? route('user/myorders', 'quotations') : route('user/loginForm') }}" class="nb-btn" aria-label="View Offers" style="text-decoration: none;"><span>{{ __('home.view_offers') }}</span></a>
                     </div>
                 </div>
             </div>

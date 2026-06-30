@@ -361,11 +361,21 @@ class AuthController extends Controller
     {
         $limit = (int) ($limit ?: PAGINATION_COUNT);
         $offset = (int) ($offset ?: 0);
+        $filter = $request->get('filter', 'all');
+        if (!in_array($filter, ['all', 'read', 'unread'], true)) {
+            $filter = 'all';
+        }
 
         $query = auth()->user()
             ->notifications()
             ->with(['serviceable', 'order'])
             ->orderByDesc('id');
+
+        if ($filter === 'read') {
+            $query->read();
+        } elseif ($filter === 'unread') {
+            $query->unread();
+        }
 
         // Keep backward compatibility for AJAX/API consumers.
         // Direct browser visits should show a proper UI page instead of raw JSON.
@@ -388,8 +398,113 @@ class AuthController extends Controller
         return view('front.auth.notifications', compact(
             'notifications',
             'totalNotifications',
-            'unreadNotifications'
+            'unreadNotifications',
+            'filter'
         ));
+    }
+
+    public function markNotificationAsRead(Request $request, $id)
+    {
+        $notification = $this->notification->where('id', $id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if (!$notification) {
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 404,
+                    'msg' => __('messages.not_found', ['item' => __('nav.notification')]),
+                    'data' => null,
+                ]);
+            }
+
+            flash()->error(__('messages.not_found', ['item' => __('nav.notification')]));
+            return back();
+        }
+
+        $notification->update(['read_at' => now()]);
+
+        if ($request->ajax() || $request->expectsJson()) {
+            return responseJson(200, 'messages.notification_marked', [
+                'id' => $notification->id,
+            ]);
+        }
+
+        flash()->success(__('messages.notification_marked'));
+        return back();
+    }
+
+    public function deleteNotification(Request $request, $id)
+    {
+        $notification = $this->notification->where('id', $id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if (!$notification) {
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json([
+                    'status' => 404,
+                    'msg' => __('messages.not_found', ['item' => __('nav.notification')]),
+                    'data' => null,
+                ]);
+            }
+
+            flash()->error(__('messages.not_found', ['item' => __('nav.notification')]));
+            return back();
+        }
+
+        $notification->delete();
+
+        if ($request->ajax() || $request->expectsJson()) {
+            return responseJson(200, 'messages.notification_deleted', [
+                'id' => $id,
+            ]);
+        }
+
+        flash()->success(__('messages.notification_deleted'));
+        return back();
+    }
+
+    public function markAllNotificationsAsRead(Request $request)
+    {
+        $this->notification->where('user_id', auth()->id())
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
+        if ($request->ajax() || $request->expectsJson()) {
+            return responseJson(200, 'messages.all_marked');
+        }
+
+        flash()->success(__('messages.all_marked'));
+        return back();
+    }
+
+    private function baseNotificationsQuery(int $userId)
+    {
+        return $this->notification->where('user_id', $userId);
+    }
+
+    private function presentNotification(Notification $notification): Notification
+    {
+        $type = $notification->type ?: ($notification->order_id ? 'order' : 'system');
+
+        $notification->display_title = $notification->title ?: __('nav.notification');
+        $notification->display_message = $notification->content ?: ($notification->message ?: '-');
+        $notification->display_url = $notification->action_url ?: ($notification->order_id ? route('user/get/order', $notification->order_id) : null);
+        $notification->is_unread = is_null($notification->read_at);
+        $notification->type_key = $type;
+
+        [$notification->icon, $notification->icon_class] = match ($type) {
+            'order' => ['bi-receipt-cutoff', 'order'],
+            'payment' => ['bi-credit-card-2-front', 'payment'],
+            'status_change' => ['bi-arrow-repeat', 'status-change'],
+            'offer' => ['bi-chat-square-text', 'offer'],
+            'rating' => ['bi-star-fill', 'rating'],
+            'scheduled' => ['bi-calendar-event', 'scheduled'],
+            default => ['bi-bell-fill', 'system'],
+        };
+
+        return $notification;
     }
 
     public function userUpdate(Request $request)

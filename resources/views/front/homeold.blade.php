@@ -22,8 +22,8 @@
                             Request quotations, manage maintenance, and connect with trusted suppliers across Saudi Arabia.
                         </p>
                         <div class="d-flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="200">
-                            <a href="#" class="btn btn-gradient px-4 py-2">Explore Marketplace</a>
-                            <a href="#" class="btn btn-outline-light px-4 py-2">Request Maintenance</a>
+                            <a href="{{ route('products') }}" class="btn btn-gradient px-4 py-2">Explore Marketplace</a>
+                            <button type="button" class="btn btn-outline-light px-4 py-2" disabled aria-disabled="true">Request Maintenance</button>
                         </div>
                     </div>
                 </div>
@@ -143,7 +143,7 @@
                         <div class="carousel-item active">
                             <div class="row g-4">
                                 <div class="col-md-4">
-                                    <a class="nc-card" href="#">
+                                    <a class="nc-card" href="{{ route('categories') }}">
                                         <div class="nc-card__media">
                                             <img src="https://images.unsplash.com/photo-1584988299601-c10fa8d93d2b?q=80&w=1600&auto=format&fit=crop" alt="">
                                             <span class="nc-card__overlay"></span>
@@ -152,7 +152,7 @@
                                     </a>
                                 </div>
                                 <div class="col-md-4">
-                                    <a class="nc-card" href="#">
+                                    <a class="nc-card" href="{{ route('categories') }}">
                                         <div class="nc-card__media">
                                             <img src="https://images.unsplash.com/photo-1582714320637-6cfb0c0d3b3e?q=80&w=1600&auto=format&fit=crop" alt="">
                                             <span class="nc-card__overlay"></span>
@@ -161,7 +161,7 @@
                                     </a>
                                 </div>
                                 <div class="col-md-4">
-                                    <a class="nc-card" href="#">
+                                    <a class="nc-card" href="{{ route('categories') }}">
                                         <div class="nc-card__media">
                                             <img src="https://images.unsplash.com/photo-1581093588401-16f8b8a9a21a?q=80&w=1600&auto=format&fit=crop" alt="">
                                             <span class="nc-card__overlay"></span>
@@ -176,7 +176,7 @@
                         <div class="carousel-item">
                             <div class="row g-4">
                                 <div class="col-md-4">
-                                    <a class="nc-card" href="#">
+                                    <a class="nc-card" href="{{ route('categories') }}">
                                         <div class="nc-card__media">
                                             <img src="https://images.unsplash.com/photo-1583912086096-8b0eb9d38a59?q=80&w=1600&auto=format&fit=crop" alt="">
                                             <span class="nc-card__overlay"></span>
@@ -185,7 +185,7 @@
                                     </a>
                                 </div>
                                 <div class="col-md-4">
-                                    <a class="nc-card" href="#">
+                                    <a class="nc-card" href="{{ route('categories') }}">
                                         <div class="nc-card__media">
                                             <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1600&auto=format&fit=crop" alt="">
                                             <span class="nc-card__overlay"></span>
@@ -194,7 +194,7 @@
                                     </a>
                                 </div>
                                 <div class="col-md-4">
-                                    <a class="nc-card" href="#">
+                                    <a class="nc-card" href="{{ route('categories') }}">
                                         <div class="nc-card__media">
                                             <img src="https://images.unsplash.com/photo-1583912268912-b96c82147fe3?q=80&w=1600&auto=format&fit=crop" alt="">
                                             <span class="nc-card__overlay"></span>
@@ -210,7 +210,7 @@
 
                 <!-- See More -->
                 <div class="text-center mt-4">
-                    <a href="#" class="nc-btn-outline" style="text-decoration: none;">See More</a>
+                    <a href="{{ route('categories') }}" class="nc-btn-outline" style="text-decoration: none;">See More</a>
                 </div>
             </div>
         </section>
@@ -226,7 +226,7 @@
                             Get exclusive discounts and limited-time deals from trusted suppliers across
                             <br>Saudi Arabia.
                         </p>
-                        <a href="#" class="nb-btn" aria-label="View Offers" style="text-decoration: none;"><span>View Offers</span></a>
+                        <a href="{{ auth()->check() ? route('user/myorders', 'quotations') : route('user/loginForm') }}" class="nb-btn" aria-label="View Offers" style="text-decoration: none;"><span>View Offers</span></a>
                     </div>
                 </div>
             </div>
@@ -319,12 +319,12 @@
                         secure, and easy-to-use platform.
                         </p>
                         <div class="ndl__stores">
-                        <a href="#" class="ndl__store">
+                        <span class="ndl__store" role="img" aria-label="App Store unavailable" style="opacity:.55;cursor:not-allowed;">
                             <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store">
-                        </a>
-                        <a href="#" class="ndl__store">
+                        </span>
+                        <span class="ndl__store" role="img" aria-label="Google Play unavailable" style="opacity:.55;cursor:not-allowed;">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
-                        </a>
+                        </span>
                         </div>
                     </div>
 
