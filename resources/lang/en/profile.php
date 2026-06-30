@@ -3,11 +3,21 @@
 return [
     'title' => 'Hema - My Profile',
     'my_profile' => 'My Profile',
+    'profile_overview' => 'Manage your account details, password, and language preferences in one place.',
     'personal_info' => 'Personal Information',
     'personal_info_short' => 'Personal Info',
     'change_password' => 'Change Password',
     'language' => 'Language',
     'logout' => 'Logout',
+    'personal_details' => 'Personal Details',
+    'security_settings' => 'Security Settings',
+    'language_preferences' => 'Language Preferences',
+    'company_details' => 'Company Details',
+    'upload_photo' => 'Upload Photo',
+    'save_changes' => 'Save Changes',
+    'password_help' => 'Use a strong password with letters, numbers, and symbols.',
+    'language_help' => 'Choose the language you want to use across your dashboard.',
+    'company_help' => 'Keep your company and registration details up to date.',
 
     // Personal Info Form
     'name' => 'Name',

@@ -376,8 +376,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tableShowData">
-                                @isset($products)
-                                    @foreach($products as $record)
+                                @forelse($products as $record)
                                         @php
                                             $activationClass = $record->is_activate == 1 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
                                             $activationLabel = $record->is_activate == 1 ? __('admin.pages.common.active') : __('admin.pages.common.inactive');
@@ -415,12 +414,7 @@
                                                 </form>
                                             </td>
                                             <td>
-                                                <div class="d-inline-flex align-items-center gap-2">
-                                                    <a href="{{ route('admin/products/edit', $record->id) }}" class="btn btn-light btn-sm" title="{{ __('admin.pages.common.edit') }}">
-                                                        <i class="ri-pencil-line align-middle"></i>
-                                                    </a>
-                                                </div>
-                                                <div class="dropdown d-inline-block ms-1">
+                                                <div class="dropdown d-inline-block">
                                                     <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <i class="ri-more-fill align-middle"></i>
                                                     </button>
@@ -439,8 +433,11 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @endisset
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="text-center text-muted py-5">{{ __('admin.pages.common.no_data') }}</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -486,11 +483,12 @@
                         </nav>
                     </div>
 
-                    <div class="modal fade" id="myModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabell" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                    <div class="modal fade" id="myModalDelete" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
+                                    <h5 class="modal-title fw-bold">{{ __('admin.pages.common.confirm_delete') }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('admin.pages.common.close') }}"></button>
                                 </div>
                                 <div class="modal-body text-center p-5">
                                     <form role="form" action="{{ route('admin/products/delete') }}" method="post">

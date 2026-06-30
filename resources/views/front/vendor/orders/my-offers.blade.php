@@ -227,20 +227,20 @@
         {{-- List --}}
         @if($offers->count() > 0)
             @foreach($offers as $offer)
-                @php
-                    $status = strtolower($offer->status_label ?? 'pending');
-                    $statusLabel = $status === 'pending'
-                        ? __('nav.pending')
-                        : ($status === 'accepted'
-                            ? __('nav.accepted')
-                            : __('nav.rejected'));
+	                @php
+	                    $status = strtolower($offer->status_label ?? 'pending');
+	                    $statusLabel = $status === 'pending'
+	                        ? __('nav.pending')
+	                        : ($status === 'accepted'
+	                            ? __('nav.accepted')
+	                            : __('nav.rejected'));
 
-                    $typeTitle = match((int)($offer->order->order_type ?? 0)) {
-                        1 => 'Purchase Order',
-                        3 => 'Maintenance Request',
-                        default => 'Quotation Request',
-                    };
-                @endphp
+	                    $typeTitle = match((int)($offer->order->order_type ?? 0)) {
+	                        1 => __('nav.purchase_order_title'),
+	                        3 => __('nav.maintenance_request_title'),
+	                        default => __('nav.quotation_request_title'),
+	                    };
+	                @endphp
 
                 {{-- Whole card clickable to details like screenshot --}}
                 <a href="{{ route('vendor/orders/show', $offer->order_id) }}" class="rq-card">
@@ -250,20 +250,20 @@
                             <span class="rq-status {{ $status }}">{{ $statusLabel }}</span>
                         </div>
 
-                        <p class="rq-meta">
-                            <strong>{{ __('nav.offer_id') }} #{{ $offer->id }}</strong>
-                            <span class="text-muted"> â€” {{ __('nav.order_id') }} #{{ $offer->order_id }}</span>
-                        </p>
+	                        <p class="rq-meta">
+	                            <strong>{{ __('nav.offer_id') }} #{{ $offer->id }}</strong>
+	                            <span class="text-muted"> — {{ __('nav.order_id') }} #{{ $offer->order_id }}</span>
+	                        </p>
 
-                        <p class="rq-meta mb-0">
-                            {{ __('nav.client') }}: {{ $offer->order->user->name ?? 'N/A' }}<br>
-                            {{ __('nav.price') }}: {{ number_format((float)($offer->cost ?? 0), 2) }} {{ __('nav.sar') }}<br>
-                            {{ __('nav.delivery_time') }}: {{ $offer->delivery_time ?? 'N/A' }}
-                            @if($offer->warranty)
-                                â€” {{ __('nav.warranty') }}: {{ $offer->warranty }}
-                            @endif
-                            <br>
-                            {{ __('nav.created_at') }}: {{ $offer->created_at->format('M d, Y') }}
+	                        <p class="rq-meta mb-0">
+	                            {{ __('nav.client') }}: {{ $offer->order->user->name ?? __('nav.not_available') }}<br>
+	                            {{ __('nav.price') }}: {{ number_format((float)($offer->cost ?? 0), 2) }} {{ __('nav.sar') }}<br>
+	                            {{ __('nav.delivery_time') }}: {{ $offer->delivery_time ?? __('nav.not_available') }}
+	                            @if($offer->warranty)
+	                                — {{ __('nav.warranty') }}: {{ $offer->warranty }}
+	                            @endif
+	                            <br>
+	                            {{ __('nav.created_at') }}: {{ $offer->created_at->format('M d, Y') }}
                         </p>
 
                         {{-- Optional mini actions (small, not noisy) --}}

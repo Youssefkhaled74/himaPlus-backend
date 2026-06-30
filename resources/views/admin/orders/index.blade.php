@@ -185,6 +185,81 @@
             display: none;
         }
 
+        .admin-pagination-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-top: 1.25rem;
+        }
+
+        .admin-pagination-info {
+            font-size: 0.82rem;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        .admin-pagination {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .admin-pagination .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 .5rem;
+            border-radius: 8px !important;
+            border: 1px solid #e2e5f1;
+            background: #fff;
+            color: #4b5563;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all .15s ease;
+        }
+
+        .admin-pagination .page-link:hover {
+            background: #f3f6ff;
+            border-color: #c4d0e3;
+            color: #0f4bbf;
+        }
+
+        .admin-pagination .page-item.active .page-link {
+            background: #0f4bbf;
+            border-color: #0f4bbf;
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(15, 75, 191, 0.2);
+        }
+
+        .admin-pagination .page-item.disabled .page-link {
+            opacity: .4;
+            pointer-events: none;
+        }
+
+        .admin-pagination .page-link.prev-next {
+            font-size: 0.75rem;
+            gap: 4px;
+            padding: 0 .65rem;
+        }
+
+        .admin-pagination .page-link.ellipsis {
+            border: 0;
+            background: transparent;
+            min-width: 24px;
+            color: #9ca3af;
+            pointer-events: none;
+        }
+
         @media (max-width: 767.98px) {
             .admin-filter-bar .input-group,
             .admin-filter-bar .form-select {
@@ -194,6 +269,11 @@
             .admin-filter-bar {
                 flex-direction: column;
                 align-items: stretch;
+            }
+
+            .admin-pagination-wrap {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
@@ -232,6 +312,17 @@
 
     <div class="page-content">
         <div class="container-fluid">
+            <x-admin.page-header
+                :badge="__('admin.pages.orders.module_label')"
+                :title="__('admin.pages.orders.title')"
+                :description="__('admin.pages.orders.description')"
+                :breadcrumbs="[
+                    ['label' => __('admin.pages.common.home'), 'href' => route('admin/index')],
+                    ['label' => __('admin.nav.orders'), 'href' => route('admin/orders/index') . '/0/' . PAGINATION_COUNT],
+                    ['label' => __('admin.pages.common.index'), 'active' => true],
+                ]"
+            />
+
             @include('flash::message')
             @if ($errors->any())
                 <div class="card mb-4">
@@ -387,7 +478,7 @@
                                 @endif
                                 @if($dateFrom !== '' || $dateTo !== '')
                                     <span class="admin-filter-tag">
-                                        <i class="ri-calendar-line"></i> {{ $dateFrom ?: '...' }} â†’ {{ $dateTo ?: '...' }}
+                                        <i class="ri-calendar-line"></i> {{ $dateFrom ?: '...' }} <i class="ri-arrow-left-right-line"></i> {{ $dateTo ?: '...' }}
                                         <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&scheduled_status={{ $scheduledStatus }}&order_no={{ $orderNo }}&status={{ $status }}&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from=&date_to=" class="btn-close-sm">&times;</a>
                                     </span>
                                 @endif
@@ -414,8 +505,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tableShowData">
-                                @isset($orders)
-                                    @foreach($orders as $record)
+                                @forelse($orders as $record)
                                             @php
                                                 $orderType = '---';
                                                 $orderBadge = 'bg-info-subtle text-info';
@@ -458,47 +548,73 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
-                                @endisset
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted py-5">{{ __('admin.pages.common.no_data') }}</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="d-flex justify-content-center mt-4">
+                    <div class="admin-pagination-wrap">
+                        <div class="admin-pagination-info">
+                            @php
+                                $from = $orders->firstItem() ?? 0;
+                                $to = $orders->lastItem() ?? 0;
+                                $total = $orders->total();
+                            @endphp
+                            {{ __('admin.pages.common.showing_entries', ['from' => $from, 'to' => $to, 'total' => $total]) }}
+                        </div>
                         <nav aria-label="Page navigation">
-                            <ul class="pagination flex-wrap justify-content-center align-items-center">
-                                @if (!$orders->onFirstPage())
-                                    <li class="page-item mt-1">
-                                        <a class="page-link" href="{{ $orders->previousPageUrl() }}" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
+                            <ul class="admin-pagination">
+                                <li class="page-item {{ $orders->onFirstPage() ? 'disabled' : '' }}">
+                                    <a class="page-link prev-next" href="{{ $orders->previousPageUrl() ?? '#' }}" aria-label="Previous">
+                                        <i class="ri-arrow-left-s-line"></i> <span>{{ __('admin.pages.common.previous') }}</span>
+                                    </a>
+                                </li>
+                                @php
+                                    $current = $orders->currentPage();
+                                    $last = $orders->lastPage();
+                                    $start = max(1, $current - 2);
+                                    $end = min($last, $current + 2);
+                                @endphp
+                                @if($start > 1)
+                                    <li class="page-item {{ $current == 1 ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $orders->url(1) }}">1</a>
                                     </li>
+                                    @if($start > 2)
+                                        <li class="page-item"><span class="page-link ellipsis">...</span></li>
+                                    @endif
                                 @endif
-
-                                @for ($i = 1; $i <= $orders->lastPage(); $i++)
-                                    <li class="page-item mt-1 {{ $i == $orders->currentPage() ? 'active' : '' }}">
-                                        <a class="page-link" href="{{ $orders->url($i) }}" @if ($i == $orders->currentPage()) style="font-weight:bold;" @endif>
-                                            {{ $i }}
-                                        </a>
+                                @for($i = $start; $i <= $end; $i++)
+                                    <li class="page-item {{ $i == $current ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $orders->url($i) }}">{{ $i }}</a>
                                     </li>
                                 @endfor
-
-                                @if ($orders->hasMorePages())
-                                    <li class="page-item mt-1">
-                                        <a class="page-link" href="{{ $orders->nextPageUrl() }}" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
+                                @if($end < $last)
+                                    @if($end < $last - 1)
+                                        <li class="page-item"><span class="page-link ellipsis">...</span></li>
+                                    @endif
+                                    <li class="page-item {{ $current == $last ? 'active' : '' }}">
+                                        <a class="page-link" href="{{ $orders->url($last) }}">{{ $last }}</a>
                                     </li>
                                 @endif
+                                <li class="page-item {{ !$orders->hasMorePages() ? 'disabled' : '' }}">
+                                    <a class="page-link prev-next" href="{{ $orders->nextPageUrl() ?? '#' }}" aria-label="Next">
+                                        <span>{{ __('admin.pages.common.next') }}</span> <i class="ri-arrow-right-s-line"></i>
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
                     </div>
 
-                    <div class="modal fade" id="myModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabell" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                    <div class="modal fade" id="myModalDelete" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title f-w-600" id="exampleModalLabell"></h5>
+                                    <h5 class="modal-title fw-bold">{{ __('admin.pages.common.confirm_delete') }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('admin.pages.common.close') }}"></button>
                                 </div>
                                 <div class="modal-body text-center p-5">
                                     <form role="form" action="{{ route('admin/orders/delete') }}" method="post">
@@ -518,11 +634,12 @@
                         </div>
                     </div>
 
-                    <div class="modal fade" id="myModalActivation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                    <div class="modal fade" id="myModalActivation" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title f-w-600" id="exampleModalLabel"></h5>
+                                    <h5 class="modal-title fw-bold">{{ __('admin.pages.common.confirm_activate') }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('admin.pages.common.close') }}"></button>
                                 </div>
                                 <div class="modal-body text-center p-5">
                                     <form role="form" action="{{ route('admin/orders/activate') }}" method="post">

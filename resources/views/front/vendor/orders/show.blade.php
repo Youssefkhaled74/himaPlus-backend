@@ -307,10 +307,10 @@
                                 <div class="col-md-4 col-6">
                                     <a href="{{ asset($f) }}" target="_blank" style="text-decoration:none;">
                                         @if($isImage)
-                                            <img src="{{ asset($f) }}" alt="attachment" style="width:100%;height:140px;object-fit:cover;border-radius:10px;border:1px solid #e6e8ed;">
+                                            <img src="{{ asset($f) }}" alt="{{ __('nav.attachment_preview') }}" style="width:100%;height:140px;object-fit:cover;border-radius:10px;border:1px solid #e6e8ed;">
                                         @else
                                             <div style="height:140px;border:1px solid #e6e8ed;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#f8fafc;color:#334155;font-weight:600;padding:10px;text-align:center;">
-                                                <span><i class="bi bi-file-earmark-text"></i> {{ strtoupper($ext ?: 'FILE') }}</span>
+                                                <span><i class="bi bi-file-earmark-text"></i> {{ strtoupper($ext ?: __('nav.file_label')) }}</span>
                                             </div>
                                         @endif
                                         <div style="margin-top:8px;font-size:13px;color:#6b7280;word-break:break-all;">{{ basename((string)$f) }}</div>
@@ -327,7 +327,7 @@
                     <div class="vos-rows">
                         @foreach($order->items as $item)
                             <div class="vos-row">
-                                <span class="vos-key">{{ $item->product->name ?? 'Product' }}</span>
+                                <span class="vos-key">{{ $item->product->name ?? __('nav.product') }}</span>
                                 <span class="vos-val">{{ $item->quantity }} {{ __('nav.quantity') }}</span>
                             </div>
                         @endforeach
@@ -393,7 +393,7 @@
                         <div class="vos-offer-body">
                             <div class="vos-file">
                                 <a href="{{ is_array($myOffer->files) && !empty($myOffer->files[0]) ? asset($myOffer->files[0]) : '#' }}" target="_blank">
-                                    <i class="bi bi-file-earmark-pdf"></i> {{ is_array($myOffer->files) && !empty($myOffer->files[0]) ? basename($myOffer->files[0]) : 'quotation.pdf' }}
+                                    <i class="bi bi-file-earmark-pdf"></i> {{ is_array($myOffer->files) && !empty($myOffer->files[0]) ? basename($myOffer->files[0]) : __('nav.quotation_file_name') }}
                                 </a>
                                 <i class="bi bi-clock-history"></i>
                             </div>
