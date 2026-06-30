@@ -232,7 +232,7 @@ return [
             'archives' => 'الطلبات المؤرشفة',
             'back_to_orders' => 'العودة إلى الطلبات',
             'statuses' => [
-                'pending' => 'في انتظار قبول الطلب',
+                'pending' => 'في انتظار الموافقة على الطلب',
                 'order_created' => 'تم إنشاء الطلب',
                 'confirmed' => 'مؤكد',
                 'processing' => 'قيد التنفيذ',
