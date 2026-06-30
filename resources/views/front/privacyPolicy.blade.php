@@ -1,4 +1,3 @@
-```blade
 @extends('layouts.front.home')
 
 @section('title')
@@ -255,4 +254,3 @@
     });
 </script>
 @endsection
-```
