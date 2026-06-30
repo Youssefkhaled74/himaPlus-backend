@@ -115,6 +115,21 @@ class HomeService
             ->where('payment_status', 0)
             ->count();
 
+        $purchaseOrdersCount = (clone $ordersBase)->where('order_type', 1)->count();
+        $quotationRequestsCount = (clone $ordersBase)
+            ->where('order_type', 2)
+            ->whereNull('offer_id')
+            ->count();
+        $maintenanceRequestsCount = (clone $ordersBase)
+            ->where('order_type', 3)
+            ->whereNull('offer_id')
+            ->count();
+        $scheduledRequestsCount = (clone $ordersBase)
+            ->whereIn('order_type', [2, 3])
+            ->whereNull('offer_id')
+            ->where('request_type', 2)
+            ->count();
+
         $totalOffers = (clone $offersBase)->count();
         $pendingOffers = (clone $offersBase)->whereIn('status', [1, '1', 'pending'])->count();
         $acceptedOffers = (clone $offersBase)->whereIn('status', [2, '2', 'accepted'])->count();
@@ -238,6 +253,40 @@ class HomeService
             'top_products' => $topProducts,
             'low_stock_products' => $lowStockProducts,
             'top_categories' => $topCategories,
+            'request_cards' => [
+                [
+                    'label' => __('admin.pages.common.order'),
+                    'subtitle' => __('admin.dashboard.open_orders'),
+                    'count' => $purchaseOrdersCount,
+                    'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?tab=orders&order_type=1',
+                    'icon' => 'ri-shopping-bag-3-line',
+                    'color' => 'primary',
+                ],
+                [
+                    'label' => __('admin.pages.common.quotation'),
+                    'subtitle' => __('admin.pages.common.requests'),
+                    'count' => $quotationRequestsCount,
+                    'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?tab=requests&order_type=2',
+                    'icon' => 'ri-file-list-3-line',
+                    'color' => 'warning',
+                ],
+                [
+                    'label' => __('admin.pages.common.maintenance'),
+                    'subtitle' => __('admin.pages.common.requests'),
+                    'count' => $maintenanceRequestsCount,
+                    'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?tab=requests&order_type=3',
+                    'icon' => 'ri-tools-line',
+                    'color' => 'success',
+                ],
+                [
+                    'label' => __('admin.dashboard.scheduled_orders'),
+                    'subtitle' => __('admin.pages.common.requests'),
+                    'count' => $scheduledRequestsCount,
+                    'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?tab=requests&scheduled_status=scheduled',
+                    'icon' => 'ri-calendar-event-line',
+                    'color' => 'info',
+                ],
+            ],
         ];
 
         return view('admin.home', compact('dashboard'));

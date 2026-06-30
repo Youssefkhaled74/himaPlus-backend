@@ -267,6 +267,35 @@
                         <div class="card-header">
                             <div class="dashboard-section-heading mb-0">
                                 <div>
+                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.offers_panel') }}</h5>
+                                    <p class="text-muted mb-0">{{ __('admin.dashboard.offers_panel_subtitle') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-mini-list">
+                                @foreach(($dashboard['request_cards'] ?? []) as $requestCard)
+                                    <a href="{{ $requestCard['link'] }}" class="dashboard-mini-item text-decoration-none">
+                                        <div>
+                                            <div class="fw-semibold">
+                                                <i class="{{ $requestCard['icon'] }} me-2 text-{{ $requestCard['color'] }}"></i>
+                                                {{ $requestCard['label'] }}
+                                            </div>
+                                            <div class="text-muted small">{{ $requestCard['subtitle'] }}</div>
+                                        </div>
+                                        <span class="badge bg-{{ $requestCard['color'] }}-subtle text-{{ $requestCard['color'] }}">
+                                            {{ number_format($requestCard['count']) }}
+                                        </span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card dashboard-panel">
+                        <div class="card-header">
+                            <div class="dashboard-section-heading mb-0">
+                                <div>
                                     <h5 class="card-title mb-1">{{ __('admin.dashboard.top_products') }}</h5>
                                     <p class="text-muted mb-0">{{ __('admin.dashboard.top_products_subtitle') }}</p>
                                 </div>
@@ -308,19 +337,19 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&scheduled_status=scheduled" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=requests&scheduled_status=scheduled" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.scheduled_orders') }}</div>
                                     </div>
                                     <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['scheduled_orders'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&scheduled_status=active_scheduled" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=requests&scheduled_status=active_scheduled" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.active_scheduled_orders') }}</div>
                                     </div>
                                     <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['active_scheduled_orders'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&scheduled_status=completed_scheduled" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=requests&scheduled_status=completed_scheduled" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.completed_scheduled_orders') }}</div>
                                     </div>
