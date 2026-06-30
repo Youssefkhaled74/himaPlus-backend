@@ -4,659 +4,644 @@
     <title>{{ __('admin.dashboard.title') }}</title>
 @endsection
 
+@section('css')
+<style>
+    .admin-dashboard {
+        --ad-bg: #f5f6f8;
+        --ad-card: #ffffff;
+        --ad-border: #e7eaf0;
+        --ad-title: #0f2f7f;
+        --ad-text: #1f2937;
+        --ad-muted: #6b7280;
+        --ad-primary: #0f4bbf;
+        --ad-accent: #0ec6a0;
+        --ad-soft: #eef5ff;
+
+        background: var(--ad-bg);
+        padding: 8px 0 24px;
+        font-family: "Poppins", "Tajawal", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    }
+
+    .admin-dashboard * {
+        font-family: inherit;
+    }
+
+    .ad-shell {
+        max-width: 95%;
+        margin: 12px auto 0;
+    }
+
+    .ad-card {
+        background: var(--ad-card);
+        border: 1px solid var(--ad-border);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+    }
+
+    .ad-hero {
+        padding: 22px;
+        margin-bottom: 16px;
+    }
+
+    .ad-title {
+        margin: 0 0 6px;
+        color: var(--ad-title);
+        font-size: 34px;
+        line-height: 1.08;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
+
+    .ad-subtitle {
+        margin: 0;
+        color: #475569;
+        font-size: 16px;
+        line-height: 1.55;
+        max-width: 760px;
+    }
+
+    .ad-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .ad-btn-primary,
+    .ad-btn-outline {
+        border-radius: 10px;
+        font-weight: 700;
+        padding: 10px 16px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all .2s ease;
+        min-height: 44px;
+    }
+
+    .ad-btn-primary {
+        border: 0;
+        color: #fff;
+        background: linear-gradient(90deg, var(--ad-primary) 0%, var(--ad-accent) 100%);
+    }
+
+    .ad-btn-primary:hover {
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(15, 75, 191, .14);
+    }
+
+    .ad-btn-outline {
+        border: 1px solid #cbd5e1;
+        color: #1e3a8a;
+        background: #fff;
+    }
+
+    .ad-btn-outline:hover {
+        color: #1e3a8a;
+        background: var(--ad-soft);
+        transform: translateY(-1px);
+    }
+
+    .ad-chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .ad-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border-radius: 999px;
+        padding: 7px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        background: #fff;
+        color: #334155;
+        border: 1px solid var(--ad-border);
+    }
+
+    .ad-stat {
+        padding: 16px 18px;
+        height: 100%;
+        transition: all .2s ease;
+        text-decoration: none;
+        display: block;
+    }
+
+    .ad-stat:hover {
+        border-color: #93c5fd;
+        box-shadow: 0 4px 12px rgba(15, 75, 191, .08);
+        transform: translateY(-1px);
+    }
+
+    .ad-stat-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: linear-gradient(90deg, var(--ad-primary) 0%, var(--ad-accent) 100%);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+        font-size: 18px;
+    }
+
+    .ad-stat-label {
+        display: block;
+        color: var(--ad-muted);
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        line-height: 1.35;
+    }
+
+    .ad-stat-value {
+        display: block;
+        color: var(--ad-text);
+        font-size: 36px;
+        line-height: 1;
+        font-weight: 800;
+    }
+
+    .ad-stat-meta {
+        margin-top: 8px;
+        color: var(--ad-muted);
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .ad-panel-head {
+        border-bottom: 1px solid var(--ad-border);
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .ad-panel-title {
+        margin: 0;
+        color: #0f172a;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .ad-panel-subtitle {
+        margin: 4px 0 0;
+        color: var(--ad-muted);
+        font-size: 13px;
+    }
+
+    .ad-body {
+        padding: 18px;
+    }
+
+    .ad-chart {
+        min-height: 360px;
+    }
+
+    .ad-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .ad-badge-primary {
+        background: #eaf2ff;
+        color: #1d4ed8;
+    }
+
+    .ad-badge-success {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .ad-badge-warning {
+        background: #fff7ed;
+        color: #9a3412;
+    }
+
+    .ad-badge-danger {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .ad-table {
+        width: 100%;
+        margin: 0;
+    }
+
+    .ad-table th {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--ad-border);
+        white-space: nowrap;
+    }
+
+    .ad-table td {
+        vertical-align: middle;
+        color: #334155;
+        font-size: 14px;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+    .ad-table tbody tr {
+        cursor: pointer;
+        transition: background .18s ease;
+    }
+
+    .ad-table tbody tr:hover {
+        background: #f8fbff;
+    }
+
+    .ad-alert-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .ad-alert-item {
+        border: 1px solid var(--ad-border);
+        border-radius: 14px;
+        padding: 14px;
+        background: #fff;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .ad-alert-count {
+        flex-shrink: 0;
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 12px;
+        font-weight: 800;
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .ad-alert-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .ad-alert-title {
+        font-size: 14px;
+        color: #111827;
+        font-weight: 800;
+        margin-bottom: 4px;
+    }
+
+    .ad-alert-meta {
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    .ad-empty {
+        text-align: center;
+        padding: 30px 18px;
+        color: #64748b;
+    }
+
+    .ad-empty i {
+        font-size: 34px;
+        color: #94a3b8;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    @media (max-width: 992px) {
+        .ad-shell {
+            max-width: 100%;
+            padding: 0 12px;
+        }
+
+        .ad-title {
+            font-size: 28px;
+        }
+
+        .ad-subtitle {
+            font-size: 15px;
+        }
+
+        .ad-stat-value {
+            font-size: 30px;
+        }
+
+        .ad-panel-title {
+            font-size: 18px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .ad-hero {
+            padding: 18px;
+        }
+
+        .ad-title {
+            font-size: 24px;
+        }
+
+        .ad-actions,
+        .ad-btn-primary,
+        .ad-btn-outline {
+            width: 100%;
+        }
+
+        .ad-panel-head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
 @php
-    $paidTotal = max(1, (int) ($dashboard['totals']['orders'] ?? 0));
-    $paidPercent = round((((int) ($dashboard['totals']['paid_orders'] ?? 0)) / $paidTotal) * 100, 1);
-    $quickActions = [
-        ['label' => __('admin.dashboard.manage_orders'), 'icon' => 'ri-shopping-bag-line', 'route' => route('admin/orders/index', [0, PAGINATION_COUNT])],
-        ['label' => __('admin.dashboard.manage_users'), 'icon' => 'ri-user-3-line', 'route' => route('admin/users/index', [0, PAGINATION_COUNT])],
-        ['label' => __('admin.dashboard.manage_products'), 'icon' => 'ri-capsule-line', 'route' => route('admin/products/index', [0, PAGINATION_COUNT])],
-        ['label' => __('admin.dashboard.manage_categories'), 'icon' => 'ri-layout-grid-line', 'route' => route('admin/categories/index', [0, PAGINATION_COUNT])],
-        ['label' => __('admin.dashboard.manage_coupons'), 'icon' => 'ri-coupon-2-line', 'route' => route('admin/coupons/index', [0, PAGINATION_COUNT])],
-        ['label' => __('admin.dashboard.manage_ratings'), 'icon' => 'ri-star-line', 'route' => route('admin/ratings/index', [0, PAGINATION_COUNT])],
-        ['label' => __('admin.dashboard.view_contacts'), 'icon' => 'ri-mail-line', 'route' => route('admin/contacts/index', [0, PAGINATION_COUNT])],
-        ['label' => __('admin.dashboard.manage_admins'), 'icon' => 'ri-shield-user-line', 'route' => route('admin/admins/index', [0, PAGINATION_COUNT])],
-    ];
-    $stats = [
-        [
-            'label' => __('admin.dashboard.stats.orders'),
-            'value' => number_format($dashboard['totals']['orders'] ?? 0),
-            'growth' => $dashboard['growth']['orders'] ?? 0,
-            'icon' => 'ri-shopping-bag-3-line',
-            'softClass' => 'bg-primary-subtle text-primary',
-            'showIcon' => true,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?tab=orders',
-        ],
-        [
-            'label' => __('admin.pages.orders.statuses.confirmed'),
-            'value' => number_format($dashboard['totals']['confirmed_orders'] ?? 0),
-            'growth' => 0,
-            'icon' => null,
-            'softClass' => '',
-            'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=confirmed&tab=orders',
-        ],
-        [
-            'label' => __('admin.dashboard.accepted_orders'),
-            'value' => number_format($dashboard['totals']['accepted_orders'] ?? 0),
-            'growth' => 0,
-            'icon' => null,
-            'softClass' => '',
-            'showIcon' => false,
-            'meta' => __('admin.dashboard.accepted_payment_breakdown', [
-                'paid' => number_format($dashboard['totals']['accepted_paid_orders'] ?? 0),
-                'unpaid' => number_format($dashboard['totals']['accepted_unpaid_orders'] ?? 0),
-            ]),
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=accepted_orders&tab=orders',
-        ],
-        [
-            'label' => __('admin.dashboard.in_progress_orders'),
-            'value' => number_format($dashboard['totals']['processing_orders'] ?? 0),
-            'growth' => 0,
-            'icon' => null,
-            'softClass' => '',
-            'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=processing&tab=orders',
-        ],
-        [
-            'label' => __('admin.dashboard.executed_orders'),
-            'value' => number_format($dashboard['totals']['executed_orders'] ?? 0),
-            'growth' => 0,
-            'icon' => null,
-            'softClass' => '',
-            'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=completed&tab=orders',
-        ],
-        [
-            'label' => __('admin.pages.orders.statuses.scheduled'),
-            'value' => number_format($dashboard['totals']['scheduled_orders'] ?? 0),
-            'growth' => 0,
-            'icon' => null,
-            'softClass' => '',
-            'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=scheduled&tab=orders',
-        ],
-        [
-            'label' => __('admin.dashboard.rejected_orders'),
-            'value' => number_format($dashboard['totals']['rejected_orders'] ?? 0),
-            'growth' => 0,
-            'icon' => null,
-            'softClass' => '',
-            'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=rejected&tab=orders',
-        ],
-        [
-            'label' => __('admin.pages.orders.statuses.canceled'),
-            'value' => number_format($dashboard['totals']['cancelled_orders'] ?? 0),
-            'growth' => 0,
-            'icon' => null,
-            'softClass' => '',
-            'showIcon' => false,
-            'link' => route('admin/orders/index', [0, PAGINATION_COUNT]) . '?status=cancelled&tab=orders',
-        ],
-    ];
+    $isAr = app()->getLocale() === 'ar';
+
+    $tr = function ($key, $fallback, $replace = []) {
+        $translated = __($key, $replace);
+        return $translated === $key ? $fallback : $translated;
+    };
+
+    $dashboard = $dashboard ?? [];
+    $totals = $dashboard['totals'] ?? [];
+    $charts = $dashboard['charts'] ?? [];
+
+    $recentOrders = collect($dashboard['recent_orders'] ?? []);
+    $lowStockProducts = collect($dashboard['low_stock_products'] ?? []);
+
+    $ordersTotal = (int) ($totals['orders'] ?? 0);
+    $paidOrders = (int) ($totals['paid_orders'] ?? 0);
+    $unpaidOrders = (int) ($totals['unpaid_orders'] ?? 0);
+    $processingOrders = (int) ($totals['processing_orders'] ?? 0);
+    $lowStock = (int) ($totals['low_stock'] ?? 0);
+
+    $paidPercent = $ordersTotal > 0 ? round(($paidOrders / $ordersTotal) * 100, 1) : 0;
 @endphp
 
-<div class="page-content">
+<div class="page-content admin-dashboard">
     <div class="container-fluid">
-        <div class="dashboard-shell">
-            <section class="dashboard-hero">
-                <div class="dashboard-hero-grid">
-                    <div class="dashboard-hero-copy">
-                        <span class="badge bg-primary-subtle text-primary align-self-start">{{ __('admin.dashboard.eyebrow') }}</span>
+        <div class="ad-shell">
+            <section class="ad-card ad-hero">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div>
+                        <span class="ad-badge ad-badge-primary mb-3">
+                            <i class="ri-dashboard-3-line"></i>
+                            {{ $tr('admin.dashboard.eyebrow', $isAr ? 'لوحة الإدارة' : 'Admin Dashboard') }}
+                        </span>
 
-                        <div class="dashboard-chip-row">
-                            <div class="dashboard-chip">
+                        <h3 class="ad-title">
+                            {{ $tr('admin.dashboard.title', $isAr ? 'لوحة التحكم' : 'Dashboard') }}
+                        </h3>
+
+                        <p class="ad-subtitle">
+                            {{ $isAr
+                                ? 'تابع أهم أرقام المنصة: الطلبات، المدفوعات، الطلبات قيد التنفيذ، وتنبيهات المخزون من مكان واحد.'
+                                : 'Track the most important platform numbers: orders, payments, processing orders, and stock alerts from one place.' }}
+                        </p>
+
+                        <div class="ad-chip-row">
+                            <span class="ad-chip">
                                 <i class="ri-checkbox-circle-line text-success"></i>
-                                <span>{{ __('admin.dashboard.paid_orders', ['count' => number_format($dashboard['totals']['paid_orders'] ?? 0)]) }}</span>
-                            </div>
-                            <div class="dashboard-chip">
+                                {{ $isAr ? 'مدفوع' : 'Paid' }}: {{ number_format($paidOrders) }}
+                            </span>
+
+                            <span class="ad-chip">
                                 <i class="ri-error-warning-line text-warning"></i>
-                                <span>{{ __('admin.dashboard.pending_payments', ['count' => number_format($dashboard['totals']['unpaid_orders'] ?? 0)]) }}</span>
-                            </div>
-                            <div class="dashboard-chip">
+                                {{ $isAr ? 'غير مدفوع' : 'Unpaid' }}: {{ number_format($unpaidOrders) }}
+                            </span>
+
+                            <span class="ad-chip">
                                 <i class="ri-time-line text-primary"></i>
-                                <span>{{ __('admin.dashboard.updated', ['time' => now()->format('Y-m-d H:i')]) }}</span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-wrap gap-3 pt-2">
-                            <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="btn btn-primary">
-                                <i class="ri-shopping-bag-line align-bottom me-1"></i>
-                                {{ __('admin.dashboard.open_orders') }}
-                            </a>
-                            <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light">
-                                <i class="ri-capsule-line align-bottom me-1"></i>
-                                {{ __('admin.dashboard.browse_products') }}
-                            </a>
+                                {{ $isAr ? 'آخر تحديث' : 'Updated' }}: {{ now()->format('Y-m-d H:i') }}
+                            </span>
                         </div>
                     </div>
 
-                    <aside class="dashboard-hero-aside">
-                        <div>
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <span class="badge bg-success-subtle text-success">{{ __('admin.dashboard.live_status') }}</span>
-                                <span class="muted small">{{ __('admin.dashboard.collection_rate') }}</span>
-                            </div>
-                            <h3 class="text-white mb-2">{{ $paidPercent }}%</h3>
-                            <p class="muted mb-0">{{ __('admin.dashboard.paid_orders_summary') }}</p>
-                        </div>
+                    <div class="ad-actions">
+                        <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="ad-btn-primary">
+                            <i class="ri-shopping-bag-line"></i>
+                            {{ $tr('admin.dashboard.open_orders', $isAr ? 'فتح الطلبات' : 'Open Orders') }}
+                        </a>
 
-                        <div>
-                            <div class="progress mb-3" style="height: 12px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ $paidPercent }}%"></div>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <div class="small muted">{{ __('admin.dashboard.paid') }}</div>
-                                    <div class="fw-bold fs-4">{{ number_format($dashboard['totals']['paid_orders'] ?? 0) }}</div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="small muted">{{ __('admin.dashboard.unpaid') }}</div>
-                                    <div class="fw-bold fs-4">{{ number_format($dashboard['totals']['unpaid_orders'] ?? 0) }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </aside>
+                        <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}" class="ad-btn-outline">
+                            <i class="ri-capsule-line"></i>
+                            {{ $tr('admin.dashboard.browse_products', $isAr ? 'المنتجات' : 'Products') }}
+                        </a>
+                    </div>
                 </div>
             </section>
 
-            <section class="dashboard-stat-grid">
-                @foreach($stats as $stat)
-                    <a href="{{ $stat['link'] }}" class="dashboard-stat-card" style="text-decoration: none;">
-                        <div class="dashboard-stat-head">
-                            <div>
-                                <span class="dashboard-stat-label">{{ $stat['label'] }}</span>
-                                <strong class="dashboard-stat-value">{{ $stat['value'] }}</strong>
-                                @if($stat['growth'] != 0)
-                                    <div class="dashboard-stat-growth {{ $stat['growth'] >= 0 ? 'text-success' : 'text-danger' }}">
-                                        {{ __('admin.dashboard.stats.vs_last_month', ['value' => ($stat['growth'] >= 0 ? '+' : '') . $stat['growth']]) }}
-                                    </div>
-                                @endif
-                                @if(!empty($stat['meta']))
-                                    <div class="dashboard-stat-growth text-muted">
-                                        {{ $stat['meta'] }}
-                                    </div>
-                                @endif
-                            </div>
-                            @if(!empty($stat['showIcon']) && !empty($stat['icon']))
-                                <span class="dashboard-stat-icon {{ $stat['softClass'] }}">
-                                    <i class="{{ $stat['icon'] }}"></i>
-                                </span>
-                            @endif
-                        </div>
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-md-3">
+                    <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders" class="ad-card ad-stat">
+                        <span class="ad-stat-icon">
+                            <i class="ri-shopping-bag-3-line"></i>
+                        </span>
+                        <span class="ad-stat-label">{{ $isAr ? 'إجمالي الطلبات' : 'Total Orders' }}</span>
+                        <strong class="ad-stat-value">{{ number_format($ordersTotal) }}</strong>
                     </a>
-                @endforeach
-            </section>
-
-            <section class="dashboard-grid">
-                <div class="d-flex flex-column gap-4">
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.quick_actions') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.quick_actions_subtitle') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-quick-actions">
-                                @foreach ($quickActions as $action)
-                                    <a href="{{ $action['route'] }}" class="dashboard-quick-link">
-                                        <span><i class="{{ $action['icon'] }} me-2"></i>{{ $action['label'] }}</span>
-                                        <i class="ri-arrow-left-up-line"></i>
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.guidance_metrics_title') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.guidance_metrics_subtitle') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?user_type=2" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.vendors_count') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.vendor_orders_summary_hint') }}</div>
-                                    </div>
-                                    <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['vendors_count'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}?user_type=1" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.customers_count') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.orders_rate_per_customer_hint') }}</div>
-                                    </div>
-                                    <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['customers_count'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.avg_orders_per_customer') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.orders_rate_per_customer_hint') }}</div>
-                                    </div>
-                                    <span class="badge bg-warning-subtle text-warning">{{ number_format((float) ($dashboard['totals']['avg_orders_per_customer'] ?? 0), 2) }}</span>
-                                </a>
-                                <a href="{{ route('admin/contacts/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.contact_numbers_summary') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.contacts_snapshot') }}</div>
-                                    </div>
-                                    <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['contacts'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/ratings/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.ratings_summary') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.ratings_snapshot') }}</div>
-                                    </div>
-                                    <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['ratings'] ?? 0) }}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.offers_panel') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.offers_panel_subtitle') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-mini-list">
-                                @foreach(($dashboard['request_cards'] ?? []) as $requestCard)
-                                    <a href="{{ $requestCard['link'] }}" class="dashboard-mini-item text-decoration-none">
-                                        <div>
-                                            <div class="fw-semibold">
-                                                <i class="{{ $requestCard['icon'] }} me-2 text-{{ $requestCard['color'] }}"></i>
-                                                {{ $requestCard['label'] }}
-                                            </div>
-                                            <div class="text-muted small">{{ $requestCard['subtitle'] }}</div>
-                                        </div>
-                                        <span class="badge bg-{{ $requestCard['color'] }}-subtle text-{{ $requestCard['color'] }}">
-                                            {{ number_format($requestCard['count']) }}
-                                        </span>
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.top_products') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.top_products_subtitle') }}</p>
-                                </div>
-                                <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-mini-list">
-                                @forelse($dashboard['top_products'] as $product)
-                                    <a href="{{ route('admin/products/edit', $product->id) }}" class="dashboard-mini-item text-decoration-none">
-                                        <div>
-                                            <div class="fw-semibold">{{ $product->name }}</div>
-                                            <div class="text-muted small">
-                                                {{ __('admin.pages.common.price') }}: {{ number_format((float) ($product->price ?? 0), 2) }}
-                                            </div>
-                                        </div>
-                                        <span class="badge bg-primary-subtle text-primary">
-                                            {{ __('admin.pages.common.stock_quantity') }}: {{ number_format((int) ($product->stock_quantity ?? 0)) }}
-                                        </span>
-                                    </a>
-                                @empty
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.no_top_products') }}</p>
-                                @endforelse
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
-                <div class="d-flex flex-column gap-4">
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.scheduled_operations') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.scheduled_operations_subtitle') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=scheduled" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.scheduled_orders') }}</div>
-                                    </div>
-                                    <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['scheduled_orders'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=active_scheduled" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.active_scheduled_orders') }}</div>
-                                    </div>
-                                    <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['active_scheduled_orders'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=completed_scheduled" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.completed_scheduled_orders') }}</div>
-                                    </div>
-                                    <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['completed_scheduled_orders'] ?? 0) }}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="col-6 col-md-3">
+                    <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&payment_status=1" class="ad-card ad-stat">
+                        <span class="ad-stat-icon">
+                            <i class="ri-bank-card-line"></i>
+                        </span>
+                        <span class="ad-stat-label">{{ $isAr ? 'طلبات مدفوعة' : 'Paid Orders' }}</span>
+                        <strong class="ad-stat-value">{{ number_format($paidOrders) }}</strong>
+                        <div class="ad-stat-meta">{{ $isAr ? 'معدل التحصيل' : 'Collection Rate' }}: {{ $paidPercent }}%</div>
+                    </a>
                 </div>
-            </section>
 
-            <section class="dashboard-grid">
-                <div class="d-flex flex-column gap-4">
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.orders_revenue_trend') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.performance_movement') }}</p>
-                                </div>
-                                <span class="badge bg-primary-subtle text-primary">{{ __('admin.dashboard.monthly_analytics') }}</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div id="real_dashboard_chart" class="apex-charts" dir="ltr"></div>
-                        </div>
-                    </div>
+                <div class="col-6 col-md-3">
+                    <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=processing" class="ad-card ad-stat">
+                        <span class="ad-stat-icon">
+                            <i class="ri-time-line"></i>
+                        </span>
+                        <span class="ad-stat-label">{{ $isAr ? 'قيد التنفيذ' : 'Processing' }}</span>
+                        <strong class="ad-stat-value">{{ number_format($processingOrders) }}</strong>
+                    </a>
+                </div>
 
-                    <div class="card dashboard-table-card">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.recent_orders') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.recent_orders_subtitle') }}</p>
-                                </div>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.view_all') }}</a>
+                <div class="col-6 col-md-3">
+                    <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}?low_stock=1" class="ad-card ad-stat">
+                        <span class="ad-stat-icon">
+                            <i class="ri-alert-line"></i>
+                        </span>
+                        <span class="ad-stat-label">{{ $isAr ? 'تنبيهات المخزون' : 'Low Stock Alerts' }}</span>
+                        <strong class="ad-stat-value">{{ number_format($lowStock) }}</strong>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-12">
+                    <section class="ad-card">
+                        <div class="ad-panel-head">
+                            <div>
+                                <h5 class="ad-panel-title">
+                                    {{ $tr('admin.dashboard.orders_revenue_trend', $isAr ? 'اتجاه الطلبات والإيرادات' : 'Orders & Revenue Trend') }}
+                                </h5>
+                                <p class="ad-panel-subtitle">
+                                    {{ $isAr ? 'رسم بياني بسيط يوضح حركة الطلبات والإيرادات.' : 'A simple chart showing orders and revenue movement.' }}
+                                </p>
                             </div>
+
+                            <span class="ad-badge ad-badge-primary">
+                                {{ $tr('admin.dashboard.monthly_analytics', $isAr ? 'تحليلات شهرية' : 'Monthly Analytics') }}
+                            </span>
                         </div>
-                        <div class="card-body">
+
+                        <div class="ad-body">
+                            <div id="real_dashboard_chart" class="ad-chart" dir="ltr"></div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-xl-8">
+                    <section class="ad-card h-100">
+                        <div class="ad-panel-head">
+                            <div>
+                                <h5 class="ad-panel-title">
+                                    {{ $tr('admin.dashboard.recent_orders', $isAr ? 'أحدث الطلبات' : 'Recent Orders') }}
+                                </h5>
+                                <p class="ad-panel-subtitle">
+                                    {{ $isAr ? 'آخر الطلبات التي تم إنشاؤها داخل المنصة.' : 'Latest orders created in the platform.' }}
+                                </p>
+                            </div>
+
+                            <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="ad-badge ad-badge-primary text-decoration-none">
+                                {{ $tr('admin.dashboard.view_all', $isAr ? 'عرض الكل' : 'View All') }}
+                            </a>
+                        </div>
+
+                        <div class="ad-body">
                             <div class="table-responsive">
-                                <table class="table align-middle mb-0">
+                                <table class="table ad-table align-middle">
                                     <thead>
                                         <tr>
-                                            <th>{{ __('admin.dashboard.order_id') }}</th>
-                                            <th>{{ __('admin.dashboard.customer') }}</th>
-                                            <th>{{ __('admin.dashboard.provider') }}</th>
-                                            <th>{{ __('admin.dashboard.total') }}</th>
-                                            <th>{{ __('admin.dashboard.status') }}</th>
-                                            <th>{{ __('admin.dashboard.date') }}</th>
+                                            <th>{{ $isAr ? 'رقم الطلب' : 'Order ID' }}</th>
+                                            <th>{{ $isAr ? 'العميل' : 'Customer' }}</th>
+                                            <th>{{ $isAr ? 'المورد' : 'Provider' }}</th>
+                                            <th>{{ $isAr ? 'الإجمالي' : 'Total' }}</th>
+                                            <th>{{ $isAr ? 'الدفع' : 'Payment' }}</th>
+                                            <th>{{ $isAr ? 'التاريخ' : 'Date' }}</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
-                                        @forelse($dashboard['recent_orders'] as $order)
-                                            <tr onclick="window.location='{{ route('admin/orders/edit', $order->id) }}'" style="cursor: pointer;">
+                                        @forelse($recentOrders as $order)
+                                            <tr onclick="window.location='{{ route('admin/orders/edit', $order->id) }}'">
                                                 <td class="fw-semibold">#{{ $order->id }}</td>
                                                 <td>{{ optional($order->user)->name ?? '-' }}</td>
                                                 <td>{{ optional($order->provider)->name ?? '-' }}</td>
                                                 <td>{{ number_format((float) ($order->total_cost ?? 0), 2) }}</td>
                                                 <td>
-                                                    @if((int) $order->payment_status === 1)
-                                                        <span class="badge bg-success-subtle text-success">{{ __('admin.dashboard.paid_badge') }}</span>
+                                                    @if((int) ($order->payment_status ?? 0) === 1)
+                                                        <span class="ad-badge ad-badge-success">
+                                                            {{ $isAr ? 'مدفوع' : 'Paid' }}
+                                                        </span>
                                                     @else
-                                                        <span class="badge bg-warning-subtle text-warning">{{ __('admin.dashboard.pending_badge') }}</span>
+                                                        <span class="ad-badge ad-badge-warning">
+                                                            {{ $isAr ? 'معلق' : 'Pending' }}
+                                                        </span>
                                                     @endif
                                                 </td>
-                                                <td>{{ optional($order->created_at)->format('Y-m-d H:i') }}</td>
+                                                <td>{{ optional($order->created_at)->format('Y-m-d H:i') ?? '-' }}</td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="6" class="text-center text-muted">{{ __('admin.dashboard.no_recent_orders') }}</td>
+                                                <td colspan="6" class="text-center text-muted py-4">
+                                                    {{ $isAr ? 'لا توجد طلبات حديثة.' : 'No recent orders.' }}
+                                                </td>
                                             </tr>
                                         @endforelse
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
 
-                <div class="d-flex flex-column gap-4">
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.top_categories') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.top_categories_subtitle') }}</p>
-                                </div>
-                                <span class="badge bg-info-subtle text-info">{{ __('admin.dashboard.top_five') }}</span>
+                <div class="col-xl-4">
+                    <section class="ad-card h-100">
+                        <div class="ad-panel-head">
+                            <div>
+                                <h5 class="ad-panel-title">
+                                    {{ $tr('admin.dashboard.low_stock_alerts', $isAr ? 'تنبيهات المخزون' : 'Low Stock Alerts') }}
+                                </h5>
+                                <p class="ad-panel-subtitle">
+                                    {{ $isAr ? 'منتجات تحتاج مراجعة المخزون.' : 'Products that need stock review.' }}
+                                </p>
                             </div>
+
+                            <span class="ad-badge ad-badge-danger">{{ number_format($lowStock) }}</span>
                         </div>
-                        <div class="card-body">
-                            <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/categories/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.total_categories_label') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.stats.categories') }}</div>
-                                    </div>
-                                    <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['categories'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.total_products_label') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.stats.products') }}</div>
-                                    </div>
-                                    <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['products'] ?? 0) }}</span>
-                                </a>
-                                @forelse($dashboard['top_categories'] as $category)
-                                    <a href="{{ route('admin/categories/edit', $category->id) }}" class="dashboard-mini-item text-decoration-none">
-                                        <div>
-                                            <div class="fw-semibold">{{ $category->name }}</div>
-                                            <div class="text-muted small">{{ __('admin.dashboard.products_listed') }}</div>
-                                        </div>
-                                        <span class="badge bg-primary-subtle text-primary">{{ $category->products_count }}</span>
-                                    </a>
-                                @empty
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.no_category_insights') }}</p>
-                                @endforelse
-                            </div>
-                        </div>
-                    </div>
 
-                </div>
-            </section>
-
-            <section class="dashboard-entity-grid">
-                <article class="dashboard-entity-card is-blue">
-                    <div class="dashboard-entity-meta">
-                        <i class="ri-user-heart-line text-primary"></i>
-                        <span>{{ __('admin.dashboard.users_snapshot') }}</span>
-                    </div>
-                    <h4 class="mb-2">{{ __('admin.dashboard.registered_accounts', ['count' => number_format($dashboard['totals']['users'] ?? 0)]) }}</h4>
-                    <p class="text-muted mb-3">{{ __('admin.dashboard.users_snapshot_text') }}</p>
-                    <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_users') }}</a>
-                </article>
-
-                <article class="dashboard-entity-card is-green">
-                    <div class="dashboard-entity-meta">
-                        <i class="ri-shopping-bag-line text-success"></i>
-                        <span>{{ __('admin.dashboard.operations_snapshot') }}</span>
-                    </div>
-                    <h4 class="mb-2">{{ __('admin.dashboard.total_orders', ['count' => number_format($dashboard['totals']['orders'] ?? 0)]) }}</h4>
-                    <p class="text-muted mb-3">{{ __('admin.dashboard.operations_snapshot_text') }}</p>
-                    <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_orders_short') }}</a>
-                </article>
-
-                <article class="dashboard-entity-card is-amber">
-                    <div class="dashboard-entity-meta">
-                        <i class="ri-coupon-2-line text-warning"></i>
-                        <span>{{ __('admin.dashboard.catalog_snapshot') }}</span>
-                    </div>
-                    <h4 class="mb-2">{{ __('admin.dashboard.listed_products', ['count' => number_format($dashboard['totals']['products'] ?? 0)]) }}</h4>
-                    <p class="text-muted mb-3">{{ __('admin.dashboard.catalog_snapshot_text') }}</p>
-                    <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
-                </article>
-
-                <article class="dashboard-entity-card" style="background: linear-gradient(135deg, #0f4bbf 0%, #10c7a5 100%); color: white;">
-                    <div class="dashboard-entity-meta" style="color: rgba(255,255,255,0.8);">
-                        <i class="ri-alert-line"></i>
-                        <span>{{ __('admin.dashboard.inventory_alert') }}</span>
-                    </div>
-                    <h4 class="mb-2" style="color: white;">{{ __('admin.dashboard.low_stock_items', ['count' => number_format($dashboard['totals']['low_stock'] ?? 0)]) }}</h4>
-                    <p class="mb-3" style="color: rgba(255,255,255,0.8);">{{ __('admin.dashboard.inventory_alert_text', ['warning' => $dashboard['totals']['low_stock_warning_threshold'] ?? 20, 'critical' => $dashboard['totals']['low_stock_critical_threshold'] ?? 5]) }}</p>
-                    <a href="{{ route('admin/products/index', [0, PAGINATION_COUNT]) }}?low_stock=1" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_catalog') }}</a>
-                </article>
-
-                <article class="dashboard-entity-card is-blue">
-                    <div class="dashboard-entity-meta">
-                        <i class="ri-star-line text-warning"></i>
-                        <span>{{ __('admin.dashboard.ratings_snapshot') }}</span>
-                    </div>
-                    <h4 class="mb-2">{{ number_format($dashboard['totals']['ratings'] ?? 0) }}</h4>
-                    <p class="text-muted mb-3">{{ __('admin.dashboard.ratings_snapshot_text') }}</p>
-                    <a href="{{ route('admin/ratings/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_ratings') }}</a>
-                </article>
-
-                <article class="dashboard-entity-card is-green">
-                    <div class="dashboard-entity-meta">
-                        <i class="ri-mail-line text-info"></i>
-                        <span>{{ __('admin.dashboard.contacts_snapshot') }}</span>
-                    </div>
-                    <h4 class="mb-2">{{ number_format($dashboard['totals']['contacts'] ?? 0) }}</h4>
-                    <p class="text-muted mb-3">{{ __('admin.dashboard.contacts_snapshot_text') }}</p>
-                    <a href="{{ route('admin/contacts/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.open_contacts') }}</a>
-                </article>
-
-            </section>
-
-            <!-- Recent Users & Low Stock Grid -->
-            <section class="dashboard-grid dashboard-grid--auto" style="margin-top: 2rem;">
-                <div class="d-flex flex-column gap-4">
-                    <div class="card dashboard-table-card">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.recent_users') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.recent_users_subtitle') }}</p>
-                                </div>
-                                <a href="{{ route('admin/users/index', [0, PAGINATION_COUNT]) }}" class="btn btn-light btn-sm">{{ __('admin.dashboard.view_all') }}</a>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table align-middle mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>{{ __('admin.dashboard.user_id') }}</th>
-                                            <th>{{ __('admin.pages.common.name') }}</th>
-                                            <th>{{ __('admin.pages.common.email') }}</th>
-                                            <th>{{ __('admin.dashboard.joined') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($dashboard['recent_users'] as $user)
-                                            <tr onclick="window.location='{{ route('admin/users/show', $user->id) }}'" style="cursor: pointer;">
-                                                <td class="fw-semibold">#{{ $user->id }}</td>
-                                                <td>{{ $user->name }}</td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>{{ $user->created_at->locale(app()->getLocale())->translatedFormat('d M Y') }}</td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="4" class="text-center text-muted">{{ __('admin.dashboard.no_recent_users') }}</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-flex flex-column gap-4">
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.low_stock_alerts') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.low_stock_threshold_hint', ['warning' => $dashboard['totals']['low_stock_warning_threshold'] ?? 20, 'critical' => $dashboard['totals']['low_stock_critical_threshold'] ?? 5]) }}</p>
-                                </div>
-                                <span class="badge bg-danger-subtle text-danger">{{ number_format($dashboard['totals']['low_stock'] ?? 0) }}</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-alert-list">
-                                @forelse($dashboard['low_stock_products'] as $product)
-                                    <a href="{{ route('admin/products/edit', $product->id) }}" class="dashboard-alert-item text-decoration-none">
-                                        <span class="dashboard-alert-item__count">
-                                            {{ __('admin.dashboard.stock_left', ['count' => $product->stock_quantity]) }}
+                        <div class="ad-body">
+                            <div class="ad-alert-list">
+                                @forelse($lowStockProducts as $product)
+                                    <div class="ad-alert-item">
+                                        <span class="ad-alert-count">
+                                            {{ $isAr ? 'المتبقي' : 'Left' }}: {{ $product->stock_quantity ?? 0 }}
                                         </span>
-                                        <div class="dashboard-alert-item__content">
-                                            <div class="dashboard-alert-item__title">{{ $product->name }}</div>
-                                            <div class="dashboard-alert-item__meta">
-                                                {{ __('admin.dashboard.supplier_label') }}: {{ optional($product->provider)->name ?? '-' }}
+
+                                        <div class="ad-alert-content">
+                                            <a href="{{ route('admin/products/edit', $product->id) }}" class="text-decoration-none">
+                                                <div class="ad-alert-title">{{ $product->name ?? '-' }}</div>
+                                            </a>
+
+                                            <div class="ad-alert-meta">
+                                                {{ $isAr ? 'المورد' : 'Supplier' }}:
+                                                {{ optional($product->provider)->name ?? '-' }}
                                             </div>
-                                            @if(!empty($product->provider_id))
-                                                <a href="{{ route('admin/users/show', $product->provider_id) }}" class="btn btn-light btn-sm mt-2">
-                                                    {{ __('admin.dashboard.open_supplier_profile') }}
+
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <a href="{{ route('admin/products/edit', $product->id) }}" class="ad-badge ad-badge-primary text-decoration-none">
+                                                    {{ $isAr ? 'فتح المنتج' : 'Open Product' }}
                                                 </a>
-                                            @endif
+
+                                                @if(!empty($product->provider_id))
+                                                    <a href="{{ route('admin/users/show', $product->provider_id) }}" class="ad-badge ad-badge-primary text-decoration-none">
+                                                        {{ $isAr ? 'ملف المورد' : 'Supplier Profile' }}
+                                                    </a>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <span class="dashboard-alert-item__accent" aria-hidden="true"></span>
-                                    </a>
+                                    </div>
                                 @empty
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.all_stocked') }}</p>
+                                    <div class="ad-empty">
+                                        <i class="ri-checkbox-circle-line"></i>
+                                        <p class="mb-0">
+                                            {{ $isAr ? 'كل المنتجات لديها مخزون كافٍ.' : 'All products are sufficiently stocked.' }}
+                                        </p>
+                                    </div>
                                 @endforelse
                             </div>
                         </div>
-                    </div>
-
-                    <div class="card dashboard-panel">
-                        <div class="card-header">
-                            <div class="dashboard-section-heading mb-0">
-                                <div>
-                                    <h5 class="card-title mb-1">{{ __('admin.dashboard.payment_status') }}</h5>
-                                    <p class="text-muted mb-0">{{ __('admin.dashboard.payment_status_subtitle') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&payment_status=1" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.paid_orders_label') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.paid_badge') }}</div>
-                                    </div>
-                                    <span class="badge bg-success-subtle text-success">{{ number_format($dashboard['totals']['paid_orders'] ?? 0) }}</span>
-                                </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&payment_status=0" class="dashboard-mini-item text-decoration-none">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.pending_payments_label') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.pending_badge') }}</div>
-                                    </div>
-                                    <span class="badge bg-warning-subtle text-warning">{{ number_format($dashboard['totals']['unpaid_orders'] ?? 0) }}</span>
-                                </a>
-                                <div class="dashboard-mini-item">
-                                    <div>
-                                        <div class="fw-semibold">{{ __('admin.dashboard.collection_rate_label') }}</div>
-                                        <div class="text-muted small">{{ __('admin.dashboard.live_status') }}</div>
-                                    </div>
-                                    <span class="badge bg-primary-subtle text-primary">{{ $paidPercent }}%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </section>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
 </div>
@@ -666,20 +651,34 @@
 <script>
     (function () {
         const isRtl = @json(app()->getLocale() === 'ar');
-        const months = @json($dashboard['charts']['months']);
-        const orders = @json($dashboard['charts']['orders']);
-        const revenue = @json($dashboard['charts']['revenue']);
+        const months = @json($charts['months'] ?? []);
+        const orders = @json($charts['orders'] ?? []);
+        const revenue = @json($charts['revenue'] ?? []);
+
+        const chartEl = document.querySelector('#real_dashboard_chart');
+
+        if (!chartEl || typeof ApexCharts === 'undefined') {
+            return;
+        }
 
         const options = {
             series: [
-                { name: @json(__('admin.dashboard.chart_orders')), type: 'column', data: orders },
-                { name: @json(__('admin.dashboard.chart_revenue')), type: 'line', data: revenue }
+                {
+                    name: isRtl ? 'الطلبات' : 'Orders',
+                    type: 'column',
+                    data: orders
+                },
+                {
+                    name: isRtl ? 'الإيرادات' : 'Revenue',
+                    type: 'line',
+                    data: revenue
+                }
             ],
             chart: {
                 height: 360,
                 type: 'line',
                 toolbar: { show: false },
-                fontFamily: isRtl ? 'Almarai, sans-serif' : 'Manrope, sans-serif'
+                fontFamily: isRtl ? 'Tajawal, Almarai, sans-serif' : 'Poppins, Manrope, sans-serif'
             },
             stroke: {
                 width: [0, 4],
@@ -702,14 +701,18 @@
             },
             yaxis: [
                 {
-                    title: { text: @json(__('admin.dashboard.chart_orders')) }
+                    title: {
+                        text: isRtl ? 'الطلبات' : 'Orders'
+                    }
                 },
                 {
                     opposite: true,
-                    title: { text: @json(__('admin.dashboard.chart_revenue')) }
+                    title: {
+                        text: isRtl ? 'الإيرادات' : 'Revenue'
+                    }
                 }
             ],
-            colors: ['#0f4bbf', '#10c7a5'],
+            colors: ['#0f4bbf', '#0ec6a0'],
             dataLabels: {
                 enabled: false
             },
@@ -719,14 +722,14 @@
             legend: {
                 position: 'top',
                 horizontalAlign: isRtl ? 'right' : 'left'
+            },
+            noData: {
+                text: isRtl ? 'لا توجد بيانات كافية لعرض الرسم البياني' : 'No data available'
             }
         };
 
-        const chartEl = document.querySelector('#real_dashboard_chart');
-        if (chartEl) {
-            const chart = new ApexCharts(chartEl, options);
-            chart.render();
-        }
+        const chart = new ApexCharts(chartEl, options);
+        chart.render();
     })();
 </script>
 @endsection
