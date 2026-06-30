@@ -177,7 +177,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     
 	public function avg_rating()
     {
-        return round((float) $this->ratings()->avg('rate'), 2);
+        return round((float) $this->ratings()->avg('rating'), 2);
     }
 
     /**

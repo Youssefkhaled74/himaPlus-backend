@@ -30,6 +30,7 @@ class UserRepository extends BaseAdminRepository
         return $this->model
             ->with($this->model->model_relations())
             ->withCount($this->model->model_relations_counts())
+            ->withAvg('ratings', 'rating')
             ->unArchive()
             ->when($userType !== '', function ($query) use ($userType) {
                 $query->where('user_type', (int) $userType);

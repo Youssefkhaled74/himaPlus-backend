@@ -344,6 +344,7 @@
                                     <th class="text-center">{{ __('admin.pages.common.mobile') }}</th>
                                     <th class="text-center">{{ __('admin.pages.common.email') }}</th>
                                     <th class="text-center">{{ __('admin.pages.common.user_type') }}</th>
+                                    <th class="text-center">{{ __('admin.pages.common.rating') }}</th>
                                     <th class="text-center">{{ __('admin.pages.common.activation') }}</th>
                                     <th class="text-center">{{ __('admin.pages.common.actions') }}</th>
                                 </tr>
@@ -377,6 +378,19 @@
                                         <td class="text-center">{{ $record->email }}</td>
                                         <td class="text-center">
                                             <span class="badge {{ $typeClass }}">{{ $typeLabel }}</span>
+                                        </td>
+                                        @php
+                                            $averageRating = $record->ratings_avg_rating;
+                                        @endphp
+                                        <td class="text-center">
+                                            @if(!is_null($averageRating))
+                                                <span class="badge bg-warning-subtle text-warning-emphasis">
+                                                    <i class="ri-star-fill align-bottom me-1"></i>
+                                                    {{ number_format((float) $averageRating, 1) }}
+                                                </span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
                                         </td>
                                         <td class="text-center">
                                             <span class="badge {{ $activationClass }}">{{ $activationLabel }}</span>
@@ -432,7 +446,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center text-muted py-5">{{ __('admin.pages.common.no_data') }}</td>
+                                        <td colspan="8" class="text-center text-muted py-5">{{ __('admin.pages.common.no_data') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>
