@@ -137,8 +137,23 @@
         ],
     ];
 
-    if (!isset($privacyPolicies) || $privacyPolicies->count() === 0) {
+    $hasPrivacyPolicies = false;
+
+    if (isset($privacyPolicies)) {
+        if (is_array($privacyPolicies)) {
+            $hasPrivacyPolicies = count($privacyPolicies) > 0;
+        } elseif (is_object($privacyPolicies) && method_exists($privacyPolicies, 'count')) {
+            $hasPrivacyPolicies = $privacyPolicies->count() > 0;
+        } elseif ($privacyPolicies instanceof \Traversable) {
+            $privacyPolicies = collect($privacyPolicies);
+            $hasPrivacyPolicies = $privacyPolicies->count() > 0;
+        }
+    }
+
+    if (!$hasPrivacyPolicies) {
         $privacyPolicies = collect($defaultPrivacyPolicies);
+    } else {
+        $privacyPolicies = collect($privacyPolicies);
     }
 @endphp
 
