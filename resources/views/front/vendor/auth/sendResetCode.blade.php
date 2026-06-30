@@ -1,4 +1,4 @@
-@extends('layouts.front.home')
+﻿@extends('layouts.front.home')
 
 <!-- title page -->
 @section('title')
@@ -27,7 +27,7 @@
                         <div class="hp-card card">
                             <div class="card-body p-4 p-lg-5">
                                 <h4 class="mb-4">{{ __('profile.reset_password') }}</h4>
-                                <p class="text-muted mb-4">{{ __('profile.reset_password_instructions') ?? 'Enter your email or phone number to receive a reset code.' }}</p>
+                                <p class="text-muted mb-4">{{ trans_or_fallback('', '') }}</p>
 
                                 @include('flash::message')
                                 @if ($errors->any())
@@ -43,7 +43,7 @@
                                 <form method="POST" action="{{ route('vendor/send-reset-code/check') }}">
                                     @csrf
                                     <div class="mb-3">
-                                        <label class="form-label">{{ __('profile.email_or_phone') ?? 'Email or Phone Number' }} <span class="required-star">*</span></label>
+                                        <label class="form-label">{{ trans_or_fallback('', '') }} <span class="required-star">*</span></label>
                                         <input 
                                             name="data" 
                                             type="text" 
@@ -55,13 +55,13 @@
                                     </div>
 
                                     <button class="btn hp-btn-gradient w-100" type="submit">
-                                        {{ __('profile.send_reset_code') ?? 'Send Reset Code' }}
+                                        {{ trans_or_fallback('', '') }}
                                     </button>
                                 </form>
 
                                 <div class="mt-4 text-center">
                                     <p class="small text-muted">
-                                        {{ __('profile.remember_password') ?? 'Remember your password?' }}
+                                        {{ trans_or_fallback('', '') }}
                                         <a href="{{ route('vendor/login') }}" class="hp-link">{{ __('nav.login') }}</a>
                                     </p>
                                 </div>
@@ -73,4 +73,5 @@
         </div>
     </main>
 @endsection
+
 

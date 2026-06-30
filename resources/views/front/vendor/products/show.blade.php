@@ -1,7 +1,7 @@
-@extends('layouts.front.home')
+﻿@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ $product->name ?? __('nav.product_details') ?? 'Product Details' }} - Vendor | Hema</title>
+    <title>{{ $product->name ?? trans_or_fallback('', '') }} - Vendor | Hema</title>
 @endsection
 
 @section('css')
@@ -402,7 +402,7 @@
 
         {{-- Breadcrumb --}}
         <div class="hp-bc">
-            <a href="{{ route('vendor/products') }}">{{ __('nav.products') ?? 'Products' }}</a>
+            <a href="{{ route('vendor/products') }}">{{ trans_or_fallback('', '') }}</a>
             <span class="sep">&rsaquo;</span>
             <span style="color:#0e5bd8;font-weight:700;">{{ $product->name ?? '' }}</span>
         </div>
@@ -482,14 +482,14 @@
                     {{ $product->name ?? '' }}
                 </h1>
 
-                <div class="sec-label">{{ __('nav.description') ?? 'Description' }}</div>
+                <div class="sec-label">{{ trans_or_fallback('', '') }}</div>
                 <p class="desc">
                     {{ $product->desc ?? '-' }}
                 </p>
 
                 <div class="meta-line">
-                    <span>{{ __('nav.stock_status') ?? 'Stock Status' }}:</span>
-                    <b>{{ (int)($product->stock_quantity ?? 0) }} {{ __('nav.units') ?? 'Units' }}</b>
+                    <span>{{ trans_or_fallback('', '') }}:</span>
+                    <b>{{ (int)($product->stock_quantity ?? 0) }} {{ trans_or_fallback('', '') }}</b>
                 </div>
 
                 {{-- Vendor mini card (optional) --}}
@@ -512,21 +512,21 @@
                 </div>
                 <div class="btn-row">
                     <a href="{{ route('vendor/products/edit', $product->id) }}" class="btn-hp btn-grad">
-                        {{ __('nav.edit_product') ?? 'Edit' }}
+                        {{ trans_or_fallback('', '') }}
                     </a>
 
                     <form class="js-delete-form" action="{{ route('vendor/products/delete', $product->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn-hp btn-outline">
-                            {{ __('nav.delete') ?? 'Delete' }}
+                            {{ trans_or_fallback('', '') }}
                         </button>
                     </form>
                 </div>
                 <a href="{{ route('vendor/products/edit', $product->id) }}#images"
                    class="d-inline-block mt-2 text-decoration-none"
                    style="font-size:13px;color:#0e5bd8;">
-                    {{ __('products.manage_images') ?? 'Manage images (update/remove one by one)' }}
+                    {{ trans_or_fallback('', '') }}
                 </a>
             </div>
 
@@ -536,10 +536,10 @@
         <div class="hp-tabs">
             <div class="tab-head">
                 <button type="button" class="tab-btn active" data-tab="specs">
-                    {{ __('products.specifications') ?? 'Specifications' }}
+                    {{ trans_or_fallback('', '') }}
                 </button>
                 <button type="button" class="tab-btn" data-tab="reviews">
-                    {{ __('products.ratings_reviews') ?? 'Ratings & Reviews' }}
+                    {{ trans_or_fallback('', '') }}
                 </button>
             </div>
 
@@ -549,11 +549,11 @@
                     <div class="spec-grid">
                         <div class="spec-box">
                             <div class="spec-row">
-                                <div class="k">{{ __('products.power') ?? 'Power' }}:</div>
+                                <div class="k">{{ trans_or_fallback('', '') }}:</div>
                                 <div class="v">{{ $product->power ?? '-' }}</div>
                             </div>
                             <div class="spec-row">
-                                <div class="k">{{ __('products.weight') ?? 'Weight' }}:</div>
+                                <div class="k">{{ trans_or_fallback('', '') }}:</div>
                                 <div class="v">{{ $product->weight ?? '-' }}</div>
                             </div>
                         </div>
@@ -615,7 +615,7 @@
                         </div>
                     @else
                         <div class="reviews-empty">
-                            {{ __('nav.no_ratings') ?? __('products.reviews_placeholder') ?? 'Ratings & Reviews will appear here.' }}
+                            {{ __('nav.no_ratings') ?? trans_or_fallback('', '') }}
                         </div>
                     @endif
                 </div>
@@ -629,17 +629,17 @@
     <div class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
         <div class="delete-modal-icon">?</div>
         <h3 id="deleteModalTitle" class="delete-modal-title">
-            {{ __('products.delete_product_title') ?? 'Delete Product' }}
+            {{ trans_or_fallback('', '') }}
         </h3>
         <p class="delete-modal-text">
-            {{ __('products.delete_product_message') ?? 'Are you sure you want to delete this product? This action cannot be undone.' }}
+            {{ trans_or_fallback('', '') }}
         </p>
         <div class="delete-modal-actions">
             <button type="button" id="deleteModalConfirm" class="delete-modal-btn delete-modal-confirm">
-                {{ __('nav.delete') ?? 'Delete' }}
+                {{ trans_or_fallback('', '') }}
             </button>
             <button type="button" id="deleteModalCancel" class="delete-modal-btn delete-modal-cancel">
-                {{ __('nav.cancel') ?? 'Cancel' }}
+                {{ trans_or_fallback('', '') }}
             </button>
         </div>
     </div>
@@ -730,4 +730,5 @@
     })();
 </script>
 @endsection
+
 

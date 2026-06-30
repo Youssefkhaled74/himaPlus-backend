@@ -1,4 +1,4 @@
-@extends('layouts.admin.home')
+﻿@extends('layouts.admin.home')
 
 @section('title')
     <title>{{ __('admin.pages.contacts.title') }}</title>
@@ -39,7 +39,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.contacts.update_title') ?? 'Update Contact' }}</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">{{ trans_or_fallback('', '') }}</h4>
                         </div>
                         <div class="card-body">
                             @isset($contact)
@@ -97,3 +97,4 @@
     })();
 </script>
 @endsection
+

@@ -1,7 +1,7 @@
-@extends('layouts.front.home')
+﻿@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.view_products') ?? 'Products' }} - Vendor | Hema</title>
+    <title>{{ trans_or_fallback('', '') }} - Vendor | Hema</title>
 @endsection
 
 @section('css')
@@ -259,9 +259,9 @@
     <main class="hp-main">
         <section class="vendor-hero">
             <div class="container">
-                <h1 class="vendor-hero__title">{{ __('nav.products') ?? 'Products' }}</h1>
+                <h1 class="vendor-hero__title">{{ trans_or_fallback('', '') }}</h1>
                 <p class="vendor-hero__sub">
-                    {{ __('products.products_desc') ?? 'Find high-quality medical devices, consumables, and equipment from verified suppliers - compare, request quotations, or shop directly with ease.' }}
+                    {{ trans_or_fallback('', '') }}
                 </p>
             </div>
         </section>
@@ -280,7 +280,7 @@
             @endif
 
             <div class="vendor-products__bar">
-                <h2 class="vendor-products__title">{{ __('products.products_heading') ?? 'Our Products' }}</h2>
+                <h2 class="vendor-products__title">{{ trans_or_fallback('', '') }}</h2>
 
                 <div class="vendor-tools">
                     <form method="GET" action="{{ route('vendor/products') }}">
@@ -290,14 +290,14 @@
                                 type="text"
                                 name="search"
                                 value="{{ request('search', $search ?? '') }}"
-                                placeholder="{{ __('nav.search') ?? 'Search...' }}"
+                                placeholder="{{ trans_or_fallback('', '') }}"
                             >
                         </div>
                     </form>
 
                     <a href="{{ route('vendor/products/create') }}" class="btn-add-product">
                         <i class="bi bi-plus-lg"></i>
-                        {{ __('nav.add_product') ?? 'Add Product' }}
+                        {{ trans_or_fallback('', '') }}
                     </a>
                 </div>
             </div>
@@ -348,7 +348,7 @@
                     <div>
                         <a href="{{ route('vendor/products/create') }}" class="btn-add-product">
                             <i class="bi bi-plus-lg"></i>
-                            {{ __('nav.add_product') ?? 'Add Product' }}
+                            {{ trans_or_fallback('', '') }}
                         </a>
                     </div>
                 </div>
@@ -356,4 +356,5 @@
         </section>
     </main>
 @endsection
+
 

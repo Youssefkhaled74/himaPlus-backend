@@ -1,4 +1,4 @@
-@extends('layouts.admin.home')
+﻿@extends('layouts.admin.home')
 
 @section('title')
     <title>{{ __('admin.pages.orders.title') }}</title>
@@ -210,6 +210,7 @@
         $paymentStatus = (string) ($paymentStatus ?? request('payment_status', ''));
         $dateFrom = (string) ($dateFrom ?? request('date_from', ''));
         $dateTo = (string) ($dateTo ?? request('date_to', ''));
+        $scheduledStatus = (string) ($scheduledStatus ?? request('scheduled_status', ''));
 
         $statusOptions = orderStatusOptions('admin');
         $statusLabels = collect($statusOptions)->mapWithKeys(fn ($option, $key) => [$key => $option['label']])->all();
@@ -226,7 +227,7 @@
             'rejected' => '#ef4444',
         ];
 
-        $hasActiveFilters = $orderNo !== '' || $status !== '' || $orderType !== '' || $paymentStatus !== '' || $dateFrom !== '' || $dateTo !== '';
+        $hasActiveFilters = $orderNo !== '' || $status !== '' || $scheduledStatus !== '' || $orderType !== '' || $paymentStatus !== '' || $dateFrom !== '' || $dateTo !== '';
     @endphp
 
     <div class="page-content">
@@ -275,6 +276,7 @@
                 <div class="card-body">
                     <form method="GET" action="{{ route('admin/orders/index', ['offset' => 0, 'limit' => PAGINATION_COUNT]) }}" id="ordersFilterForm">
                         <input type="hidden" name="tab" value="{{ $tab }}">
+                        <input type="hidden" name="scheduled_status" value="{{ $scheduledStatus }}">
 
                         <div class="admin-filter-bar">
                             <div class="input-group" style="min-width:170px;">
@@ -318,7 +320,7 @@
                                 name="date_from"
                                 value="{{ $dateFrom }}"
                                 class="form-control flatpickr-input"
-                                placeholder="{{ __('admin.pages.common.date_from') ?? 'From date' }}"
+                                placeholder="{{ trans_or_fallback('', '') }}"
                                 style="width:auto;min-width:130px;"
                                 data-input>
                             <input
@@ -326,7 +328,7 @@
                                 name="date_to"
                                 value="{{ $dateTo }}"
                                 class="form-control flatpickr-input"
-                                placeholder="{{ __('admin.pages.common.date_to') ?? 'To date' }}"
+                                placeholder="{{ trans_or_fallback('', '') }}"
                                 style="width:auto;min-width:130px;"
                                 data-input>
 
@@ -335,7 +337,7 @@
                             </button>
 
                             @if($hasActiveFilters)
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}" class="btn btn-light btn-filter">
+                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&scheduled_status={{ $scheduledStatus }}" class="btn btn-light btn-filter">
                                     <i class="ri-close-line align-bottom"></i>
                                 </a>
                             @endif
@@ -346,14 +348,21 @@
                                 @if($orderNo !== '')
                                     <span class="admin-filter-tag">
                                         <i class="ri-hashtag"></i> {{ $orderNo }}
-                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no=&status={{ $status }}&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&scheduled_status={{ $scheduledStatus }}&order_no=&status={{ $status }}&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
                                     </span>
                                 @endif
                                 @if($status !== '')
                                     <span class="admin-filter-tag">
                                         <span class="status-dot" style="background:{{ $statusColors[$status] ?? '#6b7280' }}"></span>
                                         {{ $statusLabels[$status] ?? $status }}
-                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no={{ $orderNo }}&status=&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&scheduled_status={{ $scheduledStatus }}&order_no={{ $orderNo }}&status=&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
+                                    </span>
+                                @endif
+                                @if($scheduledStatus !== '')
+                                    <span class="admin-filter-tag">
+                                        <span class="status-dot" style="background:{{ $statusColors[$scheduledStatus] ?? '#6b7280' }}"></span>
+                                        {{ $statusLabels[$scheduledStatus] ?? $scheduledStatus }}
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&scheduled_status=&order_no={{ $orderNo }}&status={{ $status }}&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
                                     </span>
                                 @endif
                                 @if($orderType !== '')
@@ -363,7 +372,7 @@
                                         @elseif($orderType === '2') {{ __('admin.pages.common.quotation') }}
                                         @else {{ __('admin.pages.common.maintenance') }}
                                         @endif
-                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no={{ $orderNo }}&status={{ $status }}&order_type=&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&scheduled_status={{ $scheduledStatus }}&order_no={{ $orderNo }}&status={{ $status }}&order_type=&payment_status={{ $paymentStatus }}&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
                                     </span>
                                 @endif
                                 @if($paymentStatus !== '')
@@ -373,16 +382,16 @@
                                         @else
                                             <i class="ri-time-line" style="color:#f59e0b;"></i> {{ __('admin.dashboard.unpaid') }}
                                         @endif
-                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no={{ $orderNo }}&status={{ $status }}&order_type={{ $orderType }}&payment_status=&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&scheduled_status={{ $scheduledStatus }}&order_no={{ $orderNo }}&status={{ $status }}&order_type={{ $orderType }}&payment_status=&date_from={{ $dateFrom }}&date_to={{ $dateTo }}" class="btn-close-sm">&times;</a>
                                     </span>
                                 @endif
                                 @if($dateFrom !== '' || $dateTo !== '')
                                     <span class="admin-filter-tag">
-                                        <i class="ri-calendar-line"></i> {{ $dateFrom ?: '...' }} → {{ $dateTo ?: '...' }}
-                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&order_no={{ $orderNo }}&status={{ $status }}&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from=&date_to=" class="btn-close-sm">&times;</a>
+                                        <i class="ri-calendar-line"></i> {{ $dateFrom ?: '...' }} â†’ {{ $dateTo ?: '...' }}
+                                        <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&scheduled_status={{ $scheduledStatus }}&order_no={{ $orderNo }}&status={{ $status }}&order_type={{ $orderType }}&payment_status={{ $paymentStatus }}&date_from=&date_to=" class="btn-close-sm">&times;</a>
                                     </span>
                                 @endif
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}" class="admin-filter-tag is-reset">
+                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab={{ $tab }}&scheduled_status={{ $scheduledStatus }}" class="admin-filter-tag is-reset">
                                     <i class="ri-restart-line"></i> {{ __('admin.pages.common.reset') }}
                                 </a>
                             </div>
@@ -550,3 +559,4 @@
         });
     </script>
 @endsection
+

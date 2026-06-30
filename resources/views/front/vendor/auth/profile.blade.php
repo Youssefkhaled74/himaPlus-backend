@@ -1,4 +1,4 @@
-@extends('layouts.front.home')
+﻿@extends('layouts.front.home')
 
 <!-- title page -->
 @section('title')
@@ -26,7 +26,7 @@
             </div>
         @endif
         <nav class="breadcrumb-custom mb-3" style="margin-top: 8%;">
-            <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ __('nav.dashboard') ?? 'Dashboard' }}</a>
+            <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ trans_or_fallback('', '') }}</a>
             <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
             <span class="text-primary fw-semibold" id="section-area-name">{{ __('profile.my_profile') }}</span>
         </nav>
@@ -37,8 +37,8 @@
                     <a class="btn-tab active" section-name="{{ __('profile.personal_info') }}" data-target="#profile-pane" href="#profile-pane">
                         <i class="bi bi-person"></i> <span>{{ __('profile.personal_info_short') }}</span>
                     </a>
-                    <a class="btn-tab" section-name="{{ __('profile.company_info') ?? 'Company Info' }}" data-target="#company-pane" href="#company-pane">
-                        <i class="bi bi-building"></i> <span>{{ __('profile.company_info') ?? 'Company Info' }}</span>
+                    <a class="btn-tab" section-name="{{ trans_or_fallback('', '') }}" data-target="#company-pane" href="#company-pane">
+                        <i class="bi bi-building"></i> <span>{{ trans_or_fallback('', '') }}</span>
                     </a>
                     <a class="btn-tab" section-name="{{ __('profile.change_password') }}" data-target="#password-pane" href="#password-pane">
                         <i class="bi bi-shield-lock"></i> <span>{{ __('profile.change_password') }}</span>
@@ -69,7 +69,7 @@
                         </div>
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label">{{ __('profile.company_name') ?? 'Company Name' }}</label>
+                                <label class="form-label">{{ trans_or_fallback('', '') }}</label>
                                 <input name="name" class="form-control" value="{{ $user?->name }}">
                             </div>
                             <div class="col-md-12">
@@ -99,22 +99,22 @@
                 <div class="detail-card reveal">
                     <form action="{{ route('vendor/update') }}" method="post" enctype="multipart/form-data">
                         @csrf
-                        <h6 class="mb-3">{{ __('profile.company_info') ?? 'Company Information' }}</h6>
+                        <h6 class="mb-3">{{ trans_or_fallback('', '') }}</h6>
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label">{{ __('profile.branch') ?? 'Branch' }}</label>
+                                <label class="form-label">{{ trans_or_fallback('', '') }}</label>
                                 <input name="branch" class="form-control" value="{{ $user?->branch }}">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">{{ __('profile.iban') ?? 'IBAN' }}</label>
+                                <label class="form-label">{{ trans_or_fallback('', '') }}</label>
                                 <input name="iban" class="form-control" value="{{ $user?->iban }}">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">{{ __('profile.tax_number') ?? 'Tax Number' }}</label>
+                                <label class="form-label">{{ trans_or_fallback('', '') }}</label>
                                 <input name="tax_number" class="form-control" value="{{ $user?->tax_number }}">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">{{ __('profile.cr_number') ?? 'CR Number' }}</label>
+                                <label class="form-label">{{ trans_or_fallback('', '') }}</label>
                                 <input name="cr_number" class="form-control" value="{{ $user?->cr_number }}">
                             </div>
                         </div>
@@ -137,13 +137,13 @@
                             <button class="hp-eye-btn" type="button"><i class="bi bi-eye-slash"></i></button>
                         </div>
 
-                        <label class="form-label">{{ __('profile.new_password') ?? 'New Password' }}</label>
+                        <label class="form-label">{{ trans_or_fallback('', '') }}</label>
                         <div class="position-relative mb-3">
                             <input name="password" type="password" class="form-control hp-input--password" placeholder="Enter new password">
                             <button class="hp-eye-btn" type="button"><i class="bi bi-eye-slash"></i></button>
                         </div>
 
-                        <label class="form-label">{{ __('profile.confirm_password') ?? 'Confirm Password' }}</label>
+                        <label class="form-label">{{ trans_or_fallback('', '') }}</label>
                         <div class="position-relative mb-3">
                             <input name="password_confirmation" type="password" class="form-control hp-input--password" placeholder="Confirm new password">
                             <button class="hp-eye-btn" type="button"><i class="bi bi-eye-slash"></i></button>
@@ -164,15 +164,15 @@
                         <h6 class="mb-3">{{ __('profile.language') }}</h6>
                         <div class="row g-3">
                             <div class="col-12">
-                                <label class="form-label">{{ __('profile.select_language') ?? 'Select Language' }}</label>
+                                <label class="form-label">{{ trans_or_fallback('', '') }}</label>
                                 <select name="lang" class="form-select">
                                     <option value="en" {{ $user?->lang == 'en' ? 'selected' : '' }}>English</option>
-                                    <option value="ar" {{ $user?->lang == 'ar' ? 'selected' : '' }}>العربية</option>
+                                    <option value="ar" {{ $user?->lang == 'ar' ? 'selected' : '' }}>Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</option>
                                 </select>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between mt-3">
-                            <button class="btn btn-gradient" type="submit">{{ __('profile.update') ?? 'Update' }}</button>
+                            <button class="btn btn-gradient" type="submit">{{ trans_or_fallback('', '') }}</button>
                         </div>
                     </div>
                 </form>
@@ -242,4 +242,5 @@
     });
 </script>
 @endsection
+
 

@@ -1,4 +1,4 @@
-@extends('layouts.front.home')
+﻿@extends('layouts.front.home')
 
 <!-- title page -->
 @section('title')
@@ -43,7 +43,7 @@
                                     @csrf
                                     <!-- Verification Code -->
                                     <div class="mb-3">
-                                        <label class="form-label">{{ __('profile.verification_code') ?? 'Verification Code' }} <span class="required-star">*</span></label>
+                                        <label class="form-label">{{ trans_or_fallback('', '') }} <span class="required-star">*</span></label>
                                         <input 
                                             name="code" 
                                             type="text" 
@@ -53,12 +53,12 @@
                                             pattern="[0-9]{4}"
                                             required
                                         >
-                                        <small class="text-muted d-block mt-1">{{ __('profile.check_email') ?? 'Check your email for the code' }}</small>
+                                        <small class="text-muted d-block mt-1">{{ trans_or_fallback('', '') }}</small>
                                     </div>
 
                                     <!-- New Password -->
                                     <div class="mb-3">
-                                        <label class="form-label">{{ __('profile.new_password') ?? 'New Password' }} <span class="required-star">*</span></label>
+                                        <label class="form-label">{{ trans_or_fallback('', '') }} <span class="required-star">*</span></label>
                                         <div class="position-relative">
                                             <input 
                                                 name="password" 
@@ -73,7 +73,7 @@
 
                                     <!-- Confirm Password -->
                                     <div class="mb-3">
-                                        <label class="form-label">{{ __('profile.confirm_password') ?? 'Confirm Password' }} <span class="required-star">*</span></label>
+                                        <label class="form-label">{{ trans_or_fallback('', '') }} <span class="required-star">*</span></label>
                                         <div class="position-relative">
                                             <input 
                                                 name="password_confirmation" 
@@ -93,7 +93,7 @@
 
                                 <div class="mt-4 text-center">
                                     <p class="small text-muted">
-                                        {{ __('profile.remember_password') ?? 'Remember your password?' }}
+                                        {{ trans_or_fallback('', '') }}
                                         <a href="{{ route('vendor/login') }}" class="hp-link">{{ __('nav.login') }}</a>
                                     </p>
                                 </div>
@@ -140,4 +140,5 @@
         });
     </script>
 @endsection
+
 

@@ -1,5 +1,6 @@
 <?php
 	use Illuminate\Support\Facades\File;
+	use Illuminate\Support\Facades\Lang;
     use App\Services\OrderStatusService;
 
 	define('PAGINATION_COUNT', 10);
@@ -34,6 +35,17 @@
 			'data' => $data
 		];
 		return response()->json($response);
+	}
+
+	function trans_or_fallback($key, $fallback = null, array $replace = [], $locale = null)
+	{
+		$locale = $locale ?: app()->getLocale();
+
+		if (Lang::hasForLocale($key, $locale)) {
+			return __($key, $replace, $locale);
+		}
+
+		return $fallback ?? __($key, $replace, $locale);
 	}
 
 	function orderType($order_no)

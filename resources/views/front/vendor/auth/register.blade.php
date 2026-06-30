@@ -1,4 +1,4 @@
-@extends('layouts.front.home')
+﻿@extends('layouts.front.home')
 
 @section('title')
     <title>{{ __('nav.register') }} | Hema</title>
@@ -82,12 +82,12 @@
                 <div class="mb-8 flex items-center justify-center gap-10">
                     <a href="{{ route('vendor/login') }}"
                        class="pb-2 text-sm font-semibold text-gray-400 hover:text-gray-600">
-                        {{ __('nav.login') ?? 'Login' }}
+                        {{ trans_or_fallback('', '') }}
                     </a>
 
                     <a href="{{ route('vendor/register/form') }}"
                        class="border-b-2 border-teal-500 pb-2 text-sm font-semibold text-teal-600">
-                        {{ __('nav.register') ?? 'Register' }}
+                        {{ trans_or_fallback('', '') }}
                     </a>
                 </div>
 
@@ -176,7 +176,7 @@
                             <div class="flex items-center gap-2 bg-gray-50 px-4 text-sm text-gray-600 border-r border-gray-200">
                                 <span class="inline-flex h-4 w-6 items-center justify-center rounded-sm bg-green-600 text-[9px] font-bold text-white">SA</span>
                                 <span>+966</span>
-                                <span class="text-gray-400">▼</span>
+                                <span class="text-gray-400">â–¼</span>
                             </div>
                             <input name="mobile" value="{{ old('mobile') }}" required
                                    placeholder="xxxxxxxxx"
@@ -338,7 +338,7 @@
     if(crDocInput){
         crDocInput.addEventListener('change', ()=>{
             if(crDocInput.files.length){
-                crDocName.textContent = '✓ ' + crDocInput.files[0].name;
+                crDocName.textContent = 'âœ“ ' + crDocInput.files[0].name;
                 crDocName.classList.remove('hidden');
             }else{
                 crDocName.classList.add('hidden');
@@ -364,4 +364,5 @@
 })();
 </script>
 @endsection
+
 

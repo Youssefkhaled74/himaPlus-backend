@@ -1,7 +1,7 @@
-@extends('layouts.front.home')
+﻿@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.verify_account') ?? 'Verify Account' }} - Hema</title>
+    <title>{{ trans_or_fallback('', '') }} - Hema</title>
 @endsection
 
 @section('css')
@@ -59,11 +59,11 @@
             <div class="px-10 py-12 text-center">
 
                 <h3 class="text-2xl font-extrabold text-gray-900">
-                    {{ __('profile.verify_account') ?? 'Verify Your Account' }}
+                    {{ trans_or_fallback('', '') }}
                 </h3>
 
                 <p class="mt-2 text-sm text-gray-500">
-                    {{ __('profile.verification_code_sent') ?? 'A verification code has been sent to your email.' }}
+                    {{ trans_or_fallback('', '') }}
                 </p>
 
                 <div class="mt-6 text-left">
@@ -103,7 +103,7 @@
                         <form method="POST" action="{{ route('vendor/regenerate-code', $user->id) }}" style="display:inline;">
                             @csrf
                             <button id="resendBtn" type="submit" class="font-semibold text-gray-600 hover:text-teal-600" style="background:none; border:none; padding:0; cursor:pointer;">
-                                {{ __('profile.resend_code') ?? 'Resend Code' }}
+                                {{ trans_or_fallback('', '') }}
                             </button>
                         </form>
 
@@ -113,7 +113,7 @@
                     </div>
 
                     <button id="verifyBtn" class="hp-btn-gradient mt-8 w-full" type="submit" disabled>
-                        {{ __('profile.verify') ?? 'Verify Account' }}
+                        {{ trans_or_fallback('', '') }}
                     </button>
                 </form>
 
@@ -185,4 +185,5 @@
 })();
 </script>
 @endsection
+
 

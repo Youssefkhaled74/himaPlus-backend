@@ -1,4 +1,4 @@
-@extends('layouts.admin.home')
+﻿@extends('layouts.admin.home')
 
 <!-- title page -->
 @section('title')
@@ -42,7 +42,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.coupons.update_title') ?? 'Coupon Update' }}</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">{{ trans_or_fallback('', '') }}</h4>
                         </div>
                         <div class="card-body">
                             @isset($coupon)
@@ -68,7 +68,7 @@
                                                     <label>{{ __('admin.pages.coupons.coupon_type') }} <span class="input-group-addon" style="color: red;">*</span></label>
                                                     <div class="input-group">
                                                         <select class="form-control" name="type" id="coupons">
-                                                            <option value="">{{ __('admin.pages.coupons.select_type') ?? 'Select' }}</option>
+                                                            <option value="">{{ trans_or_fallback('', '') }}</option>
                                                             <option value="1" {{$coupon->type == 1 ? 'selected' : ''}}>{{ __('admin.pages.coupons.type_amount') }}</option>
                                                             <option value="2" {{$coupon->type == 2 ? 'selected' : ''}}>{{ __('admin.pages.coupons.type_percentage') }}</option>
                                                         </select>
@@ -106,3 +106,4 @@
     })();
 </script>
 @endsection
+

@@ -1,7 +1,7 @@
-@extends('layouts.front.home')
+﻿@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ __('nav.my_offers') ?? 'My Offers' }} - Vendor | Hema</title>
+    <title>{{ trans_or_fallback('', '') }} - Vendor | Hema</title>
 @endsection
 
 @section('css')
@@ -185,40 +185,40 @@
 
         {{-- Breadcrumb (keep it small) --}}
         <nav class="mb-2" style="font-size:12px;">
-            <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ __('nav.dashboard') ?? 'Dashboard' }}</a>
+            <a href="{{ route('vendor/dashboard') }}" class="text-decoration-none text-muted">{{ trans_or_fallback('', '') }}</a>
             <span class="text-muted mx-1">/</span>
-            <a href="{{ route('vendor/orders') }}" class="text-decoration-none text-muted">{{ __('nav.view_orders') ?? 'Orders' }}</a>
+            <a href="{{ route('vendor/orders') }}" class="text-decoration-none text-muted">{{ trans_or_fallback('', '') }}</a>
             <span class="text-muted mx-1">/</span>
-            <span class="text-primary fw-bold">{{ __('nav.my_offers') ?? 'My Offers' }}</span>
+            <span class="text-primary fw-bold">{{ trans_or_fallback('', '') }}</span>
         </nav>
 
         <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 class="m-0 fw-bold">{{ __('nav.my_offers') ?? 'My Offers' }}</h5>
+            <h5 class="m-0 fw-bold">{{ trans_or_fallback('', '') }}</h5>
             <a href="{{ route('vendor/orders') }}" class="btn btn-outline-primary btn-sm" style="border-radius:10px;font-weight:800;">
-                <i class="bi bi-arrow-left"></i> {{ __('nav.view_orders') ?? 'Orders' }}
+                <i class="bi bi-arrow-left"></i> {{ trans_or_fallback('', '') }}
             </a>
         </div>
-        <p class="page-subtitle">{{ __('nav.dashboard_description') ?? 'Manage your business and view analytics' }}</p>
+        <p class="page-subtitle">{{ trans_or_fallback('', '') }}</p>
 
         {{-- Filters (simple toolbar) --}}
         <div class="filters-bar">
             <form method="GET" action="{{ route('vendor/orders/my-offers') }}" class="row g-2 align-items-center">
                 <div class="col-12 col-md-4">
                     <select name="status" class="form-select">
-                        <option value="">{{ __('nav.all_statuses') ?? 'All statuses' }}</option>
-                        <option value="pending"  {{ request('status') === 'pending' ? 'selected' : '' }}>{{ __('nav.pending') ?? 'Pending' }}</option>
-                        <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>{{ __('nav.accepted') ?? 'Accepted' }}</option>
-                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>{{ __('nav.rejected') ?? 'Rejected' }}</option>
+                        <option value="">{{ trans_or_fallback('', '') }}</option>
+                        <option value="pending"  {{ request('status') === 'pending' ? 'selected' : '' }}>{{ trans_or_fallback('', '') }}</option>
+                        <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>{{ trans_or_fallback('', '') }}</option>
+                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>{{ trans_or_fallback('', '') }}</option>
                     </select>
                 </div>
                 <div class="col-12 col-md-5">
                     <input type="text" name="search" class="form-control"
-                           placeholder="{{ __('nav.search_order_id') ?? 'Search by order #' }}"
+                           placeholder="{{ trans_or_fallback('', '') }}"
                            value="{{ request('search') }}">
                 </div>
                 <div class="col-12 col-md-3">
                     <button type="submit" class="btn btn-primary w-100" style="border-radius:10px;font-weight:800;">
-                        <i class="bi bi-search"></i> {{ __('nav.search') ?? 'Search' }}
+                        <i class="bi bi-search"></i> {{ trans_or_fallback('', '') }}
                     </button>
                 </div>
             </form>
@@ -230,10 +230,10 @@
                 @php
                     $status = strtolower($offer->status_label ?? 'pending');
                     $statusLabel = $status === 'pending'
-                        ? (__('nav.pending') ?? 'Pending')
+                        ? (trans_or_fallback('', ''))
                         : ($status === 'accepted'
-                            ? (__('nav.accepted') ?? 'Accepted')
-                            : (__('nav.rejected') ?? 'Rejected'));
+                            ? (trans_or_fallback('', ''))
+                            : (trans_or_fallback('', '')));
 
                     $typeTitle = match((int)($offer->order->order_type ?? 0)) {
                         1 => 'Purchase Order',
@@ -251,19 +251,19 @@
                         </div>
 
                         <p class="rq-meta">
-                            <strong>{{ __('nav.offer') ?? 'Offer' }} #{{ $offer->id }}</strong>
-                            <span class="text-muted"> — {{ __('nav.order') ?? 'Order' }} #{{ $offer->order_id }}</span>
+                            <strong>{{ trans_or_fallback('', '') }} #{{ $offer->id }}</strong>
+                            <span class="text-muted"> â€” {{ trans_or_fallback('', '') }} #{{ $offer->order_id }}</span>
                         </p>
 
                         <p class="rq-meta mb-0">
-                            {{ __('nav.client') ?? 'Client' }}: {{ $offer->order->user->name ?? 'N/A' }}<br>
-                            {{ __('nav.price') ?? 'Price' }}: {{ number_format((float)($offer->cost ?? 0), 2) }} {{ __('nav.sar') ?? 'SAR' }}<br>
-                            {{ __('nav.delivery_days') ?? 'Delivery days' }}: {{ $offer->delivery_time ?? 'N/A' }}
+                            {{ trans_or_fallback('', '') }}: {{ $offer->order->user->name ?? 'N/A' }}<br>
+                            {{ trans_or_fallback('', '') }}: {{ number_format((float)($offer->cost ?? 0), 2) }} {{ trans_or_fallback('', '') }}<br>
+                            {{ trans_or_fallback('', '') }}: {{ $offer->delivery_time ?? 'N/A' }}
                             @if($offer->warranty)
-                                — {{ __('nav.warranty') ?? 'Warranty' }}: {{ $offer->warranty }}
+                                â€” {{ trans_or_fallback('', '') }}: {{ $offer->warranty }}
                             @endif
                             <br>
-                            {{ __('nav.date') ?? 'Date' }}: {{ $offer->created_at->format('M d, Y') }}
+                            {{ trans_or_fallback('', '') }}: {{ $offer->created_at->format('M d, Y') }}
                         </p>
 
                         {{-- Optional mini actions (small, not noisy) --}}
@@ -274,15 +274,15 @@
 
                             @if(($offer->status_label ?? 'pending') === 'pending')
                                 <a href="{{ route('vendor/orders/offer-edit', $offer->id) }}" class="btn btn-outline-warning btn-sm" onclick="event.stopPropagation();">
-                                    <i class="bi bi-pencil"></i> {{ __('nav.edit') ?? 'Edit' }}
+                                    <i class="bi bi-pencil"></i> {{ trans_or_fallback('', '') }}
                                 </a>
                                 <form action="{{ route('vendor/orders/offer-delete', $offer->id) }}"
                                       method="POST"
-                                      onsubmit="event.stopPropagation(); return confirm('{{ __('nav.confirm_delete') ?? 'Delete this offer?' }}');">
+                                      onsubmit="event.stopPropagation(); return confirm('{{ trans_or_fallback('', '') }}');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-outline-danger btn-sm">
-                                        <i class="bi bi-trash"></i> {{ __('nav.delete') ?? 'Delete' }}
+                                        <i class="bi bi-trash"></i> {{ trans_or_fallback('', '') }}
                                     </button>
                                 </form>
                             @endif
@@ -303,11 +303,11 @@
             <div class="v-card p-4 text-center" style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);">
                 <div class="text-muted">
                     <i class="bi bi-info-circle me-1"></i>
-                    {{ __('nav.no_offers_yet') ?? 'You have not submitted any offers yet.' }}
+                    {{ trans_or_fallback('', '') }}
                 </div>
                 <div class="mt-2">
                     <a href="{{ route('vendor/orders') }}" class="text-decoration-none fw-bold">
-                        {{ __('nav.start_offer') ?? 'Start submitting an offer' }}
+                        {{ trans_or_fallback('', '') }}
                     </a>
                 </div>
             </div>
@@ -316,4 +316,5 @@
     </div>
 </main>
 @endsection
+
 

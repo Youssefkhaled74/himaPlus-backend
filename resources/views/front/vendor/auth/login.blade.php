@@ -1,4 +1,4 @@
-@extends('layouts.front.home')
+﻿@extends('layouts.front.home')
 
 <!-- title page -->
 @section('title')
@@ -328,7 +328,7 @@
 
                                     <button id="regSubmitBtn" type="submit" disabled
                                             class="btn hp-btn-gradient w-100 hp-btn-disabled">
-                                        {{ __('nav.register') ?? 'Sign Up' }}
+                                        {{ trans_or_fallback('', '') }}
                                     </button>
                                 </form>
                             </div>
@@ -398,7 +398,7 @@
             });
         });
 
-        // ── Register form logic ──────────────────────────────────────────────
+        // â”€â”€ Register form logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         (function () {
             const regUserType  = document.getElementById('regUserType');
             const userFields   = document.getElementById('userFields');
@@ -478,7 +478,7 @@
             if (crDocInput) {
                 crDocInput.addEventListener('change', () => {
                     if (crDocInput.files.length) {
-                        crFilePreview.textContent = '✓ ' + crDocInput.files[0].name;
+                        crFilePreview.textContent = 'âœ“ ' + crDocInput.files[0].name;
                         crFilePreview.classList.remove('d-none');
                     } else {
                         crFilePreview.classList.add('d-none');
@@ -515,4 +515,5 @@
         })();
     </script>
 @endsection
+
 

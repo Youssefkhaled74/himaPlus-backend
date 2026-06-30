@@ -308,19 +308,19 @@
                         </div>
                         <div class="card-body">
                             <div class="dashboard-mini-list">
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=scheduled" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&scheduled_status=scheduled" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.scheduled_orders') }}</div>
                                     </div>
                                     <span class="badge bg-primary-subtle text-primary">{{ number_format($dashboard['totals']['scheduled_orders'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=active_scheduled" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&scheduled_status=active_scheduled" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.active_scheduled_orders') }}</div>
                                     </div>
                                     <span class="badge bg-info-subtle text-info">{{ number_format($dashboard['totals']['active_scheduled_orders'] ?? 0) }}</span>
                                 </a>
-                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&status=completed_scheduled" class="dashboard-mini-item text-decoration-none">
+                                <a href="{{ route('admin/orders/index', [0, PAGINATION_COUNT]) }}?tab=orders&scheduled_status=completed_scheduled" class="dashboard-mini-item text-decoration-none">
                                     <div>
                                         <div class="fw-semibold">{{ __('admin.dashboard.completed_scheduled_orders') }}</div>
                                     </div>

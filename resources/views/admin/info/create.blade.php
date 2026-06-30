@@ -1,4 +1,4 @@
-@extends('layouts.admin.home')
+﻿@extends('layouts.admin.home')
 
 <!-- title page -->
 @section('title')
@@ -42,7 +42,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.info.form_title') ?? 'Info Form' }}</h4>
+                            <h4 class="card-title mb-0 flex-grow-1">{{ trans_or_fallback('', '') }}</h4>
                         </div>
                         <div class="card-body">
                             <form role="form" action="{{ route('admin/info/create') }}" method="post" enctype="multipart/form-data">
@@ -97,22 +97,23 @@
         var target = $('.sidebarinfo').attr('href');
         $(target).addClass('show');
     })();
-    // $('#info').select2({
-    //     ajax: {
-    //         url: "{{ route('get/info') }}",
-    //         dataType: 'json',
-    //         processResults: function (data) {
-    //             return {
-    //                 results:  $.map(data, function (item) {
-    //                     return {
-    //                         id: item.id,
-    //                         text: item.name
-    //                     }
-    //                 })
-    //             };
-    //         },
-    //         cache: true
-    //     }
-    // });
+    {{-- $('#info').select2({
+        ajax: {
+            url: "{{ route('get/info') }}",
+            dataType: 'json',
+            processResults: function (data) {
+                return {
+                    results: $.map(data, function (item) {
+                        return {
+                            id: item.id,
+                            text: item.name
+                        }
+                    })
+                };
+            },
+            cache: true
+        }
+    }); --}}
 </script>
 @endsection
+
