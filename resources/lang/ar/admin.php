@@ -9,7 +9,7 @@ return [
         'hospital' => 'المستشفيات',
         'factory' => 'المصانع',
         'supplier' => 'الموردون',
-        'catalog' => 'الكتالوج',
+        'items' => 'العناصر',
         'orders' => 'الطلبات',
         'settings' => 'الإعدادات',
         'dashboard' => 'لوحة التحكم',
@@ -232,7 +232,7 @@ return [
             'archives' => 'الطلبات المؤرشفة',
             'back_to_orders' => 'العودة إلى الطلبات',
             'statuses' => [
-                'pending' => 'قيد الانتظار',
+                'pending' => 'في انتظار قبول الطلب',
                 'order_created' => 'تم إنشاء الطلب',
                 'confirmed' => 'مؤكد',
                 'processing' => 'قيد التنفيذ',

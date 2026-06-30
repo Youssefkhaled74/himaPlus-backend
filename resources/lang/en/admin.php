@@ -9,7 +9,7 @@ return [
         'hospital' => 'Hospital',
         'factory' => 'Factory',
         'supplier' => 'Supplier',
-        'catalog' => 'Catalog',
+        'items' => 'Items',
         'orders' => 'Orders',
         'settings' => 'Settings',
         'dashboard' => 'Dashboard',
@@ -291,7 +291,7 @@ return [
             'archives' => 'Archived Orders',
             'back_to_orders' => 'Back to Orders',
             'statuses' => [
-                'pending' => 'Pending',
+                'pending' => 'Awaiting Order Approval',
                 'order_created' => 'Order Created',
                 'confirmed' => 'Confirmed',
                 'processing' => 'Processing',

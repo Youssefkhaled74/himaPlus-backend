@@ -16,17 +16,6 @@
             ],
         ],
         [
-            'label' => __('admin.nav.catalog'),
-            'icon' => 'ri-layout-grid-line',
-            'active' => request()->routeIs('admin/products/*') || request()->routeIs('admin/categories/*') || request()->routeIs('admin/countries/*'),
-            'primary_route' => route('admin/products/index') . '/0/' . PAGINATION_COUNT,
-            'links' => [
-                ['label' => __('admin.nav.products'), 'route' => route('admin/products/index') . '/0/' . PAGINATION_COUNT, 'match' => request()->routeIs('admin/products/*')],
-                ['label' => __('admin.nav.categories'), 'route' => route('admin/categories/index') . '/0/' . PAGINATION_COUNT, 'match' => request()->routeIs('admin/categories/*')],
-                ['label' => __('admin.nav.countries'), 'route' => route('admin/countries/index') . '/0/' . PAGINATION_COUNT, 'match' => request()->routeIs('admin/countries/*')],
-            ],
-        ],
-        [
             'label' => __('admin.nav.orders'),
             'icon' => 'ri-shopping-bag-3-line',
             'active' => request()->routeIs('admin/orders/*') || request()->routeIs('admin/ratings/*'),
@@ -49,10 +38,19 @@
     ];
 
     $settingsLinks = array_values(array_filter([
+        ['label' => __('admin.nav.items'), 'route' => route('admin/products/index') . '/0/' . PAGINATION_COUNT, 'match' => request()->routeIs('admin/products/*'), 'icon' => 'ri-layout-grid-line'],
+        ['label' => __('admin.nav.categories'), 'route' => route('admin/categories/index') . '/0/' . PAGINATION_COUNT, 'match' => request()->routeIs('admin/categories/*'), 'icon' => 'ri-list-check-2'],
+        ['label' => __('admin.nav.countries'), 'route' => route('admin/countries/index') . '/0/' . PAGINATION_COUNT, 'match' => request()->routeIs('admin/countries/*'), 'icon' => 'ri-global-line'],
         ['label' => __('admin.nav.platform_info'), 'route' => route('admin/info/index') . '/0/' . PAGINATION_COUNT, 'match' => request()->routeIs('admin/info/*'), 'icon' => 'ri-settings-3-line'],
         ['label' => __('admin.nav.coupons'), 'route' => route('admin/coupons/index') . '/0/' . PAGINATION_COUNT, 'match' => request()->routeIs('admin/coupons/*'), 'icon' => 'ri-coupon-3-line'],
         $isSuperAdmin ? ['label' => __('admin.nav.admins'), 'route' => route('admin/admins/index') . '/0/' . PAGINATION_COUNT, 'match' => request()->routeIs('admin/admins/*'), 'icon' => 'ri-shield-user-line'] : null,
     ]));
+    $settingsActive = request()->routeIs('admin/products/*')
+        || request()->routeIs('admin/categories/*')
+        || request()->routeIs('admin/countries/*')
+        || request()->routeIs('admin/info/*')
+        || request()->routeIs('admin/coupons/*')
+        || request()->routeIs('admin/admins/*');
 @endphp
 
 <header id="page-topbar">
@@ -118,7 +116,7 @@
                 <div class="admin-navbar-actions">
                     <div class="dropdown admin-utility-dropdown">
                         <button
-                            class="btn admin-utility-button {{ request()->routeIs('admin/info/*') || request()->routeIs('admin/coupons/*') || request()->routeIs('admin/admins/*') ? 'active' : '' }}"
+                            class="btn admin-utility-button {{ $settingsActive ? 'active' : '' }}"
                             type="button"
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
