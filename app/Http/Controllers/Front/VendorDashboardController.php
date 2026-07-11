@@ -176,30 +176,36 @@ class VendorDashboardController extends Controller
     public function invoices(Request $request)
     {
         $vendor = auth()->user();
-        $status = (string) $request->get('status', '');
+        $orderStatus = (string) $request->get('order_status', '');
+        $paymentStatus = (string) $request->get('payment_status', '');
         $dateFrom = $request->get('date_from');
         $dateTo = $request->get('date_to');
 
-        $query = $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'all')
+        $baseQuery = $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'all');
+
+        $filteredQuery = (clone $baseQuery)
             ->with(['user:id,name', 'offers', 'timeline']);
 
-        if ($status !== '') {
-            if ($status === 'paid') {
-                $query->where('payment_status', 1);
-            } elseif ($status === 'pending') {
-                $query->where('payment_status', 0);
-            } elseif ($status === '2') {
-                $query->where('request_type', 2);
-            }
-        }
-        if ($dateFrom) {
-            $query->whereDate('created_at', '>=', $dateFrom);
-        }
-        if ($dateTo) {
-            $query->whereDate('created_at', '<=', $dateTo);
+        if ($orderStatus !== '') {
+            $filteredQuery = $this->orderStatusService->applyStatusFilter(
+                $filteredQuery,
+                $orderStatus,
+                ['provider_id' => (int) $vendor->id]
+            );
         }
 
-        $invoices = $query->latest()->paginate(15)->withQueryString()
+        if ($paymentStatus !== '') {
+            $filteredQuery->where('payment_status', $paymentStatus === 'paid' ? 1 : 0);
+        }
+
+        if ($dateFrom) {
+            $filteredQuery->whereDate('created_at', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $filteredQuery->whereDate('created_at', '<=', $dateTo);
+        }
+
+        $invoices = $filteredQuery->latest()->paginate(15)->withQueryString()
             ->through(function ($order) use ($vendor) {
                 $order->front_status_state = $order->resolveStatus([
                     'audience' => 'front',
@@ -208,15 +214,19 @@ class VendorDashboardController extends Controller
 
                 return $order;
             });
+
+        $countsQuery = clone $baseQuery;
+        $vendorId = (int) $vendor->id;
         $totals = [
-            'amount' => (clone $query)->sum('total_cost'),
-            'paid' => (clone $query)->where('payment_status', 'paid')->count(),
-            'pending' => (clone $query)->where('payment_status', 'pending')->count(),
-            'scheduled' => (clone $query)->where('request_type', 2)->count(),
-            'completed' => (clone $query)->whereHas('timeline', fn($t) => $t->where('timeline_no', 6))->count(),
+            'paid' => (clone $countsQuery)->where('payment_status', 1)->count(),
+            'pending' => (clone $countsQuery)->where('payment_status', 0)->count(),
+            'scheduled' => $this->orderStatusService->countByStatus(clone $baseQuery, OrderStatusService::STATUS_SCHEDULED, ['provider_id' => $vendorId]),
+            'completed' => $this->orderStatusService->countByStatus(clone $baseQuery, OrderStatusService::STATUS_COMPLETED, ['provider_id' => $vendorId]),
+            'processing' => $this->orderStatusService->countByStatus(clone $baseQuery, OrderStatusService::STATUS_PROCESSING, ['provider_id' => $vendorId]),
+            'cancelled' => $this->orderStatusService->countByStatus(clone $baseQuery, OrderStatusService::STATUS_CANCELLED, ['provider_id' => $vendorId]),
         ];
 
-        return view('front.vendor.invoices.index', compact('invoices', 'totals', 'status', 'dateFrom', 'dateTo'));
+        return view('front.vendor.invoices.index', compact('invoices', 'totals', 'orderStatus', 'paymentStatus', 'dateFrom', 'dateTo'));
     }
 
     public function categories()

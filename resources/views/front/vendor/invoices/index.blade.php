@@ -312,6 +312,7 @@
     .vi-chip-active { background: #dbefff; color: #2285e8; }
     .vi-chip-cancelled { background: #ffe1df; color: #ef5753; }
     .vi-chip-rejected { background: #ffe1df; color: #ef5753; }
+    .vi-chip-upcoming { background: #e0e7ff; color: #3730a3; }
 
     .vi-empty {
         text-align: center;
@@ -483,15 +484,15 @@
 
         <div class="col-6 col-md-3">
             <div class="vi-card vi-stat">
-                <p class="vi-stat-label">{{ $isAr ? 'مجدول' : 'Scheduled' }}</p>
-                <h4 class="vi-stat-value">{{ number_format((int) $totals['scheduled']) }}</h4>
+                <p class="vi-stat-label">{{ $isAr ? 'مكتمل' : 'Completed' }}</p>
+                <h4 class="vi-stat-value">{{ number_format((int) $totals['completed']) }}</h4>
             </div>
         </div>
 
         <div class="col-6 col-md-3">
             <div class="vi-card vi-stat">
-                <p class="vi-stat-label">{{ $isAr ? 'مكتمل' : 'Completed' }}</p>
-                <h4 class="vi-stat-value">{{ number_format((int) $totals['completed']) }}</h4>
+                <p class="vi-stat-label">{{ $isAr ? 'ملغي' : 'Cancelled' }}</p>
+                <h4 class="vi-stat-value">{{ number_format((int) $totals['cancelled']) }}</h4>
             </div>
         </div>
     </div>
@@ -501,11 +502,11 @@
             <div>
                 <h5 class="vi-panel-title">{{ $isAr ? 'تصفية الفواتير' : 'Filter Invoices' }}</h5>
                 <p class="vi-panel-subtitle">
-                    {{ $isAr ? 'حدد الفترة أو حالة الدفع للوصول للفواتير المطلوبة بسرعة.' : 'Choose a date range or payment status to find invoices faster.' }}
+                    {{ $isAr ? 'حدد الفترة أو حالة الطلب أو حالة الدفع للوصول للفواتير المطلوبة بسرعة.' : 'Choose a date range, order status, or payment status to find invoices faster.' }}
                 </p>
             </div>
 
-            @if(request()->hasAny(['date_from', 'date_to', 'status']))
+            @if(request()->hasAny(['date_from', 'date_to', 'order_status', 'payment_status']))
                 <a href="{{ url()->current() }}" class="vi-btn-outline">
                     <i class="bi bi-arrow-clockwise"></i>
                     {{ $isAr ? 'إعادة ضبط' : 'Reset' }}
@@ -526,28 +527,63 @@
                 </div>
 
                 <div class="vi-field">
-                    <label>{{ $isAr ? 'الحالة' : 'Status' }}</label>
-                    <select name="status" class="form-select">
+                    <label>{{ $isAr ? 'حالة الطلب' : 'Order Status' }}</label>
+                    <select name="order_status" class="form-select">
                         <option value="">{{ $isAr ? 'كل الحالات' : 'All Statuses' }}</option>
-                        <option value="paid" {{ $status === 'paid' ? 'selected' : '' }}>
-                            {{ $isAr ? 'مدفوع' : 'Paid' }}
-                        </option>
-                        <option value="pending" {{ $status === 'pending' ? 'selected' : '' }}>
+                        <option value="pending" {{ $orderStatus === 'pending' ? 'selected' : '' }}>
                             {{ $isAr ? 'قيد الانتظار' : 'Pending' }}
                         </option>
-                        <option value="2" {{ $status === '2' ? 'selected' : '' }}>
+                        <option value="confirmed" {{ $orderStatus === 'confirmed' ? 'selected' : '' }}>
+                            {{ $isAr ? 'تم التأكيد' : 'Confirmed' }}
+                        </option>
+                        <option value="processing" {{ $orderStatus === 'processing' ? 'selected' : '' }}>
+                            {{ $isAr ? 'قيد التنفيذ' : 'Processing' }}
+                        </option>
+                        <option value="completed" {{ $orderStatus === 'completed' ? 'selected' : '' }}>
+                            {{ $isAr ? 'مكتمل' : 'Completed' }}
+                        </option>
+                        <option value="scheduled" {{ $orderStatus === 'scheduled' ? 'selected' : '' }}>
                             {{ $isAr ? 'مجدول' : 'Scheduled' }}
+                        </option>
+                        <option value="active_scheduled" {{ $orderStatus === 'active_scheduled' ? 'selected' : '' }}>
+                            {{ $isAr ? 'نشط' : 'Active' }}
+                        </option>
+                        <option value="cancelled" {{ $orderStatus === 'cancelled' ? 'selected' : '' }}>
+                            {{ $isAr ? 'ملغي' : 'Cancelled' }}
+                        </option>
+                        <option value="rejected" {{ $orderStatus === 'rejected' ? 'selected' : '' }}>
+                            {{ $isAr ? 'مرفوض' : 'Rejected' }}
                         </option>
                     </select>
                 </div>
 
-                <div>
-                    <button class="vi-btn-primary w-100" type="submit">
-                        <i class="bi bi-funnel-fill"></i>
-                        {{ $isAr ? 'تصفية' : 'Filter' }}
-                    </button>
+                <div class="vi-field">
+                    <label>{{ $isAr ? 'حالة الدفع' : 'Payment Status' }}</label>
+                    <select name="payment_status" class="form-select">
+                        <option value="">{{ $isAr ? 'كل الحالات' : 'All' }}</option>
+                        <option value="paid" {{ $paymentStatus === 'paid' ? 'selected' : '' }}>
+                            {{ $isAr ? 'مدفوع' : 'Paid' }}
+                        </option>
+                        <option value="unpaid" {{ $paymentStatus === 'unpaid' ? 'selected' : '' }}>
+                            {{ $isAr ? 'غير مدفوع' : 'Unpaid' }}
+                        </option>
+                    </select>
                 </div>
             </form>
+
+            <div style="margin-top:14px;display:flex;justify-content:flex-end;">
+                <button class="vi-btn-primary" type="submit" form="vi-filter-form" style="display:none;"></button>
+                <form method="GET" id="vi-filter-form" style="display:contents;">
+                    <input type="hidden" name="date_from" value="{{ $dateFrom }}">
+                    <input type="hidden" name="date_to" value="{{ $dateTo }}">
+                    <input type="hidden" name="order_status" value="{{ $orderStatus }}">
+                    <input type="hidden" name="payment_status" value="{{ $paymentStatus }}">
+                </form>
+                <button class="vi-btn-primary" onclick="this.form.submit();" form="vi-filter-form" type="button">
+                    <i class="bi bi-funnel-fill"></i>
+                    {{ $isAr ? 'تصفية' : 'Filter' }}
+                </button>
+            </div>
         </div>
     </section>
 
