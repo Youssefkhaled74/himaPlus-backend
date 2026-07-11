@@ -195,6 +195,15 @@
 
     .vd-chip-paid { background: #dcfce7; color: #166534; }
     .vd-chip-pending { background: #ffedd5; color: #9a3412; }
+    .vd-chip-confirmed { background: #dbefff; color: #2285e8; }
+    .vd-chip-processing { background: #ffefda; color: #e4972d; }
+    .vd-chip-completed { background: #dff0e3; color: #4fa464; }
+    .vd-chip-scheduled { background: #eef0f4; color: #666d79; }
+    .vd-chip-active { background: #dbefff; color: #2285e8; }
+    .vd-chip-cancelled { background: #ffe1df; color: #ef5753; }
+    .vd-chip-rejected { background: #ffe1df; color: #ef5753; }
+    .vd-chip-status { cursor: pointer; transition: opacity .2s ease; }
+    .vd-chip-status:hover { opacity: .8; }
 
     .vd-quick {
         padding: 14px 18px 18px;
@@ -338,13 +347,19 @@
                 <div class="vd-list">
                     @forelse($recentOrders as $order)
                         @php
-                            $isPaid = (string)($order->payment_status ?? '') === '1' || (string)($order->payment_status ?? '') === 'paid';
+                            $statusState = $order->front_status_state ?? ['text' => ($isAr ? 'قيد الانتظار' : 'Pending'), 'class' => 'vd-chip-pending', 'filter_key' => 'pending'];
+                            $statusFilterKey = $statusState['filter_key'] ?? $statusState['key'] ?? 'pending';
+                            $statusChipClass = $statusState['class'] ?? 'vd-chip-pending';
+                            if (str_starts_with($statusChipClass, 'chip-')) {
+                                $statusChipClass = 'vd-chip-' . substr($statusChipClass, 5);
+                            }
                             $typeLabels = [
                                 1 => $isAr ? 'شراء' : 'Purchase',
                                 2 => $isAr ? 'تسعير' : 'Quotation',
                                 3 => $isAr ? 'صيانة' : 'Maintenance',
                             ];
                             $orderTypeLabel = $typeLabels[(int)($order->order_type ?? 0)] ?? ($isAr ? 'طلب' : 'Order');
+                            $filterUrl = route('vendor/orders', ['tab' => 'all', 'status' => $statusFilterKey]);
                         @endphp
                         <a href="{{ route('vendor/orders/show', $order->id) }}" class="text-decoration-none" style="color:inherit;">
                             <div class="vd-item d-flex justify-content-between align-items-start gap-3">
@@ -353,7 +368,7 @@
                                     <p class="vd-item-sub">{{ $order->user->name ?? '-' }}</p>
                                 </div>
                                 <div class="text-end">
-                                    <span class="vd-chip {{ $isPaid ? 'vd-chip-paid' : 'vd-chip-pending' }}">{{ $isPaid ? ($isAr ? 'مدفوع' : 'Paid') : ($isAr ? 'قيد الانتظار' : 'Pending') }}</span>
+                                    <span class="vd-chip vd-chip-status {{ $statusChipClass }}" onclick="event.stopPropagation(); event.preventDefault(); window.location='{{ $filterUrl }}';">{{ $statusState['text'] ?? ($isAr ? 'قيد الانتظار' : 'Pending') }}</span>
                                     <div class="small text-muted mt-2">{{ number_format((float)($order->total_cost ?? 0), 2) }} SAR</div>
                                 </div>
                             </div>
