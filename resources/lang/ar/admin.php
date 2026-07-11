@@ -396,6 +396,8 @@ return [
                 'converted_to_order' => 'تم التحويل إلى طلب',
                 'under_review' => 'قيد المراجعة',
                 'assigned_to_supplier' => 'تم الإسناد إلى المورد',
+                'scheduled' => 'مجدول',
+                'accepted' => 'مقبول',
                 'upcoming' => 'قادم',
                 'active' => 'نشط',
                 'paused' => 'متوقف مؤقتاً',
