@@ -483,7 +483,7 @@
 
         <div class="col-6 col-md-3">
             <div class="vi-card vi-stat">
-                <p class="vi-stat-label">{{ $isAr ? 'قيد الانتظار' : 'Pending' }}</p>
+                <p class="vi-stat-label">{{ $isAr ? 'غير مدفوع' : 'Unpaid' }}</p>
                 <h4 class="vi-stat-value">{{ number_format((int) $totals['pending']) }}</h4>
             </div>
         </div>
