@@ -234,8 +234,17 @@ class VendorOrderController extends Controller
         $status = $request->get('status', '');
         $search = $request->get('search', '');
         
-        $query = Offer::where('provider_id', $vendor->id)
-            ->where('deleted_at', null);
+        $baseQuery = Offer::where('provider_id', $vendor->id)
+            ->whereNull('deleted_at');
+
+        $counts = [
+            'all' => (clone $baseQuery)->count(),
+            'pending' => (clone $baseQuery)->whereIn('status', [1, '1', 'pending'])->count(),
+            'accepted' => (clone $baseQuery)->whereIn('status', [2, '2', 'accepted'])->count(),
+            'rejected' => (clone $baseQuery)->whereIn('status', [3, '3', 'rejected'])->count(),
+        ];
+
+        $query = (clone $baseQuery);
         
         if ($status) {
             $statusValues = $this->offerStatusToDbValues($status);
@@ -260,7 +269,7 @@ class VendorOrderController extends Controller
             return $offer;
         });
 
-        return view('front.vendor.orders.my-offers', compact('offers', 'status', 'search'));
+        return view('front.vendor.orders.my-offers', compact('offers', 'status', 'search', 'counts'));
     }
 
     /**
