@@ -108,7 +108,6 @@
     $actionLabelKey = null;
     $timelineActionNo = null;
     $showPendingConfirmActions = false;
-    $isMaintenance = (int)$order->order_type === 3;
     $__stepMap = match ((int)$order->order_type) {
         1 => [1 => 3, 3 => 4, 4 => 5, 5 => 6],
         2 => [1 => 7, 7 => 9, 9 => 6],
