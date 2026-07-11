@@ -107,7 +107,7 @@ class VendorOrderController extends Controller
     {
         $vendor = auth()->user();
         $order = Order::where('id', $id)
-            ->with(['user', 'items.product', 'timeline', 'offers.provider'])
+            ->with(['user', 'items.product', 'timeline', 'offers.provider', 'device_category', 'coupon'])
             ->firstOrFail();
 
         $isAllowed = $this->vendorOrderVisibilityService->canViewOrder($order, (int) $vendor->id);

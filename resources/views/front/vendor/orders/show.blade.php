@@ -99,6 +99,8 @@
     $lastTimelineNo = (int) ($timeline->last()->timeline_no ?? 0);
     $isScheduled = (int)$order->request_type === 2;
     $isQuotation = (int)$order->order_type === 2;
+    $isMaintenance = (int)$order->order_type === 3;
+    $isPurchase = (int)$order->order_type === 1;
     $statusState = $order->front_status_state ?? $order->front_status ?? ['key' => 'pending', 'text' => 'Pending', 'class' => 'chip-pending'];
 
     $currentStatus = $statusState['text'];
@@ -288,10 +290,58 @@
                 </div>
             </div>
 
+            @if($isQuotation || $isMaintenance)
+                <div class="vos-card" style="margin-top:14px;">
+                    <h5>{{ __('nav.request_information') }}</h5>
+                    <div class="vos-rows">
+                        <div class="vos-row"><span class="vos-key">{{ __('nav.order_type_label') }}</span><span class="vos-val">{{ $isQuotation ? __('nav.quotation_request') : __('nav.maintenance_request') }}</span></div>
+                        @if($isQuotation)
+                            @if($order->budget)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.budget') }}</span><span class="vos-val">{{ number_format((float)$order->budget, 0) }} {{ __('nav.sar') }}</span></div>
+                            @endif
+                            @if($order->delivery_duration)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.delivery_duration') }}</span><span class="vos-val">{{ $order->delivery_duration }}</span></div>
+                            @endif
+                            @if($order->frequency)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.frequency') }}</span><span class="vos-val">{{ $order->frequency }}</span></div>
+                            @endif
+                            @if($order->date_time_picker)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.preferred_date_time') }}</span><span class="vos-val">{{ $order->date_time_picker }}</span></div>
+                            @endif
+                            @if($order->quotation_type)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.quotation_type') }}</span><span class="vos-val">{{ $order->quotation_type }}</span></div>
+                            @endif
+                        @endif
+                        @if($isMaintenance)
+                            @if($order->device_category)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.device_category') }}</span><span class="vos-val">{{ $order->device_category->name ?? $order->device_category_id }}</span></div>
+                            @endif
+                            @if($order->device_name)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.device_name') }}</span><span class="vos-val">{{ $order->device_name }}</span></div>
+                            @endif
+                            @if($order->serial_number)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.serial_number') }}</span><span class="vos-val">{{ $order->serial_number }}</span></div>
+                            @endif
+                            @if($order->issue_description)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.issue_description') }}</span><span class="vos-val">{{ $order->issue_description }}</span></div>
+                            @endif
+                            @if($order->preferred_service_time)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.preferred_service_time') }}</span><span class="vos-val">{{ $order->preferred_service_time }}</span></div>
+                            @endif
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             @if($isScheduled)
                 <div class="vos-card" style="margin-top:14px;">
                 <h5>{{ __('nav.note') }}</h5>
                     <div class="vos-offer-line">{{ $order->notes ?: __('nav.no_notes_provided') }}</div>
+                </div>
+            @elseif($order->notes)
+                <div class="vos-card" style="margin-top:14px;">
+                    <h5>{{ __('nav.general_notes') }}</h5>
+                    <div class="vos-offer-line">{{ $order->notes }}</div>
                 </div>
             @endif
             <div class="vos-card" style="margin-top:14px;">
@@ -411,11 +461,35 @@
             <div class="vos-card vos-payment">
                 <h5>{{ __('nav.payment_details') }}</h5>
                 <div class="vos-rows">
-                    <div class="vos-row"><span class="vos-key">{{ __('nav.subtotal') }}</span><span class="vos-val">{{ number_format((float)($order->items_cost ?? $order->total_before_discount ?? $order->total_cost ?? 0), 0) }} {{ __('nav.sar') }}</span></div>
+                    @if($order->items_cost && $order->items_cost != $order->total_before_discount && $order->items_cost != $order->total_cost)
+                        <div class="vos-row"><span class="vos-key">{{ __('nav.items_cost') }}</span><span class="vos-val">{{ number_format((float)$order->items_cost, 0) }} {{ __('nav.sar') }}</span></div>
+                    @endif
+                    <div class="vos-row"><span class="vos-key">{{ __('nav.subtotal') }}</span><span class="vos-val">{{ number_format((float)($order->total_before_discount ?? $order->items_cost ?? $order->total_cost ?? 0), 0) }} {{ __('nav.sar') }}</span></div>
+                    @if($order->discount)
+                        <div class="vos-row"><span class="vos-key">{{ __('nav.discount') }}</span><span class="vos-val">-{{ number_format((float)$order->discount, 0) }} {{ __('nav.sar') }}</span></div>
+                    @endif
+                    @if($order->coupon)
+                        <div class="vos-row"><span class="vos-key">{{ __('nav.coupon_code') }}</span><span class="vos-val">{{ $order->coupon->code ?? $order->coupon_id }}</span></div>
+                    @endif
                     <div class="vos-row"><span class="vos-key">{{ __('nav.vat') }} (10%)</span><span class="vos-val">{{ number_format((float)($order->vat_amount ?? 0), 0) }} {{ __('nav.sar') }}</span></div>
                     <div class="vos-row"><span class="vos-key">{{ __('nav.delivery_fee') }}</span><span class="vos-val">{{ number_format((float)($order->delivery_fee ?? 0), 0) }} {{ __('nav.sar') }}</span></div>
                     <div class="vos-row vos-total"><span class="vos-key">{{ __('nav.net_total') }}</span><span class="vos-val">{{ number_format((float)($order->total_cost ?? 0), 0) }} {{ __('nav.sar') }}</span></div>
                 </div>
+                @if($order->payment_status || $order->gateway_name)
+                    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--vos-border);">
+                        <div class="vos-rows">
+                            @if($order->payment_status)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.payment_status') }}</span><span class="vos-val">{{ $paymentDisplay }}</span></div>
+                            @endif
+                            @if($order->gateway_name)
+                                <div class="vos-row"><span class="vos-key">{{ __('nav.payment_gateway') }}</span><span class="vos-val">{{ $order->gateway_name }}</span></div>
+                            @endif
+                            @if($order->gateway_payment_id)
+                                <div class="vos-row"><span class="vos-key">Gateway Payment ID</span><span class="vos-val" style="font-size:13px;word-break:break-all;">{{ $order->gateway_payment_id }}</span></div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div style="margin-top:14px;">
