@@ -306,6 +306,13 @@
         color: #1d4ed8;
     }
 
+    .vi-chip-confirmed { background: #dbefff; color: #2285e8; }
+    .vi-chip-processing { background: #ffefda; color: #e4972d; }
+    .vi-chip-completed { background: #dff0e3; color: #4fa464; }
+    .vi-chip-active { background: #dbefff; color: #2285e8; }
+    .vi-chip-cancelled { background: #ffe1df; color: #ef5753; }
+    .vi-chip-rejected { background: #ffe1df; color: #ef5753; }
+
     .vi-empty {
         text-align: center;
         padding: 38px 20px;
@@ -577,7 +584,11 @@
                     @forelse($invoices as $order)
                         @php
                             $isPaid = (string)($order->payment_status ?? '') === '1' || (string)($order->payment_status ?? '') === 'paid';
-                            $isScheduled = (int)($order->request_type ?? 0) === 2;
+                            $statusState = $order->front_status_state ?? ['text' => ($isAr ? 'قيد الانتظار' : 'Pending'), 'class' => 'chip-pending'];
+                            $statusChipClass = $statusState['class'] ?? 'chip-pending';
+                            if (str_starts_with($statusChipClass, 'chip-')) {
+                                $statusChipClass = 'vi-chip-' . substr($statusChipClass, 5);
+                            }
                         @endphp
 
                         <tr>
@@ -608,9 +619,8 @@
                             </td>
 
                             <td>
-                                <span class="vi-chip {{ $isScheduled ? 'vi-chip-scheduled' : 'vi-chip-normal' }}">
-                                    <i class="bi {{ $isScheduled ? 'bi-calendar-check' : 'bi-bag-check' }}"></i>
-                                    {{ $isScheduled ? ($isAr ? 'مجدول' : 'Scheduled') : ($isAr ? 'عادي' : 'Normal') }}
+                                <span class="vi-chip {{ $statusChipClass }}">
+                                    {{ $statusState['text'] ?? ($isAr ? 'قيد الانتظار' : 'Pending') }}
                                 </span>
                             </td>
 

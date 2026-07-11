@@ -181,7 +181,7 @@ class VendorDashboardController extends Controller
         $dateTo = $request->get('date_to');
 
         $query = $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'all')
-            ->with(['user:id,name', 'offers']);
+            ->with(['user:id,name', 'offers', 'timeline']);
 
         if ($status !== '') {
             if ($status === 'paid') {
@@ -199,7 +199,15 @@ class VendorDashboardController extends Controller
             $query->whereDate('created_at', '<=', $dateTo);
         }
 
-        $invoices = $query->latest()->paginate(15)->withQueryString();
+        $invoices = $query->latest()->paginate(15)->withQueryString()
+            ->through(function ($order) use ($vendor) {
+                $order->front_status_state = $order->resolveStatus([
+                    'audience' => 'front',
+                    'provider_id' => (int) $vendor->id,
+                ]);
+
+                return $order;
+            });
         $totals = [
             'amount' => (clone $query)->sum('total_cost'),
             'paid' => (clone $query)->where('payment_status', 'paid')->count(),
