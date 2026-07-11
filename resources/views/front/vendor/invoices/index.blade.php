@@ -393,6 +393,12 @@
         }
     }
 
+    @media (max-width: 992px) {
+        .vi-body form {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
     @media (max-width: 576px) {
         .vi-hero {
             padding: 18px;
@@ -515,7 +521,7 @@
         </div>
 
         <div class="vi-body">
-            <form method="GET" class="vi-filter-grid">
+            <form method="GET" style="display:grid;grid-template-columns:repeat(4, minmax(0, 1fr)) 1fr;gap:14px;align-items:end;">
                 <div class="vi-field">
                     <label>{{ $isAr ? 'من تاريخ' : 'From Date' }}</label>
                     <input type="date" name="date_from" value="{{ $dateFrom }}" class="form-control">
@@ -569,21 +575,14 @@
                         </option>
                     </select>
                 </div>
-            </form>
 
-            <div style="margin-top:14px;display:flex;justify-content:flex-end;">
-                <button class="vi-btn-primary" type="submit" form="vi-filter-form" style="display:none;"></button>
-                <form method="GET" id="vi-filter-form" style="display:contents;">
-                    <input type="hidden" name="date_from" value="{{ $dateFrom }}">
-                    <input type="hidden" name="date_to" value="{{ $dateTo }}">
-                    <input type="hidden" name="order_status" value="{{ $orderStatus }}">
-                    <input type="hidden" name="payment_status" value="{{ $paymentStatus }}">
-                </form>
-                <button class="vi-btn-primary" onclick="this.form.submit();" form="vi-filter-form" type="button">
-                    <i class="bi bi-funnel-fill"></i>
-                    {{ $isAr ? 'تصفية' : 'Filter' }}
-                </button>
-            </div>
+                <div>
+                    <button class="vi-btn-primary w-100" type="submit">
+                        <i class="bi bi-funnel-fill"></i>
+                        {{ $isAr ? 'تصفية' : 'Filter' }}
+                    </button>
+                </div>
+            </form>
         </div>
     </section>
 
@@ -650,7 +649,7 @@
                             <td>
                                 <span class="vi-chip {{ $isPaid ? 'vi-chip-paid' : 'vi-chip-pending' }}">
                                     <i class="bi {{ $isPaid ? 'bi-check2-circle' : 'bi-hourglass-split' }}"></i>
-                                    {{ $isPaid ? ($isAr ? 'مدفوع' : 'Paid') : ($isAr ? 'قيد الانتظار' : 'Pending') }}
+                                    {{ $isPaid ? ($isAr ? 'مدفوع' : 'Paid') : ($isAr ? 'غير مدفوع' : 'Unpaid') }}
                                 </span>
                             </td>
 
