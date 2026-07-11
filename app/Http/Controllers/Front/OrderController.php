@@ -509,6 +509,15 @@ class OrderController extends Controller
                         $query->orWhereHas('offers', function ($offersQuery) use ($user) {
                             $offersQuery->where('provider_id', $user->id);
                         });
+
+                        $query->orWhere(function ($publicQuery) {
+                            $publicQuery->whereNull('provider_id')
+                                ->whereIn('order_type', [2, 3])
+                                ->where(function ($typeQuery) {
+                                    $typeQuery->where('request_type', 1)
+                                        ->orWhereNull('request_type');
+                                });
+                        });
                     }
                 })
                 ->with(['timeline', 'user', 'offers'])
