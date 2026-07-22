@@ -2316,3 +2316,80 @@ textarea.form-control {
         justify-content: space-between;
     }
 }
+
+/* ── Language Toggle Switch ─────────────────────────── */
+.admin-lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.admin-lang-toggle-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: 80px;
+    height: 42px;
+    padding: 4px;
+    border: 1px solid rgba(216, 227, 240, 0.96);
+    border-radius: 14px;
+    background: linear-gradient(180deg, #fff, #f8fbff);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    transition: border-color .25s, box-shadow .25s;
+}
+
+.admin-lang-toggle:hover .admin-lang-toggle-track {
+    border-color: rgba(59, 130, 246, 0.45);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
+}
+
+.admin-lang-toggle-thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    height: calc(100% - 8px);
+    border-radius: 11px;
+    background: linear-gradient(135deg, #2352b7 0%, #1a3fa0 100%);
+    box-shadow: 0 2px 6px rgba(35, 82, 183, 0.35);
+    transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s ease;
+    z-index: 0;
+    pointer-events: none;
+}
+
+html[dir="rtl"] .admin-lang-toggle-thumb,
+.locale-ar .admin-lang-toggle-thumb {
+    transform: translateX(calc(100% + 0px));
+}
+
+.admin-lang-toggle-option {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #8899b0;
+    user-select: none;
+    transition: color .3s ease;
+    height: 100%;
+}
+
+.admin-lang-toggle-option.is-active {
+    color: #fff;
+}
+
+@media (max-width: 767.98px) {
+    .admin-lang-toggle-track {
+        min-width: 72px;
+        height: 38px;
+    }
+    .admin-lang-toggle-option {
+        font-size: 0.72rem;
+    }
+}
