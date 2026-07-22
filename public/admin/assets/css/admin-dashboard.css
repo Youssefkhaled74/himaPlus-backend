@@ -2338,6 +2338,7 @@ textarea.form-control {
     background: linear-gradient(180deg, #fff, #f8fbff);
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     transition: border-color .25s, box-shadow .25s;
+    direction: ltr;
 }
 
 .admin-lang-toggle:hover .admin-lang-toggle-track {
@@ -2359,7 +2360,6 @@ textarea.form-control {
     pointer-events: none;
 }
 
-html[dir="rtl"] .admin-lang-toggle-thumb,
 .locale-ar .admin-lang-toggle-thumb {
     transform: translateX(calc(100% + 0px));
 }
