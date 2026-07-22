@@ -31,7 +31,7 @@ class UserController extends Controller
             return view('admin.users.index', compact('users', 'userType', 'search', 'isActivate', 'createdToday'));
         }catch(\Exception $e){
             report($e);
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -45,10 +45,10 @@ class UserController extends Controller
     {
         try{
             $this->users->store($request);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -123,10 +123,10 @@ class UserController extends Controller
     {
         try{
             $this->users->update($request, $id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -135,10 +135,10 @@ class UserController extends Controller
     {
         try{
             $this->users->activate($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -147,10 +147,10 @@ class UserController extends Controller
     {
         try{
             $this->users->delete($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -196,10 +196,10 @@ class UserController extends Controller
     {
         try{
             $this->users->back($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }

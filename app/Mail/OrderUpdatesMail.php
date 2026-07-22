@@ -29,7 +29,7 @@ class OrderUpdatesMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Updates Mail',
+            subject: __('messages.email_order_updates'),
         );
     }
 

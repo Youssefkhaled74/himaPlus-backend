@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Hema - Smart Medical Procurement</title>
+    <title>{{ __('auth.title') }}</title>
 @endsection
 
 <!-- custom page -->
@@ -35,31 +35,31 @@
                                 <form method="POST" action="{{ route('user/reset-password', $id) }}">
                                     @csrf
                                     <div class="card-body p-4 p-lg-5 text-center">
-                                        <h5 class="fw-bold mb-2">Reset Your Password</h5>
-                                        <p class="text-body-secondary small mb-4">Create a new password for your<br>account</p>
+                                        <h5 class="fw-bold mb-2">{{ __('auth.reset_password') }}</h5>
+                                        <p class="text-body-secondary small mb-4">{{ __('auth.create_new_password') }}</p>
 
                                         <div class="text-start mb-3">
-                                            <label class="form-label">Your Code</label>
+                                            <label class="form-label">{{ __('auth.code_placeholder') }}</label>
                                             <div class="position-relative">
-                                                <input name="code" type="text" class="form-control hp-input" placeholder="Enter your code">
+                                                <input name="code" type="text" class="form-control hp-input" placeholder="{{ __('auth.code_placeholder') }}">
                                             </div>
                                         </div>
                                         <div class="text-start mb-3">
-                                            <label class="form-label">New Password</label>
+                                            <label class="form-label">{{ __('auth.new_password') }}</label>
                                             <div class="position-relative">
-                                                <input name="password" type="password" class="form-control hp-input hp-input--password" placeholder="Create a new password">
+                                                <input name="password" type="password" class="form-control hp-input hp-input--password" placeholder="{{ __('auth.new_password') }}">
                                                 <button class="hp-eye-btn" type="button"><i class="bi bi-eye-slash"></i></button>
                                             </div>
                                         </div>
                                         <div class="text-start mb-4">
-                                            <label class="form-label">Confirm Password</label>
+                                            <label class="form-label">{{ __('auth.confirm_password') }}</label>
                                             <div class="position-relative">
-                                                <input name="password_confirmation" type="password" class="form-control hp-input hp-input--password" placeholder="Re-enter your password">
+                                                <input name="password_confirmation" type="password" class="form-control hp-input hp-input--password" placeholder="{{ __('auth.re_enter_password') }}">
                                                 <button class="hp-eye-btn" type="button"><i class="bi bi-eye-slash"></i></button>
                                             </div>
                                         </div>
 
-                                        <button class="btn hp-btn-gradient w-100">Reset Password</button>
+                                        <button class="btn hp-btn-gradient w-100">{{ __('auth.reset_password') }}</button>
                                     </div>
                                 </form>
                             @endisset

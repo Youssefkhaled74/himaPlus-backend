@@ -63,14 +63,14 @@
         @php
             $__isAr = app()->getLocale() === 'ar';
             $__journeyMap = [
-                1 => $__isAr ? 'إنشاء الطلب → تجهيز → شحن → تسليم → اكتمال' : 'Ordered → Processing → Shipped → Delivered → Completed',
-                2 => $__isAr ? 'إنشاء الطلب → استلام العروض → قبول العرض → اكتمال' : 'Ordered → Offers → Offer Accepted → Completed',
-                3 => $__isAr ? 'إنشاء الطلب → جدولة الزيارة → صيانة → اكتمال' : 'Ordered → Visit Scheduled → Maintenance → Completed',
+                1 => __('products.journey_purchase'),
+                2 => __('products.journey_quotation'),
+                3 => __('products.journey_maintenance'),
             ];
             $__journeyText = $__journeyMap[(int)$order->order_type] ?? $__journeyMap[1];
         @endphp
         <div class="alert alert-light border mb-3">
-            <strong>{{ $__isAr ? 'رحلة الطلب:' : 'Order Journey:' }}</strong>
+            <strong>{{ __('products.order_journey') }}</strong>
             {{ $__journeyText }}
         </div>
         <div class="row g-4">
@@ -179,11 +179,11 @@
             <div class="col-lg-5">
                 <div class="summary-card p-4 reveal">
                     <h6 class="mb-3">{{ __('products.payment_details') }}</h6>
-                    <div class="row-line"><span>{{ __('products.subtotal') }}</span><span>{{ $order->items_cost }} SAR</span></div>
-                    <div class="row-line"><span>{{ __('products.vat') }}({{ $order->vat }}%)</span><span>{{ $order->vat_amount }} SAR</span></div>
-                    <div class="row-line"><span>{{ __('products.discount') }}</span><span>{{ $order->discount }} SAR</span></div>
-                    <div class="row-line"><span>{{ __('products.delivery_fee') }}</span><span>{{ $order->delivery_fee }} SAR</span></div>
-                    <div class="row-line"><strong>{{ __('products.net_total') }}</strong><strong>{{ $order->total_cost + $order->delivery_fee }} SAR</strong></div>
+                    <div class="row-line"><span>{{ __('products.subtotal') }}</span><span>{{ $order->items_cost }} {{ __('products.currency_sar') }}</span></div>
+                    <div class="row-line"><span>{{ __('products.vat') }}({{ $order->vat }}%)</span><span>{{ $order->vat_amount }} {{ __('products.currency_sar') }}</span></div>
+                    <div class="row-line"><span>{{ __('products.discount') }}</span><span>{{ $order->discount }} {{ __('products.currency_sar') }}</span></div>
+                    <div class="row-line"><span>{{ __('products.delivery_fee') }}</span><span>{{ $order->delivery_fee }} {{ __('products.currency_sar') }}</span></div>
+                    <div class="row-line"><strong>{{ __('products.net_total') }}</strong><strong>{{ $order->total_cost + $order->delivery_fee }} {{ __('products.currency_sar') }}</strong></div>
                     <div class="d-flex gap-2 mt-3">
                         @if (!isset($step_12->id))
                             @if (!isset($step_5->id))
@@ -443,7 +443,7 @@
                                         </div>
                                         <div class="mb-1">
                                             <span class="fw-semibold">{{ __('products.total_price') }}:</span>
-                                            <span>{{ number_format($offer->cost, 0) }} SAR</span>
+                                            <span>{{ number_format($offer->cost, 0) }} {{ __('products.currency_sar') }}</span>
                                         </div>
                                         <div class="mb-1">
                                             <span class="fw-semibold">{{ __('products.delivery_time') }}:</span>
@@ -484,7 +484,7 @@
                                             </div>
                                             <div class="mb-2">
                                                 <span class="fw-semibold">{{ __('products.total_price') }}:</span>
-                                                <span>{{ number_format($offer->cost, 0) }} SAR</span>
+                                                <span>{{ number_format($offer->cost, 0) }} {{ __('products.currency_sar') }}</span>
                                             </div>
                                             <div class="mb-2">
                                                 <span class="fw-semibold">{{ __('products.delivery_time') }}:</span>

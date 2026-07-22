@@ -188,5 +188,26 @@ return [
     'items_count' => 'Items Count',
     'add_offer' => 'Add Offer',
     'delete_offer_confirm' => 'Are you sure you want to delete this offer?',
+
+    // My Orders page
+    'total_orders' => 'Total Orders',
+    'current_tab' => 'Current Tab',
+    'active_filters' => 'Active Filters',
+    'filtered' => 'Filtered',
+    'filter_description' => 'Choose order type or payment/status filter to view the required orders.',
+    'orders_list' => 'Orders List',
+    'orders_list_desc' => 'All orders matching the current tab and filters.',
+    'view_summary' => 'View Summary',
+    'view_summary_desc' => 'Quick summary for current tab and filters.',
+    'tab' => 'Tab',
+    'orders_count' => 'Orders Count',
+    'payment' => 'Payment',
+    'quick_actions_desc' => 'Useful links to continue shopping.',
+
+    // Order Journey
+    'order_journey' => 'Order Journey:',
+    'journey_purchase' => 'Ordered → Processing → Shipped → Delivered → Completed',
+    'journey_quotation' => 'Ordered → Offers → Offer Accepted → Completed',
+    'journey_maintenance' => 'Ordered → Visit Scheduled → Maintenance → Completed',
 ];
 

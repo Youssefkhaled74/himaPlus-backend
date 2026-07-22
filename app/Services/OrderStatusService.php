@@ -138,16 +138,16 @@ class OrderStatusService
         ];
 
         $frontMap = [
-            self::STATUS_PENDING => ['label' => app()->getLocale() === 'ar' ? 'قيد الانتظار' : 'Pending', 'class' => 'chip-pending'],
-            self::STATUS_CONFIRMED => ['label' => app()->getLocale() === 'ar' ? 'تم التأكيد' : 'Confirmed', 'class' => 'chip-confirmed'],
-            self::STATUS_ACCEPTED_ORDERS => ['label' => app()->getLocale() === 'ar' ? 'تم التأكيد' : 'Confirmed', 'class' => 'chip-confirmed'],
-            self::STATUS_PROCESSING => ['label' => app()->getLocale() === 'ar' ? 'قيد التنفيذ' : 'Processing', 'class' => 'chip-processing'],
-            self::STATUS_COMPLETED => ['label' => app()->getLocale() === 'ar' ? 'مكتمل' : 'Completed', 'class' => 'chip-completed'],
-            self::STATUS_SCHEDULED => ['label' => app()->getLocale() === 'ar' ? 'مجدول' : 'Scheduled', 'class' => 'chip-upcoming'],
-            self::STATUS_ACTIVE_SCHEDULED => ['label' => app()->getLocale() === 'ar' ? 'نشط' : 'Active', 'class' => 'chip-active'],
-            self::STATUS_COMPLETED_SCHEDULED => ['label' => app()->getLocale() === 'ar' ? 'مكتمل' : 'Completed', 'class' => 'chip-completed'],
-            self::STATUS_CANCELLED => ['label' => app()->getLocale() === 'ar' ? 'ملغي' : 'Cancelled', 'class' => 'chip-cancelled'],
-            self::STATUS_REJECTED => ['label' => app()->getLocale() === 'ar' ? 'مرفوض' : 'Rejected', 'class' => 'chip-rejected'],
+            self::STATUS_PENDING => ['label' => __('messages.status_pending'), 'class' => 'chip-pending'],
+            self::STATUS_CONFIRMED => ['label' => __('messages.status_confirmed'), 'class' => 'chip-confirmed'],
+            self::STATUS_ACCEPTED_ORDERS => ['label' => __('messages.status_confirmed'), 'class' => 'chip-confirmed'],
+            self::STATUS_PROCESSING => ['label' => __('messages.status_processing'), 'class' => 'chip-processing'],
+            self::STATUS_COMPLETED => ['label' => __('messages.status_completed'), 'class' => 'chip-completed'],
+            self::STATUS_SCHEDULED => ['label' => __('messages.status_scheduled'), 'class' => 'chip-upcoming'],
+            self::STATUS_ACTIVE_SCHEDULED => ['label' => __('messages.status_active'), 'class' => 'chip-active'],
+            self::STATUS_COMPLETED_SCHEDULED => ['label' => __('messages.status_completed'), 'class' => 'chip-completed'],
+            self::STATUS_CANCELLED => ['label' => __('messages.status_cancelled'), 'class' => 'chip-cancelled'],
+            self::STATUS_REJECTED => ['label' => __('messages.status_rejected'), 'class' => 'chip-rejected'],
         ];
 
         $payload = $audience === 'admin' ? $adminMap[$status] ?? $adminMap[self::STATUS_PENDING] : $frontMap[$status] ?? $frontMap[self::STATUS_PENDING];

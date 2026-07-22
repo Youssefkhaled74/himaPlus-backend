@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Hema - Smart Medical Procurement</title>
+    <title>{{ __('auth.title') }}</title>
 @endsection
 
 <!-- custom page -->
@@ -75,21 +75,21 @@
                             @endif
                             <div class="card-body p-4 p-lg-5">
                                 <div class="hp-tabs d-flex gap-4 justify-content-center mb-4">
-                                    <a class="hp-tab active" data-target="#page-login">Login</a>
-                                    <a class="hp-tab" data-target="#page-register">Register</a>
+                                    <a class="hp-tab active" data-target="#page-login">{{ __('auth.login') }}</a>
+                                    <a class="hp-tab" data-target="#page-register">{{ __('auth.register') }}</a>
                                 </div>
 
                                 <form method="POST" action="{{ route('user/check/login') }}">
                                     @csrf
                                     <div class="mb-3">
-                                        <label class="form-label">Email <span class="required-star">*</span></label>
-                                        <input name="email" type="email" class="form-control hp-input" placeholder="Enter your Email">
+                                        <label class="form-label">{{ __('auth.email') }} <span class="required-star">*</span></label>
+                                        <input name="email" type="email" class="form-control hp-input" placeholder="{{ __('auth.enter_email') }}">
                                     </div>
 
                                     <div class="mb-2 position-relative">
-                                        <label class="form-label">Password <span class="required-star">*</span></label>
+                                        <label class="form-label">{{ __('auth.password') }} <span class="required-star">*</span></label>
                                         <div class="position-relative">
-                                            <input name="password" type="password" class="form-control hp-input hp-input--password" placeholder="Enter your password">
+                                            <input name="password" type="password" class="form-control hp-input hp-input--password" placeholder="{{ __('auth.enter_password') }}">
                                             <button class="hp-eye-btn" type="button"><i class="bi bi-eye-slash"></i></button>
                                         </div>
                                     </div>
@@ -97,12 +97,12 @@
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" id="rememberMe">
-                                            <label class="form-check-label small" for="rememberMe">Remember me</label>
+                                            <label class="form-check-label small" for="rememberMe">{{ __('auth.remember_me') }}</label>
                                         </div>
-                                        <a class="hp-link small" href="{{ route('user/send-reset-code/form') }}">Forgot Password ?</a>
+                                        <a class="hp-link small" href="{{ route('user/send-reset-code/form') }}">{{ __('auth.forgot_password') }}</a>
                                     </div>
     
-                                    <button class="btn hp-btn-gradient w-100 hp-btn-disabled" type="submit" disabled>Log In</button>
+                                    <button class="btn hp-btn-gradient w-100 hp-btn-disabled" type="submit" disabled>{{ __('auth.login') }}</button>
                                 </form>
                             </div>
                         </div>
@@ -116,8 +116,8 @@
                         <div class="hp-card card">
                             <div class="card-body p-4 p-lg-5">
                                 <div class="hp-tabs d-flex gap-4 justify-content-center mb-4">
-                                    <a class="hp-tab" data-target="#page-login">Login</a>
-                                    <a class="hp-tab active" data-target="#page-register">Register</a>
+                                    <a class="hp-tab" data-target="#page-login">{{ __('auth.login') }}</a>
+                                    <a class="hp-tab active" data-target="#page-register">{{ __('auth.register') }}</a>
                                 </div>
 
                                 <form method="POST" action="{{ route('user/register/store') }}" enctype="multipart/form-data">
@@ -135,31 +135,31 @@
 
                                     <div class="row g-3">
                                         <div class="col-12">
-                                            <label class="form-label">User Type Selector <span class="required-star">*</span></label>
+                                            <label class="form-label">{{ __('auth.user_type_selector') }} <span class="required-star">*</span></label>
                                             <select class="form-select hp-input" name="user_type">
-                                                <option value="" selected>Select Account Type</option>
-                                                <option value="1" {{ old('user_type') == '1' ? 'selected' : '' }}>Hospital / Clinic</option>
-                                                <option value="2" {{ old('user_type') == '2' ? 'selected' : '' }}>Supplier</option>
+                                                <option value="" selected>{{ __('auth.select_account_type') }}</option>
+                                                <option value="1" {{ old('user_type') == '1' ? 'selected' : '' }}>{{ __('auth.hospital_clinic') }}</option>
+                                                <option value="2" {{ old('user_type') == '2' ? 'selected' : '' }}>{{ __('auth.supplier') }}</option>
                                                 {{-- <option value="3">Logistics</option> --}}
                                             </select>
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label"><span id="account-name-label">Hospital / Clinic Name</span> <span class="required-star">*</span></label>
-                                            <input name="name" value="{{ old('name') }}" class="form-control hp-input" placeholder="Enter Name">
+                                            <label class="form-label"><span id="account-name-label">{{ __('auth.hospital_clinic_name') }}</span> <span class="required-star">*</span></label>
+                                            <input name="name" value="{{ old('name') }}" class="form-control hp-input" placeholder="{{ __('auth.enter_name') }}">
                                         </div>
                                         <div class="col-12 col-md-6 supplier-only">
-                                            <label class="form-label">Branch <span class="required-star">*</span></label>
-                                            <input name="branch" value="{{ old('branch') }}" class="form-control hp-input" placeholder="Enter branch">
+                                            <label class="form-label">{{ __('auth.branch') }} <span class="required-star">*</span></label>
+                                            <input name="branch" value="{{ old('branch') }}" class="form-control hp-input" placeholder="{{ __('auth.enter_branch') }}">
                                         </div>
 
                                         <div class="col-12 supplier-only">
-                                            <label class="form-label">Location <span class="required-star">*</span></label>
-                                            <input name="location" value="{{ old('location') }}" class="form-control hp-input" placeholder="Enter location">
+                                            <label class="form-label">{{ __('auth.location') }} <span class="required-star">*</span></label>
+                                            <input name="location" value="{{ old('location') }}" class="form-control hp-input" placeholder="{{ __('auth.enter_location') }}">
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label">Phone Number <span class="required-star">*</span></label>
+                                            <label class="form-label">{{ __('auth.phone_number') }} <span class="required-star">*</span></label>
                                             <div class="input-group hp-input-group">
                                                 <span class="input-group-text hp-cc">+966</span>
                                                 <input name="mobile" value="{{ old('mobile') }}" class="form-control hp-input" placeholder="xxxxxxxxx">
@@ -167,50 +167,50 @@
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label">Email <span class="required-star">*</span></label>
-                                            <input name="email" type="email" class="form-control hp-input" placeholder="Enter your email">
+                                            <label class="form-label">{{ __('auth.email') }} <span class="required-star">*</span></label>
+                                            <input name="email" type="email" class="form-control hp-input" placeholder="{{ __('auth.enter_your_email') }}">
                                         </div>
 
                                         <div class="col-12 col-md-6 supplier-only">
-                                            <label class="form-label">IBAN <span class="required-star">*</span></label>
-                                            <input name="iban" value="{{ old('iban') }}" class="form-control hp-input" placeholder="Enter IBAN">
+                                            <label class="form-label">{{ __('auth.iban') }} <span class="required-star">*</span></label>
+                                            <input name="iban" value="{{ old('iban') }}" class="form-control hp-input" placeholder="{{ __('auth.enter_iban') }}">
                                         </div>
 
                                         <div class="col-12 col-md-6 supplier-only">
-                                            <label class="form-label">Tax Number <span class="required-star">*</span></label>
-                                            <input name="tax_number" value="{{ old('tax_number') }}" class="form-control hp-input" placeholder="Enter Tax Number">
+                                            <label class="form-label">{{ __('auth.tax_number') }} <span class="required-star">*</span></label>
+                                            <input name="tax_number" value="{{ old('tax_number') }}" class="form-control hp-input" placeholder="{{ __('auth.enter_tax_number') }}">
                                         </div>
 
                                         <div class="col-12 col-md-6 supplier-only">
-                                            <label class="form-label">CR Number <span class="required-star">*</span></label>
-                                            <input name="cr_number" value="{{ old('cr_number') }}" class="form-control hp-input" placeholder="Enter CR number">
+                                            <label class="form-label">{{ __('auth.cr_number') }} <span class="required-star">*</span></label>
+                                            <input name="cr_number" value="{{ old('cr_number') }}" class="form-control hp-input" placeholder="{{ __('auth.enter_cr_number') }}">
                                         </div>
 
                                         <div class="col-12 supplier-only">
-                                            <label class="form-label">Upload CR Document</label>
+                                            <label class="form-label">{{ __('auth.upload_cr_document') }}</label>
                                             <div class="hp-upload dropzone text-center p-4">
                                                 <input name="cr_file_document" type="file" class="d-none" id="crFile">
                                                 <button class="btn btn-light border hp-upload-btn" type="button">
                                                     <i class="bi bi-arrow-up-circle me-2"></i>
-                                                    Choose file to upload
+                                                    {{ __('auth.choose_file') }}
                                                 </button>
-                                                <div class="small text-body-tertiary mt-1">Upload CR Certificate (PDF / image)</div>
+                                                <div class="small text-body-tertiary mt-1">{{ __('auth.upload_cr_certificate') }}</div>
                                                 <div class="small mt-2 hp-file-name d-none"></div>
                                             </div>
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label">Password <span class="required-star">*</span></label>
+                                            <label class="form-label">{{ __('auth.password') }} <span class="required-star">*</span></label>
                                             <div class="position-relative">
-                                            <input name="password" type="password" class="form-control hp-input hp-input--password" placeholder="Enter your password">
+                                            <input name="password" type="password" class="form-control hp-input hp-input--password" placeholder="{{ __('auth.enter_password') }}">
                                                 <button class="hp-eye-btn" type="button"><i class="bi bi-eye-slash"></i></button>
                                             </div>
                                         </div>
 
                                         <div class="col-12 col-md-6">
-                                            <label class="form-label">Confirm Password <span class="required-star">*</span></label>
+                                            <label class="form-label">{{ __('auth.confirm_password') }} <span class="required-star">*</span></label>
                                             <div class="position-relative">
-                                            <input name="password_confirmation" type="password" class="form-control hp-input hp-input--password" placeholder="Re-enter your password">
+                                            <input name="password_confirmation" type="password" class="form-control hp-input hp-input--password" placeholder="{{ __('auth.re_enter_password') }}">
                                                 <button class="hp-eye-btn" type="button"><i class="bi bi-eye-slash"></i></button>
                                             </div>
                                         </div>
@@ -219,16 +219,16 @@
                                             <div class="form-check">
                                                 <input name="terms" class="form-check-input" type="checkbox" id="terms" value="1">
                                                 <label class="form-check-label small" for="terms">
-                                                    <span class="required-star">*</span> I agree to the
-                                                    <a href="{{ route('termsConditions') }}" class="hp-link">Terms &amp; Conditions</a>
+                                                    <span class="required-star">*</span> {{ __('auth.i_agree_to') }}
+                                                    <a href="{{ route('termsConditions') }}" class="hp-link">{{ __('auth.terms_conditions') }}</a>
                                                     &amp;
-                                                    <a href="{{ route('privacyPolicy') }}" class="hp-link">Privacy Policy</a>
+                                                    <a href="{{ route('privacyPolicy') }}" class="hp-link">{{ __('auth.privacy_policy') }}</a>
                                                 </label>
                                             </div>
                                         </div>
 
                                         <div class="col-12">
-                                            <button class="btn hp-btn-gradient w-100 hp-btn-disabled" disabled>Sign Up</button>
+                                            <button class="btn hp-btn-gradient w-100 hp-btn-disabled" disabled>{{ __('auth.sign_up') }}</button>
                                         </div>
                                     </div>
                                 </form>
@@ -334,7 +334,7 @@
 
             $supplierFields.toggle(supplierSelected);
             if ($nameLabel.length) {
-                $nameLabel.text(supplierSelected ? 'Supplier Name' : 'Hospital / Clinic Name');
+                $nameLabel.text(supplierSelected ? '{{ __("auth.supplier_name") }}' : '{{ __("auth.hospital_clinic_name") }}');
             }
         }
 

@@ -25,7 +25,7 @@ class ContactController extends Controller
             $contacts = $this->contacts->index($offset, $limit, $search);
             return view('admin.contacts.index', compact('contacts', 'search'));
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -39,10 +39,10 @@ class ContactController extends Controller
     {
         try{
             $this->contacts->store($request);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -57,10 +57,10 @@ class ContactController extends Controller
     {
         try{
             $this->contacts->update($request, $id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -69,10 +69,10 @@ class ContactController extends Controller
     {
         try{
             $this->contacts->activate($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -81,10 +81,10 @@ class ContactController extends Controller
     {
         try{
             $this->contacts->delete($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -130,10 +130,10 @@ class ContactController extends Controller
     {
         try{
             $this->contacts->back($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }

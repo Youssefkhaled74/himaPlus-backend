@@ -29,7 +29,7 @@
                     <span class="d-block fw-medium sidebar-user-name-text">{{ $admin?->name }}</span>
                     <span class="d-block fs-14 sidebar-user-name-sub-text">
                         <i class="ri ri-circle-fill fs-10 text-success align-baseline"></i>
-                        <span class="align-middle">Online now</span>
+                        <span class="align-middle">{{ __('admin.nav.online_now') }}</span>
                     </span>
                 </span>
             </span>
@@ -37,13 +37,13 @@
         <div class="dropdown-menu dropdown-menu-end">
             <a class="dropdown-item" href="{{ url(route('admin/admins/info')) }}">
                 <i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i>
-                <span class="align-middle">Settings</span>
+                <span class="align-middle">{{ __('admin.nav.settings') }}</span>
             </a>
             <form method="POST" action="{{ url(route('admin/logout')) }}">
                 @csrf
                 <button type="submit" class="dropdown-item">
                     <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
-                    <span class="align-middle">Logout</span>
+                    <span class="align-middle">{{ __('admin.nav.logout') }}</span>
                 </button>
             </form>
         </div>
@@ -53,21 +53,21 @@
         <div class="container-fluid">
             <div id="two-column-menu"></div>
             <ul class="navbar-nav" id="navbar-nav">
-                <li class="menu-title"><span data-key="t-menu">Operations</span></li>
+                <li class="menu-title"><span data-key="t-menu">{{ __('admin.nav.operations') }}</span></li>
 
                 @if($isSuperAdmin)
                     <li class="nav-item">
                         <a class="nav-link menu-link sidebaradmins" href="#sidebaradmins" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebaradmins">
                             <i class="ri-shield-user-line"></i>
-                            <span data-key="t-admins">Admins</span>
+                            <span data-key="t-admins">{{ __('admin.nav.admins') }}</span>
                         </a>
                         <div class="collapse menu-dropdown" id="sidebaradmins">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin/admins/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-admins-list">Admins List</a>
+                                    <a href="{{ route('admin/admins/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-admins-list">{{ __('admin.nav.admins_list') }}</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('admin/admins/create') }}" class="nav-link" data-key="t-admins-add">Add Admin</a>
+                                    <a href="{{ route('admin/admins/create') }}" class="nav-link" data-key="t-admins-add">{{ __('admin.nav.add_admin') }}</a>
                                 </li>
                             </ul>
                         </div>
@@ -77,12 +77,12 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebarinfo" href="#sidebarinfo" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarinfo">
                         <i class="ri-information-line"></i>
-                        <span data-key="t-info">Platform Info</span>
+                        <span data-key="t-info">{{ __('admin.nav.platform_info') }}</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarinfo">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin/info/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-info-list">Info Settings</a>
+                                <a href="{{ route('admin/info/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-info-list">{{ __('admin.nav.info_settings') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -91,15 +91,15 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebarusers" href="#sidebarusers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarusers">
                         <i class="ri-user-3-line"></i>
-                        <span data-key="t-users">Users</span>
+                        <span data-key="t-users">{{ __('admin.nav.users') }}</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarusers">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-users-list">Users List</a>
+                                <a href="{{ route('admin/users/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-users-list">{{ __('admin.nav.users_list') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin/users/create') }}" class="nav-link" data-key="t-users-add">Add User</a>
+                                <a href="{{ route('admin/users/create') }}" class="nav-link" data-key="t-users-add">{{ __('admin.nav.add_user') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -108,15 +108,15 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebarcoupons" href="#sidebarcoupons" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarcoupons">
                         <i class="ri-coupon-3-line"></i>
-                        <span data-key="t-coupons">Coupons</span>
+                        <span data-key="t-coupons">{{ __('admin.nav.coupons') }}</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarcoupons">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin/coupons/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-coupons-list">Coupons List</a>
+                                <a href="{{ route('admin/coupons/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-coupons-list">{{ __('admin.nav.coupons_list') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin/coupons/create') }}" class="nav-link" data-key="t-coupons-add">Add Coupon</a>
+                                <a href="{{ route('admin/coupons/create') }}" class="nav-link" data-key="t-coupons-add">{{ __('admin.nav.add_coupon') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -125,15 +125,15 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link sidebarcategories" href="#sidebarcategories" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarcategories">
                         <i class="ri-layout-grid-line"></i>
-                        <span data-key="t-categories">Categories</span>
+                        <span data-key="t-categories">{{ __('admin.nav.categories') }}</span>
                     </a>
                     <div class="collapse menu-dropdown" id="sidebarcategories">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin/categories/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-categories-list">Categories List</a>
+                                <a href="{{ route('admin/categories/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-categories-list">{{ __('admin.nav.categories_list') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin/categories/create') }}" class="nav-link" data-key="t-categories-add">Add Category</a>
+                                <a href="{{ route('admin/categories/create') }}" class="nav-link" data-key="t-categories-add">{{ __('admin.nav.add_category') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -147,10 +147,10 @@
                     <div class="collapse menu-dropdown" id="sidebarcountries">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin/countries/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-countries-list">Countries List</a>
+                                <a href="{{ route('admin/countries/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-countries-list">{{ __('admin.nav.countries_list') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin/countries/create') }}" class="nav-link" data-key="t-countries-add">Add Country</a>
+                                <a href="{{ route('admin/countries/create') }}" class="nav-link" data-key="t-countries-add">{{ __('admin.nav.add_country') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -164,10 +164,10 @@
                     <div class="collapse menu-dropdown" id="sidebarproducts">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-products-list">Products List</a>
+                                <a href="{{ route('admin/products/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-products-list">{{ __('admin.nav.products_list') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin/products/create') }}" class="nav-link" data-key="t-products-add">Add Product</a>
+                                <a href="{{ route('admin/products/create') }}" class="nav-link" data-key="t-products-add">{{ __('admin.nav.add_product') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -181,10 +181,10 @@
                     <div class="collapse menu-dropdown" id="sidebarorders">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders" class="nav-link" data-key="t-orders-list">Orders List</a>
+                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=orders" class="nav-link" data-key="t-orders-list">{{ __('admin.nav.orders_list') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=requests" class="nav-link" data-key="t-requests-list">Requests List</a>
+                                <a href="{{ route('admin/orders/index') }}/0/{{ PAGINATION_COUNT }}?tab=requests" class="nav-link" data-key="t-requests-list">{{ __('admin.nav.requests_list') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -198,7 +198,7 @@
                     <div class="collapse menu-dropdown" id="sidebarcontacts">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin/contacts/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-contacts-list">Contacts List</a>
+                                <a href="{{ route('admin/contacts/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-contacts-list">{{ __('admin.nav.contacts_list') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -212,7 +212,7 @@
                     <div class="collapse menu-dropdown" id="sidebarratings">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a href="{{ route('admin/ratings/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-ratings-list">Ratings List</a>
+                                <a href="{{ route('admin/ratings/index') }}/0/{{ PAGINATION_COUNT }}" class="nav-link" data-key="t-ratings-list">{{ __('admin.nav.ratings_list') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -224,10 +224,10 @@
     <div class="admin-sidebar-footer">
         <div class="d-flex align-items-center justify-content-between gap-2">
             <div>
-                <div class="fw-semibold">Healthcare Operations</div>
-                <div class="sidebar-footer-copy small text-muted">Clean admin workspace for products, orders, and users.</div>
+                <div class="fw-semibold">{{ __('admin.sidebar.brand_title') }}</div>
+                <div class="sidebar-footer-copy small text-muted">{{ __('admin.sidebar.brand_subtitle') }}</div>
             </div>
-            <span class="badge bg-success-subtle text-success">Live</span>
+            <span class="badge bg-success-subtle text-success">{{ __('admin.sidebar.status_live') }}</span>
         </div>
     </div>
 

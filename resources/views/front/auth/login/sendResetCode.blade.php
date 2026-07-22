@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Hema - Smart Medical Procurement</title>
+    <title>{{ __('auth.title') }}</title>
 @endsection
 
 <!-- custom page -->
@@ -34,13 +34,13 @@
                             <form method="POST" action="{{ route('user/send-reset-code/check') }}">
                                 @csrf
                                 <div class="card-body p-4 p-lg-5 text-center">
-                                    <h5 class="fw-bold mb-2">Forgot Password</h5>
-                                    <p class="text-body-secondary small mb-4">Don't worry! Just enter your phone number or email, and we'll<br>send you a code.</p>
+                                    <h5 class="fw-bold mb-2">{{ __('auth.forgot_password') }}</h5>
+                                    <p class="text-body-secondary small mb-4">{!! __('auth.forgot_password_text') !!}</p>
                                     <div class="text-start mb-3">
-                                        <label class="form-label">Phone Number or Email</label>
-                                        <input name="data" class="form-control hp-input" placeholder="Enter phone number or email">
+                                        <label class="form-label">{{ __('auth.phone_or_email') }}</label>
+                                        <input name="data" class="form-control hp-input" placeholder="{{ __('auth.enter_phone_or_email') }}">
                                     </div>
-                                    <button class="btn hp-btn-gradient w-100">Confirm</button>
+                                    <button class="btn hp-btn-gradient w-100">{{ __('buttons.confirm') }}</button>
                                 </div>
                             </form>
                         </div>

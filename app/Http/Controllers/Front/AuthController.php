@@ -80,14 +80,14 @@ class AuthController extends Controller
                 'code' => 1111,
             ]);
             $this->notification->create([
-                'title' => 'verified your account',
-                'content' => "your code: #$user->code",
+                'title' => __('messages.verified_your_account'),
+                'content' => __('messages.your_code_is', ['code' => $user->code]),
                 'user_id' => $user->id,
             ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            flash()->error('there is some thing wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
 
@@ -101,7 +101,7 @@ class AuthController extends Controller
         // dispatch(new SendSmsJob($user->mobile, (string) $user->code))->delay(now()->addMinute());
         dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
 
-        flash()->success("success");
+        flash()->success(__('messages.success'));
         return redirect(route('user/account-check/form', $user->id));
     }
     
@@ -109,7 +109,7 @@ class AuthController extends Controller
     {
         $user = $this->user->where('id', $id)->first();
         if (is_null($user)) {
-            flash()->error("there is spmething wrong , please contact technical support");
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
         return view('front.auth.login.accountCheck', compact('user'));
@@ -126,7 +126,7 @@ class AuthController extends Controller
         try {
             $user = $this->user->where('id', $id)->where('code', $request->code)->with(['cart.product', 'favorites.product'])->first();
             if(!is_null($user->deleted_at)){
-                flash()->error("This Account Not Activate , Please Contact Technical Support");
+                flash()->error(__('messages.account_not_activated'));
                 return back();
             }
             DB::beginTransaction();
@@ -139,7 +139,7 @@ class AuthController extends Controller
             FacadesAuth::guard('web')->login($user);
             if ($request->session()->regenerate()) {
                 DB::commit();
-                flash()->success("success");
+                flash()->success(__('messages.success'));
                 if ((int) $user->user_type === 2) {
                     return redirect(route('vendor/dashboard'));
                 }
@@ -152,7 +152,7 @@ class AuthController extends Controller
             dd('credentials', $user);
         } catch (\Exception $e) {
             DB::rollback();
-            flash()->error("Internal Server Error");
+            flash()->error(__('messages.internal_server_error'));
             return back();
         }
     }
@@ -170,7 +170,7 @@ class AuthController extends Controller
 
         $user = $this->user->where('id', $id)->first();
         if(!is_null($user->deleted_at)){
-            flash()->error("This Account Not Activate , Please Contact Technical Support");
+            flash()->error(__('messages.account_not_activated'));
             return back();
         }
         try {
@@ -181,21 +181,21 @@ class AuthController extends Controller
                 'email_verified_at' =>  null,
             ]);
             $this->notification->create([
-                'title' => 'verified your account',
-                'content' => "your code: #$user->code",
+                'title' => __('messages.verified_your_account'),
+                'content' => __('messages.your_code_is', ['code' => $user->code]),
                 'user_id' => $user->id,
             ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            flash()->error("Internal Server Error");
+            flash()->error(__('messages.internal_server_error'));
             return back();
         }
         
         // dispatch(new SendSmsJob($user->mobile, (string) $user->code))->delay(now()->addMinute());
         dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
         
-        flash()->success("success");
+        flash()->success(__('messages.success'));
         return back();
     }
 
@@ -250,7 +250,7 @@ class AuthController extends Controller
                 Log::warning('User login blocked: inactive/deleted/not-found', $context + [
                     'user_id' => $user?->id,
                 ]);
-                flash()->error("هذا الحساب غير مفعل برجاء الاتصال بالاداره");
+                flash()->error(__('messages.account_not_activated'));
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
 
@@ -258,7 +258,7 @@ class AuthController extends Controller
                 Log::warning('User login blocked: account not verified', $context + [
                     'user_id' => $user->id,
                 ]);
-                flash()->error("هذا الحساب غير مؤكد برجاء تاكيد الايميل او رقم الجوال");
+                flash()->error(__('messages.account_not_verified'));
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
 
@@ -266,7 +266,7 @@ class AuthController extends Controller
                 Log::warning('User login blocked: password mismatch', $context + [
                     'user_id' => $user->id,
                 ]);
-                flash()->error('خطا في الايميل او الرقم السري');
+                flash()->error(__('messages.invalid_credentials'));
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
 
@@ -295,7 +295,7 @@ class AuthController extends Controller
             Log::error('User login failed: Auth::attempt returned false', $context + [
                 'user_id' => $user?->id,
             ]);
-            flash()->error("There IS Something Worng");
+            flash()->error(__('messages.something_wrong_wrong'));
             return back();
         } catch (\Exception $e) {
             Log::error('User login exception', $context + [
@@ -303,7 +303,7 @@ class AuthController extends Controller
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
             ]);
-            flash()->error("Internal Server Error");
+            flash()->error(__('messages.internal_server_error'));
             if ($validator) {
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
@@ -385,7 +385,7 @@ class AuthController extends Controller
                 ->limit($limit)
                 ->get();
 
-            return responseJson(200, "success", $notifications);
+            return responseJson(200, __('messages.success'), $notifications);
         }
 
         $notifications = (clone $query)
@@ -535,7 +535,7 @@ class AuthController extends Controller
         $request['location'] = isset($request['location']) ? $request['location'] : $user->location;
 
         $user->update($request);
-        flash()->success('success');
+        flash()->success(__('messages.success'));
         return back();
     }
 
@@ -553,7 +553,7 @@ class AuthController extends Controller
             'lang' => $request->lang
         ]);
         session()->put('locale', $request->lang);
-        flash()->success('success');
+        flash()->success(__('messages.language_updated'));
         return back();
     }
 
@@ -570,11 +570,11 @@ class AuthController extends Controller
 
         $user = auth()->user();
         if (!$user) {
-            flash()->error("Unauthorized: User not logged in.");
+            flash()->error(__('messages.unauthorized_user_not_logged'));
             return redirect()->to(url()->previous())->withErrors($validator)->withInput();
         }
         if (!Hash::check($request->old_password, $user->password)) {
-            flash()->error("Old password is incorrect.");
+            flash()->error(__('messages.old_password_incorrect'));
             return redirect()->to(url()->previous())->withErrors($validator)->withInput();
         }
 
@@ -583,11 +583,11 @@ class AuthController extends Controller
                 'password' => bcrypt($request->password),
             ]);
         } catch (\Exception $e) {
-            flash()->error("Internal Server Error");
+            flash()->error(__('messages.internal_server_error'));
             return back();
         }
 
-        flash()->success('success');
+        flash()->success(__('messages.password_changed'));
         return back();
     }
 
@@ -599,7 +599,7 @@ class AuthController extends Controller
             'mobile' => 'required|unique:users,mobile|max:100|min:6'
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
   
         $user = auth()->user(); 
@@ -613,32 +613,32 @@ class AuthController extends Controller
                 'code' => 1111,
             ]);
             $this->notification->create([
-                'title' => 'verified your account',
-                'content' => "your code: #$user->code",
+                'title' => __('messages.verified_your_account'),
+                'content' => __('messages.your_code_is', ['code' => $user->code]),
                 'user_id' => $user->id,
             ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            return responseJson(500, "Internal Server Error");
+            return responseJson(500, __('messages.internal_server_error'));
         }
 
         // dispatch(new SendSmsJob($user->mobile, (string) $user->code))->delay(now()->addMinute());
         dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
 
-        return responseJson(200, "success");
+        return responseJson(200, __('messages.success'));
     }
 
     public function logout()
     {
         auth()->logout();
-        flash()->success('success');
+        flash()->success(__('messages.success_logged_out'));
         return back();
     }
 
     public function refresh()
     {
-        return responseJson(200, "success", auth()->refresh());
+        return responseJson(200, __('messages.success'), auth()->refresh());
     }
     
     public function sendResetCodePasswordForm(Request $request)
@@ -657,26 +657,26 @@ class AuthController extends Controller
         
         $user = $this->user->where('mobile', $request->data)->orWhere('email', $request->data)->first();
         if (!$user) {
-            flash()->error("User not found");
+            flash()->error(__('messages.user_not_found'));
             return back();
         }
 
         try {
             $user->update(['code' => 1111]);
             $this->notification->create([
-                'title' => 'verified your account',
-                'content' => "your code: #$user->code",
+                'title' => __('messages.verified_your_account'),
+                'content' => __('messages.your_code_is', ['code' => $user->code]),
                 'user_id' => $user->id,
             ]);
         } catch (\Exception $e) {
-            flash()->error("Internal Server Error");
+            flash()->error(__('messages.internal_server_error'));
             return back();
         }
 
         // dispatch(new SendSmsJob($user->mobile, (string) $user->code))->delay(now()->addMinute());
         dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
 
-        flash()->success("Reset code sent successfully.");
+        flash()->success(__('messages.reset_code_sent'));
         return redirect(route('user/reset-password/form', $user->id));
     }
 
@@ -684,7 +684,7 @@ class AuthController extends Controller
     {
         $user = $this->user->where('id', $id)->first();
         if (!$user || !is_null($user->deleted_at)) {
-            flash()->error(401, "This Account Not Activated, Please Contact Technical Support");
+            flash()->error(__('messages.account_not_activated'));
             return back();
         }
         return view('front.auth.login.resetPasswordForm', compact('id'));
@@ -702,7 +702,7 @@ class AuthController extends Controller
 
         $user = $this->user->where('id', $id)->first();
         if (!$user || !is_null($user->deleted_at) || $user->code != $request->code) {
-            flash()->error("This Account Not Activated, Please Contact Technical Support");
+            flash()->error(__('messages.account_not_activated'));
             return back();
         }
         try {
@@ -711,11 +711,11 @@ class AuthController extends Controller
                 'code' => null, 
             ]);
         } catch (\Exception $e) {
-            flash()->error("Internal Server Error");
+            flash()->error(__('messages.internal_server_error'));
             return back();
         }
 
-        flash()->success("Password reset successfully.");
+        flash()->success(__('messages.password_reset'));
         return redirect()->to(route('user/loginForm'));
     }
 

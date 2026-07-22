@@ -29,7 +29,7 @@ class NewOrderMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Order Mail',
+            subject: __('messages.email_new_order'),
         );
     }
 

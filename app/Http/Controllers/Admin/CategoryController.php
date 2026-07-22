@@ -25,7 +25,7 @@ class CategoryController extends Controller
             $categories = $this->categories->index($offset, $limit, $search);
             return view('admin.categories.index', compact('categories', 'search'));
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -39,10 +39,10 @@ class CategoryController extends Controller
     {
         try{
             $this->categories->store($request);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -57,10 +57,10 @@ class CategoryController extends Controller
     {
         try{
             $this->categories->update($request, $id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -69,10 +69,10 @@ class CategoryController extends Controller
     {
         try{
             $this->categories->activate($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -81,10 +81,10 @@ class CategoryController extends Controller
     {
         try{
             $this->categories->delete($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -130,10 +130,10 @@ class CategoryController extends Controller
     {
         try{
             $this->categories->back($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }

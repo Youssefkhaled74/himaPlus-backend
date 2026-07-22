@@ -1,7 +1,7 @@
 <x-mail::message>
-# Hello,
+# {{ __('emails.hello') }},
 
-the code to verify your account : {{ $code }} .
+{{ __('emails.verify_code_message') }} {{ $code }} .
 
 {{-- <x-mail::button :url="''">
 Button Text
@@ -11,6 +11,6 @@ Button Text
 ادخل على الموقع
 @endcomponent --}}
 
-Thanks,<br>
-Hema Pules
+{{ __('emails.thanks') }},<br>
+{{ __('emails.brand_name') }}
 </x-mail::message>

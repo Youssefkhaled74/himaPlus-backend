@@ -26,7 +26,7 @@ class ProductController extends Controller
             $products = $this->products->index($offset, $limit, $search, $lowStock);
             return view('admin.products.index', compact('products', 'search', 'lowStock'));
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -40,10 +40,10 @@ class ProductController extends Controller
     {
         try{
             $this->products->store($request);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -58,10 +58,10 @@ class ProductController extends Controller
     {
         try{
             $this->products->update($request, $id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -70,10 +70,10 @@ class ProductController extends Controller
     {
         try{
             $this->products->activate($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -82,10 +82,10 @@ class ProductController extends Controller
     {
         try{
             $this->products->delete($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -131,10 +131,10 @@ class ProductController extends Controller
     {
         try{
             $this->products->back($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }

@@ -77,9 +77,9 @@ class ProductController extends Controller
             })
             ->active()->unArchive()->with(['category', 'provider'])->withCount(['ratings'])->withAvg('ratings', 'rating')
             ->offset($offset)->limit(PAGINATION_COUNT)->get();
-            return responseJson(200, "success", $records);
+            return responseJson(200, __('messages.success'), $records);
         }catch(\Exception $e){
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
     
@@ -88,7 +88,7 @@ class ProductController extends Controller
         $record = $this->product->where('id', $id)->with([
             'provider', 'category', 'origin', 'ratings.user'
         ])->withCount(['ratings'])->withAvg('ratings', 'rating')->first();
-        return responseJson(200, "success", $record);
+        return responseJson(200, __('messages.success'), $record);
     }
     
     public function store(Request $request)
@@ -123,13 +123,13 @@ class ProductController extends Controller
                 'is_special'     => ['nullable', 'in:1,0'],
             ]);
             if ($validator->fails()) {
-                return responseJson(400, "Bad Request", $validator->errors()->first());
+                return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
             }
             $request->merge(['provider_id' => auth()->user()->id]);
             $this->productRepository->store($request);
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
     
@@ -165,16 +165,16 @@ class ProductController extends Controller
                 'is_special'     => ['nullable', 'in:1,0'],
             ]);
             if ($validator->fails()) {
-                return responseJson(400, "Bad Request", $validator->errors()->first());
+                return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
             }
             
             $record = $this->product->where('id', $id)->where('provider_id', auth()->user()->id)->first();
             if ($record && !is_null($record)) {
                 $this->productRepository->update($request, $id);
             }
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
     
@@ -185,9 +185,9 @@ class ProductController extends Controller
             if ($record && !is_null($record)) {
                 $this->productRepository->activate($id);
             }
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 

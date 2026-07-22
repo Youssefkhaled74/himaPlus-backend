@@ -50,7 +50,7 @@
                                     <div class="col-sm-12 col-md-6">
                                         <div id="scroll-horizontal_filter" class="dataTables_filter">
                                             <label>
-                                                <input type="search" class="form-control form-control-sm data_search" placeholder="Search" aria-controls="scroll-horizontal" />
+                                                <input type="search" class="form-control form-control-sm data_search" placeholder="{{ __('crud.search_placeholder', ['entity' => __('admin.nav.platform_info')]) }}" aria-controls="scroll-horizontal" />
                                             </label>
                                             <!-- <label>
                                                 <div class="form-group">
@@ -69,10 +69,10 @@
                                                 <table id="scroll-horizontal" class="table nowrap align-middle dataTable no-footer" style="width: 100%" aria-describedby="scroll-horizontal_info">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">ID</th>
-                                                            <th class="text-center">Name</th>
-                                                            <th class="text-center">Activation</th>
-                                                            <th class="text-center">Actions</th>
+                                                             <th class="text-center">{{ __('crud.id') }}</th>
+                                                             <th class="text-center">{{ __('crud.name') }}</th>
+                                                             <th class="text-center">{{ __('admin.pages.common.activation') }}</th>
+                                                             <th class="text-center">{{ __('crud.actions') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tableShowData">
@@ -86,20 +86,20 @@
                                                                         <img src="{{asset($record->img)}}" alt="record image" class="img-fluid img-40 rounded-circle blur-up lazyloaded" width="100">
                                                                     </td> -->
                                                                     <?php
-                                                                        if($record->is_activate == 1){$activate = '<span class="badge bg-info-subtle text-info">active</span>';}
-                                                                        else{$activate = '<span class="badge bg-info-subtle text-danger">un active</span>';}
-                                                                    ?>
-                                                                    <td class="text-center">{!! $activate !!}</td>
-                                                                    <td class="text-center">
-                                                                        <div class="dropdown d-inline-block">
-                                                                            <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                                <i class="ri-more-fill align-middle"></i>
-                                                                            </button>
-                                                                            <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
-                                                                                <li>
-                                                                                    <button class="dropdown-item edit-item-btn openBackFrom" data-bs-toggle="modal" data-bs-target="#myModalBack" data-id="{{$record->id}}">
-                                                                                        <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> back
-                                                                                    </button>
+                                                                         if($record->is_activate == 1){$activate = '<span class="badge bg-info-subtle text-info">' . __('admin.pages.common.active') . '</span>';}
+                                                                         else{$activate = '<span class="badge bg-info-subtle text-danger">' . __('admin.pages.common.inactive') . '</span>';}
+                                                                     ?>
+                                                                     <td class="text-center">{!! $activate !!}</td>
+                                                                     <td class="text-center">
+                                                                         <div class="dropdown d-inline-block">
+                                                                             <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                                 <i class="ri-more-fill align-middle"></i>
+                                                                             </button>
+                                                                             <ul class="dropdown-menu dropdown-menu-end" style="text-align: end;">
+                                                                                 <li>
+                                                                                     <button class="dropdown-item edit-item-btn openBackFrom" data-bs-toggle="modal" data-bs-target="#myModalBack" data-id="{{$record->id}}">
+                                                                                         <i class="ri-pencil-fill align-bottom me-2 text-muted"></i> {{ __('buttons.back') }}
+                                                                                     </button>
                                                                                 </li>
                                                                             </ul>
                                                                         </div>
@@ -111,13 +111,13 @@
                                                 </table>
 
                                                 <div style="margin-top: 20px; font-weight: 600; font-size: 16px;">
-                                                    Showing 1 to <span id="showItems"></span> of <span>{{App\Models\Info::archive()->count()}}</span> entries
+                                                    {{ __('admin.pages.common.showing_entries', ['from' => 1, 'to' => App\Models\Info::archive()->count(), 'total' => App\Models\Info::archive()->count()]) }}
                                                 </div>
                                                 <div class="ltn__pagination-area text-center mt-5">
                                                 
                                                     <div class="ltn__pagination text-center">
                                                         <div id="load_more">
-                                                            <button type="button" name="load_more_button" style="width: 350px;" class="btn btn-info form-control px-5" data-id="'.$last_id.'" id="load_more_button">Read more</button>
+                                                             <button type="button" name="load_more_button" style="width: 350px;" class="btn btn-info form-control px-5" data-id="'.$last_id.'" id="load_more_button">{{ __('admin.pages.common.load_more') }}</button>
                                                         </div>
                                                     </div>
                                 
@@ -172,11 +172,11 @@
                                                                     {{ csrf_field() }}
                                                                     <lord-icon src="https://cdn.lordicon.com/tdrtiskw.json"  trigger="loop" colors="primary:#f7b84b,secondary:#405189" style="width:130px;height:130px"></lord-icon>
                                                                     <div class="mt-4 pt-4">
-                                                                        <h4>! Back Confirmation</h4>
-                                                                        <p class="text-muted">Are You Sure To Update This Record.</p>
-                                                                        <input id="back_record_id" name="record_id" type="hidden">
-                                                                        <button type="submit" class="btn btn-warning">
-                                                                            Continue
+                                                                         <h4>{{ __('admin.pages.common.back_confirmation') }}</h4>
+                                                                         <p class="text-muted">{{ __('admin.pages.common.back_confirm_message') }}</p>
+                                                                         <input id="back_record_id" name="record_id" type="hidden">
+                                                                         <button type="submit" class="btn btn-warning">
+                                                                             {{ __('buttons.continue') }}
                                                                         </button>
                                                                     </div>
                                                                             
@@ -226,7 +226,7 @@
         $(document).on('click', '#load_more_button', function() {
             var urlPath = `{{ route("admin/info/pagination/archives")}}/${offset}/${limit}`;
             event.preventDefault();
-            $('#load_more_button').html('<b>Loading... </b>');
+            $('#load_more_button').html('<b>{{ __("admin.pages.common.loading") }} </b>');
             search_in_data(q, urlPath, 1);
         });
 

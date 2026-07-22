@@ -411,7 +411,7 @@
                                 name="date_from"
                                 value="{{ $dateFrom }}"
                                 class="form-control flatpickr-input"
-                                placeholder="{{ trans_or_fallback('', '') }}"
+                                placeholder="{{ __('forms.date') }}"
                                 style="width:auto;min-width:130px;"
                                 data-input>
                             <input
@@ -419,7 +419,7 @@
                                 name="date_to"
                                 value="{{ $dateTo }}"
                                 class="form-control flatpickr-input"
-                                placeholder="{{ trans_or_fallback('', '') }}"
+                                placeholder="{{ __('forms.date') }}"
                                 style="width:auto;min-width:130px;"
                                 data-input>
 

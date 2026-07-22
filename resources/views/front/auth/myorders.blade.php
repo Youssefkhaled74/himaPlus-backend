@@ -589,7 +589,7 @@
     @include('flash::message')
 
     <nav class="co-breadcrumb">
-        <a href="{{ route('user/dashboard') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
+        <a href="{{ route('user/dashboard') }}">{{ __('products.home') }}</a>
         <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
         <span class="active">{{ __('products.my_orders') }}</span>
     </nav>
@@ -633,24 +633,24 @@
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-4">
             <div class="co-card co-stat">
-                <p class="co-stat-label">{{ $isAr ? 'إجمالي الطلبات' : 'Total Orders' }}</p>
+                <p class="co-stat-label">{{ __('products.total_orders') }}</p>
                 <h4 class="co-stat-value">{{ number_format($orderCount) }}</h4>
             </div>
         </div>
 
         <div class="col-6 col-md-4">
             <div class="co-card co-stat">
-                <p class="co-stat-label">{{ $isAr ? 'التبويب الحالي' : 'Current Tab' }}</p>
+                <p class="co-stat-label">{{ __('products.current_tab') }}</p>
                 <h4 class="co-stat-value" style="font-size: 24px;">{{ $currentTabLabel }}</h4>
             </div>
         </div>
 
         <div class="col-12 col-md-4">
             <div class="co-card co-stat">
-                <p class="co-stat-label">{{ $isAr ? 'الفلاتر الحالية' : 'Active Filters' }}</p>
+                <p class="co-stat-label">{{ __('products.active_filters') }}</p>
                 <h4 class="co-stat-value" style="font-size: 24px;">
                     @if($paymentStatus !== '' || $status !== '')
-                        {{ $isAr ? 'مفلتر' : 'Filtered' }}
+                        {{ __('products.filtered') }}
                     @else
                         {{ __('nav.all') }}
                     @endif
@@ -664,7 +664,7 @@
             <div>
                 <h5 class="co-panel-title">{{ __('products.filter') }}</h5>
                 <p class="co-panel-subtitle">
-                    {{ $isAr ? 'اختر نوع الطلب أو حالة الدفع لعرض الطلبات المطلوبة.' : 'Choose order type or payment/status filter to view the required orders.' }}
+                    {{ __('products.filter_description') }}
                 </p>
             </div>
 
@@ -733,9 +733,9 @@
             <section class="co-card">
                 <div class="co-panel-head">
                     <div>
-                        <h5 class="co-panel-title">{{ $isAr ? 'قائمة الطلبات' : 'Orders List' }}</h5>
+                        <h5 class="co-panel-title">{{ __('products.orders_list') }}</h5>
                         <p class="co-panel-subtitle">
-                            {{ $isAr ? 'كل الطلبات المطابقة للتبويب والفلاتر الحالية.' : 'All orders matching the current tab and filters.' }}
+                            {{ __('products.orders_list_desc') }}
                         </p>
                     </div>
 
@@ -854,9 +854,9 @@
             <section class="co-card mb-4">
                 <div class="co-panel-head">
                     <div>
-                        <h5 class="co-panel-title">{{ $isAr ? 'ملخص العرض' : 'View Summary' }}</h5>
+                        <h5 class="co-panel-title">{{ __('products.view_summary') }}</h5>
                         <p class="co-panel-subtitle">
-                            {{ $isAr ? 'ملخص سريع للتبويب والفلاتر الحالية.' : 'Quick summary for current tab and filters.' }}
+                            {{ __('products.view_summary_desc') }}
                         </p>
                     </div>
                 </div>
@@ -864,15 +864,15 @@
                 <div class="co-body">
                     <table class="co-mini-table">
                         <tr>
-                            <td>{{ $isAr ? 'التبويب' : 'Tab' }}</td>
+                            <td>{{ __('products.tab') }}</td>
                             <td>{{ $currentTabLabel }}</td>
                         </tr>
                         <tr>
-                            <td>{{ $isAr ? 'عدد الطلبات' : 'Orders Count' }}</td>
+                            <td>{{ __('products.orders_count') }}</td>
                             <td>{{ number_format($orderCount) }}</td>
                         </tr>
                         <tr>
-                            <td>{{ $isAr ? 'الدفع' : 'Payment' }}</td>
+                            <td>{{ __('products.payment') }}</td>
                             <td>
                                 @if($paymentStatus === '1')
                                     {{ __('products.paid') }}
@@ -884,7 +884,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>{{ $isAr ? 'الحالة' : 'Status' }}</td>
+                            <td>{{ __('nav.status') }}</td>
                             <td>{{ $status !== '' ? $status : __('nav.all') }}</td>
                         </tr>
                     </table>
@@ -894,9 +894,9 @@
             <section class="co-card">
                 <div class="co-panel-head">
                     <div>
-                        <h5 class="co-panel-title">{{ $isAr ? 'إجراءات سريعة' : 'Quick Actions' }}</h5>
+                        <h5 class="co-panel-title">{{ __('nav.quick_actions') }}</h5>
                         <p class="co-panel-subtitle">
-                            {{ $isAr ? 'روابط مهمة لمتابعة الشراء.' : 'Useful links to continue shopping.' }}
+                            {{ __('products.quick_actions_desc') }}
                         </p>
                     </div>
                 </div>

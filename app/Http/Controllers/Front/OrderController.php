@@ -102,7 +102,7 @@ class OrderController extends Controller
     public function order($id, $from = null)
     {
         if (!is_null($from)) {
-            flash()->success("success");
+            flash()->success(__('messages.success'));
             return redirect()->route('user/get/order', $id);
         }
 
@@ -121,9 +121,9 @@ class OrderController extends Controller
             'coupon' => 'required|exists:coupons,name',
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
-        return responseJson(200, "success", $this->coupon->where('name', $request->coupon)->active()->unArchive()->first());
+        return responseJson(200, __('messages.success'), $this->coupon->where('name', $request->coupon)->active()->unArchive()->first());
     }
 
     public function makeOrder(Request $request)
@@ -204,14 +204,14 @@ class OrderController extends Controller
                 }
                 try {
                     $notificationArr[0] = [
-                        'title' => 'new order.', 'content' => "your order sended to the provider", 'user_id' => $user->id,
+                        'title' => __('messages.new_order_received'), 'content' => __('messages.order_sent_to_provider'), 'user_id' => $user->id,
                         'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                         'created_at' => now(), 'updated_at' => now()
                     ];
 
                     if (!is_null($order->provider_id)) {
                         $notificationArr[1] = [
-                            'title' => 'new order.', 'content' => "you have new order", 'user_id' => $order->provider_id,
+                            'title' => __('messages.new_order_received'), 'content' => __('messages.new_order_received'), 'user_id' => $order->provider_id,
                             'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                             'created_at' => now(), 'updated_at' => now()
                         ];
@@ -244,24 +244,24 @@ class OrderController extends Controller
                     $errorDetails = null;
                     $payment = $this->arbPaymentService->generatePaymentUrl($createdOrder, $user, 'pc', $request, $errorDetails);
                     if (!empty($payment['payment_url'])) {
-                        if (count($createdOrderIds) > 1) {
-                            session()->flash('info', 'Multiple orders were created. You are being redirected to pay the first order now.');
-                        }
-                        return $this->redirectToArbGateway($payment);
+                    if (count($createdOrderIds) > 1) {
+                        session()->flash('info', __('messages.multiple_orders_created'));
                     }
-                    Log::warning('ARB payment link generation failed after order creation', [
-                        'order_id' => $createdOrder->id,
-                        'error_details' => $errorDetails,
-                    ]);
-                    flash()->error("order created, but online payment link generation failed");
+                    return $this->redirectToArbGateway($payment);
                 }
+                Log::warning('ARB payment link generation failed after order creation', [
+                    'order_id' => $createdOrder->id,
+                    'error_details' => $errorDetails,
+                ]);
+                flash()->error(__('messages.order_created_payment_failed'));
             }
+        }
 
-            flash()->success("success");
-            return redirect(route('user/myorders', 'all'));
-        }catch(\Exception $e){
-            DB::rollBack();
-            flash()->error("there is some thing wrong , please contact technical support");
+        flash()->success(__('messages.success'));
+        return redirect(route('user/myorders', 'all'));
+    }catch(\Exception $e){
+        DB::rollBack();
+        flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -311,13 +311,13 @@ class OrderController extends Controller
             ]);
             
             $notificationArr[0] = [
-                'title' => 'new order.', 'content' => "your order sended to the provider", 'user_id' => $user->id, 
+                'title' => __('messages.new_order_received'), 'content' => __('messages.order_sent_to_provider'), 'user_id' => $user->id, 
                 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                 'created_at' => now(), 'updated_at' => now()
             ];
             if (!is_null($order->provider_id)) {
                 $notificationArr[1] = [
-                    'title' => 'new order.', 'content' => "you have new order", 'user_id' => $order->provider_id, 
+                    'title' => __('messages.new_order_received'), 'content' => __('messages.new_order_received'), 'user_id' => $order->provider_id, 
                     'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
@@ -335,11 +335,11 @@ class OrderController extends Controller
             );
 
             DB::commit();
-            flash()->success("success");
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
             DB::rollBack();
-            flash()->success("there is some thing wrong , please contact technical support");
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -383,12 +383,12 @@ class OrderController extends Controller
             ]);
             
             $notificationArr[0] = [
-                'title' => 'new order.', 'content' => "your order sended to the provider", 'user_id' => $user->id, 
+                'title' => __('messages.new_order_received'), 'content' => __('messages.order_sent_to_provider'), 'user_id' => $user->id, 
                 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                 'created_at' => now(), 'updated_at' => now()
             ];
             if (!is_null($order->provider_id)) {
-                $notificationArr[1] = ['title' => 'new order.', 'content' => "you have new order", 'user_id' => $order->provider_id, 
+                $notificationArr[1] = ['title' => __('messages.new_order_received'), 'content' => __('messages.new_order_received'), 'user_id' => $order->provider_id, 
                     'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
@@ -412,11 +412,11 @@ class OrderController extends Controller
             // } catch (\Exception $e) { dd($e); }
 
             DB::commit();
-            flash()->success("success");
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
             DB::rollBack();
-            flash()->error("there is some thing wrong , please contact technical support");
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -450,14 +450,14 @@ class OrderController extends Controller
                     'reason_for_partial' => $request->reason_for_partial ?? null,
                 ]);
             } else {
-                flash()->error("not found");
+                flash()->error(__('messages.not_found', ['item' => __('messages.order_not_found')]));
                 return back();
             }
 
-            flash()->success("success");
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error("there is some thing wrong , please contact technical support");
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -491,7 +491,7 @@ class OrderController extends Controller
             $user = auth()->user();
             if (!(int)$request->timeline_no == 6) {
                 if (!(int)$user->user_type == 2) {
-                    flash()->error("this action for the providers only");
+                    flash()->error(__('messages.this_action_providers_only'));
                     return back();
                 }
             }
@@ -524,7 +524,7 @@ class OrderController extends Controller
                 ->first();
 
             if (!$order) {
-                flash()->error('order not found or access denied');
+                flash()->error(__('messages.not_found', ['item' => __('messages.order_not_found')]));
                 return back();
             }
 
@@ -532,7 +532,7 @@ class OrderController extends Controller
             $timeline_no = (int)$request->timeline_no;
             $pre_timeline_no = $timeline_no - 1;
             if (in_array(12, $timeline_no_arr)) {
-                flash()->error("this order was deleted.");
+                flash()->error(__('messages.deleted_order'));
                 return back();
             }
             // if (in_array($pre_timeline_no, $timeline_no_arr)) {
@@ -546,21 +546,21 @@ class OrderController extends Controller
                     
                     $step = timelineName($timeline_no);
                     $this->notification->query()->insert([
-                        'title' => "your order has been $step.", 'content' => "your order #$order->id has been $step.", 'user_id' => $order->user_id, 
+                        'title' => __('messages.order_updates', ['step' => $step]), 'content' => __('messages.order_updates', ['step' => $step]), 'user_id' => $order->user_id, 
                         'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                         'created_at' => now(), 'updated_at' => now()
                     ]);
 
                     $client = $order->user;
-                    $this->targetOrderUpdatesMailJob($client?->email, "your order #$order->id has been $step.");
+                    $this->targetOrderUpdatesMailJob($client?->email, __('messages.order_updates', ['step' => $step]));
                     $this->targetFairbaseServicePushNotification(
-                        $client?->fcm_token, "your order has been $step.", "your order #$order->id has been $step.", 1, $order->id
+                        $client?->fcm_token, __('messages.order_updates', ['step' => $step]), __('messages.order_updates', ['step' => $step]), 1, $order->id
                     );
 
                     $provider = $user;
-                    $this->targetOrderUpdatesMailJob($provider?->email, "your order #$order->id has been $step.");
+                    $this->targetOrderUpdatesMailJob($provider?->email, __('messages.order_updates', ['step' => $step]));
                     $this->targetFairbaseServicePushNotification(
-                        $provider?->fcm_token, "your order has been $step.", "your order #$order->id has been $step.", 1, $order->id
+                        $provider?->fcm_token, __('messages.order_updates', ['step' => $step]), __('messages.order_updates', ['step' => $step]), 1, $order->id
                     );
                 }
             // }else {
@@ -574,7 +574,7 @@ class OrderController extends Controller
             }
 
             DB::commit();
-            flash()->success("success");
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
             DB::rollBack();
@@ -584,7 +584,7 @@ class OrderController extends Controller
                 'timeline_no' => $request->timeline_no ?? null,
                 'message' => $e->getMessage(),
             ]);
-            flash()->error("there is something wrong , please contact technical support");
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -597,7 +597,7 @@ class OrderController extends Controller
             $order = $this->order->where('id', $id)->where('user_id', $user->id)->with(['timeline', 'partial_receive'])->first();
             $timeline_no_arr = array_column($order->timeline->toArray(), 'timeline_no');
             if (in_array(12, $timeline_no_arr)) {
-                flash()->error("this order was deleted.");
+                flash()->error(__('messages.deleted_order'));
                 return back();
             }
             if ($order) {
@@ -607,14 +607,14 @@ class OrderController extends Controller
                 }
                 $order->update($data);
             } else {
-                flash()->error("not found");
+                flash()->error(__('messages.not_found', ['item' => __('messages.order_not_found')]));
                 return back();
             }
 
-            flash()->success("success");
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error("there is some thing wrong , please contact technical support");
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -627,15 +627,15 @@ class OrderController extends Controller
             DB::beginTransaction();
             if ($order) {
                 if ($order->user_id != $user->id && $order->provider_id != $user->id) {
-                    flash()->error('not found');
+                    flash()->error(__('messages.not_found', ['item' => __('messages.order_not_found')]));
                     return back();
                 }
                 $timeline_no_arr = array_column($order->timeline->toArray(), 'timeline_no');
                 if (in_array(2, $timeline_no_arr)) {
-                    flash()->error('can’t cancel because this order is already being processed.');
+                    flash()->error(__('messages.cant_cancel_processing'));
                     return back();
                 } elseif ((int)$user->user_type == 2 && (int)$order->payment_status == 1) {
-                    flash()->error('can’t cancel because this order is paid, please contact technical support.');
+                    flash()->error(__('messages.cant_cancel_paid'));
                     return back();
                 } else {
                     // $order->items()->delete();
@@ -648,40 +648,40 @@ class OrderController extends Controller
                     ]);
                 }
             } else {
-                flash()->error('not found');
+                flash()->error(__('messages.not_found', ['item' => __('messages.order_not_found')]));
                 return back();
             }
 
             $notificationArr[0] = [
-                'title' => "order canceled.", 'content' => "the order no #$order->id has been canceled.", 'user_id' => $order->user_id, 
+                'title' => __('messages.order_canceled_title'), 'content' => __('messages.order_canceled_content', ['id' => $order->id]), 'user_id' => $order->user_id, 
                 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                 'created_at' => now(), 'updated_at' => now()
             ];
             if (!is_null($order->provider_id)) {
                 $notificationArr[1] = [
-                    'title' => "order canceled.", 'content' => "the order no #$order->id has been canceled.", 'user_id' => $order->provider_id, 
+                    'title' => __('messages.order_canceled_title'), 'content' => __('messages.order_canceled_content', ['id' => $order->id]), 'user_id' => $order->provider_id, 
                     'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
                 $provider = $order->provider;
-                $this->targetOrderUpdatesMailJob($provider?->email, "the order no #$order->id has been canceled.");
+                $this->targetOrderUpdatesMailJob($provider?->email, __('messages.order_canceled_content', ['id' => $order->id]));
                 $this->targetFairbaseServicePushNotification(
-                    $provider?->fcm_token, "order canceled.", "the order no #$order->id has been canceled.", 1, $order->id
+                    $provider?->fcm_token, __('messages.order_canceled_title'), __('messages.order_canceled_content', ['id' => $order->id]), 1, $order->id
                 );
             }
             $this->notification->query()->insert($notificationArr);
 
-            $this->targetOrderUpdatesMailJob($user?->email, "the order no #$order->id has been canceled.");
+            $this->targetOrderUpdatesMailJob($user?->email, __('messages.order_canceled_content', ['id' => $order->id]));
             $this->targetFairbaseServicePushNotification(
-                $user?->fcm_token, "order canceled.", "the order no #$order->id has been canceled.", 1, $order->id
+                $user?->fcm_token, __('messages.order_canceled_title'), __('messages.order_canceled_content', ['id' => $order->id]), 1, $order->id
             );
 
             DB::commit();
-            flash()->success('success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
             DB::rollBack();
-            flash()->error("there is something wrong , please contact technical support");
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -692,23 +692,23 @@ class OrderController extends Controller
             $user = auth()->user();
             $order = $this->order->where('id', $id)->where('user_id', $user->id)->with(['timeline'])->first();
             if (is_null($order)) {
-                flash()->error("not found");
+                flash()->error(__('messages.not_found', ['item' => __('messages.order_not_found')]));
                 return back();
             }
             if ($order->payment_status == 1) {
-                flash()->error("this order is paid");
+                flash()->error(__('messages.order_paid'));
                 return back();
             }
             $timeline_no_arr = array_column($order->timeline->toArray(), 'timeline_no');
             if (in_array(12, $timeline_no_arr)) {
-                flash()->error("this order was deleted.");
+                flash()->error(__('messages.deleted_order'));
                 return back();
             }
             $device_type = 'pc';
             $errorDetails = null;
             $payment = $this->arbPaymentService->generatePaymentUrl($order, $user, $device_type, request(), $errorDetails);
             if (!$payment) {
-                flash()->error("arb link generation failed");
+                flash()->error(__('messages.arb_link_failed'));
                 Log::warning('ARB payment link generation failed from onlinePayment route', [
                     'order_id' => $order->id,
                     'error_details' => $errorDetails,
@@ -717,7 +717,7 @@ class OrderController extends Controller
             }
             return $this->redirectToArbGateway($payment);
         } catch (\Exception $ex) {
-            flash()->error("there is something wrong , please contact technical support");
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }

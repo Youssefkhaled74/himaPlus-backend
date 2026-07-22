@@ -2,7 +2,7 @@
 
 <!-- title page -->
 @section('title')
-    <title>Hema - Smart Medical Procurement</title>
+    <title>{{ __('auth.title') }}</title>
 @endsection
 
 <!-- custom page -->
@@ -35,8 +35,8 @@
                                 <form method="post" action="{{ route('user/account-check', $user->id) }}">
                                     @csrf
                                     <div class="card-body p-4 p-lg-5 text-center">
-                                        <h5 class="fw-bold mb-2">Verify Your Number</h5>
-                                        <p class="text-body-secondary small mb-4">Enter the 4-digit code sent to your phone and email<br>number.</p>
+                                        <h5 class="fw-bold mb-2">{{ __('auth.verify_your_number') }}</h5>
+                                        <p class="text-body-secondary small mb-4">{!! __('auth.enter_code_sent') !!}</p>
 
                                         <div class="d-flex justify-content-center gap-3 mb-3 hp-otp" data-filled="1">
                                             <input type="text" class="hp-otp-input" maxlength="1" value="">
@@ -47,11 +47,11 @@
                                         <input name="code" id="hp-otp-input-val" type="hidden" value="">
 
                                         <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <a class="hp-link small" href="{{ route('user/regenerate-code', $user->id) }}" id="resendFilled">Resend Code</a>
+                                            <a class="hp-link small" href="{{ route('user/regenerate-code', $user->id) }}" id="resendFilled">{{ __('auth.resend_code') }}</a>
                                             <div class="small text-primary" id="timerFilled">60:00</div>
                                         </div>
 
-                                        <button class="btn hp-btn-gradient w-100">Verify</button>
+                                        <button class="btn hp-btn-gradient w-100">{{ __('buttons.verify') }}</button>
                                     </div>
                                 </form>
                             @endisset

@@ -1,5 +1,5 @@
 <x-mail::message>
-# Hello,
+# {{ __('emails.hello') }},
 
 {{ $message }}.
 
@@ -7,6 +7,6 @@
 ادخل على الموقع
 @endcomponent --}}
 
-Thanks,<br>
-Hema Pules
+{{ __('emails.thanks') }},<br>
+{{ __('emails.brand_name') }}
 </x-mail::message>

@@ -131,16 +131,16 @@
 
             <ul class="nav nav-tabs mb-4">
                 <li class="nav-item">
-                    <a class="nav-link {{ $activeTab === 'account' ? 'active' : '' }}" href="{{ route('admin/users/show', $user->id) }}?tab=account">Account</a>
+                    <a class="nav-link {{ $activeTab === 'account' ? 'active' : '' }}" href="{{ route('admin/users/show', $user->id) }}?tab=account">{{ __('admin.pages.users.account') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ $activeTab === 'customer-orders' ? 'active' : '' }}" href="{{ route('admin/users/show', $user->id) }}?tab=customer-orders">Customer Orders</a>
+                    <a class="nav-link {{ $activeTab === 'customer-orders' ? 'active' : '' }}" href="{{ route('admin/users/show', $user->id) }}?tab=customer-orders">{{ __('admin.pages.users.customer_orders') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ $activeTab === 'vendor-orders' ? 'active' : '' }}" href="{{ route('admin/users/show', $user->id) }}?tab=vendor-orders">Vendor Orders</a>
+                    <a class="nav-link {{ $activeTab === 'vendor-orders' ? 'active' : '' }}" href="{{ route('admin/users/show', $user->id) }}?tab=vendor-orders">{{ __('admin.pages.users.vendor_orders') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ $activeTab === 'products' ? 'active' : '' }}" href="{{ route('admin/users/show', $user->id) }}?tab=products">Vendor Products</a>
+                    <a class="nav-link {{ $activeTab === 'products' ? 'active' : '' }}" href="{{ route('admin/users/show', $user->id) }}?tab=products">{{ __('admin.pages.users.vendor_products') }}</a>
                 </li>
             </ul>
 
@@ -191,7 +191,7 @@
                         <a href="{{ route('admin/users/show', $user->id) }}?tab=customer-orders" class="text-decoration-none text-reset">
                             <div class="card admin-content-card h-100">
                                 <div class="card-body">
-                                    <div class="text-muted small mb-1">Customer Orders</div>
+                                    <div class="text-muted small mb-1">{{ __('admin.pages.users.customer_orders') }}</div>
                                     <h4 class="mb-0">{{ $customerOrdersCount }}</h4>
                                 </div>
                             </div>
@@ -201,7 +201,7 @@
                         <a href="{{ route('admin/users/show', $user->id) }}?tab=vendor-orders" class="text-decoration-none text-reset">
                             <div class="card admin-content-card h-100">
                                 <div class="card-body">
-                                    <div class="text-muted small mb-1">Vendor Orders</div>
+                                    <div class="text-muted small mb-1">{{ __('admin.pages.users.vendor_orders') }}</div>
                                     <h4 class="mb-0">{{ $vendorOrdersCount }}</h4>
                                 </div>
                             </div>
@@ -211,7 +211,7 @@
                         <a href="{{ route('admin/users/show', $user->id) }}?tab=products" class="text-decoration-none text-reset">
                             <div class="card admin-content-card h-100">
                                 <div class="card-body">
-                                    <div class="text-muted small mb-1">Vendor Products</div>
+                                    <div class="text-muted small mb-1">{{ __('admin.pages.users.vendor_products') }}</div>
                                     <h4 class="mb-0">{{ $productsCount }}</h4>
                                 </div>
                             </div>
@@ -223,8 +223,8 @@
             @if($activeTab === 'customer-orders')
                 <div class="card admin-content-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Customer Orders</h5>
-                        <small class="text-muted">Total: {{ $customerOrders->total() }}</small>
+                        <h5 class="mb-0">{{ __('admin.pages.users.customer_orders') }}</h5>
+                        <small class="text-muted">{{ __('admin.pages.common.total') }}: {{ $customerOrders->total() }}</small>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -274,8 +274,8 @@
             @if($activeTab === 'vendor-orders')
                 <div class="card admin-content-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Vendor Orders</h5>
-                        <small class="text-muted">Total: {{ $vendorOrders->total() }}</small>
+                        <h5 class="mb-0">{{ __('admin.pages.users.vendor_orders') }}</h5>
+                        <small class="text-muted">{{ __('admin.pages.common.total') }}: {{ $vendorOrders->total() }}</small>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -325,8 +325,8 @@
             @if($activeTab === 'products')
                 <div class="card admin-content-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Vendor Products</h5>
-                        <small class="text-muted">Total: {{ $products->total() }}</small>
+                        <h5 class="mb-0">{{ __('admin.pages.users.vendor_products') }}</h5>
+                        <small class="text-muted">{{ __('admin.pages.common.total') }}: {{ $products->total() }}</small>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">

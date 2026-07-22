@@ -49,19 +49,19 @@
                 @isset($report['category'])
                     <form method="GET" action="{{ route('products') }}" class="row g-2 mb-4" id="productsFilterForm">
                         <div class="col-md-3 autocomplete-wrap">
-                            <input class="form-control" name="product_name" value="{{ request('product_name') }}" placeholder="Product name" autocomplete="off" data-suggest="name">
+                            <input class="form-control" name="product_name" value="{{ request('product_name') }}" placeholder="{{ __('products.product_name') }}" autocomplete="off" data-suggest="name">
                             <ul class="suggestions-list"></ul>
                         </div>
                         <div class="col-md-2 autocomplete-wrap">
-                            <input class="form-control" name="factory_name" value="{{ request('factory_name') }}" placeholder="Factory name" autocomplete="off" data-suggest="factory_name">
+                            <input class="form-control" name="factory_name" value="{{ request('factory_name') }}" placeholder="{{ __('products.factory_name') }}" autocomplete="off" data-suggest="factory_name">
                             <ul class="suggestions-list"></ul>
                         </div>
                         <div class="col-md-2 autocomplete-wrap">
-                            <input class="form-control" name="vendor_name" value="{{ request('vendor_name') }}" placeholder="Supplier name" autocomplete="off" data-suggest="vendor_name">
+                            <input class="form-control" name="vendor_name" value="{{ request('vendor_name') }}" placeholder="{{ __('products.supplier_name') }}" autocomplete="off" data-suggest="vendor_name">
                             <ul class="suggestions-list"></ul>
                         </div>
                         <div class="col-md-3 autocomplete-wrap">
-                            <input class="form-control" name="factory_country" value="{{ request('factory_country') }}" placeholder="Factory country" autocomplete="off" list="countryList">
+                            <input class="form-control" name="factory_country" value="{{ request('factory_country') }}" placeholder="{{ __('products.factory_country') }}" autocomplete="off" list="countryList">
                             <datalist id="countryList">
                                 @foreach($countries as $country)
                                     <option value="{{ $country->name }}">{{ $country->name }}</option>
@@ -69,8 +69,8 @@
                             </datalist>
                         </div>
                         <div class="col-md-2 d-flex gap-2">
-                            <button class="btn btn-primary w-100" type="submit">Filter</button>
-                            <a href="{{ route('products') }}" class="btn btn-outline-secondary">Reset</a>
+                            <button class="btn btn-primary w-100" type="submit">{{ __('products.filter') }}</button>
+                            <a href="{{ route('products') }}" class="btn btn-outline-secondary">{{ __('products.reset') }}</a>
                         </div>
                     </form>
                     <nav class="hp-breadcrumb small mb-4">
@@ -90,11 +90,11 @@
                                     <div class="position-relative">
                                         <img src="{{ asset('storage/' . $product->img) }}" class="equipment-card__image" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                         @if (is_null($product->is_favorite))
-                                            <button class="wishlist-btn btn p-0 position-absolute top-0 end-0 m-2" data-id="{{ $product->id }}" aria-label="Add to wishlist">
+                                            <button class="wishlist-btn btn p-0 position-absolute top-0 end-0 m-2" data-id="{{ $product->id }}" aria-label="{{ __('products.add_to_wishlist') }}">
                                                 <i class="bi bi-heart fs-5"></i>
                                             </button>
                                         @else
-                                            <button class="wishlist-btn btn p-0 position-absolute top-0 end-0 m-2 active" data-id="{{ $product->id }}" aria-label="Add to wishlist">
+                                            <button class="wishlist-btn btn p-0 position-absolute top-0 end-0 m-2 active" data-id="{{ $product->id }}" aria-label="{{ __('products.add_to_wishlist') }}">
                                                 <i class="bi fs-5 bi-heart-fill"></i>
                                             </button>
                                         @endif
@@ -117,13 +117,13 @@
                                             <span>{{ $product->provider?->name ?? 'Supplier' }}</span>
                                         </div>
                                         <div class="d-flex align-items-center">
-                                            <span class="equipment-price me-3">{{ $product->price }} SAR</span>
+                                            <span class="equipment-price me-3">{{ $product->price }} {{ __('products.currency_sar') }}</span>
                                             
-                                            <button class="hp-pill-btn ms-auto me-2 add-to-cart" data-id="{{ $product->id }}" data-img="{{ asset('storage/' . $product->img) }}" title="Add to cart" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
+                                            <button class="hp-pill-btn ms-auto me-2 add-to-cart" data-id="{{ $product->id }}" data-img="{{ asset('storage/' . $product->img) }}" title="{{ __('products.add_to_cart') }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                                 <i class="bi bi-cart-plus-fill"></i>
                                             </button>
                                             <a href="{{ route('product', [$product->id]) }}" class="btn btn-gradient btn-sm px-3 me-2">{{ __('products.details') }}</a>
-                                            <a href="{{ route('products', ['vendor_name' => $product->provider?->name]) }}" class="btn btn-outline-secondary btn-sm px-2">{{ app()->getLocale() === 'ar' ? 'المورد' : 'Supplier' }}</a>
+                                            <a href="{{ route('products', ['vendor_name' => $product->provider?->name]) }}" class="btn btn-outline-secondary btn-sm px-2">{{ __('products.supplier') }}</a>
                                         </div>
                                     </div>
                                 </article>

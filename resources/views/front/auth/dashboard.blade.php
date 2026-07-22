@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-<title>{{ app()->getLocale() === 'ar' ? 'لوحة العميل' : 'Customer Dashboard' }}</title>
+<title>{{ __('nav.customer_dashboard_title') }}</title>
 @endsection
 
 @section('css')
@@ -628,29 +628,27 @@
                 <div>
                     <div class="cd-hero__eyebrow">
                         <i class="bi bi-stars"></i>
-                        {{ app()->getLocale() === 'ar' ? 'لوحة التحكم' : 'Dashboard' }}
+                        {{ __('nav.dashboard') }}
                     </div>
 
                     <h4 class="cd-hero__title">
-                        {{ app()->getLocale() === 'ar' ? 'مرحباً بعودتك 👋' : 'Welcome back 👋' }}
+                        {{ __('nav.welcome_back') }}
                     </h4>
 
                     <p class="cd-hero__sub">
-                        {{ app()->getLocale() === 'ar'
-                            ? 'تابع طلباتك، فواتيرك، مفضلاتك، وأقسام السوق من مكان واحد بتجربة أسهل وأوضح.'
-                            : 'Track your orders, invoices, favorites, and marketplace sections from one clean place.' }}
+                        {{ __('nav.dashboard_track_desc') }}
                     </p>
                 </div>
 
                 <div class="cd-hero__actions">
                     <a href="{{ route('products') }}" class="cd-btn-light">
                         <i class="bi bi-grid-3x3-gap-fill"></i>
-                        {{ app()->getLocale() === 'ar' ? 'تصفح المنتجات' : 'Browse Products' }}
+                        {{ __('products.browse_products') }}
                     </a>
 
                     <a href="{{ route('user/myorders', 'all') }}" class="cd-btn-ghost">
                         <i class="bi bi-bag-check"></i>
-                        {{ app()->getLocale() === 'ar' ? 'طلباتي' : 'My Orders' }}
+                        {{ __('nav.orders') }}
                     </a>
                 </div>
             </div>
@@ -665,7 +663,7 @@
                     <i class="bi bi-arrow-up-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} cd-stat__arrow"></i>
                 </div>
                 <div class="cd-stat__bottom">
-                    <div class="cd-stat__label">{{ app()->getLocale() === 'ar' ? 'طلباتي' : 'Orders' }}</div>
+                    <div class="cd-stat__label">{{ __('nav.orders') }}</div>
                     <div class="cd-stat__value">{{ $counts['orders'] }}</div>
                 </div>
             </a>
@@ -678,7 +676,7 @@
                     <i class="bi bi-arrow-up-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} cd-stat__arrow"></i>
                 </div>
                 <div class="cd-stat__bottom">
-                    <div class="cd-stat__label">{{ app()->getLocale() === 'ar' ? 'مدفوعة' : 'Paid' }}</div>
+                    <div class="cd-stat__label">{{ __('nav.paid') }}</div>
                     <div class="cd-stat__value">{{ $counts['paid_invoices'] }}</div>
                 </div>
             </a>
@@ -691,7 +689,7 @@
                     <i class="bi bi-arrow-up-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} cd-stat__arrow"></i>
                 </div>
                 <div class="cd-stat__bottom">
-                    <div class="cd-stat__label">{{ app()->getLocale() === 'ar' ? 'قيد التنفيذ' : 'Processing' }}</div>
+                    <div class="cd-stat__label">{{ __('nav.processing') }}</div>
                     <div class="cd-stat__value">{{ $counts['processing_orders'] }}</div>
                 </div>
             </a>
@@ -704,7 +702,7 @@
                     <i class="bi bi-arrow-up-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} cd-stat__arrow"></i>
                 </div>
                 <div class="cd-stat__bottom">
-                    <div class="cd-stat__label">{{ app()->getLocale() === 'ar' ? 'المفضلة' : 'Favorites' }}</div>
+                    <div class="cd-stat__label">{{ __('products.favorites') }}</div>
                     <div class="cd-stat__value">{{ $counts['favorites'] }}</div>
                 </div>
             </a>
@@ -717,7 +715,7 @@
                     <i class="bi bi-arrow-up-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} cd-stat__arrow"></i>
                 </div>
                 <div class="cd-stat__bottom">
-                    <div class="cd-stat__label">{{ app()->getLocale() === 'ar' ? 'الإشعارات' : 'Notifications' }}</div>
+                    <div class="cd-stat__label">{{ __('nav.notifications') }}</div>
                     <div class="cd-stat__value">{{ $counts['notifications'] }}</div>
                 </div>
             </a>
@@ -730,7 +728,7 @@
                     <i class="bi bi-arrow-up-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }} cd-stat__arrow"></i>
                 </div>
                 <div class="cd-stat__bottom">
-                    <div class="cd-stat__label">{{ app()->getLocale() === 'ar' ? 'متابعة' : 'Tracking' }}</div>
+                    <div class="cd-stat__label">{{ __('nav.tracking') }}</div>
                     <div class="cd-stat__value">{{ $counts['tracking_orders'] ?? 0 }}</div>
                 </div>
             </a>
@@ -740,7 +738,7 @@
             <div class="cd-section-head">
                 <h5 class="cd-section-title">
                     <span class="icon"><i class="bi bi-grid-1x2-fill"></i></span>
-                    {{ app()->getLocale() === 'ar' ? 'أقسام السوق' : 'Marketplace Sections' }}
+                    {{ __('nav.marketplace_sections') }}
                 </h5>
             </div>
 
@@ -748,32 +746,32 @@
                 <a class="cd-market-item" href="{{ route('products') }}">
                     <span class="icon"><i class="bi bi-capsule"></i></span>
                     <span>
-                        {{ app()->getLocale() === 'ar' ? 'المستلزمات الطبية' : 'Medical Supplies' }}
-                        <small>{{ app()->getLocale() === 'ar' ? 'تصفح المنتجات المتاحة' : 'Browse available products' }}</small>
+                        {{ __('nav.medical_supplies') }}
+                        <small>{{ __('nav.browse_available_products') }}</small>
                     </span>
                 </a>
 
                 <a class="cd-market-item" href="{{ route('providers') }}">
                     <span class="icon"><i class="bi bi-building"></i></span>
                     <span>
-                        {{ app()->getLocale() === 'ar' ? 'الشركات الصناعية' : 'Industrial Companies' }}
-                        <small>{{ app()->getLocale() === 'ar' ? 'استكشف الشركات والمصنعين' : 'Explore companies and manufacturers' }}</small>
+                        {{ __('nav.industrial_companies') }}
+                        <small>{{ __('nav.explore_companies_manufacturers') }}</small>
                     </span>
                 </a>
 
                 <a class="cd-market-item" href="{{ route('providers') }}">
                     <span class="icon"><i class="bi bi-people-fill"></i></span>
                     <span>
-                        {{ app()->getLocale() === 'ar' ? 'الموردين والبائعين' : 'Suppliers / Vendors' }}
-                        <small>{{ app()->getLocale() === 'ar' ? 'اعرض الموردين المتاحين' : 'View available suppliers' }}</small>
+                        {{ __('nav.suppliers_vendors') }}
+                        <small>{{ __('nav.view_available_suppliers') }}</small>
                     </span>
                 </a>
 
                 <a class="cd-market-item" href="{{ route('categories') }}">
                     <span class="icon"><i class="bi bi-hospital-fill"></i></span>
                     <span>
-                        {{ app()->getLocale() === 'ar' ? 'المراكز والخدمات الطبية' : 'Medical Centers & Services' }}
-                        <small>{{ app()->getLocale() === 'ar' ? 'تصفح الأقسام والخدمات' : 'Browse categories and services' }}</small>
+                        {{ __('nav.medical_centers_services') }}
+                        <small>{{ __('nav.browse_categories_services') }}</small>
                     </span>
                 </a>
             </div>
@@ -785,11 +783,11 @@
                     <div class="cd-card__header">
                         <strong>
                             <i class="bi bi-clock-history"></i>
-                            {{ app()->getLocale() === 'ar' ? 'الطلبات الأخيرة' : 'Recent Orders' }}
+                            {{ __('nav.recent_orders') }}
                         </strong>
 
                         <a class="cd-section-link" href="{{ route('user/myorders','all') }}">
-                            {{ app()->getLocale() === 'ar' ? 'عرض الكل' : 'View all' }}
+                            {{ __('nav.view_all') }}
                             <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
                         </a>
                     </div>
@@ -816,8 +814,8 @@
 
                                 <span class="cd-badge {{ in_array($order->front_status_state['key'] ?? '', ['completed', 'completed_scheduled'], true) ? 'badge-cd-paid' : 'badge-cd-pending' }}">
                                     {{ $order->front_status_state['text'] ?? ((int)($order->payment_status ?? 0) === 1
-                                        ? (app()->getLocale() === 'ar' ? 'مدفوع' : 'Paid')
-                                        : (app()->getLocale() === 'ar' ? 'معلق' : 'Pending')) }}
+                                        ? __('nav.paid')
+                                        : __('products.pending')) }}
                                 </span>
                             </a>
                         @empty
@@ -826,7 +824,7 @@
                                     <i class="bi bi-bag-x"></i>
                                 </div>
                                 <p class="cd-empty__text">
-                                    {{ app()->getLocale() === 'ar' ? 'لا توجد طلبات حتى الآن.' : 'No orders yet.' }}
+                                    {{ __('nav.no_orders') }}
                                 </p>
                             </div>
                         @endforelse
@@ -839,11 +837,11 @@
                     <div class="cd-card__header">
                         <strong>
                             <i class="bi bi-shop"></i>
-                            {{ app()->getLocale() === 'ar' ? 'الموردون والشركات' : 'Suppliers & Companies' }}
+                            {{ __('nav.suppliers_companies') }}
                         </strong>
 
                         <a class="cd-section-link" href="{{ route('providers') }}">
-                            {{ app()->getLocale() === 'ar' ? 'عرض الكل' : 'View all' }}
+                            {{ __('nav.view_all') }}
                             <i class="bi bi-chevron-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}"></i>
                         </a>
                     </div>
@@ -862,7 +860,7 @@
                                     <div class="cd-item__meta">
                                         <span>
                                             <i class="bi bi-grid-3x3-gap"></i>
-                                            {{ app()->getLocale() === 'ar' ? 'عرض المنتجات' : 'View products' }}
+                                            {{ __('nav.view_products') }}
                                         </span>
                                     </div>
                                 </div>
@@ -875,7 +873,7 @@
                                     <i class="bi bi-shop-window"></i>
                                 </div>
                                 <p class="cd-empty__text">
-                                    {{ app()->getLocale() === 'ar' ? 'لا يوجد موردون.' : 'No suppliers.' }}
+                                    {{ __('nav.no_suppliers') }}
                                 </p>
                             </div>
                         @endforelse

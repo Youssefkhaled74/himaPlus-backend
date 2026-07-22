@@ -34,7 +34,7 @@ class OrderController extends Controller
             return view('admin.orders.index', compact('orders', 'tab', 'orderNo', 'status', 'orderType', 'paymentStatus', 'dateFrom', 'dateTo', 'scheduledStatus'));
         }catch(\Exception $e){
             report($e);
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -48,7 +48,7 @@ class OrderController extends Controller
     {
         try{
             $this->orders->store($request);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Throwable $e){
             report($e);
@@ -81,10 +81,10 @@ class OrderController extends Controller
     {
         try{
             $this->orders->update($request, $id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -93,10 +93,10 @@ class OrderController extends Controller
     {
         try{
             $this->orders->activate($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -105,10 +105,10 @@ class OrderController extends Controller
     {
         try{
             $this->orders->delete($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }
@@ -154,10 +154,10 @@ class OrderController extends Controller
     {
         try{
             $this->orders->back($request->record_id);
-            flash()->success('Success');
+            flash()->success(__('messages.success'));
             return back();
         }catch(\Exception $e){
-            flash()->error('There is something wrong , please contact technical support');
+            flash()->error(__('messages.something_went_wrong'));
             return back();
         }
     }

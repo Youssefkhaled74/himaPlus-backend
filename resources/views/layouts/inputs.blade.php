@@ -1,20 +1,20 @@
 <div class="form-group input-group">
     <span class="input-group-addon" style="color: red;">*</span>
-    <input name="phone" type="text" class="form-control" placeholder="Phone">
+    <input name="phone" type="text" class="form-control" placeholder="{{ __('forms.phone') }}">
     @error('phone')
         <span class="text-danger">{{$message}}</span>
     @enderror
 </div>
 <div class="form-group input-group">
     <span class="input-group-addon" style="color: red;">*</span>
-    <input name="quantity" type="number" class="form-control" placeholder="Quantity">
+    <input name="quantity" type="number" class="form-control" placeholder="{{ __('forms.quantity') }}">
     @error('quantity')
         <span class="text-danger">{{$message}}</span>
     @enderror
 </div>
 <div class="form-group input-group">
     <span class="input-group-addon" style="color: red;">*</span>
-    <input name="file" type="file" class="form-control" placeholder="Upload Image">
+    <input name="file" type="file" class="form-control" placeholder="{{ __('forms.upload_image') }}">
     @error('file')
         <span class="text-danger">{{$message}}</span>
     @enderror
@@ -27,11 +27,11 @@
     @enderror
 </div>
 <div class="form-group input-group">
-    <label for="exampleFormControlTextarea1">Example textarea</label>
-    <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" placeholder="Description"></textarea>
+    <label for="exampleFormControlTextarea1">{{ __('forms.example_textarea') }}</label>
+    <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" placeholder="{{ __('forms.description') }}"></textarea>
 </div>
 <div class="input-group">
-    <span class="input-group-text">ملاحظات</span>
+    <span class="input-group-text">{{ __('forms.notes') }}</span>
     <textarea class="form-control" name="notes" aria-label="With textarea" rows="2"></textarea>
 </div>
 <td>
@@ -42,7 +42,7 @@
 </td>
 <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-    <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
+    <label class="form-check-label" for="flexSwitchCheckDefault">{{ __('forms.switch_checkbox') }}</label>
 </div>
 <div class="form-group input-group">
     <label for="projectinput1"> {{__('vendor/products.select_category')}}</label>
@@ -58,7 +58,7 @@
     @enderror
 </div>
 <div class="col-xxl-12 col-md-12">
-    <label for="payment_types">Payment Type <span class="text-danger">*</span></label>
+    <label for="payment_types">{{ __('forms.payment_type') }} <span class="text-danger">*</span></label>
     <div class="col-xxl-6 col-md-6">
         <select name="payment_type_id" class="form-control" id="payment_types"></select>                                                
     </div>

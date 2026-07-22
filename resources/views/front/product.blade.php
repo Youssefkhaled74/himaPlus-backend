@@ -180,7 +180,7 @@
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
                                     {{-- <div class="text-muted-soft small">Starting price</div> --}}
-                                    <div class="h4 mb-0">{{ $product->price }} SAR</div>
+                                    <div class="h4 mb-0">{{ $product->price }} {{ __('products.currency_sar') }}</div>
                                 </div>
                                 <div class="d-flex gap-2">
                                     <a href="{{ auth()->check() ? url('user/cart/add/' . $product->id) : route('user/loginForm') }}" class="btn btn-gradient px-4">{{ __('products.add_to_cart') }}</a>
@@ -380,9 +380,9 @@
                                         </div>
                                         <p class="text-muted small mb-3">{{ $related->desc }}</p>
                                         <div class="d-flex align-items-center">
-                                            <span class="equipment-price me-3">{{ $related->price }} SAR</span>
+                                            <span class="equipment-price me-3">{{ $related->price }} {{ __('products.currency_sar') }}</span>
 
-                                            <button class="hp-pill-btn ms-auto me-2" title="Add to cart"><i class="bi bi-cart-plus-fill"></i></button>
+                                            <button class="hp-pill-btn ms-auto me-2" title="{{ __('products.add_to_cart') }}"><i class="bi bi-cart-plus-fill"></i></button>
                                             <a href="{{ route('product', [$related->id]) }}" class="btn btn-gradient btn-sm px-3 me-2">{{ __('products.details') }}</a>
                                         </div>
                                     </div>

@@ -1,7 +1,7 @@
 ﻿@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ app()->getLocale() === 'ar' ? 'تحليلات المورد - هيما' : 'Vendor Analytics | Hema' }}</title>
+    <title>{{ __('nav.vendor_analytics') }}</title>
 @endsection
 
 @section('css')
@@ -395,34 +395,32 @@
     @include('flash::message')
 
     <nav class="va-breadcrumb">
-        <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
+        <a href="{{ route('vendor/dashboard') }}">{{ __('nav.home') }}</a>
         <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
-        <span class="active">{{ $isAr ? 'التحليلات' : 'Analytics' }}</span>
+        <span class="active">{{ __('nav.analytics') }}</span>
     </nav>
 
     <section class="va-card va-hero">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
                 <h3 class="va-title">
-                    {{ $isAr ? 'تحليلات الأداء' : 'Performance Analytics' }}
+                    {{ __('nav.performance_analytics') }}
                 </h3>
 
                 <p class="va-subtitle">
-                    {{ $isAr
-                        ? 'تابع أداء الطلبات والعروض، راقب معدلات الإنجاز والقبول، وحدد المنتجات الأكثر حركة خلال الفترة التي تهمك.'
-                        : 'Track orders and offers performance, monitor completion and acceptance rates, and identify your most active products for the selected period.' }}
+                    {{ __('nav.analytics_description') }}
                 </p>
             </div>
 
             <div class="va-actions">
                 <a href="{{ route('vendor/dashboard') }}" class="va-btn-outline">
                     <i class="bi bi-grid-1x2-fill"></i>
-                    {{ $isAr ? 'لوحة التحكم' : 'Dashboard' }}
+                    {{ __('nav.dashboard') }}
                 </a>
 
                 <a href="{{ route('vendor/orders') }}" class="va-btn-primary">
                     <i class="bi bi-bag-check"></i>
-                    {{ $isAr ? 'الطلبات' : 'Orders' }}
+                    {{ __('nav.orders') }}
                 </a>
             </div>
         </div>
@@ -432,19 +430,19 @@
         <div class="va-body">
             <div class="va-periods">
                 <a href="{{ route('vendor/analytics', ['period' => '7']) }}" class="va-period {{ $period === '7' ? 'is-active' : '' }}">
-                    {{ $isAr ? 'آخر 7 أيام' : 'Last 7 Days' }}
+                    {{ __('nav.last_7_days') }}
                 </a>
 
                 <a href="{{ route('vendor/analytics', ['period' => '30']) }}" class="va-period {{ $period === '30' ? 'is-active' : '' }}">
-                    {{ $isAr ? 'آخر 30 يومًا' : 'Last 30 Days' }}
+                    {{ __('nav.last_30_days') }}
                 </a>
 
                 <a href="{{ route('vendor/analytics', ['period' => '90']) }}" class="va-period {{ $period === '90' ? 'is-active' : '' }}">
-                    {{ $isAr ? 'آخر 90 يومًا' : 'Last 90 Days' }}
+                    {{ __('nav.last_90_days') }}
                 </a>
 
                 <a href="{{ route('vendor/analytics', ['period' => 'all']) }}" class="va-period {{ $period === 'all' ? 'is-active' : '' }}">
-                    {{ $isAr ? 'كل الفترات' : 'All Time' }}
+                    {{ __('nav.all_time') }}
                 </a>
             </div>
         </div>
@@ -454,7 +452,7 @@
         <div class="col-6 col-md-3">
             <div class="va-card va-stat">
                 <span class="va-stat-icon"><i class="bi bi-bag-check-fill"></i></span>
-                <p class="va-stat-label">{{ $isAr ? 'إجمالي الطلبات' : 'Total Orders' }}</p>
+                <p class="va-stat-label">{{ __('nav.total_orders') }}</p>
                 <h4 class="va-stat-value">{{ number_format($totalOrders) }}</h4>
             </div>
         </div>
@@ -462,7 +460,7 @@
         <div class="col-6 col-md-3">
             <div class="va-card va-stat">
                 <span class="va-stat-icon"><i class="bi bi-file-earmark-text-fill"></i></span>
-                <p class="va-stat-label">{{ $isAr ? 'إجمالي العروض' : 'Total Offers' }}</p>
+                <p class="va-stat-label">{{ __('nav.total_offers') }}</p>
                 <h4 class="va-stat-value">{{ number_format($totalOffers) }}</h4>
             </div>
         </div>
@@ -470,7 +468,7 @@
         <div class="col-6 col-md-3">
             <div class="va-card va-stat">
                 <span class="va-stat-icon"><i class="bi bi-graph-up-arrow"></i></span>
-                <p class="va-stat-label">{{ $isAr ? 'معدل القبول' : 'Acceptance Rate' }}</p>
+                <p class="va-stat-label">{{ __('nav.acceptance_rate') }}</p>
                 <h4 class="va-stat-value">{{ number_format((float) $acceptanceRate, 1) }}%</h4>
             </div>
         </div>
@@ -478,7 +476,7 @@
         <div class="col-6 col-md-3">
             <div class="va-card va-stat">
                 <span class="va-stat-icon"><i class="bi bi-star-fill"></i></span>
-                <p class="va-stat-label">{{ $isAr ? 'متوسط التقييم' : 'Average Rating' }}</p>
+                <p class="va-stat-label">{{ __('nav.avg_rating') }}</p>
                 <h4 class="va-stat-value">{{ number_format((float) $avgProductRating, 1) }}</h4>
             </div>
         </div>
@@ -489,14 +487,14 @@
             <div class="va-card h-100">
                 <div class="va-panel-head">
                     <div>
-                        <h5 class="va-panel-title">{{ $isAr ? 'اتجاه الطلبات' : 'Orders Trend' }}</h5>
+                        <h5 class="va-panel-title">{{ __('nav.orders_trend') }}</h5>
                         <p class="va-panel-subtitle">
-                            {{ $isAr ? 'حركة الطلبات خلال الفترة المحددة.' : 'Order movement during the selected period.' }}
+                            {{ __('nav.orders_trend_description') }}
                         </p>
                     </div>
 
                     <span class="va-chip va-chip-primary">
-                        {{ $period === 'all' ? ($isAr ? 'كل الفترات' : 'All Time') : ($isAr ? 'فترة مفلترة' : 'Filtered Period') }}
+                        {{ $period === 'all' ? __('nav.all_time') : __('nav.filtered_period') }}
                     </span>
                 </div>
 
@@ -512,9 +510,9 @@
             <div class="va-card h-100">
                 <div class="va-panel-head">
                     <div>
-                        <h5 class="va-panel-title">{{ $isAr ? 'توزيع الحالات' : 'Status Mix' }}</h5>
+                        <h5 class="va-panel-title">{{ __('nav.status_mix') }}</h5>
                         <p class="va-panel-subtitle">
-                            {{ $isAr ? 'مقارنة بين الطلبات المؤكدة وقيد التنفيذ والمكتملة.' : 'Comparison between confirmed, processing, and completed orders.' }}
+                            {{ __('nav.status_mix_description') }}
                         </p>
                     </div>
                 </div>
@@ -533,9 +531,9 @@
             <div class="va-card h-100">
                 <div class="va-panel-head">
                     <div>
-                        <h5 class="va-panel-title">{{ $isAr ? 'أفضل المنتجات' : 'Top Products' }}</h5>
+                        <h5 class="va-panel-title">{{ __('nav.top_products') }}</h5>
                         <p class="va-panel-subtitle">
-                            {{ $isAr ? 'المنتجات الأكثر توليدًا للطلبات خلال الفترة.' : 'Products generating the most orders in the selected period.' }}
+                            {{ __('nav.top_products_description') }}
                         </p>
                     </div>
                 </div>
@@ -547,7 +545,7 @@
 
                             <div class="flex-grow-1">
                                 <p class="va-product-title">
-                                    {{ $item->product_name ?? ($isAr ? 'منتج' : 'Product') }}
+                                    {{ $item->product_name ?? __('nav.product') }}
                                 </p>
 
                                 <p class="va-product-meta">

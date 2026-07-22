@@ -27,15 +27,15 @@ class CartController extends Controller
                 $item = auth()->user()->cart()->firstOrNew(['product_id' => $id]);
                 if ($item->exists) {
                     $item->delete();
-                    return responseJson(200, "success");
+                    return responseJson(200, __('messages.success'));
                 }
                 $item->quantity = (int)$request->input('quantity', 1);
                 $item->save();
-                return responseJson(200, "success");
+                return responseJson(200, __('messages.success'));
             }
-            return responseJson(500, 'product not found , please contact technical support');
+            return responseJson(500, __('messages.product_not_found'));
         }catch(\Exception $e){
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -48,11 +48,11 @@ class CartController extends Controller
                     ['product_id' => $id],
                     ['quantity'   => $request->quantity ?? 1]
                 );
-                return responseJson(200, "success");
+                return responseJson(200, __('messages.success'));
             }
-            return responseJson(500, 'product not found , please contact technical support');
+            return responseJson(500, __('messages.product_not_found'));
         }catch(\Exception $e){
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -60,9 +60,9 @@ class CartController extends Controller
     {
         try{
             auth()->user()->cart()->where('product_id', $id)->delete();
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -70,9 +70,9 @@ class CartController extends Controller
     {
         try{
             auth()->user()->cart()->delete();
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -85,7 +85,7 @@ class CartController extends Controller
                     $cartItem->update([
                         'quantity' => (int)$cartItem->quantity + 1,
                     ]);
-                    return responseJson(200, "success");
+                    return responseJson(200, __('messages.success'));
                 }else if ($request->type == 'negative') {
                     if ((int)$cartItem->quantity > 1) {
                         $cartItem->update([
@@ -94,12 +94,12 @@ class CartController extends Controller
                     } else {
                         $cartItem->delete();
                     }
-                    return responseJson(200, "success");
+                    return responseJson(200, __('messages.success'));
                 }
             }
-            return responseJson(500, 'product not found , please contact technical support');
+            return responseJson(500, __('messages.product_not_found'));
         }catch(\Exception $e){
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 

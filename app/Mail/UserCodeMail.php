@@ -29,7 +29,7 @@ class UserCodeMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'verify your account',
+            subject: __('messages.email_verify_account'),
         );
     }
 

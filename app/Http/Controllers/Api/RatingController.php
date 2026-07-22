@@ -28,7 +28,7 @@ class RatingController extends Controller
             'for_type' => 'required|string|in:User,Product', 
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
         $user = auth()->user();
         $rating = $this->rating->create([
@@ -39,7 +39,7 @@ class RatingController extends Controller
             'forable_type' => "App\Models\\$request->for_type",
             'is_activate' => 0, 
         ]);
-        return responseJson(200, "success");
+        return responseJson(200, __('messages.success'));
     }
 
 }

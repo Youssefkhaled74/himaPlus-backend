@@ -19,7 +19,7 @@
                         <div class="p-0 ms-auto rounded-circle profile-photo-edit">
                             {{-- <input id="profile-foreground-img-file-input" type="file" class="profile-foreground-img-file-input"> --}}
                             <label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light">
-                                <i class="ri-image-edit-line align-bottom me-1"></i> {{ trans_or_fallback('', '') }}
+                                <i class="ri-image-edit-line align-bottom me-1"></i> {{ __('buttons.edit') }}
                             </label>
                         </div>
                     </div>

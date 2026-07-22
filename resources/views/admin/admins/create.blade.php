@@ -42,7 +42,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">{{ trans_or_fallback('', '') }}</h4>
+                        <h4 class="card-title mb-0 flex-grow-1">{{ __('admin.pages.admins.admin_details') }}</h4>
                     </div>
                     <div class="card-body">
                         <form role="form" action="{{ route('admin/admins/create') }}" method="post" enctype="multipart/form-data">

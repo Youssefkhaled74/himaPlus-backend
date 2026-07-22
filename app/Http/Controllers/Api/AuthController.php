@@ -48,9 +48,9 @@ class AuthController extends Controller
         try {
             $user = JWTAuth::parseToken()->authenticate();
 
-            return responseJson(200, 'success', !is_null($user));
+            return responseJson(200, __('messages.success'), !is_null($user));
         } catch (\Throwable $th) {
-            return responseJson(200, 'success', false);
+            return responseJson(200, __('messages.success'), false);
         }
     }
 
@@ -73,7 +73,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return responseJson(400, 'Bad Request', $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
 
         try {
@@ -81,14 +81,14 @@ class AuthController extends Controller
             $user = $this->userRepository->store($request);
             $code = $this->issueVerificationCode($user, (string) $user->email, 'email');
             $this->notification->create([
-                'title' => 'verified your account',
-                'content' => "your code: #$code",
+                'title' => __('messages.verified_your_account'),
+                'content' => __('messages.your_code', ['code' => $code]),
                 'user_id' => $user->id,
             ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return responseJson(500, 'there is some thing wrong , please contact technical support');
+            return responseJson(500, __('messages.something_went_wrong'));
         }
 
         dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
@@ -96,14 +96,14 @@ class AuthController extends Controller
         if (!is_null($user->fcm_token)) {
             $this->targetFairbaseServicePushNotification(
                 $user->fcm_token,
-                'verified your account',
-                "your code: #$code",
+                __('messages.verified_your_account'),
+                __('messages.your_code', ['code' => $code]),
                 0,
                 0
             );
         }
 
-        return responseJson(200, 'success');
+        return responseJson(200, __('messages.success'));
     }
 
     public function mobileCheck(Request $request)
@@ -114,19 +114,19 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return responseJson(400, 'Bad Request', $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
 
         try {
             $user = $this->user->where('email', $request->email)->with(['cart.product', 'favorites.product'])->first();
 
             if (is_null($user) || !is_null($user->deleted_at)) {
-                return responseJson(401, 'This Account Not Activate , Please Contact Technical Support');
+                return responseJson(401, __('messages.account_not_activated'));
             }
 
             $isMasterOtp = (string) $request->code === '1111';
             if (!$isMasterOtp && !$this->checkVerificationCode($user, (string) $request->code)) {
-                return responseJson(401, 'Invalid or expired verification code');
+                return responseJson(401, __('messages.invalid_verification_code'));
             }
 
             DB::beginTransaction();
@@ -139,10 +139,10 @@ class AuthController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return responseJson(500, 'Internal Server Error');
+            return responseJson(500, __('messages.internal_server_error'));
         }
 
-        return responseJson(200, 'success', $user->makeHidden(['password', 'code']));
+        return responseJson(200, __('messages.success'), $user->makeHidden(['password', 'code']));
     }
 
     public function regenerateCode(Request $request)
@@ -152,27 +152,27 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return responseJson(400, 'Bad Request', $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
 
         $user = $this->user->where('email', $request->email)->first();
 
         if (!is_null($user->deleted_at)) {
-            return responseJson(401, 'This Account Not Activate , Please Contact Technical Support');
+            return responseJson(401, __('messages.account_not_activated'));
         }
 
         try {
             DB::beginTransaction();
             $code = $this->issueVerificationCode($user, (string) $user->email, 'email');
             $this->notification->create([
-                'title' => 'verified your account',
-                'content' => "your code: #$code",
+                'title' => __('messages.verified_your_account'),
+                'content' => __('messages.your_code', ['code' => $code]),
                 'user_id' => $user->id,
             ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return responseJson(500, 'Internal Server Error');
+            return responseJson(500, __('messages.internal_server_error'));
         }
 
         dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
@@ -180,14 +180,14 @@ class AuthController extends Controller
         if (!is_null($user->fcm_token)) {
             $this->targetFairbaseServicePushNotification(
                 $user->fcm_token,
-                'verified your account',
-                "your code: #$code",
+                __('messages.verified_your_account'),
+                __('messages.your_code', ['code' => $code]),
                 0,
                 0
             );
         }
 
-        return responseJson(200, 'success');
+        return responseJson(200, __('messages.success'));
     }
 
     public function login(Request $request)
@@ -200,17 +200,17 @@ class AuthController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return responseJson(400, 'Bad Request', $validator->errors()->first());
+                return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
             }
 
             $user = $this->user->where('email', $request->email)->with(['cart.product', 'favorites.product'])->first();
 
             if (!$user || !is_null($user->deleted_at) || (int) $user->is_activate === 0) {
-                return responseJson(401, 'This account is not active.');
+                return responseJson(401, __('messages.account_not_active'));
             }
 
             if (is_null($user->email_verified_at)) {
-                return responseJson(401, 'This account is not email-verified.');
+                return responseJson(401, __('messages.account_not_email_verified'));
             }
 
             $attemptKey = 'login-attempts:' . strtolower((string) $request->email) . '|' . $request->ip();
@@ -219,12 +219,12 @@ class AuthController extends Controller
                 $attempts = RateLimiter::hit($attemptKey, 900);
                 if ($attempts >= 5) {
                     $this->notification->create([
-                        'title' => 'security alert',
-                        'content' => 'Repeated failed login attempts were detected on your account.',
+                        'title' => __('messages.security_alert'),
+                        'content' => __('messages.failed_login_attempts'),
                         'user_id' => $user->id,
                     ]);
                 }
-                return response()->json(['error' => 'Invalid email or password'], 401);
+                return response()->json(['error' => __('messages.invalid_email_or_password')], 401);
             }
 
             RateLimiter::clear($attemptKey);
@@ -234,33 +234,33 @@ class AuthController extends Controller
             }
 
             $user->token = JWTAuth::customClaims(['exp' => Carbon::now()->addYears(20)->timestamp])->fromUser($user);
-            return responseJson(200, 'success', $user->makeHidden(['password', 'code']));
+            return responseJson(200, __('messages.success'), $user->makeHidden(['password', 'code']));
         } catch (\Exception $e) {
-            return responseJson(500, 'Internal Server Error');
+            return responseJson(500, __('messages.internal_server_error'));
         }
     }
 
     public function me()
     {
-        return responseJson(200, 'success', auth()->user()->makeHidden(['password', 'code'])->load(['cart.product', 'favorites.product']));
+        return responseJson(200, __('messages.success'), auth()->user()->makeHidden(['password', 'code'])->load(['cart.product', 'favorites.product']));
     }
 
     public function cart()
     {
         $cart = auth()->user()->cart()->with('product')->orderByDesc('id')->get();
-        return responseJson(200, 'success', $cart);
+        return responseJson(200, __('messages.success'), $cart);
     }
 
     public function favorites($offset, $limit)
     {
         $favorites = auth()->user()->favorites()->with('product')->orderByDesc('id')->offset($offset)->limit(PAGINATION_COUNT)->get();
-        return responseJson(200, 'success', $favorites);
+        return responseJson(200, __('messages.success'), $favorites);
     }
 
     public function notifications($offset, $limit)
     {
         $notifications = auth()->user()->notifications()->with('serviceable')->orderByDesc('id')->offset($offset)->limit(PAGINATION_COUNT)->get();
-        return responseJson(200, 'success', $notifications);
+        return responseJson(200, __('messages.success'), $notifications);
     }
 
     public function userUpdate(Request $request)
@@ -279,11 +279,11 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return responseJson(400, 'Bad Request', $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
 
         $user = $this->userRepository->customUpdate($request, $user->id);
-        return responseJson(200, 'success', $user->makeHidden(['password', 'code']));
+        return responseJson(200, __('messages.success'), $user->makeHidden(['password', 'code']));
     }
 
     public function changePassword(Request $request)
@@ -294,17 +294,17 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return responseJson(400, 'Bad Request', $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
 
         $user = auth()->guard('api')->user();
 
         if (!$user) {
-            return responseJson(401, 'Unauthorized: User not logged in.');
+            return responseJson(401, __('messages.unauthorized_user_not_logged'));
         }
 
         if (!Hash::check($request->old_password, $user->password)) {
-            return responseJson(400, 'Old password is incorrect.');
+            return responseJson(400, __('messages.old_password_incorrect'));
         }
 
         try {
@@ -312,10 +312,10 @@ class AuthController extends Controller
                 'password' => bcrypt($request->new_password),
             ]);
         } catch (\Exception $e) {
-            return responseJson(500, 'Internal Server Error');
+            return responseJson(500, __('messages.internal_server_error'));
         }
 
-        return responseJson(200, 'Password changed successfully.');
+        return responseJson(200, __('messages.password_changed_successfully'));
     }
 
     public function changeMobileNum(Request $request)
@@ -325,7 +325,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return responseJson(400, 'Bad Request', $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
 
         $user = auth()->user();
@@ -338,30 +338,30 @@ class AuthController extends Controller
             ]);
             $code = $this->issueVerificationCode($user, (string) $user->mobile, 'mobile');
             $this->notification->create([
-                'title' => 'verified your account',
-                'content' => "your code: #$code",
+                'title' => __('messages.verified_your_account'),
+                'content' => __('messages.your_code', ['code' => $code]),
                 'user_id' => $user->id,
             ]);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return responseJson(500, 'Internal Server Error');
+            return responseJson(500, __('messages.internal_server_error'));
         }
 
         dispatch(new SendSmsJob((string) $user->mobile, (string) $code))->delay(now()->addMinute());
 
-        return responseJson(200, 'success');
+        return responseJson(200, __('messages.success'));
     }
 
     public function logout()
     {
         auth()->logout();
-        return responseJson(200, 'successfully logged out', ['token' => null]);
+        return responseJson(200, __('messages.successfully_logged_out'), ['token' => null]);
     }
 
     public function refresh()
     {
-        return responseJson(200, 'success', auth()->refresh());
+        return responseJson(200, __('messages.success'), auth()->refresh());
     }
 
     public function sendResetCodePassword(Request $request)
@@ -374,37 +374,37 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return responseJson(400, 'Bad Request', $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
 
         $identifier = $request->data ?? $request->email ?? $request->mobile;
         if (empty($identifier)) {
-            return responseJson(400, 'Bad Request', 'email or mobile is required');
+            return responseJson(400, __('messages.bad_request'), __('messages.email_or_phone_required'));
         }
 
         $user = $this->user->where('email', $identifier)->orWhere('mobile', $identifier)->first();
         if (!$user || !is_null($user->deleted_at) || (int) $user->is_activate === 0) {
-            return responseJson(404, 'User not found');
+            return responseJson(404, __('messages.user_not_found'));
         }
 
         $isMobileIdentifier = $identifier === $user->mobile;
         if ($isMobileIdentifier && is_null($user->mobile_verified_at)) {
-            return responseJson(422, 'Reset by phone requires a verified phone number.');
+            return responseJson(422, __('messages.reset_by_phone_requires_verified'));
         }
         if (!$isMobileIdentifier && is_null($user->email_verified_at)) {
-            return responseJson(422, 'Reset by email requires a verified email address.');
+            return responseJson(422, __('messages.reset_by_email_requires_verified'));
         }
 
         try {
             $channel = $isMobileIdentifier ? 'mobile' : 'email';
             $code = $this->issueResetCode($user, (string) $identifier, $channel);
             $this->notification->create([
-                'title' => 'reset password code',
-                'content' => "your code: #$code",
+                'title' => __('messages.reset_password_code'),
+                'content' => __('messages.your_code', ['code' => $code]),
                 'user_id' => $user->id,
             ]);
         } catch (\Exception $e) {
-            return responseJson(500, 'Internal Server Error');
+            return responseJson(500, __('messages.internal_server_error'));
         }
 
         if ($isMobileIdentifier) {
@@ -413,7 +413,7 @@ class AuthController extends Controller
             dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
         }
 
-        return responseJson(200, 'Reset code sent successfully.');
+        return responseJson(200, __('messages.reset_code_sent_successfully'));
     }
 
     public function verifyResetCodePassword(Request $request)
@@ -426,24 +426,24 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return responseJson(400, 'Bad Request', $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
 
         $identifier = $request->data ?? $request->email ?? $request->mobile;
         if (empty($identifier)) {
-            return responseJson(400, 'Bad Request', 'email or mobile is required');
+            return responseJson(400, __('messages.bad_request'), __('messages.email_or_phone_required'));
         }
 
         $user = $this->user->where('email', $identifier)->orWhere('mobile', $identifier)->first();
         if (!$user || !is_null($user->deleted_at)) {
-            return responseJson(401, 'There Is Something Wrong, Please Contact Technical Support');
+            return responseJson(401, __('messages.there_is_something_wrong'));
         }
 
         if ((string) $user->reset_code_target !== (string) $identifier || !$this->checkResetCode($user, (string) $request->code)) {
-            return responseJson(401, 'Invalid or expired reset code');
+            return responseJson(401, __('messages.invalid_reset_code'));
         }
 
-        return responseJson(200, 'Code verified successfully.');
+        return responseJson(200, __('messages.code_verified_successfully'));
     }
 
     public function resetPassword(Request $request)
@@ -457,21 +457,21 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return responseJson(400, 'Bad Request', $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
 
         $identifier = $request->data ?? $request->email ?? $request->mobile;
         if (empty($identifier)) {
-            return responseJson(400, 'Bad Request', 'email or mobile is required');
+            return responseJson(400, __('messages.bad_request'), __('messages.email_or_phone_required'));
         }
 
         $user = $this->user->where('email', $identifier)->orWhere('mobile', $identifier)->first();
         if (!$user || !is_null($user->deleted_at) || (string) $user->reset_code_target !== (string) $identifier) {
-            return responseJson(401, 'This Account Not Activated, Please Contact Technical Support');
+            return responseJson(401, __('messages.account_not_activated'));
         }
 
         if (!$this->checkResetCode($user, (string) $request->code)) {
-            return responseJson(401, 'Invalid or expired reset code');
+            return responseJson(401, __('messages.invalid_reset_code'));
         }
 
         try {
@@ -480,9 +480,9 @@ class AuthController extends Controller
             ]);
             $this->clearResetCode($user);
         } catch (\Exception $e) {
-            return responseJson(500, 'Internal Server Error');
+            return responseJson(500, __('messages.internal_server_error'));
         }
 
-        return responseJson(200, 'Password reset successfully.');
+        return responseJson(200, __('messages.password_reset_successfully'));
     }
 }

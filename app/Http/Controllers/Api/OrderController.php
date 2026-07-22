@@ -77,14 +77,14 @@ class OrderController extends Controller
         })->with([
             'items.product', 'timeline', 'provider', 'offers', 'offer'
         ])->offset($offset)->limit(PAGINATION_COUNT)->get();
-        return responseJson(200, "success", $orders);
+        return responseJson(200, __('messages.success'), $orders);
     }
     
     public function randomOrders(Request $request, $offset, $limit)
     {
         $user = auth()->user();
         if ((int) $user->user_type !== 2) {
-            return responseJson(403, "forbidden");
+            return responseJson(403, __('messages.unauthorized'));
         }
         $orders = $this->order::whereNull('provider_id')
         ->when($request->orders_type, function($q) use($request){
@@ -94,7 +94,7 @@ class OrderController extends Controller
         })->with([
             'items.product', 'timeline', 'user', 'offers', 'offer'
         ])->offset($offset)->limit(PAGINATION_COUNT)->get();
-        return responseJson(200, "success", $orders);
+        return responseJson(200, __('messages.success'), $orders);
     }
 
     public function providerOrders(Request $request, $offset, $limit)
@@ -107,7 +107,7 @@ class OrderController extends Controller
         })->with([
             'items.product', 'timeline', 'provider', 'offers', 'offer'
         ])->offset($offset)->limit(PAGINATION_COUNT)->get();
-        return responseJson(200, "success", $orders);
+        return responseJson(200, __('messages.success'), $orders);
     }
 
     public function order($id)
@@ -119,9 +119,9 @@ class OrderController extends Controller
             'items.product', 'timeline', 'provider', 'user', 'offer.provider', 'offers.provider', 'partial_receive'
         ])->first();
         if (is_null($order)) {
-            return responseJson(404, "not found");
+            return responseJson(404, __('messages.not_found', ['item' => 'Order']));
         }
-        return responseJson(200, "success", $order);
+        return responseJson(200, __('messages.success'), $order);
     }
 
     public function updateOrder(Request $request, $id)
@@ -132,7 +132,7 @@ class OrderController extends Controller
             $order = $this->order->where('id', $id)->where('user_id', $user->id)->with(['timeline', 'partial_receive'])->first();
             $timeline_no_arr = array_column($order->timeline->toArray(), 'timeline_no');
             if (in_array(12, $timeline_no_arr)) {
-                return responseJson(500, "this order was deleted.");
+                return responseJson(500, __('messages.deleted_order'));
             }
             if ($order) {
                 $data = [];
@@ -141,12 +141,12 @@ class OrderController extends Controller
                 }
                 $order->update($data);
             } else {
-                return responseJson(500, "not found");
+                return responseJson(500, __('messages.not_found', ['item' => 'Order']));
             }
 
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -156,9 +156,9 @@ class OrderController extends Controller
             'coupon' => 'required|exists:coupons,name',
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
-        return responseJson(200, "success", $this->coupon->where('name', $request->coupon)->active()->unArchive()->first());
+        return responseJson(200, __('messages.success'), $this->coupon->where('name', $request->coupon)->active()->unArchive()->first());
     }
 
     public function makeOrder(Request $request)
@@ -168,7 +168,7 @@ class OrderController extends Controller
             'coupon' => 'nullable|exists:coupons,name',
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
         try{
             $coupon = null;
@@ -179,7 +179,7 @@ class OrderController extends Controller
             $vatRate = $this->resolveVatRate($info);
             $cartItems = $user->cart()->with('product')->get();
             if ($cartItems->isEmpty()) {
-                return responseJson(400, "Bad Request", "cart is empty");
+                return responseJson(400, __('messages.bad_request'), __('messages.cart_empty'));
             }
             $byProviders = $cartItems->groupBy(fn ($row) => optional($row->product)->provider_id);
             if (isset($request->coupon) && !is_null($request->coupon)) {
@@ -244,14 +244,14 @@ class OrderController extends Controller
                 }
 
                 $notificationArr[0] = [
-                    'title' => 'new order.', 'content' => "your order sended to the provider", 'user_id' => $user->id, 
+                    'title' => __('messages.new_order_received'), 'content' => __('messages.order_sent_to_provider'), 'user_id' => $user->id, 
                     'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
                 
                 if (!is_null($order->provider_id)) {
                     $notificationArr[1] = [
-                        'title' => 'new order.', 'content' => "you have new order", 'user_id' => $order->provider_id, 
+                        'title' => __('messages.new_order_received'), 'content' => __('messages.new_order_received'), 'user_id' => $order->provider_id, 
                         'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                         'created_at' => now(), 'updated_at' => now()
                     ];
@@ -277,7 +277,7 @@ class OrderController extends Controller
                 $user->cart()->delete();
             }
             DB::commit();
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Throwable $e){
             DB::rollBack();
             report($e);
@@ -306,7 +306,7 @@ class OrderController extends Controller
             'schedule_start_date' => 'required_if:request_type,2|date_format:Y-m-d H:i:s',
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
         try{
             $user = auth()->user();
@@ -334,13 +334,13 @@ class OrderController extends Controller
             ]);
             
             $notificationArr[0] = [
-                'title' => 'new order.', 'content' => "your order sended to the provider", 'user_id' => $user->id, 
+                'title' => __('messages.new_order_received'), 'content' => __('messages.order_sent_to_provider'), 'user_id' => $user->id, 
                 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                 'created_at' => now(), 'updated_at' => now()
             ];
             if (!is_null($order->provider_id)) {
                 $notificationArr[1] = [
-                    'title' => 'new order.', 'content' => "you have new order", 'user_id' => $order->provider_id, 
+                    'title' => __('messages.new_order_received'), 'content' => __('messages.new_order_received'), 'user_id' => $order->provider_id, 
                     'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
@@ -358,10 +358,10 @@ class OrderController extends Controller
             // );
 
             DB::commit();
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
             DB::rollBack();
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -379,7 +379,7 @@ class OrderController extends Controller
             'preferred_service_time' => 'nullable|date_format:Y-m-d H:i:s',
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
         try{
             $user = auth()->user();
@@ -404,12 +404,12 @@ class OrderController extends Controller
             ]);
             
             $notificationArr[0] = [
-                'title' => 'new order.', 'content' => "your order sended to the provider", 'user_id' => $user->id, 
+                'title' => __('messages.new_order_received'), 'content' => __('messages.order_sent_to_provider'), 'user_id' => $user->id, 
                 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                 'created_at' => now(), 'updated_at' => now()
             ];
             if (!is_null($order->provider_id)) {
-                $notificationArr[1] = ['title' => 'new order.', 'content' => "you have new order", 'user_id' => $order->provider_id, 
+                $notificationArr[1] = ['title' => __('messages.new_order_received'), 'content' => __('messages.new_order_received'), 'user_id' => $order->provider_id, 
                     'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
@@ -431,11 +431,11 @@ class OrderController extends Controller
             }
 
             DB::commit();
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
             DB::rollBack();
             report($e);
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -451,7 +451,7 @@ class OrderController extends Controller
             'reason_for_partial' => 'nullable|string|max:1255',
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
         try{
             
@@ -459,7 +459,7 @@ class OrderController extends Controller
             $order = $this->order->where('id', $request->order_id)->where('user_id', $user->id)->with(['timeline', 'partial_receive'])->first();
             $timeline_no_arr = array_column($order->timeline->toArray(), 'timeline_no');
             if (in_array(12, $timeline_no_arr)) {
-                return responseJson(500, "this order was deleted.");
+                return responseJson(500, __('messages.deleted_order'));
             }
             if ($order) {
                 $order->partial_receive()->create([
@@ -472,12 +472,12 @@ class OrderController extends Controller
                     'reason_for_partial' => $request->reason_for_partial ?? null,
                 ]);
             } else {
-                return responseJson(500, "not found");
+                return responseJson(500, __('messages.not_found', ['item' => 'Order']));
             }
 
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -494,7 +494,7 @@ class OrderController extends Controller
             ],
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
         
         try{
@@ -502,7 +502,7 @@ class OrderController extends Controller
             $user = auth()->user();
             if (!(int)$request->timeline_no == 6) {
                 if (!(int)$user->user_type == 2) {
-                    flash()->error("this action for the providers only");
+                    flash()->error(__('messages.this_action_providers_only'));
                     return back();
                 }
             }
@@ -516,7 +516,7 @@ class OrderController extends Controller
             $timeline_no = (int)$request->timeline_no;
             $pre_timeline_no = $timeline_no - 1;
             if (in_array(12, $timeline_no_arr)) {
-                return responseJson(500, "this order was deleted.");
+                return responseJson(500, __('messages.deleted_order'));
             }
             // if (in_array($pre_timeline_no, $timeline_no_arr)) {
                 if (!in_array($timeline_no, $timeline_no_arr)) {
@@ -529,21 +529,21 @@ class OrderController extends Controller
                     
                     $step = timelineName($timeline_no);
                     $this->notification->query()->insert([
-                        'title' => "your order has been $step.", 'content' => "your order #$order->id has been $step.", 'user_id' => $order->user_id, 
+                        'title' => __('messages.order_status_update', ['step' => $step]), 'content' => __('messages.order_status_update_content', ['id' => $order->id, 'step' => $step]), 'user_id' => $order->user_id, 
                         'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                         'created_at' => now(), 'updated_at' => now()
                     ]);
 
                     $client = $order->user;
-                    $this->targetOrderUpdatesMailJob($client?->email, "your order #$order->id has been $step.");
+                    $this->targetOrderUpdatesMailJob($client?->email, __('messages.order_status_update_content', ['id' => $order->id, 'step' => $step]));
                     $this->targetFairbaseServicePushNotification(
-                        $client?->fcm_token, "your order has been $step.", "your order #$order->id has been $step.", 1, $order->id
+                        $client?->fcm_token, __('messages.order_status_update', ['step' => $step]), __('messages.order_status_update_content', ['id' => $order->id, 'step' => $step]), 1, $order->id
                     );
 
                     $provider = $user;
-                    $this->targetOrderUpdatesMailJob($provider?->email, "your order #$order->id has been $step.");
+                    $this->targetOrderUpdatesMailJob($provider?->email, __('messages.order_status_update_content', ['id' => $order->id, 'step' => $step]));
                     $this->targetFairbaseServicePushNotification(
-                        $provider?->fcm_token, "your order has been $step.", "your order #$order->id has been $step.", 1, $order->id
+                        $provider?->fcm_token, __('messages.order_status_update', ['step' => $step]), __('messages.order_status_update_content', ['id' => $order->id, 'step' => $step]), 1, $order->id
                     );
                 }
             // }else {
@@ -557,10 +557,10 @@ class OrderController extends Controller
             }
 
             DB::commit();
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
             DB::rollBack();
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -574,9 +574,9 @@ class OrderController extends Controller
             if ($order) {
                 $timeline_no_arr = array_column($order->timeline->toArray(), 'timeline_no');
                 if (in_array(2, $timeline_no_arr)) {
-                    return responseJson(500, "can’t cancel because this order is already being processed.");
+                    return responseJson(500, __('messages.cant_cancel_processing'));
                 } elseif (in_array(12, $timeline_no_arr)) {
-                    return responseJson(500, "this order was deleted.");
+                    return responseJson(500, __('messages.deleted_order'));
                 } else {
                     // $order->items()->delete();
                     // $order->timeline()->delete();
@@ -588,38 +588,38 @@ class OrderController extends Controller
                     ]);
                 }
             } else {
-                return responseJson(500, "not found");
+                return responseJson(500, __('messages.not_found', ['item' => 'Order']));
             }
 
             $notificationArr[0] = [
-                'title' => "order canceled.", 'content' => "the order no #$order->id has been canceled.", 'user_id' => $order->user_id, 
+                'title' => __('messages.order_canceled_title'), 'content' => __('messages.order_canceled_content', ['id' => $order->id]), 'user_id' => $order->user_id, 
                 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                 'created_at' => now(), 'updated_at' => now()
             ];
             if (!is_null($order->provider_id)) {
                 $notificationArr[1] = [
-                    'title' => "order canceled.", 'content' => "the order no #$order->id has been canceled.", 'user_id' => $order->provider_id, 
+                    'title' => __('messages.order_canceled_title'), 'content' => __('messages.order_canceled_content', ['id' => $order->id]), 'user_id' => $order->provider_id, 
                     'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
                 $provider = $order->provider;
-                $this->targetOrderUpdatesMailJob($provider?->email, "the order no #$order->id has been canceled.");
+                $this->targetOrderUpdatesMailJob($provider?->email, __('messages.order_canceled_content', ['id' => $order->id]));
                 $this->targetFairbaseServicePushNotification(
-                    $provider?->fcm_token, "order canceled.", "the order no #$order->id has been canceled.", 1, $order->id
+                    $provider?->fcm_token, __('messages.order_canceled_title'), __('messages.order_canceled_content', ['id' => $order->id]), 1, $order->id
                 );
             }
             $this->notification->query()->insert($notificationArr);
 
-            $this->targetOrderUpdatesMailJob($user?->email, "the order no #$order->id has been canceled.");
+            $this->targetOrderUpdatesMailJob($user?->email, __('messages.order_canceled_content', ['id' => $order->id]));
             $this->targetFairbaseServicePushNotification(
-                $user?->fcm_token, "order canceled.", "the order no #$order->id has been canceled.", 1, $order->id
+                $user?->fcm_token, __('messages.order_canceled_title'), __('messages.order_canceled_content', ['id' => $order->id]), 1, $order->id
             );
 
             DB::commit();
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
             DB::rollBack();
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -629,14 +629,14 @@ class OrderController extends Controller
             $user = auth()->user();
             $order = $this->order->where('id', $id)->where('user_id', $user->id)->with(['timeline'])->first();
             if (is_null($order)) {
-                return responseJson(404, "not found");
+                return responseJson(404, __('messages.not_found', ['item' => 'Order']));
             }
             $timeline_no_arr = array_column($order->timeline->toArray(), 'timeline_no');
             if (in_array(12, $timeline_no_arr)) {
-                return responseJson(500, "this order was deleted.");
+                return responseJson(500, __('messages.deleted_order'));
             }
             if ((int) $order->payment_status === 1) {
-                return responseJson(200, "this order is already paid", [
+                return responseJson(200, __('messages.this_order_already_paid'), [
                     'gateway' => 'arb',
                     'order_id' => $order->id,
                 ]);
@@ -646,9 +646,9 @@ class OrderController extends Controller
             $errorDetails = null;
             $payment = $this->arbPaymentService->generatePaymentUrl($order, $user, $device_type, request(), $errorDetails);
             if (!$payment) {
-                return responseJson(500, "arb link generation failed", $errorDetails);
+                return responseJson(500, __('messages.arb_link_failed'), $errorDetails);
             }
-            return responseJson(200, "success", [
+            return responseJson(200, __('messages.success'), [
                 'payment_url' => $payment['payment_url'] ?? null,
                 'payment_id' => $payment['payment_id'] ?? null,
                 'track_id' => $payment['track_id'] ?? null,
@@ -657,7 +657,7 @@ class OrderController extends Controller
                 'redirect_fields' => $payment['redirect_fields'] ?? null,
             ]);
         } catch (\Exception $ex) {
-            return responseJson(500, "there is something wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -669,7 +669,7 @@ class OrderController extends Controller
             'offer_id' => 'required|exists:offers,id',
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
         try{
             
@@ -679,7 +679,7 @@ class OrderController extends Controller
             DB::beginTransaction();
             $offer = $this->offer->where('id', $request->offer_id)->with(['order', 'provider'])->first();
             if (is_null($offer) || is_null($offer->order) || (int) $offer->order->user_id !== (int) $user->id) {
-                return responseJson(403, "forbidden");
+                return responseJson(403, __('messages.unauthorized'));
             }
             if ($offer->status == 1) {
 
@@ -711,28 +711,28 @@ class OrderController extends Controller
                     ]);
                 }
             }else {
-                return responseJson(500, "this offer has actions");
+                return responseJson(500, __('messages.this_offer_has_actions'));
             }
             
             $offetAction = '';
             if ($request->action == 2) {
-                $offetAction = 'accepted';
+                $offetAction = __('messages.offer_created');
             }elseif ($request->action == 3) {
-                $offetAction = 'rejected';
+                $offetAction = __('messages.notification_type_offer_rejected');
             }
             $this->notification->query()->insert([
-                'title' => "offer updates.", 'content' => "the offer no #$offer->id has been $offetAction.", 'user_id' => $offer->provider_id, 
+                'title' => __('messages.offer_updates'), 'content' => __('messages.offer_updated_content', ['id' => $offer->id, 'action' => $offetAction]), 'user_id' => $offer->provider_id, 
                 'order_id' => $offer->order_id, 'serviceable_id' => $offer->order_id, 'serviceable_type' => 'App\Models\Order', 
                 'created_at' => now(), 'updated_at' => now(), 
             ]);
-            $this->targetOrderUpdatesMailJob($user?->email, "the offer no #$offer->id has been $offetAction.");  
-            $this->targetOrderUpdatesMailJob($offer->provider?->email, "the offer no #$offer->id has been $offetAction.");
+            $this->targetOrderUpdatesMailJob($user?->email, __('messages.offer_updated_content', ['id' => $offer->id, 'action' => $offetAction]));  
+            $this->targetOrderUpdatesMailJob($offer->provider?->email, __('messages.offer_updated_content', ['id' => $offer->id, 'action' => $offetAction]));
 
             DB::commit();
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
             DB::rollBack();
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -749,12 +749,12 @@ class OrderController extends Controller
             'notes' => 'nullable|string|max:1255',
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
         try{
             $user = auth()->user();
             if ((int) $user->user_type !== 2) {
-                return responseJson(403, "forbidden");
+                return responseJson(403, __('messages.unauthorized'));
             }
             
             DB::beginTransaction();
@@ -777,10 +777,10 @@ class OrderController extends Controller
             }
             DB::commit();
 
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
             DB::rollBack();
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -796,12 +796,12 @@ class OrderController extends Controller
             'notes' => 'nullable|string|max:1255',
         ]);
         if ($validator->fails()) {
-            return responseJson(400, "Bad Request", $validator->errors()->first());
+            return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
         }
         try{
             $user = auth()->user();
             if ((int) $user->user_type !== 2) {
-                return responseJson(403, "forbidden");
+                return responseJson(403, __('messages.unauthorized'));
             }
             
             DB::beginTransaction();
@@ -819,10 +819,10 @@ class OrderController extends Controller
             }
             DB::commit();
 
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
             DB::rollBack();
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
@@ -831,18 +831,18 @@ class OrderController extends Controller
         try{
             $user = auth()->user();
             if ((int) $user->user_type !== 2) {
-                return responseJson(403, "forbidden");
+                return responseJson(403, __('messages.unauthorized'));
             }
 
             $offer = $this->offer->where('provider_id', $user->id)->where('id', $id)->first();
             if((int)$offer->status == 1){
                 $offer->delete();
             }else {
-                return responseJson(500, "cant remove this offer, this offer has actions");
+                return responseJson(500, __('messages.cant_remove_offer_actions'));
             }
-            return responseJson(200, "success");
+            return responseJson(200, __('messages.success'));
         }catch(\Exception $e){
-            return responseJson(500, "there is some thing wrong , please contact technical support");
+            return responseJson(500, __('messages.something_went_wrong'));
         }
     }
 
