@@ -452,4 +452,4 @@ return [
         'copyright' => 'Hema :year',
         'workflow' => 'Built for a cleaner, faster admin workflow.',
     ],
-    'pages' => [
+];
