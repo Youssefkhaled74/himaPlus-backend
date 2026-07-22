@@ -139,26 +139,13 @@
                         </div>
                     </div>
 
-                    <div class="dropdown admin-utility-dropdown">
-                        <button
-                            class="btn admin-utility-button"
-                            type="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                            aria-label="{{ __('admin.nav.language') }}">
-                            <i class="ri-global-line"></i>
-                        </button>
-                        <div class="dropdown-menu admin-topnav-menu dropdown-menu-end">
-                            <a href="{{ route('locale.switch', 'en') }}" class="dropdown-item {{ $adminLocale === 'en' ? 'active' : '' }}">
-                                <i class="ri-global-line"></i>
-                                <span>{{ __('admin.nav.english') }}</span>
-                            </a>
-                            <a href="{{ route('locale.switch', 'ar') }}" class="dropdown-item {{ $adminLocale === 'ar' ? 'active' : '' }}">
-                                <i class="ri-global-line"></i>
-                                <span>{{ __('admin.nav.arabic') }}</span>
-                            </a>
-                        </div>
-                    </div>
+                    <a href="{{ route('locale.switch', $adminLocale === 'en' ? 'ar' : 'en') }}" class="admin-lang-toggle" title="{{ $adminLocale === 'en' ? 'التبديل إلى العربية' : 'Switch to English' }}">
+                        <span class="admin-lang-toggle-track">
+                            <span class="admin-lang-toggle-option {{ $adminLocale === 'en' ? 'is-active' : '' }}">EN</span>
+                            <span class="admin-lang-toggle-option {{ $adminLocale === 'ar' ? 'is-active' : '' }}">ع</span>
+                            <span class="admin-lang-toggle-thumb"></span>
+                        </span>
+                    </a>
 
                     <form method="POST" action="{{ route('admin/logout') }}" class="admin-logout-form">
                         @csrf
