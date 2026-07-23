@@ -3,21 +3,11 @@
 return [
     'title' => 'Hema - My Profile',
     'my_profile' => 'My Profile',
-    'profile_overview' => 'Manage your account details, password, and language preferences in one place.',
     'personal_info' => 'Personal Information',
     'personal_info_short' => 'Personal Info',
     'change_password' => 'Change Password',
     'language' => 'Language',
     'logout' => 'Logout',
-    'personal_details' => 'Personal Details',
-    'security_settings' => 'Security Settings',
-    'language_preferences' => 'Language Preferences',
-    'company_details' => 'Company Details',
-    'upload_photo' => 'Upload Photo',
-    'save_changes' => 'Save Changes',
-    'password_help' => 'Use a strong password with letters, numbers, and symbols.',
-    'language_help' => 'Choose the language you want to use across your dashboard.',
-    'company_help' => 'Keep your company and registration details up to date.',
 
     // Personal Info Form
     'name' => 'Name',
@@ -73,30 +63,8 @@ return [
     'send_reset_code' => 'Send Reset Code',
     'remember_password' => 'Remember your password?',
 
-    // Login
-    'remember_me' => 'Remember me',
-    'forgot_password' => 'Forgot password?',
-
     // Alert
     'select_image_only' => 'Please select an image only',
-    
-    // Products & Orders
-    'view' => 'View',
-    'edit' => 'Edit',
-    'delete' => 'Delete',
-    'add' => 'Add',
-    'save' => 'Save',
-    'cancel' => 'Cancel',
-    'description' => 'Description',
-    'price' => 'Price',
-    'quantity' => 'Quantity',
-    'category' => 'Category',
-    'image' => 'Image',
-    'action' => 'Action',
-    'date' => 'Date',
-    'status' => 'Status',
-    'update_profile' => 'Update Profile',
-    'notes' => 'Notes',
 ];
 
 
