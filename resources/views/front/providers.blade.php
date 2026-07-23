@@ -146,7 +146,7 @@
                 <!-- Cards -->
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-5" data-aos="fade-up" data-aos-once="false" data-aos-mirror="true">
-                        <a class="nc-card" href="{{ route('vendor/register/form') }}">
+                        <a class="nc-card" href="{{ route('login') }}">
                             <div class="nc-card__media">
                                 <img src="{{ asset('front/assets/images/empty-medical-office-with-desktop-pc 11111.png') }}" alt="Medical Suppliers">
                                 <span class="nc-card__overlay"></span>
@@ -155,7 +155,7 @@
                         </a>
                     </div>
                     <div class="col-md-5" data-aos="fade-up" data-aos-once="false" data-aos-mirror="true" data-aos-delay="100">
-                        <a class="nc-card" href="{{ route('vendor/register/form') }}">
+                        <a class="nc-card" href="{{ route('login') }}">
                             <div class="nc-card__media">
                                 <img src="{{ asset('front/assets/images/acoustic-engineering-hospitals-minimize-noise-pollution 1.png') }}" alt="Medical Suppliers">
                                 <span class="nc-card__overlay"></span>
