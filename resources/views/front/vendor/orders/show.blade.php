@@ -528,6 +528,19 @@
                             <button type="submit" class="btn-vos btn-vos-main" style="width:100%;">{{ __('nav.confirmed') }}</button>
                         </form>
                     </div>
+                @elseif($timelineActionNo && (int)$timelineActionNo === 4)
+                    <div class="vos-actions" style="flex-direction:column;gap:10px;">
+                        <a href="{{ route('vendor/orders/create-shipment', $order->id) }}" class="btn-vos btn-vos-main" style="width:100%;text-align:center;">
+                            <i class="bi bi-box-seam"></i> {{ __('nav.create_shipment_with_images') }}
+                        </a>
+                        <form method="POST" action="{{ route('user/order-timeline') }}" style="width:100%;">
+                            @csrf
+                            <input type="hidden" name="order_type" value="{{ encrypt((int)$order->order_type) }}">
+                            <input type="hidden" name="timeline_no" value="{{ encrypt((int)$timelineActionNo) }}">
+                            <input type="hidden" name="order_id" value="{{ encrypt((int)$order->id) }}">
+                            <button type="submit" class="btn-vos btn-vos-outline" style="width:100%;">{{ __('nav.mark_as_shipped') }} ({{ __('nav.without_images') }})</button>
+                        </form>
+                    </div>
                 @elseif($timelineActionNo)
                     <div class="vos-actions">
                         <form method="POST" action="{{ route('user/order-timeline') }}" style="width:100%;">
