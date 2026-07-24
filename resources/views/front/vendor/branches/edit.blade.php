@@ -117,16 +117,6 @@
                         <input type="email" name="email" class="form-control" value="{{ old('email', $branch->email) }}">
                     </div>
 
-                    <div class="vb-field">
-                        <label>{{ $isAr ? 'خط العرض' : 'Latitude' }}</label>
-                        <input type="number" step="any" name="latitude" class="form-control" value="{{ old('latitude', $branch->latitude) }}">
-                    </div>
-
-                    <div class="vb-field">
-                        <label>{{ $isAr ? 'خط الطول' : 'Longitude' }}</label>
-                        <input type="number" step="any" name="longitude" class="form-control" value="{{ old('longitude', $branch->longitude) }}">
-                    </div>
-
                     <div class="vb-field" style="grid-column:1/-1;">
                         <label>{{ $isAr ? 'ملاحظات' : 'Notes' }}</label>
                         <textarea name="notes" class="form-control" rows="3">{{ old('notes', $branch->notes) }}</textarea>

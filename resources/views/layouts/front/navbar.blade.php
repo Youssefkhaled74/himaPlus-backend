@@ -86,9 +86,11 @@
                     </div>
                 @else
                     <ul class="navbar-nav ms-auto align-items-lg-center">
+                        @if(auth()->check() && (int) auth()->user()->user_type !== 2)
                         <li class="nav-item">
                             <a class="nav-link" id="nav-dashboard" href="{{ route('user/dashboard') }}">{{ __('nav.dashboard') }}</a>
                         </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" id="nav-home" href="{{ route('home') }}">{{ __('nav.home') }}</a>
                         </li>
