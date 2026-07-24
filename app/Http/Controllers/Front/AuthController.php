@@ -77,8 +77,9 @@ class AuthController extends Controller
             DB::beginTransaction();
             $request->merge(['user_type' => (int) $request->user_type]);
             $user = $this->userRepository->store($request);
+            $code = (string) random_int(1000, 9999);
             $user->update([
-                'code' => 1111,
+                'code' => $code,
             ]);
             $this->notification->create([
                 'title' => __('messages.verified_your_account'),
@@ -92,15 +93,8 @@ class AuthController extends Controller
             return back();
         }
 
-        // try {
-        //     Mail::to($user->email)->send(new UserCodeMail($user->code));
-        //     $this->forJawalyService->sendSMS($user->mobile, $user->code);
-        //     dispatch(new SendSmsJob($user->mobile, (string) $user->code))->delay(now()->addMinute());
-        //     dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
-        // } catch (\Exception $e) { dd($e); }
-        
-        // dispatch(new SendSmsJob($user->mobile, (string) $user->code))->delay(now()->addMinute());
-        dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
+        dispatch(new SendSmsJob($user->mobile, (string) $code))->delay(now()->addMinute());
+        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
 
         flash()->success(__('messages.success'));
         return redirect(route('user/account-check/form', $user->id));
@@ -176,8 +170,9 @@ class AuthController extends Controller
         }
         try {
             DB::beginTransaction();
+            $code = (string) random_int(1000, 9999);
             $user->update([
-                'code' => 1111,
+                'code' => $code,
                 'mobile_verified_at' =>  null,
                 'email_verified_at' =>  null,
             ]);
@@ -193,8 +188,8 @@ class AuthController extends Controller
             return back();
         }
         
-        // dispatch(new SendSmsJob($user->mobile, (string) $user->code))->delay(now()->addMinute());
-        dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
+        dispatch(new SendSmsJob($user->mobile, (string) $code))->delay(now()->addMinute());
+        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
         
         flash()->success(__('messages.success'));
         return back();
