@@ -16,6 +16,10 @@ return [
     'location' => 'الموقع',
     'edit_profile' => 'تعديل الملف',
     'delete_account' => 'حذف الحساب',
+    'profile_overview' => 'نظرة عامة على الملف',
+    'personal_details' => 'المعلومات الشخصية',
+    'upload_photo' => 'رفع صورة',
+    'save_changes' => 'حفظ التغييرات',
 
     // Change Password Form
     'create_new_password' => 'إنشاء كلمة مرور جديدة',

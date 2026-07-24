@@ -16,6 +16,10 @@ return [
     'location' => 'Location',
     'edit_profile' => 'Edit Profile',
     'delete_account' => 'Delete Account',
+    'profile_overview' => 'Profile Overview',
+    'personal_details' => 'Personal Details',
+    'upload_photo' => 'Upload Photo',
+    'save_changes' => 'Save Changes',
 
     // Change Password Form
     'create_new_password' => 'Create a new password',

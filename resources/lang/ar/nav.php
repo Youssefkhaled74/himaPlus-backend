@@ -289,4 +289,23 @@ return [
     'duration' => 'المدة',
     'next_shipment' => 'الشحنة القادمة',
     'units' => 'وحدات',
+
+    // Customer Dashboard
+    'customer_dashboard_title' => 'هيماء - لوحة التحكم',
+    'welcome_back' => 'مرحبا بعودتك!',
+    'dashboard_track_desc' => 'تتبع طلباتك، وتصفح المنتجات، وتواصل مع الموردين الموثوقين من لوحة التحكم الخاصة بك.',
+    'paid' => 'مدفوع',
+    'processing' => 'قيد المعالجة',
+    'tracking' => 'تتبع',
+    'marketplace_sections' => 'وصول سريع',
+    'medical_supplies' => 'المستلزمات الطبية',
+    'browse_available_products' => 'تصفح المنتجات المتاحة',
+    'industrial_companies' => 'الشركات الصناعية',
+    'explore_companies_manufacturers' => 'استكشف الشركات والمصانع',
+    'suppliers_vendors' => 'الموردون والبائعون',
+    'view_available_suppliers' => 'عرض الموردين المتاحين',
+    'medical_centers_services' => 'المراكز الطبية والخدمات',
+    'browse_categories_services' => 'تصفح الفئات والخدمات',
+    'suppliers_companies' => 'الموردون والشركات',
+    'no_suppliers' => 'لا يوجد موردون',
 ];
