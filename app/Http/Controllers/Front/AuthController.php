@@ -55,15 +55,15 @@ class AuthController extends Controller
             'mobile' => 'required|string|max:254|unique:users,mobile',
             'password' => 'required|confirmed|max:30',
             'user_type' => 'required|in:1,2',
-            'iban' => 'required_if:user_type,2|string|max:254|unique:users,iban',
+            'iban' => 'nullable|required_if:user_type,2|string|max:254|unique:users,iban',
             
             'file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,webm',
             
-            'branch' => 'required_if:user_type,2|string|max:255',
-            'location' => 'required_if:user_type,2|string|max:255',
-            'tax_number' => 'required_if:user_type,2|string|max:255',
-            'cr_number' => 'required_if:user_type,2|string|max:255',
-            'cr_file_document' => 'required_if:user_type,2|file|mimes:jpeg,png,jpg,gif,webp,pdf|max:5120',
+            'branch' => 'nullable|required_if:user_type,2|string|max:255',
+            'location' => 'nullable|required_if:user_type,2|string|max:255',
+            'tax_number' => 'nullable|required_if:user_type,2|string|max:255',
+            'cr_number' => 'nullable|required_if:user_type,2|string|max:255',
+            'cr_file_document' => 'nullable|required_if:user_type,2|file|mimes:jpeg,png,jpg,gif,webp,pdf|max:5120',
 
             'terms' => 'nullable|in:1',
             'fcm_token' => 'nullable|string',
