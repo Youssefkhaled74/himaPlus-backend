@@ -253,7 +253,11 @@ class OrderController extends Controller
                     'order_id' => $createdOrder->id,
                     'error_details' => $errorDetails,
                 ]);
-                flash()->error(__('messages.order_created_payment_failed'));
+                $debugMsg = __('messages.order_created_payment_failed');
+                if (!empty($errorDetails)) {
+                    $debugMsg .= ' | ' . json_encode($errorDetails, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                }
+                flash()->error($debugMsg);
             }
         }
 
@@ -708,7 +712,11 @@ class OrderController extends Controller
             $errorDetails = null;
             $payment = $this->arbPaymentService->generatePaymentUrl($order, $user, $device_type, request(), $errorDetails);
             if (!$payment) {
-                flash()->error(__('messages.arb_link_failed'));
+                $debugMsg = __('messages.arb_link_failed');
+                if (!empty($errorDetails)) {
+                    $debugMsg .= ' | ' . json_encode($errorDetails, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                }
+                flash()->error($debugMsg);
                 Log::warning('ARB payment link generation failed from onlinePayment route', [
                     'order_id' => $order->id,
                     'error_details' => $errorDetails,
