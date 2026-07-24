@@ -238,21 +238,4 @@ class VendorDashboardController extends Controller
 
         return view('front.vendor.categories.index', compact('categories'));
     }
-
-    public function storeCategory(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
-            'img' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-        ]);
-
-        $payload = ['name' => $request->name];
-        if ($request->hasFile('img')) {
-            $payload['img'] = uploadIamge($request->file('img'), 'categories');
-        }
-
-        Category::create($payload);
-        flash()->success('Category added successfully');
-        return back();
-    }
 }
