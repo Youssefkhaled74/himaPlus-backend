@@ -602,11 +602,12 @@ class AuthController extends Controller
         try {
 
             DB::beginTransaction();
+            $code = (string) random_int(1000, 9999);
             $user->update([
                 'mobile' => $request->mobile,
                 'mobile_verified_at' =>  null,
                 'email_verified_at' =>  null,
-                'code' => 1111,
+                'code' => $code,
             ]);
             $this->notification->create([
                 'title' => __('messages.verified_your_account'),
@@ -619,8 +620,8 @@ class AuthController extends Controller
             return responseJson(500, __('messages.internal_server_error'));
         }
 
-        // dispatch(new SendSmsJob($user->mobile, (string) $user->code))->delay(now()->addMinute());
-        dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
+        dispatch(new SendSmsJob($user->mobile, (string) $code))->delay(now()->addMinute());
+        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
 
         return responseJson(200, __('messages.success'));
     }
@@ -658,7 +659,8 @@ class AuthController extends Controller
         }
 
         try {
-            $user->update(['code' => 1111]);
+            $code = (string) random_int(1000, 9999);
+            $user->update(['code' => $code]);
             $this->notification->create([
                 'title' => __('messages.verified_your_account'),
                 'content' => __('messages.your_code_is', ['code' => $user->code]),
@@ -669,8 +671,8 @@ class AuthController extends Controller
             return back();
         }
 
-        // dispatch(new SendSmsJob($user->mobile, (string) $user->code))->delay(now()->addMinute());
-        dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
+        dispatch(new SendSmsJob($user->mobile, (string) $code))->delay(now()->addMinute());
+        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
 
         flash()->success(__('messages.reset_code_sent'));
         return redirect(route('user/reset-password/form', $user->id));
