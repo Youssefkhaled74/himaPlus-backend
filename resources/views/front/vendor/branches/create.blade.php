@@ -116,16 +116,6 @@
                         <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="{{ $isAr ? 'اختياري' : 'Optional' }}">
                     </div>
 
-                    <div class="vb-field">
-                        <label>{{ $isAr ? 'خط العرض' : 'Latitude' }}</label>
-                        <input type="number" step="any" name="latitude" class="form-control" value="{{ old('latitude') }}" placeholder="{{ $isAr ? 'مثال: 24.7136' : 'e.g. 24.7136' }}">
-                    </div>
-
-                    <div class="vb-field">
-                        <label>{{ $isAr ? 'خط الطول' : 'Longitude' }}</label>
-                        <input type="number" step="any" name="longitude" class="form-control" value="{{ old('longitude') }}" placeholder="{{ $isAr ? 'مثال: 46.6753' : 'e.g. 46.6753' }}">
-                    </div>
-
                     <div class="vb-field" style="grid-column:1/-1;">
                         <label>{{ $isAr ? 'ملاحظات' : 'Notes' }}</label>
                         <textarea name="notes" class="form-control" rows="3" placeholder="{{ $isAr ? 'ملاحظات داخلية (اختياري)' : 'Internal notes (optional)' }}">{{ old('notes') }}</textarea>
