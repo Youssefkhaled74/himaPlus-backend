@@ -492,6 +492,37 @@
             </div>
 
             <div style="margin-top:14px;">
+                @php
+                    $orderShipments = $order->shipments()->with(['images', 'shippingMethod'])->orderByDesc('id')->get();
+                @endphp
+                @if($orderShipments->count() > 0)
+                    <div class="vos-card" style="margin-bottom:14px;">
+                        <h5>{{ __('nav.shipments') }} ({{ $orderShipments->count() }})</h5>
+                        @foreach($orderShipments as $s)
+                            <div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:10px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                                    <span style="font-size:14px;font-weight:600;color:#1f2937;">{{ __('nav.shipment') }} #{{ $s->id }}</span>
+                                    <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;background:#dbeafe;color:#1e40af;">{{ $s->status_label }}</span>
+                                </div>
+                                <div style="font-size:13px;color:#6b7280;margin-bottom:8px;">
+                                    @if($s->tracking_number){{ __('nav.tracking_number') }}: {{ $s->tracking_number }} | @endif
+                                    @if($s->shippingMethod){{ $s->shippingMethod->name }} | @endif
+                                    {{ $s->created_at->translatedFormat('M d, Y H:i') }}
+                                </div>
+                                @if($s->images->count() > 0)
+                                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                        @foreach($s->images as $img)
+                                            <a href="{{ asset($img->image_path) }}" target="_blank">
+                                                <img src="{{ asset($img->image_path) }}" alt="{{ $img->caption ?? '' }}" style="width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;">
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
                 @if($isQuotation && $myOffer && in_array(strtolower((string)$myOffer->status), ['3','rejected'], true))
                     <div class="vos-alert" style="margin-bottom:12px;">
                         <i class="bi bi-exclamation-triangle"></i>
