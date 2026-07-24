@@ -273,6 +273,10 @@ return [
     'shipment_notes_placeholder' => 'e.g. Handle with care, keep refrigerated...',
     'creating_shipment' => 'Creating Shipment',
     'without_images' => 'without images',
+    'select_shipping_method' => 'Select Shipping Method',
+    'choose_shipping_method' => 'Choose a shipping method',
+    'ship_order' => 'Ship Order',
+    'order_shipped_success' => 'Order has been shipped successfully.',
     'customer' => 'Customer',
 
     // Vendor Orders List

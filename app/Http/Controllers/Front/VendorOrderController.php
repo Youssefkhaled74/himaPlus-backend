@@ -387,11 +387,14 @@ class VendorOrderController extends Controller
                 'shipping_method_id' => $request->shipping_method_id,
             ]);
 
-            $order->timeline()->create([
-                'timeline_no' => 4,
-                'action_at' => now(),
-                'user_id' => $vendor->id,
-            ]);
+            $hasShippedTimeline = $order->timeline()->where('timeline_no', 4)->exists();
+            if (!$hasShippedTimeline) {
+                $order->timeline()->create([
+                    'timeline_no' => 4,
+                    'action_at' => now(),
+                    'user_id' => $vendor->id,
+                ]);
+            }
 
             DB::commit();
 

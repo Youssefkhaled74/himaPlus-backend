@@ -273,6 +273,10 @@ return [
     'shipment_notes_placeholder' => 'مثال: التعامل بحذر، الحفظ في ثلاجة...',
     'creating_shipment' => 'جارٍ إنشاء الشحنة',
     'without_images' => 'بدون صور',
+    'select_shipping_method' => 'اختر طريقة الشحن',
+    'choose_shipping_method' => 'اختر طريقة الشحن',
+    'ship_order' => 'شحن الطلب',
+    'order_shipped_success' => 'تم شحن الطلب بنجاح.',
     'customer' => 'العميل',
 
     // Vendor Orders List
