@@ -93,6 +93,9 @@
                             <a class="nav-link" id="nav-aboutUs" href="{{ route('aboutUs') }}">{{ __('nav.about_us') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" id="nav-products" href="{{ route('products') }}">{{ __('nav.products') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" id="nav-providers" href="{{ route('providers') }}">{{ __('nav.service_providers') }}</a>
                         </li>
                         <li class="nav-item">
