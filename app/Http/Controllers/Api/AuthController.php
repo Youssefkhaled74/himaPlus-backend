@@ -91,6 +91,7 @@ class AuthController extends Controller
         }
 
         dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
 
         if (!is_null($user->fcm_token)) {
             $this->targetFairbaseServicePushNotification(
