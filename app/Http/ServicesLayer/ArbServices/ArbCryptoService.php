@@ -8,9 +8,8 @@ class ArbCryptoService
 
     public function encrypt(string $plainText, string $resourceKey): string
     {
-        $key = $this->decodeKey($resourceKey);
-        $cipher = $this->resolveCipher($key);
-        $encrypted = openssl_encrypt($plainText, $cipher, $key, OPENSSL_RAW_DATA, self::IV);
+        $cipher = $this->resolveCipher($resourceKey);
+        $encrypted = openssl_encrypt($plainText, $cipher, $resourceKey, OPENSSL_RAW_DATA, self::IV);
 
         if ($encrypted === false) {
             throw new \RuntimeException('Failed to encrypt ARB trandata.');
@@ -21,8 +20,7 @@ class ArbCryptoService
 
     public function decrypt(string $encryptedText, string $resourceKey): string
     {
-        $key = $this->decodeKey($resourceKey);
-        $cipher = $this->resolveCipher($key);
+        $cipher = $this->resolveCipher($resourceKey);
 
         $normalized = urldecode(trim($encryptedText));
         if (ctype_xdigit($normalized) && strlen($normalized) % 2 === 0) {
@@ -35,7 +33,7 @@ class ArbCryptoService
             throw new \RuntimeException('Invalid ARB trandata encoding.');
         }
 
-        $decrypted = openssl_decrypt($decoded, $cipher, $key, OPENSSL_RAW_DATA, self::IV);
+        $decrypted = openssl_decrypt($decoded, $cipher, $resourceKey, OPENSSL_RAW_DATA, self::IV);
         if ($decrypted === false) {
             throw new \RuntimeException('Failed to decrypt ARB trandata.');
         }
@@ -43,19 +41,9 @@ class ArbCryptoService
         return trim($decrypted);
     }
 
-    private function decodeKey(string $resourceKey): string
+    private function resolveCipher(string $resourceKey): string
     {
-        $hexDecoded = @hex2bin($resourceKey);
-        if ($hexDecoded !== false && strlen($hexDecoded) === 16) {
-            return $hexDecoded;
-        }
-
-        return $resourceKey;
-    }
-
-    private function resolveCipher(string $key): string
-    {
-        $keyLength = strlen($key);
+        $keyLength = strlen($resourceKey);
 
         return match ($keyLength) {
             16 => 'AES-128-CBC',
