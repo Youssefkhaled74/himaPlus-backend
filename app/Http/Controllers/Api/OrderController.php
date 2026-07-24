@@ -116,7 +116,7 @@ class OrderController extends Controller
         $order = $this->order->where('id', $id)->where(function ($q) use ($user) {
             $q->where('user_id', $user->id)->orWhere('provider_id', $user->id);
         })->with([
-            'items.product', 'timeline', 'provider', 'user', 'offer.provider', 'offers.provider', 'partial_receive'
+            'items.product', 'timeline', 'provider', 'user', 'offer.provider', 'offers.provider', 'partial_receive', 'shipments.images', 'shipments.shippingMethod'
         ])->first();
         if (is_null($order)) {
             return responseJson(404, __('messages.not_found', ['item' => 'Order']));
