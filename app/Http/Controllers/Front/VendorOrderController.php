@@ -353,6 +353,59 @@ class VendorOrderController extends Controller
     }
 
     /**
+     * Ship order directly from the order detail page with shipping method
+     */
+    public function shipFromOrder(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'order_id' => 'required|exists:orders,id',
+            'shipping_method_id' => 'required|exists:shipping_methods,id',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $vendor = auth()->user();
+        $order = Order::where('id', $request->order_id)->firstOrFail();
+
+        if (!$this->vendorOrderVisibilityService->canViewOrder($order, (int) $vendor->id)) {
+            abort(403);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $shipment = Shipment::create([
+                'order_id' => $order->id,
+                'shipping_method_id' => $request->shipping_method_id,
+                'status' => Shipment::STATUS_SHIPPED,
+                'shipped_at' => now(),
+            ]);
+
+            $order->update([
+                'shipping_method_id' => $request->shipping_method_id,
+            ]);
+
+            $order->timeline()->create([
+                'timeline_no' => 4,
+                'action_at' => now(),
+                'user_id' => $vendor->id,
+            ]);
+
+            DB::commit();
+
+            flash()->success(__('nav.order_shipped_success'));
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            report($e);
+            flash()->error(__('messages.something_went_wrong'));
+        }
+
+        return redirect()->route('vendor/orders/show', $order->id);
+    }
+
+    /**
      * Show shipment creation form
      */
     public function createShipment($orderId)
