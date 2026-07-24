@@ -244,6 +244,36 @@ return [
     'timeline' => 'الجدول الزمني',
     'total_price' => 'السعر الإجمالي',
     'vat' => 'ضريبة القيمة المضافة',
+    'back' => 'رجوع',
+
+    // Timeline Actions
+    'mark_as_offer_prepared' => 'تحديد كمعد للعرض',
+    'mark_as_offer_sent' => 'تحديد كإرسال العرض',
+    'mark_as_completed' => 'تحديد كمكتمل',
+    'mark_as_shipped' => 'تحديد كتم الشحن',
+    'mark_as_delivered' => 'تحديد كتم التسليم',
+    'mark_as_in_progress' => 'تحديد كقيد التنفيذ',
+    'mark_as_appointment_set' => 'تحديد موعد',
+
+    // Shipments
+    'shipments' => 'الشحنات',
+    'shipment' => 'شحنة',
+    'create_shipment' => 'إنشاء شحنة',
+    'create_shipment_with_images' => 'إنشاء شحنة مع صور',
+    'new_shipment' => 'شحنة جديدة',
+    'existing_shipments' => 'الشحنات الموجودة',
+    'tracking_number' => 'رقم التتبع',
+    'tracking_number_placeholder' => 'مثال: SHP-2026-00123',
+    'tracking_number_hint' => 'اختياري: أدخل رقم التتبع من شركة الشحن إذا كان متاحاً.',
+    'shipping_method' => 'طريقة الشحن',
+    'shipment_images' => 'صور الشحنة',
+    'drop_images_here' => 'اسحب الصور وأفلتها هنا،',
+    'or_click_to_browse' => 'أو انقر للتصفح',
+    'image_upload_hint' => 'JPEG أو PNG أو WebP أو PDF. الحد الأقصى 10 ميجا لكل ملف. حتى 10 ملفات.',
+    'shipment_notes_placeholder' => 'مثال: التعامل بحذر، الحفظ في ثلاجة...',
+    'creating_shipment' => 'جارٍ إنشاء الشحنة',
+    'without_images' => 'بدون صور',
+    'customer' => 'العميل',
 
     // Vendor Orders List
     'assigned_technician' => 'الفني المعيّن',
