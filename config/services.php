@@ -51,6 +51,7 @@ return [
         'tranportal_password' => env('ARB_TRANPORTAL_PASSWORD'),
         'resource_key' => env('ARB_RESOURCE_KEY'),
         'endpoint' => env('ARB_PAYMENT_ENDPOINT'),
+        'transactions_endpoint' => env('ARB_TRANSACTIONS_ENDPOINT'),
         'response_url' => env('ARB_RESPONSE_URL'),
         'error_url' => env('ARB_ERROR_URL'),
         'environment' => env('ARB_ENVIRONMENT', 'sandbox'),
