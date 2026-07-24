@@ -41,6 +41,8 @@ return [
     // Vendor Profile
     'company_name' => 'Company Name',
     'company_info' => 'Company Information',
+    'company_details' => 'Company Details',
+    'company_help' => 'Manage your company profile, branch, IBAN and document information.',
     'branch' => 'Branch',
     'iban' => 'IBAN',
     'tax_number' => 'Tax Number',

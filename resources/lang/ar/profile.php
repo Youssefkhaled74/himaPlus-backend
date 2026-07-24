@@ -41,6 +41,8 @@ return [
     // Vendor Profile
     'company_name' => 'اسم الشركة',
     'company_info' => 'معلومات الشركة',
+    'company_details' => 'بيانات الشركة',
+    'company_help' => 'إدارة ملف شركتك والفرع والحساب البنكي والمستندات.',
     'branch' => 'الفرع',
     'iban' => 'الحساب البنكي (IBAN)',
     'tax_number' => 'رقم الضريبة',
