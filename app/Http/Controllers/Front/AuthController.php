@@ -92,10 +92,18 @@ class AuthController extends Controller
             return back();
         }
 
-        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
-        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        $smsResult = $this->forJawalyService->sendSMS($user->mobile, (string) $code);
+        try {
+            dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        } catch (\Exception $e) {
+            Log::warning('Email dispatch failed', ['email' => $user->email, 'error' => $e->getMessage()]);
+        }
 
-        flash()->success(__('messages.success'));
+        if ($smsResult['success']) {
+            flash()->success(__('messages.success'));
+        } else {
+            flash()->warning(__('messages.success') . ' — ' . $smsResult['message']);
+        }
         return redirect(route('user/account-check/form', $user->id));
     }
     
@@ -187,10 +195,18 @@ class AuthController extends Controller
             return back();
         }
         
-        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
-        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        $smsResult = $this->forJawalyService->sendSMS($user->mobile, (string) $code);
+        try {
+            dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        } catch (\Exception $e) {
+            Log::warning('Email dispatch failed', ['email' => $user->email, 'error' => $e->getMessage()]);
+        }
         
-        flash()->success(__('messages.success'));
+        if ($smsResult['success']) {
+            flash()->success(__('messages.success'));
+        } else {
+            flash()->warning(__('messages.success') . ' — ' . $smsResult['message']);
+        }
         return back();
     }
 
@@ -619,10 +635,14 @@ class AuthController extends Controller
             return responseJson(500, __('messages.internal_server_error'));
         }
 
-        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
-        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        $smsResult = $this->forJawalyService->sendSMS($user->mobile, (string) $code);
+        try {
+            dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        } catch (\Exception $e) {
+            Log::warning('Email dispatch failed', ['email' => $user->email, 'error' => $e->getMessage()]);
+        }
 
-        return responseJson(200, __('messages.success'));
+        return responseJson(200, $smsResult['success'] ? __('messages.success') : $smsResult['message']);
     }
 
     public function logout()
