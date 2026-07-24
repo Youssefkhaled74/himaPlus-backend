@@ -244,6 +244,36 @@ return [
     'timeline' => 'Timeline',
     'total_price' => 'Total Price',
     'vat' => 'VAT',
+    'back' => 'Back',
+
+    // Timeline Actions
+    'mark_as_offer_prepared' => 'Mark as Offer Prepared',
+    'mark_as_offer_sent' => 'Mark as Offer Sent',
+    'mark_as_completed' => 'Mark as Completed',
+    'mark_as_shipped' => 'Mark as Shipped',
+    'mark_as_delivered' => 'Mark as Delivered',
+    'mark_as_in_progress' => 'Mark as In Progress',
+    'mark_as_appointment_set' => 'Set Appointment',
+
+    // Shipments
+    'shipments' => 'Shipments',
+    'shipment' => 'Shipment',
+    'create_shipment' => 'Create Shipment',
+    'create_shipment_with_images' => 'Create Shipment with Images',
+    'new_shipment' => 'New Shipment',
+    'existing_shipments' => 'Existing Shipments',
+    'tracking_number' => 'Tracking Number',
+    'tracking_number_placeholder' => 'e.g. SHP-2026-00123',
+    'tracking_number_hint' => 'Optional: Enter the carrier tracking number if available.',
+    'shipping_method' => 'Shipping Method',
+    'shipment_images' => 'Shipment Images',
+    'drop_images_here' => 'Drag & drop images here,',
+    'or_click_to_browse' => 'or click to browse',
+    'image_upload_hint' => 'JPEG, PNG, WebP, or PDF. Max 10MB each. Up to 10 files.',
+    'shipment_notes_placeholder' => 'e.g. Handle with care, keep refrigerated...',
+    'creating_shipment' => 'Creating Shipment',
+    'without_images' => 'without images',
+    'customer' => 'Customer',
 
     // Vendor Orders List
     'assigned_technician' => 'Assigned Technician',
