@@ -110,7 +110,7 @@ class VendorOrderController extends Controller
     {
         $vendor = auth()->user();
         $order = Order::where('id', $id)
-            ->with(['user', 'items.product', 'timeline', 'offers.provider', 'device_category', 'coupon'])
+            ->with(['user', 'items.product', 'timeline', 'offers.provider', 'device_category', 'coupon', 'shippingMethod', 'shipments.shippingMethod', 'shipments.images'])
             ->firstOrFail();
 
         $isAllowed = $this->vendorOrderVisibilityService->canViewOrder($order, (int) $vendor->id);
@@ -128,7 +128,9 @@ class VendorOrderController extends Controller
             'provider_id' => (int) $vendor->id,
         ]);
 
-        return view('front.vendor.orders.show', compact('order', 'myOffer'));
+        $shippingMethods = \App\Models\ShippingMethod::active()->ordered()->get();
+
+        return view('front.vendor.orders.show', compact('order', 'myOffer', 'shippingMethods'));
     }
 
     /**
