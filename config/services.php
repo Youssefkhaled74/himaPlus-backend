@@ -34,7 +34,8 @@ return [
     'forjawaly' => [
         'key' => env('FORJAWALY_API_KEY'),
         'secret' => env('FORJAWALY_API_SECRET'),
-        "base_url"=>env('FORJAWALY_URL',"https://api-sms.4jawaly.com/api/v1/")
+        'base_url' => env('FORJAWALY_URL', 'https://api-sms.4jawaly.com/api/v1/'),
+        'sender' => env('FORJAWALY_SENDER', 'TechPack'),
     ],
 
     'paymob' => [

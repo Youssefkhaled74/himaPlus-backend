@@ -27,9 +27,14 @@ class SendSmsJob implements ShouldQueue
         $this->onQueue('notifications');
     }
 
-    public function handle(ForJawalyService $sms)
+    public function handle(ForJawalyService $sms): void
     {
-        $sms->sendSMS($this->mobile, $this->code);
+        $result = $sms->sendSMS($this->mobile, $this->code);
+
+        Log::info('SendSmsJob executed', [
+            'mobile' => $this->mobile,
+            'success' => isset($result['code']) && (int) $result['code'] === 200,
+        ]);
     }
 
     public function failed(\Throwable $e): void
