@@ -33,7 +33,7 @@
             @endif
             @php
                 $vat = 0;
-                $rate = 0.10;
+                $rate = ($vatRate ?? 10) / 100;
                 $subtotal = 0;
             @endphp
             @isset($cart)
@@ -131,6 +131,7 @@
             </div>
         </div>
         <strong id="net-checkout" style="display: none;">{{ $subtotal + $vat }}</strong>
+        <strong id="subtotal-only-checkout" style="display: none;">{{ $subtotal }}</strong>
     </main>
 @endsection
 
@@ -150,11 +151,13 @@
             },
             success: function(data) {
                 if(data.status == 200){
-                    var coupon  = data.data;
-                    var baseNet = $('#net-checkout').text();
+                    var coupon = data.data;
+                    var itemsCost = parseFloat($('#subtotal-only-checkout').text());
+                    var vat = parseFloat($('#vat-area-checkout').text());
+                    var baseNet = itemsCost + vat;
                     let discount = 0;
                     if (coupon.type === 2){
-                        discount = baseNet * (coupon.amount/100);
+                        discount = itemsCost * (coupon.amount / 100);
                     } else {
                         discount = Number(coupon.amount);
                     }

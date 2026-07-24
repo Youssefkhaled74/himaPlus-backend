@@ -41,6 +41,8 @@ return [
     // Vendor Profile
     'company_name' => 'اسم الشركة',
     'company_info' => 'معلومات الشركة',
+    'company_details' => 'بيانات الشركة',
+    'company_help' => 'إدارة ملف شركتك والفرع والحساب البنكي والمستندات.',
     'branch' => 'الفرع',
     'iban' => 'الحساب البنكي (IBAN)',
     'tax_number' => 'رقم الضريبة',
@@ -66,6 +68,8 @@ return [
     'email_or_phone' => 'البريد الإلكتروني أو رقم الهاتف',
     'send_reset_code' => 'إرسال رمز إعادة التعيين',
     'remember_password' => 'هل تتذكر كلمة المرور؟',
+    'remember_me' => 'تذكرني',
+    'forgot_password' => 'نسيت كلمة المرور',
 
     // Alert
     'select_image_only' => 'الرجاء اختيار صورة فقط',

@@ -68,6 +68,8 @@ return [
     'email_or_phone' => 'Email or Phone Number',
     'send_reset_code' => 'Send Reset Code',
     'remember_password' => 'Remember your password?',
+    'remember_me' => 'Remember me',
+    'forgot_password' => 'Forgot password',
 
     // Alert
     'select_image_only' => 'Please select an image only',

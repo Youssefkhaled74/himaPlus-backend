@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Repositories\Eloquent\Admin\InfoRepository;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,9 +14,11 @@ class CartController extends Controller
 {
 
     public $product;
+    protected $infoRepository;
 
-    public function __construct(Product $product){
+    public function __construct(Product $product, InfoRepository $infoRepository){
         $this->product = $product;
+        $this->infoRepository = $infoRepository;
     }
 
     public function toggleInCart(Request $request, $id)
@@ -109,7 +112,9 @@ class CartController extends Controller
     {
         try{
             $cart = auth()->user()->cart()->with(['product' => fn($q) => $q->with(['category'])])->orderByDesc('id')->get();
-            return view('front.auth.checkout', compact('cart'));
+            $info = $this->infoRepository->getfirst();
+            $vatRate = (int) ($info->vat ?? 10);
+            return view('front.auth.checkout', compact('cart', 'vatRate'));
         }catch(\Exception $e){
             flash()->error('there is something wrong , please contact technical support');
             return back();

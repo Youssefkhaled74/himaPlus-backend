@@ -143,10 +143,7 @@ class VendorAuthController extends Controller
      */
     public function loginForm()
     {
-        if (auth()->check() && auth()->user()->user_type == 2) {
-            return redirect()->route('vendor/dashboard');
-        }
-        return view('front.vendor.auth.login');
+        return redirect()->route('login');
     }
 
     /**

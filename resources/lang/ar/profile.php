@@ -68,6 +68,8 @@ return [
     'email_or_phone' => 'البريد الإلكتروني أو رقم الهاتف',
     'send_reset_code' => 'إرسال رمز إعادة التعيين',
     'remember_password' => 'هل تتذكر كلمة المرور؟',
+    'remember_me' => 'تذكرني',
+    'forgot_password' => 'نسيت كلمة المرور',
 
     // Alert
     'select_image_only' => 'الرجاء اختيار صورة فقط',
