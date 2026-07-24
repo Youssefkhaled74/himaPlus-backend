@@ -690,10 +690,18 @@ class AuthController extends Controller
             return back();
         }
 
-        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
-        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        $smsResult = $this->forJawalyService->sendSMS($user->mobile, (string) $code);
+        try {
+            dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        } catch (\Exception $e) {
+            Log::warning('Email dispatch failed', ['email' => $user->email, 'error' => $e->getMessage()]);
+        }
 
-        flash()->success(__('messages.reset_code_sent'));
+        if ($smsResult['success']) {
+            flash()->success(__('messages.reset_code_sent'));
+        } else {
+            flash()->warning(__('messages.reset_code_sent') . ' — ' . $smsResult['message']);
+        }
         return redirect(route('user/reset-password/form', $user->id));
     }
 
