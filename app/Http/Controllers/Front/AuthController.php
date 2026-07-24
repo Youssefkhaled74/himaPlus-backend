@@ -716,7 +716,7 @@ class AuthController extends Controller
         }
 
         flash()->success(__('messages.password_reset'));
-        return redirect()->to(route('user/loginForm'));
+        return redirect()->to(route('login'));
     }
 
 }

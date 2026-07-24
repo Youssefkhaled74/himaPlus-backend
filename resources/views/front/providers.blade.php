@@ -167,7 +167,7 @@
 
                 <!-- See More -->
                 <div class="text-center mt-4">
-                    <a href="{{ route('user/loginForm') }}" class="nc-btn-outline" style="text-decoration: none;">{{ __('providers.join_with_us') }}</a>
+                    <a href="{{ route('login') }}" class="nc-btn-outline" style="text-decoration: none;">{{ __('providers.join_with_us') }}</a>
                 </div>
             </div>
         </section>
