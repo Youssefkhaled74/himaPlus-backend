@@ -31,7 +31,7 @@
 @endsection
 
 @section('content')
-@php$isAr = app()->getLocale() === 'ar'; @endphp
+@php $isAr = app()->getLocale() === 'ar'; @endphp
 
 <main class="vendor-branches">
     @include('flash::message')
