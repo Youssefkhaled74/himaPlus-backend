@@ -55,7 +55,6 @@ Route::group(['middleware' => ['limitReq']], function(){
     Route::post('contact-us', [HomeController::class, 'storeContactUs'])->name('user/store/contact-us');
     
     Route::get('/user/login', [AuthController::class, 'loginForm'])->name('login');
-    Route::get('/user/login', [AuthController::class, 'loginForm'])->name('user/loginForm');
     // Prevent 405 if this URL is opened directly in browser (GET)
     Route::get('/user/check/login', fn() => redirect()->route('user/loginForm'));
     Route::post('/user/check/login', [AuthController::class, 'login'])->middleware('throttle:auth-login')->name('user/check/login');
