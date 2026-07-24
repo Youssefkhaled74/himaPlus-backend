@@ -413,12 +413,18 @@ class AuthController extends Controller
         }
 
         if ($isMobileIdentifier) {
-            dispatch(new SendSmsJob((string) $user->mobile, (string) $code))->delay(now()->addMinute());
+            $smsResult = $this->forJawalyService->sendSMS((string) $user->mobile, (string) $code);
+            $smsMsg = $smsResult['success'] ? 'SMS sent successfully' : $smsResult['message'];
         } else {
-            dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+            try {
+                dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+            } catch (\Exception $e) {
+                Log::warning('Email dispatch failed', ['email' => $user->email, 'error' => $e->getMessage()]);
+            }
+            $smsMsg = 'Reset code sent successfully';
         }
 
-        return responseJson(200, __('messages.reset_code_sent_successfully'));
+        return responseJson(200, __('messages.reset_code_sent_successfully'), ['sms' => $smsMsg]);
     }
 
     public function verifyResetCodePassword(Request $request)
