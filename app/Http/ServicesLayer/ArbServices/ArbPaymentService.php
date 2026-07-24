@@ -64,10 +64,10 @@ class ArbPaymentService
             ]];
 
             $verifySsl = filter_var(config('services.arb.verify_ssl', true), FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
-            $jsonPayload = json_encode($payload, JSON_UNESCAPED_SLASHES);
-            if ($jsonPayload === false) {
-                throw new \RuntimeException('Failed to encode ARB payment init payload.');
-            }
+            $first = [];
+            $selectedEndpoint = null;
+            $lastHttpStatus = null;
+            $lastHttpBody = null;
             $paymentEndpoint = (string) config('services.arb.endpoint');
 
             $plainJson = json_encode([$basePlainData], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -137,11 +137,10 @@ class ArbPaymentService
                     'errorText' => $first['errorText'] ?? null,
                     'http_status' => $lastHttpStatus,
                 ];
-                Log::error('ARB payment init failed (all endpoints)', [
+                Log::error('ARB payment init failed', [
                     'order_id' => $order->id,
                     'status' => $lastHttpStatus,
                     'body' => $lastHttpBody,
-                    'variant' => $selectedVariant,
                     'gateway_status' => $first['status'] ?? null,
                     'gateway_error' => $first['error'] ?? null,
                     'gateway_error_text' => $first['errorText'] ?? null,
@@ -158,7 +157,6 @@ class ArbPaymentService
             Log::info('ARB payment init accepted', [
                 'order_id' => $order->id,
                 'endpoint' => $selectedEndpoint,
-                'variant' => $selectedVariant,
                 'payment_id' => $paymentId,
                 'payment_page_url' => $paymentPageUrl,
             ]);
