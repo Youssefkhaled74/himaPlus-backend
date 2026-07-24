@@ -43,6 +43,9 @@
                             <a class="nav-link {{ request()->routeIs('vendor/categories') ? 'active' : '' }}" href="{{ route('vendor/categories') }}">{{ __('nav.categories') }}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ str_contains($routeName, 'vendor/branches') ? 'active' : '' }}" href="{{ route('vendor/branches') }}">{{ __('vendor_branches.branches') }}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('vendor/analytics') ? 'active' : '' }}" href="{{ route('vendor/analytics') }}">{{ __('nav.analytics') }}</a>
                         </li>
                         <li class="nav-item">

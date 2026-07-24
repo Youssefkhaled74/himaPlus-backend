@@ -13,6 +13,7 @@ use App\Http\Controllers\Front\VendorOrderController;
 use App\Http\Controllers\Front\VendorRatingsController;
 use App\Http\Controllers\Front\VendorNotificationsController;
 use App\Http\Controllers\Front\VendorAnalyticsController;
+use App\Http\Controllers\Front\VendorBranchController;
 use App\Http\Controllers\Api\ArbPaymentController;
 use Illuminate\Support\Facades\Route;
 
@@ -212,6 +213,16 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['auth', 'vendorCheck']], fu
     Route::delete('/notifications/{id}', [VendorNotificationsController::class, 'delete'])->name('vendor/notifications/delete');
     Route::post('/notifications/mark-all-as-read', [VendorNotificationsController::class, 'markAllAsRead'])->name('vendor/notifications/mark-all-as-read');
     
+    // Branches
+    Route::get('/branches', [VendorBranchController::class, 'index'])->name('vendor/branches');
+    Route::get('/branches/create', [VendorBranchController::class, 'create'])->name('vendor/branches/create');
+    Route::post('/branches/store', [VendorBranchController::class, 'store'])->name('vendor/branches/store');
+    Route::get('/branches/{id}/edit', [VendorBranchController::class, 'edit'])->name('vendor/branches/edit');
+    Route::put('/branches/{id}', [VendorBranchController::class, 'update'])->name('vendor/branches/update');
+    Route::delete('/branches/{id}', [VendorBranchController::class, 'destroy'])->name('vendor/branches/delete');
+    Route::post('/branches/{id}/restore', [VendorBranchController::class, 'restore'])->name('vendor/branches/restore');
+    Route::post('/branches/{id}/toggle', [VendorBranchController::class, 'toggle'])->name('vendor/branches/toggle');
+
     // Analytics (Phase 3)
     Route::get('/analytics', [VendorAnalyticsController::class, 'index'])->name('vendor/analytics');
 });

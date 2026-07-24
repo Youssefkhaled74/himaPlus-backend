@@ -145,6 +145,16 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 		return [];
 	}
 
+    public function branches()
+    {
+        return $this->hasMany(VendorBranch::class, 'user_id')->latest();
+    }
+
+    public function activeBranches()
+    {
+        return $this->branches()->where('is_active', 1);
+    }
+
     public function orders()
 	{
 		return $this->hasMany(Order::class, 'user_id')->latest();

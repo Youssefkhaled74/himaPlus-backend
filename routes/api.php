@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\ShippingMethodController;
 use App\Http\Controllers\Api\ShipmentController;
+use App\Http\Controllers\Api\VendorBranchController as ApiVendorBranchController;
 
 
 /*
@@ -114,6 +115,16 @@ Route::group(['middleware' => ['api', 'limitReq']], function ($router) {
             Route::post('/', [RatingController::class, 'rating']);
         });
 
+        Route::group(['prefix' => 'vendor-branches'], function ($router) {
+            Route::get('/', [ApiVendorBranchController::class, 'index']);
+            Route::get('/{id}', [ApiVendorBranchController::class, 'show']);
+            Route::post('/', [ApiVendorBranchController::class, 'store']);
+            Route::put('/{id}', [ApiVendorBranchController::class, 'update']);
+            Route::delete('/{id}', [ApiVendorBranchController::class, 'destroy']);
+            Route::post('/{id}/restore', [ApiVendorBranchController::class, 'restore']);
+            Route::post('/{id}/toggle', [ApiVendorBranchController::class, 'toggle']);
+        });
+
         Route::group(['prefix' => 'chat'], function ($router) {
             Route::get('/conversations', [ChatController::class, 'getConversations']);
             Route::get('/conversation', [ChatController::class, 'getConversation']);
@@ -131,6 +142,8 @@ Route::group(['middleware' => ['api', 'limitReq']], function ($router) {
         Route::get('/details/{id?}', [ProductController::class, 'details']);
         Route::get('/{offset?}/{limit?}', [ProductController::class, 'products']);
     });
+
+    Route::get('/vendors/{vendorId}/branches', [ApiVendorBranchController::class, 'publicVendorBranches']);
 
     Route::get('/pay/callback', [PaymobController::class, 'callback']);
     Route::get('/pay/webhook', [PaymobController::class, 'webhook']);

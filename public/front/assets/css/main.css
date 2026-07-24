@@ -773,6 +773,8 @@ body{
   .clients-blob{right:-160px; bottom:-160px; width:360px; height:360px}
   .testi-card{padding:16px 18px}
   .testi-card__stars i{font-size:1rem}
+  .landing-header .navbar-brand img{height:40px; padding:4px 8px; border-radius:10px;}
+  .landing-header .navbar{min-height:60px; padding:.45rem 0;}
 }
 
 .container-testimonials{
