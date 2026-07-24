@@ -70,8 +70,8 @@ class ArbPaymentService
             $configuredEndpoint = (string) config('services.arb.endpoint');
             $transactionsEndpoint = (string) config('services.arb.transactions_endpoint', '');
             $candidateEndpoints = array_values(array_unique(array_filter([
-                $transactionsEndpoint ?: str_replace('/pg/payment/hosted.htm', '/pg/payment/tranportal.htm', $configuredEndpoint),
                 $configuredEndpoint,
+                $transactionsEndpoint,
             ])));
 
             $variants = [
