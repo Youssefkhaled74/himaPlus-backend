@@ -1,7 +1,7 @@
 @extends('layouts.front.home')
 
 @section('title')
-    <title>{{ trans_or_fallback('', '') }} - Vendor | Hema</title>
+    <title>{{ __('nav.ratings') }} - Vendor | Hema</title>
 @endsection
 
 @section('css')
@@ -342,13 +342,13 @@
     <nav class="vr-breadcrumb">
         <a href="{{ route('vendor/dashboard') }}">{{ $isAr ? 'الرئيسية' : 'Home' }}</a>
         <i class="bi bi-chevron-{{ $isAr ? 'left' : 'right' }}"></i>
-        <span class="active">{{ trans_or_fallback('', '') }}</span>
+        <span class="active">{{ __('nav.ratings') }}</span>
     </nav>
 
     <section class="vr-card vr-hero">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
-                <h3 class="vr-title">{{ trans_or_fallback('', '') }}</h3>
+                <h3 class="vr-title">{{ __('nav.ratings') }}</h3>
                 <p class="vr-subtitle">
                     {{ $isAr ? 'تابع انطباعات العملاء عن منتجاتك، راقب متوسط التقييمات، وراجع أكثر الملاحظات تأثيرًا في تجربة الشراء.' : 'Track customer feedback on your products, monitor rating averages, and review the comments that shape the buying experience.' }}
                 </p>
@@ -356,11 +356,11 @@
             <div class="vr-actions">
                 <a href="{{ route('vendor/dashboard') }}" class="vr-btn-outline">
                     <i class="bi bi-grid-1x2-fill"></i>
-                    {{ trans_or_fallback('', '') }}
+                    {{ __('nav.dashboard') }}
                 </a>
                 <a href="{{ route('vendor/products') }}" class="vr-btn-primary">
                     <i class="bi bi-box-seam"></i>
-                    {{ trans_or_fallback('', '') }}
+                    {{ __('nav.products') }}
                 </a>
             </div>
         </div>
@@ -369,19 +369,19 @@
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-4">
             <div class="vr-card vr-stat">
-                <p class="vr-stat-label">{{ trans_or_fallback('', '') }}</p>
+                <p class="vr-stat-label">{{ $isAr ? 'متوسط التقييم' : 'Average Rating' }}</p>
                 <h4 class="vr-stat-value">{{ number_format((float) $averageRating, 1) }}</h4>
             </div>
         </div>
         <div class="col-6 col-md-4">
             <div class="vr-card vr-stat">
-                <p class="vr-stat-label">{{ trans_or_fallback('', '') }}</p>
+                <p class="vr-stat-label">{{ $isAr ? 'إجمالي التقييمات' : 'Total Ratings' }}</p>
                 <h4 class="vr-stat-value">{{ number_format((int) $totalRatings) }}</h4>
             </div>
         </div>
         <div class="col-12 col-md-4">
             <div class="vr-card vr-stat">
-                <p class="vr-stat-label">{{ trans_or_fallback('', '') }}</p>
+                <p class="vr-stat-label">{{ $isAr ? 'المنتجات المقيّمة' : 'Rated Products' }}</p>
                 <h4 class="vr-stat-value">{{ number_format(count($products)) }}</h4>
             </div>
         </div>
@@ -392,7 +392,7 @@
             <div class="vr-card mb-4">
                 <div class="vr-panel-head">
                     <div>
-                        <h5 class="vr-panel-title">{{ trans_or_fallback('', '') }}</h5>
+                        <h5 class="vr-panel-title">{{ $isAr ? 'توزيع التقييمات' : 'Rating Breakdown' }}</h5>
                         <p class="vr-panel-subtitle">{{ $isAr ? 'توزيع المراجعات حسب عدد النجوم.' : 'Distribution of reviews by star score.' }}</p>
                     </div>
                 </div>
@@ -423,9 +423,9 @@
                     <form method="GET" action="{{ route('vendor/ratings') }}">
                         <div class="vr-filter-grid">
                             <div class="vr-field">
-                                <label>{{ trans_or_fallback('', '') }}</label>
+                                <label>{{ $isAr ? 'المنتج' : 'Product' }}</label>
                                 <select name="product_id" class="form-select">
-                                    <option value="">{{ trans_or_fallback('', '') }}</option>
+                                    <option value="">{{ $isAr ? 'كل المنتجات' : 'All Products' }}</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}" {{ (string) request('product_id') === (string) $product->id ? 'selected' : '' }}>
                                             {{ $product->name }}
@@ -434,9 +434,9 @@
                                 </select>
                             </div>
                             <div class="vr-field">
-                                <label>{{ trans_or_fallback('', '') }}</label>
+                                <label>{{ $isAr ? 'درجة التقييم' : 'Rating Score' }}</label>
                                 <select name="rating" class="form-select">
-                                    <option value="">{{ trans_or_fallback('', '') }}</option>
+                                    <option value="">{{ $isAr ? 'كل التقييمات' : 'All Ratings' }}</option>
                                     @for ($i = 5; $i >= 1; $i--)
                                         <option value="{{ $i }}" {{ (string) request('rating') === (string) $i ? 'selected' : '' }}>
                                             {{ $i }} / 5
@@ -447,11 +447,11 @@
                             <div class="vr-filter-actions">
                                 <button type="submit" class="vr-btn-primary" style="border:0;">
                                     <i class="bi bi-funnel-fill"></i>
-                                    {{ trans_or_fallback('', '') }}
+                                    {{ $isAr ? 'تصفية' : 'Filter' }}
                                 </button>
                                 <a href="{{ route('vendor/ratings') }}" class="vr-btn-outline">
                                     <i class="bi bi-arrow-clockwise"></i>
-                                    {{ trans_or_fallback('', '') }}
+                                    {{ $isAr ? 'إعادة ضبط' : 'Reset' }}
                                 </a>
                             </div>
                         </div>
@@ -469,7 +469,7 @@
                     </div>
                     <span class="vr-score-badge">
                         <i class="bi bi-chat-square-quote-fill"></i>
-                        {{ number_format($ratings->total()) }} {{ trans_or_fallback('', '') }}
+                        {{ number_format($ratings->total()) }} {{ $isAr ? 'مراجعة' : 'Reviews' }}
                     </span>
                 </div>
                 <div class="vr-body">
@@ -477,10 +477,10 @@
                         <article class="vr-review">
                             <div class="vr-review-head">
                                 <div>
-                                    <h6 class="vr-review-title">{{ $rating->forable?->name ?? 'Product' }}</h6>
+                                    <h6 class="vr-review-title">{{ $rating->forable?->name ?? ($isAr ? 'منتج' : 'Product') }}</h6>
                                     <p class="vr-review-meta">
-                                        <strong>{{ $rating->user?->name ?? 'Anonymous' }}</strong>
-                                        <span class="mx-1">•</span>
+                                        <strong>{{ $rating->user?->name ?? ($isAr ? 'مجهول' : 'Anonymous') }}</strong>
+                                        <span class="mx-1">&bull;</span>
                                         {{ $rating->created_at->diffForHumans() }}
                                     </p>
                                 </div>
@@ -503,7 +503,7 @@
                     @empty
                         <div class="vr-empty">
                             <i class="bi bi-star"></i>
-                            <div>{{ trans_or_fallback('', '') }}</div>
+                            <div>{{ $isAr ? 'لا توجد تقييمات بعد' : 'No ratings yet' }}</div>
                         </div>
                     @endforelse
 
@@ -518,4 +518,3 @@
     </div>
 </main>
 @endsection
-
