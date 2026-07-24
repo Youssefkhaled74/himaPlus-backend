@@ -585,6 +585,43 @@
                 @endforeach
             @endisset
 
+            @if(isset($order->shipments) && $order->shipments->count() > 0)
+                <div class="detail-card reveal mt-3">
+                    <h5 class="mb-3">{{ __('nav.shipments') }} ({{ $order->shipments->count() }})</h5>
+                    @foreach($order->shipments as $shipment)
+                        <div style="border:1px solid #e6e8ed;border-radius:12px;padding:14px;margin-bottom:12px;background:#fafbfc;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                                <span style="font-size:14px;font-weight:600;color:#1f2937;">{{ __('nav.shipment') }} #{{ $shipment->id }}</span>
+                                <span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;background:#dbeafe;color:#1e40af;">{{ $shipment->status_label }}</span>
+                            </div>
+                            <div style="font-size:13px;color:#6b7280;margin-bottom:8px;">
+                                @if($shipment->tracking_number){{ __('nav.tracking_number') }}: {{ $shipment->tracking_number }} | @endif
+                                @if($shipment->shippingMethod){{ $shipment->shippingMethod->name }} | @endif
+                                {{ $shipment->created_at->translatedFormat('M d, Y H:i') }}
+                            </div>
+                            @if($shipment->notes)
+                                <div style="font-size:13px;color:#4b5563;margin-bottom:8px;"><strong>{{ __('nav.note') }}:</strong> {{ $shipment->notes }}</div>
+                            @endif
+                            @if($shipment->images->count() > 0)
+                                <div class="files-grid" style="display:flex;gap:8px;flex-wrap:wrap;">
+                                    @foreach($shipment->images as $img)
+                                        <a href="{{ asset($img->image_path) }}" target="_blank" class="cell" style="text-decoration:none;">
+                                            @if(in_array(strtolower(pathinfo($img->image_path, PATHINFO_EXTENSION)), ['jpg','jpeg','png','webp']))
+                                                <img src="{{ asset($img->image_path) }}" alt="{{ $img->caption ?? '' }}" style="width:90px;height:90px;object-fit:cover;border-radius:8px;border:1px solid #e5e7eb;">
+                                            @else
+                                                <div style="width:90px;height:90px;border-radius:8px;border:1px solid #e5e7eb;display:grid;place-items:center;background:#f1f5f9;color:#475569;font-size:11px;">
+                                                    <i class="bi bi-file-earmark"></i> {{ strtoupper(pathinfo($img->image_path, PATHINFO_EXTENSION)) }}
+                                                </div>
+                                            @endif
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
         </div>
     @endisset
 </main>
