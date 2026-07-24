@@ -128,6 +128,7 @@ class ArbPaymentService
                         'endpoint' => $endpoint,
                         'variant' => $variant['name'],
                         'has_trandata' => !empty($encryptedTranData),
+                        'plain_data' => $variant['plain'],
                     ]);
 
                     $response = Http::withBody($jsonPayload, 'application/json;charset=UTF-8')
