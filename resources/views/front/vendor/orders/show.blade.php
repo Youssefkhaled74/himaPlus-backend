@@ -561,16 +561,27 @@
                     </div>
                 @elseif($timelineActionNo && (int)$timelineActionNo === 4)
                     <div class="vos-actions" style="flex-direction:column;gap:10px;">
-                        <a href="{{ route('vendor/orders/create-shipment', $order->id) }}" class="btn-vos btn-vos-main" style="width:100%;text-align:center;">
-                            <i class="bi bi-box-seam"></i> {{ __('nav.create_shipment_with_images') }}
+                        @if(isset($shippingMethods) && $shippingMethods->count() > 0)
+                            <form method="POST" action="{{ route('vendor/orders/ship') }}" style="width:100%;">
+                                @csrf
+                                <input type="hidden" name="order_id" value="{{ (int)$order->id }}">
+                                <label style="font-size:14px;font-weight:600;color:#374151;margin-bottom:6px;display:block;">{{ __('nav.select_shipping_method') }}</label>
+                                <select name="shipping_method_id" class="form-select" style="border-radius:12px;border:1px solid #d1d5db;padding:10px 14px;font-size:14px;margin-bottom:10px;" required>
+                                    <option value="" disabled selected>{{ __('nav.choose_shipping_method') }}</option>
+                                    @foreach($shippingMethods as $method)
+                                        <option value="{{ $method->id }}" {{ (int)($order->shipping_method_id ?? 0) === $method->id ? 'selected' : '' }}>
+                                            {{ $method->name }} — {{ $method->base_price }} SAR
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="submit" class="btn-vos btn-vos-main" style="width:100%;text-align:center;">
+                                    <i class="bi bi-box-seam"></i> {{ __('nav.ship_order') }}
+                                </button>
+                            </form>
+                        @endif
+                        <a href="{{ route('vendor/orders/create-shipment', $order->id) }}" class="btn-vos btn-vos-outline" style="width:100%;text-align:center;">
+                            <i class="bi bi-camera"></i> {{ __('nav.create_shipment_with_images') }}
                         </a>
-                        <form method="POST" action="{{ route('user/order-timeline') }}" style="width:100%;">
-                            @csrf
-                            <input type="hidden" name="order_type" value="{{ encrypt((int)$order->order_type) }}">
-                            <input type="hidden" name="timeline_no" value="{{ encrypt((int)$timelineActionNo) }}">
-                            <input type="hidden" name="order_id" value="{{ encrypt((int)$order->id) }}">
-                            <button type="submit" class="btn-vos btn-vos-outline" style="width:100%;">{{ __('nav.mark_as_shipped') }} ({{ __('nav.without_images') }})</button>
-                        </form>
                     </div>
                 @elseif($timelineActionNo)
                     <div class="vos-actions">
