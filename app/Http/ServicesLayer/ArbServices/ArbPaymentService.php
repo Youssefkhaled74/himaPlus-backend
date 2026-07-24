@@ -76,31 +76,15 @@ class ArbPaymentService
 
             $variants = [
                 [
-                    'name' => 'v1_currencyCode_with_urls',
+                    'name' => 'v1_json_native',
+                    'plain' => array_merge($basePlainData, [
+                        'currencyCode' => 682,
+                    ]),
+                ],
+                [
+                    'name' => 'v2_json_string',
                     'plain' => array_merge($basePlainData, [
                         'currencyCode' => '682',
-                        'responseURL' => $callbackUrl,
-                        'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
-                    ]),
-                ],
-                [
-                    'name' => 'v2_currencyCode_without_urls',
-                    'plain' => array_merge($basePlainData, [
-                        'currencyCode' => '682',
-                    ]),
-                ],
-                [
-                    'name' => 'v3_currencycode_with_urls',
-                    'plain' => array_merge($basePlainData, [
-                        'currencycode' => '682',
-                        'responseURL' => $callbackUrl,
-                        'errorURL' => (string) config('services.arb.error_url', $callbackUrl),
-                    ]),
-                ],
-                [
-                    'name' => 'v4_currencycode_without_urls',
-                    'plain' => array_merge($basePlainData, [
-                        'currencycode' => '682',
                     ]),
                 ],
             ];
@@ -112,8 +96,9 @@ class ArbPaymentService
             $lastHttpBody = null;
 
             foreach ($variants as $variant) {
+                $plainJson = json_encode([$variant['plain']], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                 $encryptedTranData = $this->cryptoService->encrypt(
-                    http_build_query($variant['plain'], '', '&', PHP_QUERY_RFC3986),
+                    $plainJson,
                     (string) config('services.arb.resource_key')
                 );
                 $payload[0]['trandata'] = $encryptedTranData;
