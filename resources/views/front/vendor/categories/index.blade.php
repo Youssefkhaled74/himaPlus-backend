@@ -469,48 +469,6 @@
         </div>
     </div>
 
-    <div class="vc-card mb-4">
-        <div class="vc-panel-head">
-            <div>
-                <h5 class="vc-panel-title">
-                    {{ __('providers.add_category') ?? ($isAr ? 'إضافة تصنيف جديد' : 'Add New Category') }}
-                </h5>
-                <p class="vc-panel-subtitle">
-                    {{ __('providers.add_category_desc') ?? ($isAr ? 'أضف تصنيفاً جديداً مع صورة اختيارية.' : 'Add a new category with an optional image.') }}
-                </p>
-            </div>
-        </div>
-
-        <div class="vc-body">
-            <form method="POST" action="{{ route('vendor/categories/store') }}" enctype="multipart/form-data" class="vc-form-grid">
-                @csrf
-
-                <div class="vc-field">
-                    <label>{{ __('providers.category_name') ?? ($isAr ? 'اسم التصنيف' : 'Category Name') }}</label>
-                    <input
-                        type="text"
-                        name="name"
-                        class="form-control"
-                        placeholder="{{ __('providers.category_name') ?? ($isAr ? 'اسم التصنيف' : 'Category Name') }}"
-                        required
-                    >
-                </div>
-
-                <div class="vc-field">
-                    <label>{{ $isAr ? 'صورة التصنيف' : 'Category Image' }}</label>
-                    <input type="file" name="img" class="form-control" accept="image/*">
-                </div>
-
-                <div>
-                    <button class="vc-btn-primary border-0" type="submit">
-                        <i class="bi bi-plus-lg"></i>
-                        {{ __('providers.add') ?? ($isAr ? 'إضافة' : 'Add') }}
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <div class="vc-card">
         <div class="vc-panel-head">
             <div>
