@@ -123,10 +123,18 @@ class VendorAuthController extends Controller
             return back();
         }
         
-        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
-        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        $smsResult = $this->forJawalyService->sendSMS($user->mobile, (string) $code);
+        try {
+            dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
+        } catch (\Exception $e) {
+            Log::warning('Email dispatch failed', ['email' => $user->email, 'error' => $e->getMessage()]);
+        }
         
-        flash()->success("Verification code sent successfully");
+        if ($smsResult['success']) {
+            flash()->success("Verification code sent successfully");
+        } else {
+            flash()->warning("Verification code sent — " . $smsResult['message']);
+        }
         return back();
     }
 
