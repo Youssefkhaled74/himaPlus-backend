@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Eloquent\Admin\UserRepository;
 use App\Http\ServicesLayer\ForJawalyServices\ForJawalyService;
-use App\Jobs\SendSmsJob;
 use App\Jobs\SendUserCodeMailJob;
 use App\Models\Notification;
 use App\Models\User;

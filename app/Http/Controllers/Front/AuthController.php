@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Eloquent\Admin\UserRepository;
 use App\Http\ServicesLayer\ForJawalyServices\ForJawalyService;
-use App\Jobs\SendSmsJob;
 use App\Jobs\SendUserCodeMailJob;
 use App\Models\Notification;
 use App\Models\User;
@@ -93,7 +92,7 @@ class AuthController extends Controller
             return back();
         }
 
-        dispatch(new SendSmsJob($user->mobile, (string) $code))->delay(now()->addMinute());
+        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
         dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
 
         flash()->success(__('messages.success'));
@@ -188,7 +187,7 @@ class AuthController extends Controller
             return back();
         }
         
-        dispatch(new SendSmsJob($user->mobile, (string) $code))->delay(now()->addMinute());
+        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
         dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
         
         flash()->success(__('messages.success'));
@@ -620,7 +619,7 @@ class AuthController extends Controller
             return responseJson(500, __('messages.internal_server_error'));
         }
 
-        dispatch(new SendSmsJob($user->mobile, (string) $code))->delay(now()->addMinute());
+        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
         dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
 
         return responseJson(200, __('messages.success'));
@@ -671,7 +670,7 @@ class AuthController extends Controller
             return back();
         }
 
-        dispatch(new SendSmsJob($user->mobile, (string) $code))->delay(now()->addMinute());
+        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
         dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
 
         flash()->success(__('messages.reset_code_sent'));

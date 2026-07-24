@@ -105,8 +105,9 @@ class VendorAuthController extends Controller
         
         try {
             DB::beginTransaction();
+            $code = (string) random_int(1000, 9999);
             $user->update([
-                'code' => 1111,
+                'code' => $code,
                 'mobile_verified_at' =>  null,
                 'email_verified_at' =>  null,
             ]);
@@ -122,7 +123,8 @@ class VendorAuthController extends Controller
             return back();
         }
         
-        dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
+        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
+        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
         
         flash()->success("Verification code sent successfully");
         return back();
@@ -393,7 +395,8 @@ class VendorAuthController extends Controller
         }
 
         try {
-            $user->update(['code' => 1111]);
+            $code = (string) random_int(1000, 9999);
+            $user->update(['code' => $code]);
             $this->notification->create([
                 'title' => 'verified your account',
                 'content' => "your code: #$user->code",
@@ -404,7 +407,8 @@ class VendorAuthController extends Controller
             return back();
         }
 
-        dispatch(new SendUserCodeMailJob($user->email, (string) $user->code))->delay(now()->addMinute());
+        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
+        dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
 
         flash()->success("Reset code sent successfully.");
         return redirect(route('vendor/reset-password/form', $user->id));
