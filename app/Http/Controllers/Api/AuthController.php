@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Hash as FacadesHash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -91,7 +92,7 @@ class AuthController extends Controller
         }
 
         dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
-        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
+        $smsResult = $this->forJawalyService->sendSMS($user->mobile, (string) $code);
 
         if (!is_null($user->fcm_token)) {
             $this->targetFairbaseServicePushNotification(
@@ -103,7 +104,8 @@ class AuthController extends Controller
             );
         }
 
-        return responseJson(200, __('messages.success'));
+        $smsMsg = $smsResult['success'] ? 'SMS sent successfully' : $smsResult['message'];
+        return responseJson(200, __('messages.success'), ['sms' => $smsMsg]);
     }
 
     public function mobileCheck(Request $request)
@@ -176,7 +178,7 @@ class AuthController extends Controller
         }
 
         dispatch(new SendUserCodeMailJob($user->email, (string) $code))->delay(now()->addMinute());
-        $this->forJawalyService->sendSMS($user->mobile, (string) $code);
+        $smsResult = $this->forJawalyService->sendSMS($user->mobile, (string) $code);
 
         if (!is_null($user->fcm_token)) {
             $this->targetFairbaseServicePushNotification(
@@ -188,7 +190,8 @@ class AuthController extends Controller
             );
         }
 
-        return responseJson(200, __('messages.success'));
+        $smsMsg = $smsResult['success'] ? 'SMS sent successfully' : $smsResult['message'];
+        return responseJson(200, __('messages.success'), ['sms' => $smsMsg]);
     }
 
     public function login(Request $request)
@@ -349,9 +352,10 @@ class AuthController extends Controller
             return responseJson(500, __('messages.internal_server_error'));
         }
 
-        dispatch(new SendSmsJob((string) $user->mobile, (string) $code))->delay(now()->addMinute());
+        $smsResult = $this->forJawalyService->sendSMS((string) $user->mobile, (string) $code);
 
-        return responseJson(200, __('messages.success'));
+        $smsMsg = $smsResult['success'] ? 'SMS sent successfully' : $smsResult['message'];
+        return responseJson(200, __('messages.success'), ['sms' => $smsMsg]);
     }
 
     public function logout()
