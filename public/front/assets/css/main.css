@@ -172,7 +172,7 @@ body{
 .topbar .bi{vertical-align:-0.2rem}
 
 .landing-header{box-shadow:0 6px 20px rgba(14,43,87,.06); background:#fff}
-.landing-header .navbar-brand img{height:50px;width: 125px; background:#fff; padding:6px; border-radius:12px;}
+.landing-header .navbar-brand img{height:50px;width:auto; max-width:180px; background:#fff; padding:6px 10px; border-radius:12px; object-fit:contain; display:block;}
 .landing-header .btn-primary{background:var(--hp-primary); border-color:var(--hp-primary); border-radius:999px; font-weight:600}
 .landing-header .btn-primary:hover{background:#0a4ca5; border-color:#0a4ca5}
 
