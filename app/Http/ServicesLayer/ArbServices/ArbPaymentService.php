@@ -173,6 +173,8 @@ class ArbPaymentService
                         'status' => $first['status'] ?? null,
                         'error' => $first['error'] ?? null,
                         'errorText' => $first['errorText'] ?? null,
+                        'full_response' => $first,
+                        'http_body' => $lastHttpBody,
                     ]);
                 }
             }
