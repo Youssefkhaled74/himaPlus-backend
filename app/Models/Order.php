@@ -58,8 +58,9 @@ class Order extends Model
 		// 'files', 
 		// 'address', 
 		
-		'offer_id', 
-		'delivery_fee', 
+		'offer_id',
+		'shipping_method_id',
+		'delivery_fee',
 		'quotation_type', 
 		'deleted_at', 
 	];
@@ -273,6 +274,16 @@ class Order extends Model
 	public function partial_receive()
 	{
 		return $this->hasMany(OrderPartialReceive::class, 'order_id');
+	}
+
+	public function shippingMethod()
+	{
+		return $this->belongsTo(ShippingMethod::class, 'shipping_method_id');
+	}
+
+	public function shipments()
+	{
+		return $this->hasMany(Shipment::class, 'order_id');
 	}
 
 }

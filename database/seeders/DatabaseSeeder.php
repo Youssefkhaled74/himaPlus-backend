@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             NotificationSeeder::class,
             YoussefVendorSeeder::class,
             Vendor14OffersSeeder::class,
+            ShippingMethodSeeder::class,
         ]);
     }
 }

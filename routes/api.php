@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\PaymobController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\ShippingMethodController;
+use App\Http\Controllers\Api\ShipmentController;
 
 
 /*
@@ -96,6 +98,16 @@ Route::group(['middleware' => ['api', 'limitReq']], function ($router) {
             Route::post('/check/coupon', [OrderController::class, 'checkCoupon']);
             Route::get('/order/cancel/{id?}', [OrderController::class, 'cancelOrder']);
             Route::get('/get-link/online-payment/{id?}', [OrderController::class, 'onlinePayment']);
+        });
+
+        Route::group(['prefix' => 'shipping-methods'], function ($router) {
+            Route::get('/', [ShippingMethodController::class, 'index']);
+        });
+
+        Route::group(['prefix' => 'shipments'], function ($router) {
+            Route::get('/order/{orderId}', [ShipmentController::class, 'index']);
+            Route::get('/show/{id}', [ShipmentController::class, 'show']);
+            Route::post('/', [ShipmentController::class, 'store']);
         });
         
         Route::group(['prefix' => 'ratings'], function ($router) {

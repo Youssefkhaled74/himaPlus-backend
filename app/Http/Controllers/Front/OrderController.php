@@ -131,6 +131,7 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'address' => 'required|string',
             'coupon' => 'nullable|exists:coupons,name',
+            'shipping_method_id' => 'nullable|exists:shipping_methods,id',
         ]);
         if ($validator->fails()) {
             return redirect()->to(url()->previous())->withErrors($validator)->withInput();
@@ -192,6 +193,7 @@ class OrderController extends Controller
                     'items_cost' => $grandTotal, 
                     'total_before_discount' => $grandTotal + ($vatAmount), 
                     'total_cost' => ($grandTotal + ($vatAmount)) - $discount, 
+                    'shipping_method_id' => $request->shipping_method_id ?? null,
                 ]);
                 $createdOrderIds[] = (int) $order->id;
                 $order->timeline()->create([

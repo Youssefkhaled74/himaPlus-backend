@@ -166,6 +166,7 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'address' => 'required|string',
             'coupon' => 'nullable|exists:coupons,name',
+            'shipping_method_id' => 'nullable|exists:shipping_methods,id',
         ]);
         if ($validator->fails()) {
             return responseJson(400, __('messages.bad_request'), $validator->errors()->first());
@@ -233,6 +234,7 @@ class OrderController extends Controller
                     'items_cost' => $grandTotal, 
                     'total_before_discount' => $totalBeforeDiscount, 
                     'total_cost' => $totalBeforeDiscount - $discount, 
+                    'shipping_method_id' => $request->shipping_method_id ?? null,
                 ]);
                 $order->timeline()->create([
                     'timeline_no' => 1,
