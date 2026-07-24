@@ -289,5 +289,24 @@ return [
     'duration' => 'Duration',
     'next_shipment' => 'Next Shipment',
     'units' => 'units',
+
+    // Customer Dashboard
+    'customer_dashboard_title' => 'Hema - Dashboard',
+    'welcome_back' => 'Welcome back!',
+    'dashboard_track_desc' => 'Track your orders, browse products, and connect with trusted suppliers from your personal dashboard.',
+    'paid' => 'Paid',
+    'processing' => 'Processing',
+    'tracking' => 'Tracking',
+    'marketplace_sections' => 'Quick Access',
+    'medical_supplies' => 'Medical Supplies',
+    'browse_available_products' => 'Browse available products',
+    'industrial_companies' => 'Industrial Companies',
+    'explore_companies_manufacturers' => 'Explore companies & manufacturers',
+    'suppliers_vendors' => 'Suppliers & Vendors',
+    'view_available_suppliers' => 'View available suppliers',
+    'medical_centers_services' => 'Medical Centers & Services',
+    'browse_categories_services' => 'Browse categories & services',
+    'suppliers_companies' => 'Suppliers & Companies',
+    'no_suppliers' => 'No suppliers found',
 ];
 
