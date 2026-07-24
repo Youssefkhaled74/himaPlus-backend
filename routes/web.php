@@ -198,6 +198,10 @@ Route::group(['prefix' => 'vendor', 'middleware' => ['auth', 'vendorCheck']], fu
     Route::get('/offers/{id}/edit', [VendorOrderController::class, 'editOffer'])->name('vendor/orders/offer-edit');
     Route::put('/offers/{id}', [VendorOrderController::class, 'updateOffer'])->name('vendor/orders/offer-update');
     Route::delete('/offers/{id}', [VendorOrderController::class, 'deleteOffer'])->name('vendor/orders/offer-delete');
+
+    // Shipments
+    Route::get('/orders/{id}/shipment', [VendorOrderController::class, 'createShipment'])->name('vendor/orders/create-shipment');
+    Route::post('/orders/shipment/store', [VendorOrderController::class, 'storeShipment'])->name('vendor/orders/store-shipment');
     
     // Ratings & Reviews (Phase 3)
     Route::get('/ratings', [VendorRatingsController::class, 'index'])->name('vendor/ratings');

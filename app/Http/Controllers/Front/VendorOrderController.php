@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Offer;
+use App\Models\Shipment;
+use App\Models\ShipmentImage;
+use App\Models\ShippingMethod;
 use App\Services\OrderStatusService;
 use App\Services\VendorOrderVisibilityService;
 use Illuminate\Http\Request;
@@ -345,5 +348,91 @@ class VendorOrderController extends Controller
         $offer->delete();
         flash()->success('تم حذف العرض بنجاح');
         return redirect()->route('vendor/orders/my-offers');
+    }
+
+    /**
+     * Show shipment creation form
+     */
+    public function createShipment($orderId)
+    {
+        $vendor = auth()->user();
+        $order = Order::where('id', $orderId)
+            ->with(['items.product', 'timeline'])
+            ->firstOrFail();
+
+        $isAllowed = $this->vendorOrderVisibilityService->canViewOrder($order, (int) $vendor->id);
+        if (!$isAllowed) {
+            abort(403);
+        }
+
+        $shippingMethods = \App\Models\ShippingMethod::active()->ordered()->get();
+        $existingShipments = $order->shipments()->with(['images', 'shippingMethod'])->orderByDesc('id')->get();
+
+        return view('front.vendor.orders.shipment-form', compact('order', 'shippingMethods', 'existingShipments'));
+    }
+
+    /**
+     * Store shipment with images
+     */
+    public function storeShipment(Request $request)
+    {
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'order_id' => 'required|exists:orders,id',
+            'shipping_method_id' => 'required|exists:shipping_methods,id',
+            'tracking_number' => 'nullable|string|max:255',
+            'notes' => 'nullable|string|max:2000',
+            'images' => 'required|array|min:1|max:10',
+            'images.*' => 'required|file|mimes:jpeg,png,jpg,webp,pdf|max:10240',
+            'caption' => 'nullable|array',
+            'caption.*' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $vendor = auth()->user();
+        $order = Order::where('id', $request->order_id)
+            ->where('provider_id', $vendor->id)
+            ->first();
+
+        if (!$order) {
+            flash()->error('الطلب غير موجود أو غير مصرح لك به');
+            return back();
+        }
+
+        try {
+            \Illuminate\Support\Facades\DB::beginTransaction();
+
+            $shipment = Shipment::create([
+                'order_id' => $request->order_id,
+                'shipping_method_id' => $request->shipping_method_id,
+                'tracking_number' => $request->tracking_number ?? null,
+                'status' => Shipment::STATUS_SHIPPED,
+                'shipped_at' => now(),
+                'notes' => $request->notes ?? null,
+            ]);
+
+            $captions = $request->caption ?? [];
+            foreach ($request->file('images') as $index => $file) {
+                $imagePath = uploadIamge($file, 'shipments');
+                ShipmentImage::create([
+                    'shipment_id' => $shipment->id,
+                    'image_path' => $imagePath,
+                    'caption' => $captions[$index] ?? null,
+                    'sort_order' => $index,
+                ]);
+            }
+
+            \Illuminate\Support\Facades\DB::commit();
+
+            flash()->success('تم إنشاء الشحنة بنجاح');
+            return redirect()->route('vendor/orders/show', $order->id);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            report($e);
+            flash()->error('حدث خطأ أثناء إنشاء الشحنة');
+            return back();
+        }
     }
 }
