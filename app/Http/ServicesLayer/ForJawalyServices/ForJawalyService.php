@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class ForJawalyService
 {
-    public function sendSMS(string $phone, string $code, ?string $lang = null): ?array
+    public function sendSMS(string $phone, string $code, ?string $lang = null): array
     {
         $lang = $lang ?: app()->getLocale();
 
@@ -40,21 +40,30 @@ class ForJawalyService
 
             $result = $response->json();
 
-            Log::info('ForJawaly SMS sent', [
+            Log::info('ForJawaly SMS response', [
                 'phone' => $phone,
-                'status_code' => $response->status(),
-                'response_code' => $result['code'] ?? null,
+                'http_status' => $response->status(),
+                'api_code' => $result['code'] ?? null,
+                'message' => $result['message'] ?? null,
                 'job_id' => $result['job_id'] ?? null,
             ]);
 
-            return $result;
+            $isSuccess = isset($result['code']) && (int) $result['code'] === 200;
+
+            return [
+                'success' => $isSuccess,
+                'message' => $result['message'] ?? ($isSuccess ? 'SMS sent successfully' : 'SMS sending failed'),
+            ];
         } catch (\Exception $e) {
-            Log::error('ForJawaly SMS failed', [
+            Log::error('ForJawaly SMS exception', [
                 'phone' => $phone,
                 'error' => $e->getMessage(),
             ]);
 
-            return null;
+            return [
+                'success' => false,
+                'message' => 'Failed to send SMS: ' . $e->getMessage(),
+            ];
         }
     }
 }
