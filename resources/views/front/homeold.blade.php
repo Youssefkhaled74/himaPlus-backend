@@ -226,7 +226,7 @@
                             Get exclusive discounts and limited-time deals from trusted suppliers across
                             <br>Saudi Arabia.
                         </p>
-                        <a href="{{ auth()->check() ? route('user/myorders', 'quotations') : route('user/loginForm') }}" class="nb-btn" aria-label="View Offers" style="text-decoration: none;"><span>View Offers</span></a>
+                        <a href="{{ auth()->check() ? route('user/myorders', 'quotations') : route('login') }}" class="nb-btn" aria-label="View Offers" style="text-decoration: none;"><span>View Offers</span></a>
                     </div>
                 </div>
             </div>

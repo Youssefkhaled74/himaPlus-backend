@@ -183,7 +183,7 @@
                                     <div class="h4 mb-0">{{ $product->price }} {{ __('products.currency_sar') }}</div>
                                 </div>
                                 <div class="d-flex gap-2">
-                                    <a href="{{ auth()->check() ? url('user/cart/add/' . $product->id) : route('user/loginForm') }}" class="btn btn-gradient px-4">{{ __('products.add_to_cart') }}</a>
+                                    <a href="{{ auth()->check() ? url('user/cart/add/' . $product->id) : route('login') }}" class="btn btn-gradient px-4">{{ __('products.add_to_cart') }}</a>
                                     {{-- <button class="hp-pill-btn ms-auto me-2 add-to-cart" data-id="{{ $product->id }}" data-img="{{ asset($product->img) }}" title="Add to cart">
                                         <i class="bi bi-cart-plus-fill"></i>
                                     </button> --}}

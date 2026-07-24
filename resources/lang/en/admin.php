@@ -271,6 +271,15 @@ return [
             'update_title' => 'Update Order',
             'archives' => 'Archived Orders',
             'search_by_order_no' => 'Search by order #',
+            'statuses' => [
+                'pending' => 'Pending',
+                'accepted' => 'Accepted',
+                'rejected' => 'Rejected',
+                'confirmed' => 'Confirmed',
+                'processing' => 'Processing',
+                'completed' => 'Completed',
+                'scheduled' => 'Scheduled',
+            ],
         ],
         'contacts' => [
             'title' => 'Contacts',

@@ -409,7 +409,7 @@
                         <p class="nb__subtitle"> 
                             {{ __('home.banner_desc') }}
                         </p>
-                        <a href="{{ auth()->check() ? route('user/myorders', 'quotations') : route('user/loginForm') }}" class="nb-btn" aria-label="View Offers" style="text-decoration: none;"><span>{{ __('home.view_offers') }}</span></a>
+                        <a href="{{ auth()->check() ? route('user/myorders', 'quotations') : route('login') }}" class="nb-btn" aria-label="View Offers" style="text-decoration: none;"><span>{{ __('home.view_offers') }}</span></a>
                     </div>
                 </div>
             </div>
