@@ -283,6 +283,15 @@ return [
             'update_title' => 'تحديث الطلب',
             'archives' => 'الطلبات المؤرشفة',
             'search_by_order_no' => 'بحث برقم الطلب',
+            'statuses' => [
+                'pending' => 'قيد الانتظار',
+                'accepted' => 'مقبول',
+                'rejected' => 'مرفوض',
+                'confirmed' => 'مؤكد',
+                'processing' => 'قيد المعالجة',
+                'completed' => 'مكتمل',
+                'scheduled' => 'مجدول',
+            ],
         ],
         'contacts' => [
             'title' => 'جهات الاتصال',
