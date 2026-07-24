@@ -202,6 +202,7 @@ Route::get('/categories', [VendorDashboardController::class, 'categories'])->nam
     // Shipments
     Route::get('/orders/{id}/shipment', [VendorOrderController::class, 'createShipment'])->name('vendor/orders/create-shipment');
     Route::post('/orders/shipment/store', [VendorOrderController::class, 'storeShipment'])->name('vendor/orders/store-shipment');
+    Route::post('/orders/ship', [VendorOrderController::class, 'shipFromOrder'])->name('vendor/orders/ship');
     
     // Ratings & Reviews (Phase 3)
     Route::get('/ratings', [VendorRatingsController::class, 'index'])->name('vendor/ratings');
