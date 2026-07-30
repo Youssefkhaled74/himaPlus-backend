@@ -22,11 +22,13 @@ body{
 .header{border-bottom:1px solid var(--hp-border); background:#fff; position:sticky; top:0; z-index:1020}
 .navbar-brand img{height:34px}
 /* .navbar {padding: 0.5rem 0;} */
-.navbar .nav-link{color:#15223C; font-weight:500; padding:1rem 1rem; position:relative}
+.navbar .nav-link{color:#15223C; font-weight:500; padding:1rem 0.65rem; position:relative; white-space:nowrap; font-size:0.88rem}
 .navbar .nav-link:hover{color:var(--hp-primary)}
 .navbar .nav-link.active{color:var(--hp-primary)}
-.header-icons {margin-left: 10% !important;}
-.header-icons .bi{font-size:1.15rem; margin-left:1rem; color:#1f2b45}
+.navbar .navbar-nav{flex-wrap:nowrap}
+@media (min-width:992px){.navbar .navbar-nav{gap:0}}
+.header-icons {margin-left: 3% !important; flex-shrink:0;}
+.header-icons .bi{font-size:1.05rem; margin-left:0.75rem; color:#1f2b45}
 .header-icons .bi:hover{color:var(--hp-primary)}
 
 /* RTL Product card buttons */
@@ -977,7 +979,7 @@ a:hover{text-decoration:underline}
 /* Header & Navbar RTL */
 [dir="rtl"] .header-icons {
   margin-left: 0 !important;
-  margin-right: 10% !important;
+  margin-right: 3% !important;
 }
 [dir="rtl"] .header-icons .bi {
   margin-left: 0;

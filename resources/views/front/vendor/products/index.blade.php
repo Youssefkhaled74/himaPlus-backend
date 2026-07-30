@@ -1,7 +1,7 @@
 ﻿@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ trans_or_fallback('', '') }} - Vendor | Hema</title>
+    <title>{{ __('vendor.products.hero_title') }} - Vendor | Hema</title>
 @endsection
 
 @section('css')
