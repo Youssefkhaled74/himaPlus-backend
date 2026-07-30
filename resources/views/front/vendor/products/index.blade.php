@@ -280,7 +280,7 @@
             @endif
 
             <div class="vendor-products__bar">
-                <h2 class="vendor-products__title">{{ trans_or_fallback('', '') }}</h2>
+                <h2 class="vendor-products__title">{{ __('vendor.products.products_heading') }}</h2>
 
 	                <div class="vendor-tools">
 	                    <form method="GET" action="{{ route('vendor/products') }}">
@@ -291,7 +291,7 @@
 	                                    type="text"
 	                                    name="search"
 	                                    value="{{ request('search', $search ?? '') }}"
-	                                    placeholder="{{ trans_or_fallback('', '') }}"
+	                                    placeholder="{{ __('vendor.products.search_placeholder') }}"
 	                                >
 	                            </div>
                                 <select name="status" class="form-select" onchange="this.form.submit()" style="min-width: 220px; height: 50px; border-radius: 12px; border: 1px solid #DCE4F0;">
@@ -306,7 +306,7 @@
 
                     <a href="{{ route('vendor/products/create') }}" class="btn-add-product">
                         <i class="bi bi-plus-lg"></i>
-                        {{ trans_or_fallback('', '') }}
+                        {{ __('vendor.products.add_product') }}
                     </a>
                 </div>
             </div>
@@ -362,7 +362,7 @@
                     <div>
                         <a href="{{ route('vendor/products/create') }}" class="btn-add-product">
                             <i class="bi bi-plus-lg"></i>
-                            {{ trans_or_fallback('', '') }}
+                            {{ __('vendor.products.add_product') }}
                         </a>
                     </div>
                 </div>
