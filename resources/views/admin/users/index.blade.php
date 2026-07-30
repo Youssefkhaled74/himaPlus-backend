@@ -240,7 +240,7 @@
                 <x-slot:actions>
                     <a href="{{ route('admin/users/create') }}" class="btn btn-primary">
                         <i class="ri-add-line align-bottom"></i>
-                        <span>{{ __('admin.pages.users.add_user') }}</span>
+                        <span>Add User</span>
                     </a>
                 </x-slot:actions>
             </x-admin.page-header>
