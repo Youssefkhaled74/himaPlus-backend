@@ -615,7 +615,7 @@
                         </div>
                     @else
                         <div class="reviews-empty">
-                            {{ __('nav.no_ratings') ?? trans_or_fallback('', '') }}
+                            {{ __('nav.no_ratings') }}
                         </div>
                     @endif
                 </div>
@@ -629,17 +629,17 @@
     <div class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
         <div class="delete-modal-icon">?</div>
         <h3 id="deleteModalTitle" class="delete-modal-title">
-            {{ trans_or_fallback('', '') }}
+            {{ __('vendor.products.delete_confirm_title') }}
         </h3>
         <p class="delete-modal-text">
-            {{ trans_or_fallback('', '') }}
+            {{ __('vendor.products.delete_confirm_message') }}
         </p>
         <div class="delete-modal-actions">
             <button type="button" id="deleteModalConfirm" class="delete-modal-btn delete-modal-confirm">
-                {{ trans_or_fallback('', '') }}
+                {{ __('vendor.products.delete_confirm_btn') }}
             </button>
             <button type="button" id="deleteModalCancel" class="delete-modal-btn delete-modal-cancel">
-                {{ trans_or_fallback('', '') }}
+                {{ __('vendor.products.cancel') }}
             </button>
         </div>
     </div>
