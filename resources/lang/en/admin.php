@@ -296,6 +296,7 @@ return [
             'overview' => 'Contacts Overview',
             'overview_subtitle' => 'All contact submissions from customers and visitors.',
             'create_title' => 'Add Contact',
+            'add_contact' => 'Add Contact',
             'update_title' => 'Update Contact',
             'archives' => 'Archived Contacts',
         ],
