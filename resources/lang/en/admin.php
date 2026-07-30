@@ -299,6 +299,9 @@ return [
             'add_contact' => 'Add Contact',
             'update_title' => 'Update Contact',
             'archives' => 'Archived Contacts',
+            'notes_title' => 'Notes',
+            'note_required_fields' => 'Fields marked with * are required.',
+            'note_email_or_mobile' => 'At least one of Email or Mobile should be provided.',
         ],
         'ratings' => [
             'title' => 'Ratings',

@@ -264,6 +264,9 @@ html[dir='rtl'] h6 {
     border-radius: 14px;
     font-weight: 800;
     box-shadow: 0 10px 22px rgba(15, 75, 191, 0.14);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .admin-page-header__actions .btn i {
@@ -335,6 +338,9 @@ html[dir='rtl'] h6 {
     border-radius: 13px;
     font-weight: 800;
     padding-inline: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .admin-segmented-control {
@@ -573,6 +579,12 @@ html[dir='rtl'] .admin-card-head {
 .page-link {
     border-radius: 14px;
     font-weight: 800;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary,

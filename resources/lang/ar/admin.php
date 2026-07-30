@@ -311,6 +311,9 @@ return [
             'add_contact' => 'إضافة جهة اتصال',
             'update_title' => 'تحديث جهة اتصال',
             'archives' => 'جهات الاتصال المؤرشفة',
+            'notes_title' => 'ملاحظات',
+            'note_required_fields' => 'الحقول التي تحمل علامة * مطلوبة.',
+            'note_email_or_mobile' => 'يجب توفير البريد الإلكتروني أو الجوال على الأقل.',
         ],
         'ratings' => [
             'title' => 'التقييمات',
