@@ -259,9 +259,9 @@
     <main class="hp-main">
         <section class="vendor-hero">
             <div class="container">
-                <h1 class="vendor-hero__title">{{ trans_or_fallback('', '') }}</h1>
+                <h1 class="vendor-hero__title">{{ __('vendor.products.hero_title') }}</h1>
                 <p class="vendor-hero__sub">
-                    {{ trans_or_fallback('', '') }}
+                    {{ __('vendor.products.hero_sub') }}
                 </p>
             </div>
         </section>
