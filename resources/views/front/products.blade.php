@@ -182,7 +182,7 @@
 @section('script')
 <script>
     $(function(){
-        $('#nav-categories').addClass('active');
+        $('#nav-products').addClass('active');
 
         var suggestTimeout;
         $('[data-suggest]').each(function () {
