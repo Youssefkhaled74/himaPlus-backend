@@ -1,7 +1,7 @@
 ﻿@extends('layouts.front.home')
 
 @section('title')
-    <title>{{ $product->name ?? __('vendor.products.show_page_title') }} - Vendor | Hema</title>
+    <title>{{ $product->name ?? __('vendor/products.show_page_title') }} - Vendor | Hema</title>
 @endsection
 
 @section('css')
@@ -402,7 +402,7 @@
 
         {{-- Breadcrumb --}}
         <div class="hp-bc">
-            <a href="{{ route('vendor/products') }}">{{ __('vendor.products.hero_title') }}</a>
+            <a href="{{ route('vendor/products') }}">{{ __('vendor/products.hero_title') }}</a>
             <span class="sep">&rsaquo;</span>
             <span style="color:#0e5bd8;font-weight:700;">{{ $product->name ?? '' }}</span>
         </div>
@@ -482,14 +482,14 @@
                     {{ $product->name ?? '' }}
                 </h1>
 
-                <div class="sec-label">{{ __('vendor.products.description') }}</div>
+                <div class="sec-label">{{ __('vendor/products.description') }}</div>
                 <p class="desc">
                     {{ $product->desc ?? '-' }}
                 </p>
 
                 <div class="meta-line">
-                    <span>{{ __('vendor.products.stock') }}:</span>
-                    <b>{{ (int)($product->stock_quantity ?? 0) }} {{ __('vendor.products.units') }}</b>
+                    <span>{{ __('vendor/products.stock') }}:</span>
+                    <b>{{ (int)($product->stock_quantity ?? 0) }} {{ __('vendor/products.units') }}</b>
                 </div>
 
                 {{-- Vendor mini card (optional) --}}
@@ -512,21 +512,21 @@
                 </div>
                 <div class="btn-row">
                     <a href="{{ route('vendor/products/edit', $product->id) }}" class="btn-hp btn-grad">
-                        {{ __('vendor.products.edit_product') }}
+                        {{ __('vendor/products.edit_product') }}
                     </a>
 
                     <form class="js-delete-form" action="{{ route('vendor/products/delete', $product->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn-hp btn-outline">
-                            {{ __('vendor.products.delete_product') }}
+                            {{ __('vendor/products.delete_product') }}
                         </button>
                     </form>
                 </div>
                 <a href="{{ route('vendor/products/edit', $product->id) }}#images"
                    class="d-inline-block mt-2 text-decoration-none"
                    style="font-size:13px;color:#0e5bd8;">
-                    {{ __('vendor.products.manage_images') }}
+                    {{ __('vendor/products.manage_images') }}
                 </a>
             </div>
 
@@ -536,10 +536,10 @@
         <div class="hp-tabs">
             <div class="tab-head">
                 <button type="button" class="tab-btn active" data-tab="specs">
-                    {{ __('vendor.products.specifications') }}
+                    {{ __('vendor/products.specifications') }}
                 </button>
                 <button type="button" class="tab-btn" data-tab="reviews">
-                    {{ __('vendor.products.reviews') }}
+                    {{ __('vendor/products.reviews') }}
                 </button>
             </div>
 
@@ -549,11 +549,11 @@
                     <div class="spec-grid">
                         <div class="spec-box">
                         <div class="spec-row">
-                                <div class="k">{{ __('vendor.products.spec_power') }}:</div>
+                                <div class="k">{{ __('vendor/products.spec_power') }}:</div>
                                 <div class="v">{{ $product->power ?? '-' }}</div>
                             </div>
                             <div class="spec-row">
-                                <div class="k">{{ __('vendor.products.spec_weight') }}:</div>
+                                <div class="k">{{ __('vendor/products.spec_weight') }}:</div>
                                 <div class="v">{{ $product->weight ?? '-' }}</div>
                             </div>
                         </div>
@@ -629,17 +629,17 @@
     <div class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
         <div class="delete-modal-icon">?</div>
         <h3 id="deleteModalTitle" class="delete-modal-title">
-            {{ __('vendor.products.delete_confirm_title') }}
+            {{ __('vendor/products.delete_confirm_title') }}
         </h3>
         <p class="delete-modal-text">
-            {{ __('vendor.products.delete_confirm_message') }}
+            {{ __('vendor/products.delete_confirm_message') }}
         </p>
         <div class="delete-modal-actions">
             <button type="button" id="deleteModalConfirm" class="delete-modal-btn delete-modal-confirm">
-                {{ __('vendor.products.delete_confirm_btn') }}
+                {{ __('vendor/products.delete_confirm_btn') }}
             </button>
             <button type="button" id="deleteModalCancel" class="delete-modal-btn delete-modal-cancel">
-                {{ __('vendor.products.cancel') }}
+                {{ __('vendor/products.cancel') }}
             </button>
         </div>
     </div>
