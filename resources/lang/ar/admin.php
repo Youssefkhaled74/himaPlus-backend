@@ -46,6 +46,7 @@ return [
         'admins_list' => 'قائمة المشرفين',
         'add_admin' => 'إضافة مشرف',
         'info_settings' => 'إعدادات المعلومات',
+        'items' => 'العناصر',
         'users_list' => 'قائمة المستخدمين',
         'add_user' => 'إضافة مستخدم',
         'coupons_list' => 'قائمة الكوبونات',

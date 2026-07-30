@@ -46,6 +46,7 @@ return [
         'admins_list' => 'Admins List',
         'add_admin' => 'Add Admin',
         'info_settings' => 'Info Settings',
+        'items' => 'Items',
         'users_list' => 'Users List',
         'add_user' => 'Add User',
         'coupons_list' => 'Coupons List',
