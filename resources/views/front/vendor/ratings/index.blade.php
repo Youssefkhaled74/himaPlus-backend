@@ -154,32 +154,66 @@
         padding: 18px;
     }
 
-    .vr-filter-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
+    .vr-filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
     }
 
-    .vr-field label {
-        display: block;
-        font-size: 13px;
+    .vr-filter-select {
+        flex: 1 1 180px;
+        min-width: 160px;
+        height: 50px;
+        border: 1px solid #DCE4F0;
+        border-radius: 12px;
+        background: #fff;
+        padding-inline: 14px;
+        font-size: 14px;
+        color: #1f2937;
+        outline: none;
+        box-shadow: none;
+        cursor: pointer;
+    }
+
+    .vr-filter-select:focus {
+        border-color: var(--vr-primary);
+        box-shadow: 0 0 0 3px rgba(15, 75, 191, 0.10);
+    }
+
+    .vr-rating-filter {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .vr-rating-filter .vr-filter-select {
+        flex: 0 0 auto;
+        min-width: 150px;
+    }
+
+    .vr-rating-filter-label {
+        font-size: 14px;
         font-weight: 700;
         color: #334155;
-        margin-bottom: 8px;
-    }
-
-    .vr-field .form-select {
-        min-height: 46px;
-        border-radius: 10px;
-        border-color: #d5deeb;
-        box-shadow: none;
+        white-space: nowrap;
     }
 
     .vr-filter-actions {
         display: flex;
         gap: 10px;
-        align-items: end;
+        align-items: center;
+        margin-inline-start: auto;
         flex-wrap: wrap;
+    }
+
+    .vr-filter-actions .vr-btn-primary,
+    .vr-filter-actions .vr-btn-outline {
+        height: 50px;
+        min-width: 116px;
+        padding: 0 18px;
+        justify-content: center;
+        border-radius: 12px;
     }
 
     .vr-rating-row {
@@ -325,8 +359,32 @@
             font-size: 18px;
         }
 
-        .vr-filter-grid {
-            grid-template-columns: 1fr;
+        .vr-filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .vr-filter-select,
+        .vr-rating-filter,
+        .vr-rating-filter .vr-filter-select {
+            width: 100%;
+            min-width: 0;
+            flex-basis: auto;
+        }
+
+        .vr-rating-filter {
+            justify-content: space-between;
+        }
+
+        .vr-filter-actions {
+            width: 100%;
+            margin-inline-start: 0;
+        }
+
+        .vr-filter-actions .vr-btn-primary,
+        .vr-filter-actions .vr-btn-outline {
+            flex: 1;
+            min-width: 0;
         }
     }
 </style>
@@ -421,21 +479,19 @@
                 </div>
                 <div class="vr-body">
                     <form method="GET" action="{{ route('vendor/ratings') }}">
-                        <div class="vr-filter-grid">
-                            <div class="vr-field">
-                                <label>{{ $isAr ? 'المنتج' : 'Product' }}</label>
-                                <select name="product_id" class="form-select">
-                                    <option value="">{{ $isAr ? 'كل المنتجات' : 'All Products' }}</option>
-                                    @foreach($products as $product)
-                                        <option value="{{ $product->id }}" {{ (string) request('product_id') === (string) $product->id ? 'selected' : '' }}>
-                                            {{ $product->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="vr-field">
-                                <label>{{ $isAr ? 'درجة التقييم' : 'Rating Score' }}</label>
-                                <select name="rating" class="form-select">
+                        <div class="vr-filter-bar">
+                            <select name="product_id" class="vr-filter-select" aria-label="{{ $isAr ? 'المنتج' : 'Product' }}">
+                                <option value="">{{ $isAr ? 'كل المنتجات' : 'All Products' }}</option>
+                                @foreach($products as $product)
+                                    <option value="{{ $product->id }}" {{ (string) request('product_id') === (string) $product->id ? 'selected' : '' }}>
+                                        {{ $product->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <div class="vr-rating-filter">
+                                <span class="vr-rating-filter-label">{{ $isAr ? 'التقييم:' : 'Rating:' }}</span>
+                                <select name="rating" class="vr-filter-select" aria-label="{{ $isAr ? 'درجة التقييم' : 'Rating Score' }}">
                                     <option value="">{{ $isAr ? 'كل التقييمات' : 'All Ratings' }}</option>
                                     @for ($i = 5; $i >= 1; $i--)
                                         <option value="{{ $i }}" {{ (string) request('rating') === (string) $i ? 'selected' : '' }}>
@@ -444,8 +500,9 @@
                                     @endfor
                                 </select>
                             </div>
+
                             <div class="vr-filter-actions">
-                                <button type="submit" class="vr-btn-primary" style="border:0;">
+                                <button type="submit" class="vr-btn-primary">
                                     <i class="bi bi-funnel-fill"></i>
                                     {{ $isAr ? 'تصفية' : 'Filter' }}
                                 </button>
