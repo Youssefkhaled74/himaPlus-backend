@@ -211,6 +211,27 @@
     }
     .od-btn:hover { opacity: .92; color: inherit; }
 
+    .od-modal-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .od-modal-actions form {
+        margin: 0;
+        flex: 1 1 180px;
+    }
+
+    .od-modal-actions .od-modal-btn {
+        width: 100%;
+        min-height: 48px;
+        justify-content: center;
+        font-size: 15px;
+    }
+
     .od-offer {
         border: 1px solid #e7eaf0;
         border-radius: 14px;
@@ -592,15 +613,15 @@
                                                         <div class="mb-2"><strong>{{ __('products.warranty') }}:</strong> {{ $offer->warranty ?? '---' }}</div>
                                                         <div class="mb-0"><strong>{{ __('products.notes') }}:</strong> <span class="text-muted">{{ $offer->notes ?? '---' }}</span></div>
                                                     </div>
-                                                    <div class="modal-footer border-0 justify-content-center gap-3">
-                                                        <button class="od-btn od-btn-danger" data-bs-toggle="modal" data-bs-target="#rejectOfferModal-{{ $offer->id }}">
+                                                    <div class="modal-footer border-0 od-modal-actions">
+                                                        <button class="od-btn od-btn-danger od-modal-btn" data-bs-toggle="modal" data-bs-target="#rejectOfferModal-{{ $offer->id }}" type="button">
                                                             {{ __('products.reject_offer') }}
                                                         </button>
                                                         <form method="POST" action="{{ route('user/offer/actions') }}">
                                                             @csrf
                                                             <input name="action" type="hidden" value="2">
                                                             <input name="offer_id" type="hidden" value="{{ $offer->id }}">
-                                                            <button type="submit" class="od-btn od-btn-primary">{{ __('products.accept_offer') }}</button>
+                                                            <button type="submit" class="od-btn od-btn-primary od-modal-btn">{{ __('products.accept_offer') }}</button>
                                                         </form>
                                                     </div>
                                                 </div>

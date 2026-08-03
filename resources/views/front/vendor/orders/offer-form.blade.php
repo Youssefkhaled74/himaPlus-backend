@@ -40,13 +40,14 @@
             border:0;color:#fff;border-radius:16px;min-height:56px;padding:0 26px;font-weight:700;
         }
         .vendor-offer-form .btn-secondary{
-            background:#fff;border:1px solid #e5a0a0;color:#d14343;border-radius:16px;min-height:56px;padding:0 26px;font-weight:700;
+            background:#fff;border:1px solid #cbd5e1;color:#1e3a8a;border-radius:16px;min-height:56px;padding:0 26px;font-weight:700;
+            display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
         }
-        .vendor-offer-form .btn-secondary:hover{background:#fff5f5;color:#b91c1c;border-color:#dc8a8a;}
+        .vendor-offer-form .btn-secondary:hover{background:#eef5ff;color:#1d4ed8;border-color:#93c5fd;}
         @media (max-width: 992px){
             .vendor-offer-form .card-header h4{font-size:28px;}
-            .vendor-offer-form .d-flex.justify-content-between{gap:10px;flex-direction:row-reverse;}
-            .vendor-offer-form .d-flex.justify-content-between .btn{flex:1;}
+            .vendor-offer-form .d-flex.justify-content-between{gap:10px;flex-direction:column-reverse;}
+            .vendor-offer-form .d-flex.justify-content-between .btn{flex:1;width:100%;}
         }
     </style>
 @endsection

@@ -209,7 +209,12 @@ class VendorAuthController extends Controller
                 return redirect()->to(url()->previous())->withErrors($validator)->withInput();
             }
 
-            if (FacadesAuth::guard('web')->attempt($request->only('email', 'password'))) {
+            $remember = (bool) $request->boolean('remember');
+
+            if (FacadesAuth::guard('web')->attempt(
+                $request->only('email', 'password'),
+                $remember
+            )) {
                 $request->session()->regenerate();
                 $request->session()->save();
                 Log::info('Vendor login successful', $context + [

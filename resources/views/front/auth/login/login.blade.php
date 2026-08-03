@@ -96,7 +96,7 @@
     
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                                            <input class="form-check-input" type="checkbox" id="rememberMe" name="remember" value="1">
                                             <label class="form-check-label small" for="rememberMe">{{ __('auth.remember_me') }}</label>
                                         </div>
                                         <a class="hp-link small" href="{{ route('user/send-reset-code/form') }}">{{ __('auth.forgot_password') }}</a>

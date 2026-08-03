@@ -121,7 +121,10 @@ class VendorNotificationsController extends Controller
     {
         return Notification::query()
             ->where('user_id', $vendorId)
-            ->whereIn('type', self::ALLOWED_TYPES);
+            ->where(function ($query) {
+                $query->whereIn('type', self::ALLOWED_TYPES)
+                    ->orWhereNull('type');
+            });
     }
 
     private function presentNotification(Notification $notification): Notification

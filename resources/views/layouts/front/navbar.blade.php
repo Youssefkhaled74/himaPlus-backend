@@ -2,8 +2,30 @@
     $isVendorAuthed = auth()->check() && (int) auth()->user()->user_type === 2;
     $routeName = request()->route() ? request()->route()->getName() : '';
     $cartCount = 0;
+    $vendorUnreadNotificationsCount = 0;
+    $vendorRecentNotifications = collect();
     if (auth()->check() && (int) auth()->user()->user_type !== 2) {
         $cartCount = (int) auth()->user()->cart()->sum('quantity');
+    }
+    if ($isVendorAuthed) {
+        $vendorUnreadNotificationsCount = (int) \App\Models\Notification::query()
+            ->where('user_id', auth()->id())
+            ->where(function ($query) {
+                $query->whereIn('type', ['order', 'payment', 'status_change', 'product_approval', 'product_rejection'])
+                    ->orWhereNull('type');
+            })
+            ->unread()
+            ->count();
+
+        $vendorRecentNotifications = \App\Models\Notification::query()
+            ->where('user_id', auth()->id())
+            ->where(function ($query) {
+                $query->whereIn('type', ['order', 'payment', 'status_change', 'product_approval', 'product_rejection'])
+                    ->orWhereNull('type');
+            })
+            ->latest()
+            ->take(5)
+            ->get();
     }
 @endphp
 
@@ -65,6 +87,33 @@
                                 <li><a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}" href="{{ url('locale/en') }}">English</a></li>
                                 <li><a class="dropdown-item {{ app()->getLocale() == 'ar' ? 'active' : '' }}" href="{{ url('locale/ar') }}">العربية</a></li>
                             </ul>
+                        </div>
+                        <div class="dropdown me-3">
+                            <a class="text-decoration-none position-relative d-inline-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ __('nav.notifications') }}">
+                                <i class="bi bi-bell" style="font-size:1.25rem;"></i>
+                                @if($vendorUnreadNotificationsCount > 0)
+                                    <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle" style="font-size:.65rem;min-width:18px;">{{ $vendorUnreadNotificationsCount > 99 ? '99+' : $vendorUnreadNotificationsCount }}</span>
+                                @endif
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end p-0" style="min-width:320px;max-width:360px;">
+                                <div class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+                                    <strong style="font-size:.95rem;">{{ __('nav.notifications') }}</strong>
+                                    <a href="{{ route('vendor/notifications') }}" class="text-decoration-none" style="font-size:.8rem;">{{ __('nav.all') }}</a>
+                                </div>
+                                @forelse($vendorRecentNotifications as $notification)
+                                    <a href="{{ route('vendor/notifications') }}" class="dropdown-item py-2" style="white-space:normal;">
+                                        <div class="d-flex align-items-start gap-2">
+                                            <i class="bi bi-{{ $notification->read_at ? 'bell' : 'bell-fill' }} text-primary mt-1"></i>
+                                            <div>
+                                                <div style="font-weight:700;font-size:.9rem;">{{ $notification->title }}</div>
+                                                <div class="text-muted" style="font-size:.8rem;line-height:1.4;">{{ \Illuminate\Support\Str::limit($notification->content ?? $notification->message ?? '-', 70) }}</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="px-3 py-4 text-center text-muted" style="font-size:.85rem;">{{ __('nav.no_notifications') ?? 'No notifications yet' }}</div>
+                                @endforelse
+                            </div>
                         </div>
                         <div class="dropdown">
                             <a class="text-decoration-none d-inline-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -182,6 +182,24 @@
             color: #0A42A5;
         }
 
+        .product-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #eef5ff;
+            color: #2457bd;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .product-category i {
+            font-size: 12px;
+        }
+
         .vendor-pagination {
             margin-top: 24px;
         }
@@ -338,7 +356,11 @@
 
 	                                <div class="product-body">
 	                                    <h3 class="product-name">{{ $product->name }}</h3>
-                                        <div class="d-flex align-items-center justify-content-between gap-2 mt-3">
+                                        <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+                                            <span class="product-category">
+                                                <i class="bi bi-folder2-open"></i>
+                                                {{ $product->category?->name ?? (app()->getLocale() == 'ar' ? 'بدون تصنيف' : 'Uncategorized') }}
+                                            </span>
                                             <span class="badge {{ $product->stockBadgeClass() }}">
                                                 {{ app()->getLocale() == 'ar' ? 'المخزون' : 'Stock' }}: {{ (int) $product->stock_quantity }}
                                             </span>

@@ -203,17 +203,18 @@
         display: flex;
         gap: 10px;
         align-items: center;
-        margin-inline-start: auto;
-        flex-wrap: wrap;
+        margin-inline-start: 0;
+        flex-wrap: nowrap;
     }
 
     .vr-filter-actions .vr-btn-primary,
     .vr-filter-actions .vr-btn-outline {
         height: 50px;
-        min-width: 116px;
-        padding: 0 18px;
+        min-width: 112px;
+        padding: 0 16px;
         justify-content: center;
         border-radius: 12px;
+        white-space: nowrap;
     }
 
     .vr-rating-row {
@@ -439,8 +440,8 @@
         </div>
         <div class="col-12 col-md-4">
             <div class="vr-card vr-stat">
-                <p class="vr-stat-label">{{ $isAr ? 'المنتجات المقيّمة' : 'Rated Products' }}</p>
-                <h4 class="vr-stat-value">{{ number_format(count($products)) }}</h4>
+                <p class="vr-stat-label">{{ $isAr ? 'العناصر المقيمة' : 'Reviewed Items' }}</p>
+                <h4 class="vr-stat-value">{{ number_format((int) ($reviewedItemsCount ?? 0)) }}</h4>
             </div>
         </div>
     </div>
@@ -448,29 +449,6 @@
     <div class="row g-4">
         <div class="col-lg-4">
             <div class="vr-card mb-4">
-                <div class="vr-panel-head">
-                    <div>
-                        <h5 class="vr-panel-title">{{ $isAr ? 'توزيع التقييمات' : 'Rating Breakdown' }}</h5>
-                        <p class="vr-panel-subtitle">{{ $isAr ? 'توزيع المراجعات حسب عدد النجوم.' : 'Distribution of reviews by star score.' }}</p>
-                    </div>
-                </div>
-                <div class="vr-body">
-                    @for ($i = 5; $i >= 1; $i--)
-                        @php
-                            $percentage = $totalRatings > 0 ? ($ratingBreakdown[$i] / $totalRatings) * 100 : 0;
-                        @endphp
-                        <div class="vr-rating-row">
-                            <div class="vr-rating-label">{{ $i }} <i class="bi bi-star-fill" style="color:#fbbf24;"></i></div>
-                            <div class="vr-rating-track">
-                                <div class="vr-rating-fill" style="width: {{ $percentage }}%;"></div>
-                            </div>
-                            <div class="vr-rating-count">{{ $ratingBreakdown[$i] }}</div>
-                        </div>
-                    @endfor
-                </div>
-            </div>
-
-            <div class="vr-card">
                 <div class="vr-panel-head">
                     <div>
                         <h5 class="vr-panel-title">{{ $isAr ? 'تصفية المراجعات' : 'Filter Reviews' }}</h5>
@@ -515,6 +493,29 @@
                     </form>
                 </div>
             </div>
+
+            <div class="vr-card">
+                <div class="vr-panel-head">
+                    <div>
+                        <h5 class="vr-panel-title">{{ $isAr ? 'توزيع التقييمات' : 'Rating Breakdown' }}</h5>
+                        <p class="vr-panel-subtitle">{{ $isAr ? 'توزيع المراجعات حسب عدد النجوم.' : 'Distribution of reviews by star score.' }}</p>
+                    </div>
+                </div>
+                <div class="vr-body">
+                    @for ($i = 5; $i >= 1; $i--)
+                        @php
+                            $percentage = $totalRatings > 0 ? ($ratingBreakdown[$i] / $totalRatings) * 100 : 0;
+                        @endphp
+                        <div class="vr-rating-row">
+                            <div class="vr-rating-label">{{ $i }} <i class="bi bi-star-fill" style="color:#fbbf24;"></i></div>
+                            <div class="vr-rating-track">
+                                <div class="vr-rating-fill" style="width: {{ $percentage }}%;"></div>
+                            </div>
+                            <div class="vr-rating-count">{{ $ratingBreakdown[$i] }}</div>
+                        </div>
+                    @endfor
+                </div>
+            </div>
         </div>
 
         <div class="col-lg-8">
@@ -534,7 +535,14 @@
                         <article class="vr-review">
                             <div class="vr-review-head">
                                 <div>
-                                    <h6 class="vr-review-title">{{ $rating->forable?->name ?? ($isAr ? 'منتج' : 'Product') }}</h6>
+                                    <h6 class="vr-review-title">
+                                    @php
+                                        $reviewTitle = $rating->forable_type === \App\Models\User::class
+                                            ? ($isAr ? 'تقييم الخدمة' : 'Service Review')
+                                            : ($rating->forable?->name ?? ($isAr ? 'منتج' : 'Product'));
+                                    @endphp
+                                    {{ $reviewTitle }}
+                                </h6>
                                     <p class="vr-review-meta">
                                         <strong>{{ $rating->user?->name ?? ($isAr ? 'مجهول' : 'Anonymous') }}</strong>
                                         <span class="mx-1">&bull;</span>

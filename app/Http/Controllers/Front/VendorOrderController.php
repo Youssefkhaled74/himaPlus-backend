@@ -49,6 +49,11 @@ class VendorOrderController extends Controller
         };
     }
 
+    public function shouldUseOfferFlow($orderType): bool
+    {
+        return in_array((int) $orderType, [2, 3], true);
+    }
+
     /**
      * Display list of orders received by vendor
      */
@@ -129,8 +134,9 @@ class VendorOrderController extends Controller
         ]);
 
         $shippingMethods = \App\Models\ShippingMethod::active()->ordered()->get();
+        $useOfferFlow = $this->shouldUseOfferFlow((int) $order->order_type);
 
-        return view('front.vendor.orders.show', compact('order', 'myOffer', 'shippingMethods'));
+        return view('front.vendor.orders.show', compact('order', 'myOffer', 'shippingMethods', 'useOfferFlow'));
     }
 
     /**

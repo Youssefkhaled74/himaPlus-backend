@@ -34,7 +34,7 @@
             <div class="container position-relative">
                 <div class="row align-items-center">
                     <div class="col-lg-7 col-xl-6">
-                        <span class="eyebrow text-uppercase text-white-50"  data-aos-once="false" data-aos-mirror="true" data-aos="fade-up">{{ __('products.categories_eyebrow') }}</span>
+                        <span class="eyebrow text-uppercase text-white-50"  data-aos-once="false" data-aos-mirror="true" data-aos="fade-up">{{ __('products.products_heading') }}</span>
                         <h1 class="display-5 fw-semibold mb-3 text-white"  data-aos-once="false" data-aos-mirror="true" data-aos="fade-up" data-aos-delay="50">{{ __('products.products_heading') }}</h1>
                         <p class="lead text-white-70 mb-4"  data-aos-once="false" data-aos-mirror="true" data-aos="fade-up" data-aos-delay="100">
                             {{ __('products.products_desc') }}
@@ -46,7 +46,7 @@
 
         <section class="py-5">
             <div class="container">
-                @isset($report['category'])
+                @isset($products)
                     <form method="GET" action="{{ route('products') }}" class="row g-2 mb-4" id="productsFilterForm">
                         <div class="col-md-3 autocomplete-wrap">
                             <input class="form-control" name="product_name" value="{{ request('product_name') }}" placeholder="{{ __('products.product_name') }}" autocomplete="off" data-suggest="name">
@@ -74,13 +74,11 @@
                         </div>
                     </form>
                     <nav class="hp-breadcrumb small mb-4">
-                        <a href="{{ route('categories') }}" class="hp-crumb">{{ __('products.home') }}</a>
+                        <a href="{{ route('home') }}" class="hp-crumb">{{ __('products.home') }}</a>
                         <i class="bi bi-chevron-right"></i>
                         <span class="hp-crumb text-body-secondary">
-                            <a href="{{ route('categories') }}" style="color: #47566B;">{{ __('products.categories') }}</a>
+                            <a href="{{ route('products') }}" style="color: #47566B;">{{ __('products.products_heading') }}</a>
                         </span>
-                        <i class="bi bi-chevron-right"></i>
-                        <span class="hp-crumb text-body-secondary">{{ $report['category']->name }}</span>
                     </nav>
                     <div class="row g-4">
                         @foreach ($products as $g => $product)

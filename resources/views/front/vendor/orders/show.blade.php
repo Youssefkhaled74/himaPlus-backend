@@ -78,6 +78,13 @@
     .vos-file a{text-decoration:none;color:#2f3747;font-size:14px;}
     .vos-offer-line{font-size:14px;color:#6b7280;line-height:1.5;}
 
+    .vos-shipment-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #d1d5db;border-radius:12px;cursor:pointer;background:#fff;transition:border-color .15s ease,background .15s ease,box-shadow .15s ease;}
+    .vos-shipment-option:hover{border-color:#93b4e8;background:#f8fbff;}
+    .vos-shipment-option:has(input:checked){border-color:#0f4bbf;background:#eef5ff;box-shadow:0 0 0 1px #0f4bbf inset;}
+    .vos-shipment-option input{width:18px;height:18px;margin:0;flex-shrink:0;accent-color:#0f4bbf;cursor:pointer;}
+    .vos-shipment-option .name{flex:1;font-size:14px;font-weight:600;color:#1f2937;line-height:1.3;}
+    .vos-shipment-option .price{font-size:14px;font-weight:700;color:#0f4bbf;white-space:nowrap;}
+
     @media (max-width: 1200px){
         .vos-grid{grid-template-columns:1fr;}
     }
@@ -116,7 +123,7 @@
     };
     $nextTimelineNo = $__stepMap[$lastTimelineNo] ?? null;
 
-    if ($isQuotation) {
+    if ($useOfferFlow) {
         if (!$myOffer) {
             $actionLabelKey = 'nav.send_offer';
         } else {
@@ -124,30 +131,10 @@
             if ($offerStatus === '3' || $offerStatus === 'rejected') {
                 $actionLabelKey = 'nav.resubmit_offer';
             } elseif ($offerStatus === '2' || $offerStatus === 'accepted') {
-                if ($nextTimelineNo === 7) {
-                    $actionLabelKey = 'nav.mark_as_offer_prepared';
-                    $timelineActionNo = 7;
-                } elseif ($nextTimelineNo === 9) {
-                    $actionLabelKey = 'nav.mark_as_offer_sent';
-                    $timelineActionNo = 9;
-                } elseif ($nextTimelineNo === 6) {
-                    $actionLabelKey = 'nav.mark_as_completed';
-                    $timelineActionNo = 6;
-                }
+                $actionLabelKey = null;
             } else {
                 $actionLabelKey = 'nav.send_offer';
             }
-        }
-    } elseif ($isMaintenance) {
-        if ($nextTimelineNo === 7) {
-            $actionLabelKey = 'nav.mark_as_appointment_set';
-            $timelineActionNo = 7;
-        } elseif ($nextTimelineNo === 9) {
-            $actionLabelKey = 'nav.mark_as_in_progress';
-            $timelineActionNo = 9;
-        } elseif ($nextTimelineNo === 6) {
-            $actionLabelKey = 'nav.mark_as_completed';
-            $timelineActionNo = 6;
         }
     } elseif ($isScheduled) {
         if (in_array($statusState['key'], ['scheduled', 'active_scheduled'], true)) {
@@ -523,7 +510,7 @@
                     </div>
                 @endif
 
-                @if($isQuotation && $myOffer && in_array(strtolower((string)$myOffer->status), ['3','rejected'], true))
+                @if($useOfferFlow && $myOffer && in_array(strtolower((string)$myOffer->status), ['3','rejected'], true))
                     <div class="vos-alert" style="margin-bottom:12px;">
                         <i class="bi bi-exclamation-triangle"></i>
                         {{ __('nav.offer_rejected') }}:
@@ -532,11 +519,11 @@
                     <div class="vos-actions">
                         <a href="{{ route('vendor/orders/offer-edit', $myOffer->id) }}" class="btn-vos btn-vos-main" style="width:100%;">{{ __('nav.resubmit_offer') }}</a>
                     </div>
-                @elseif($isQuotation && !$myOffer)
+                @elseif($useOfferFlow && !$myOffer)
                     <div class="vos-actions">
                         <a href="{{ route('vendor/orders/offer-form', $order->id) }}" class="btn-vos btn-vos-main" style="width:100%;">{{ __('nav.send_offer') }}</a>
                     </div>
-                @elseif($isQuotation && $myOffer && (string)$myOffer->status === '1')
+                @elseif($useOfferFlow && $myOffer && (string)$myOffer->status === '1')
                     <div class="vos-actions">
                         <form method="POST" action="{{ route('vendor/orders/offer-delete', $myOffer->id) }}" style="flex:1;" onsubmit="return confirm('{{ __('nav.delete_this_offer') }}')">
                             @csrf
@@ -565,15 +552,19 @@
                             <form method="POST" action="{{ route('vendor/orders/ship') }}" style="width:100%;">
                                 @csrf
                                 <input type="hidden" name="order_id" value="{{ (int)$order->id }}">
-                                <label style="font-size:14px;font-weight:600;color:#374151;margin-bottom:6px;display:block;">{{ __('nav.select_shipping_method') }}</label>
-                                <select name="shipping_method_id" class="form-select" style="border-radius:12px;border:1px solid #d1d5db;padding:10px 14px;font-size:14px;margin-bottom:10px;" required>
-                                    <option value="" disabled selected>{{ __('nav.choose_shipping_method') }}</option>
+                                <label style="font-size:14px;font-weight:600;color:#374151;margin-bottom:8px;display:block;">{{ __('nav.select_shipping_method') }}</label>
+                                <div style="display:grid;gap:10px;margin-bottom:12px;">
+                                    @php
+                                        $selectedShippingMethodId = (int)($order->shipping_method_id ?? 0);
+                                    @endphp
                                     @foreach($shippingMethods as $method)
-                                        <option value="{{ $method->id }}" {{ (int)($order->shipping_method_id ?? 0) === $method->id ? 'selected' : '' }}>
-                                            {{ $method->name }} — {{ $method->base_price }} SAR
-                                        </option>
+                                        <label class="vos-shipment-option">
+                                            <input type="radio" name="shipping_method_id" value="{{ $method->id }}" {{ ($selectedShippingMethodId > 0 && $selectedShippingMethodId === $method->id) || ($selectedShippingMethodId === 0 && $loop->first) ? 'checked' : '' }} required>
+                                            <span class="name">{{ $method->name }}</span>
+                                            <span class="price">{{ $method->base_price }} SAR</span>
+                                        </label>
                                     @endforeach
-                                </select>
+                                </div>
                                 <button type="submit" class="btn-vos btn-vos-main" style="width:100%;text-align:center;">
                                     <i class="bi bi-box-seam"></i> {{ __('nav.ship_order') }}
                                 </button>

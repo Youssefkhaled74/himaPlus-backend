@@ -207,14 +207,14 @@ class OrderController extends Controller
                 try {
                     $notificationArr[0] = [
                         'title' => __('messages.new_order_received'), 'content' => __('messages.order_sent_to_provider'), 'user_id' => $user->id,
-                        'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
+                        'type' => 'order', 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                         'created_at' => now(), 'updated_at' => now()
                     ];
 
                     if (!is_null($order->provider_id)) {
                         $notificationArr[1] = [
                             'title' => __('messages.new_order_received'), 'content' => __('messages.new_order_received'), 'user_id' => $order->provider_id,
-                            'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
+                            'type' => 'order', 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                             'created_at' => now(), 'updated_at' => now()
                         ];
                         $provider = $order->provider;
@@ -318,13 +318,13 @@ class OrderController extends Controller
             
             $notificationArr[0] = [
                 'title' => __('messages.new_order_received'), 'content' => __('messages.order_sent_to_provider'), 'user_id' => $user->id, 
-                'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
+                'type' => 'order', 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                 'created_at' => now(), 'updated_at' => now()
             ];
             if (!is_null($order->provider_id)) {
                 $notificationArr[1] = [
                     'title' => __('messages.new_order_received'), 'content' => __('messages.new_order_received'), 'user_id' => $order->provider_id, 
-                    'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
+                    'type' => 'order', 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
                 $provider = $order->provider;
@@ -390,12 +390,12 @@ class OrderController extends Controller
             
             $notificationArr[0] = [
                 'title' => __('messages.new_order_received'), 'content' => __('messages.order_sent_to_provider'), 'user_id' => $user->id, 
-                'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
+                'type' => 'order', 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                 'created_at' => now(), 'updated_at' => now()
             ];
             if (!is_null($order->provider_id)) {
                 $notificationArr[1] = ['title' => __('messages.new_order_received'), 'content' => __('messages.new_order_received'), 'user_id' => $order->provider_id, 
-                    'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
+                    'type' => 'order', 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
                 $provider = $order->provider;
@@ -552,7 +552,7 @@ class OrderController extends Controller
                     
                     $step = timelineName($timeline_no);
                     $this->notification->query()->insert([
-                        'title' => __('messages.order_updates', ['step' => $step]), 'content' => __('messages.order_updates', ['step' => $step]), 'user_id' => $order->user_id, 
+                        'title' => __('messages.order_updates', ['step' => $step]), 'content' => __('messages.order_updates', ['step' => $step]), 'type' => 'status_change', 'user_id' => $order->user_id, 
                         'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                         'created_at' => now(), 'updated_at' => now()
                     ]);
@@ -660,13 +660,13 @@ class OrderController extends Controller
 
             $notificationArr[0] = [
                 'title' => __('messages.order_canceled_title'), 'content' => __('messages.order_canceled_content', ['id' => $order->id]), 'user_id' => $order->user_id, 
-                'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
+                'type' => 'status_change', 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                 'created_at' => now(), 'updated_at' => now()
             ];
             if (!is_null($order->provider_id)) {
                 $notificationArr[1] = [
                     'title' => __('messages.order_canceled_title'), 'content' => __('messages.order_canceled_content', ['id' => $order->id]), 'user_id' => $order->provider_id, 
-                    'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
+                    'type' => 'status_change', 'order_id' => $order->id, 'serviceable_id' => $order->id, 'serviceable_type' => 'App\Models\Order',
                     'created_at' => now(), 'updated_at' => now()
                 ];
                 $provider = $order->provider;
@@ -969,7 +969,7 @@ class OrderController extends Controller
                 $offetAction = 'rejected';
             }
             $this->notification->query()->insert([
-                'title' => "offer updates.", 'content' => "the offer no #$offer->id has been $offetAction.", 'user_id' => $offer->provider_id, 
+                'title' => "offer updates.", 'content' => "the offer no #$offer->id has been $offetAction.", 'type' => 'status_change', 'user_id' => $offer->provider_id, 
                 'order_id' => $offer->order_id, 'serviceable_id' => $offer->order_id, 'serviceable_type' => 'App\Models\Order', 
                 'created_at' => now(), 'updated_at' => now(), 
             ]);

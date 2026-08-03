@@ -57,9 +57,10 @@
     .vo-table tbody td{color:#111827;font-size:14px;vertical-align:middle;padding:15px 16px;border-bottom:1px solid #edf2f7;white-space:nowrap;}
     .vo-table tbody tr:hover td{background:#f8fbff;}
 
-    .vo-order-link{color:var(--vo-primary);text-decoration:none;font-weight:800;}
+    .vo-order-link{color:var(--vo-primary);text-decoration:none;font-weight:800;display:inline-block;}
     .vo-order-link:hover{color:#1e3a8a;text-decoration:underline;}
     .vo-order-meta{display:block;margin-top:3px;color:var(--vo-muted);font-size:12px;font-weight:600;}
+    .vo-order-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#eef5ff;color:#2457bd;font-size:12px;font-weight:700;white-space:nowrap;margin-bottom:6px;}
 
     .vo-chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;line-height:1;white-space:nowrap;}
     .vo-chip-pending{background:#eef0f4;color:#666d79;}
@@ -258,8 +259,12 @@
                             </td>
 
                             <td>
+                                <span class="vo-order-pill">
+                                    <i class="bi bi-box-seam"></i>
+                                    {{ $isAr ? 'طلب' : 'Order' }} #{{ $offer->order_id }}
+                                </span>
                                 <a class="vo-order-link" href="{{ route('vendor/orders/show', $offer->order_id) }}">
-                                    {{ $typeTitle }} #{{ $offer->order_id }}
+                                    {{ $typeTitle }}
                                 </a>
                                 <span class="vo-order-meta">
                                     <i class="bi bi-tag"></i>

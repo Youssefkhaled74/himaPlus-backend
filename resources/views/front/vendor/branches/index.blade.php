@@ -60,6 +60,16 @@
     .vb-empty-title{margin:0 0 5px;color:#0f172a;font-size:17px;font-weight:700;}
     .vb-empty-text{margin:0;color:#64748b;font-size:14px;}
 
+    .vb-modal-card{border:0;border-radius:18px;overflow:hidden;box-shadow:0 18px 45px rgba(15,23,42,.16);}
+    .vb-modal-header{background:linear-gradient(90deg,var(--vb-primary),var(--vb-accent));color:#fff;padding:18px 20px;}
+    .vb-modal-title{margin:0;font-size:18px;font-weight:700;}
+    .vb-modal-subtitle{margin:6px 0 0;font-size:13px;opacity:.9;}
+    .vb-modal-body{padding:20px;}
+    .vb-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+    .vb-modal-btn{border-radius:10px;padding:10px 16px;font-weight:700;border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;}
+    .vb-modal-btn-cancel{background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;}
+    .vb-modal-btn-delete{background:linear-gradient(90deg,#ef4444,#dc2626);color:#fff;}
+
     @media(max-width:992px){
         .vb-title{font-size:28px;}
         .vb-branch{grid-template-columns:1fr;}
@@ -162,12 +172,12 @@
                                     <i class="bi bi-{{ $branch->is_active ? 'pause-circle' : 'play-circle' }}"></i>
                                 </button>
                             </form>
-                            <form method="POST" action="{{ route('vendor/branches/delete', $branch->id) }}" class="d-inline" onsubmit="return confirm('{{ $isAr ? 'هل أنت متأكد من حذف هذا الفرع؟' : 'Are you sure you want to delete this branch?' }}');">
+                            <button class="vb-btn vb-btn-sm vb-btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteBranchModal" data-form-id="delete-branch-form-{{ $branch->id }}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            <form method="POST" action="{{ route('vendor/branches/delete', $branch->id) }}" id="delete-branch-form-{{ $branch->id }}" class="d-none">
                                 @csrf
                                 @method('DELETE')
-                                <button class="vb-btn vb-btn-sm vb-btn-danger" type="submit">
-                                    <i class="bi bi-trash"></i>
-                                </button>
                             </form>
                         @endif
                     </div>
@@ -187,5 +197,62 @@
             @endif
         </div>
     </div>
+    <div class="modal fade" id="deleteBranchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content vb-modal-card">
+                <div class="vb-modal-header">
+                    <h5 class="vb-modal-title">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ $isAr ? 'حذف الفرع' : 'Delete Branch' }}
+                    </h5>
+                    <p class="vb-modal-subtitle">{{ $isAr ? 'هذه العملية غير قابلة للتراجع.' : 'This action cannot be undone.' }}</p>
+                </div>
+                <div class="vb-modal-body">
+                    <p class="mb-0" style="color:#374151;font-size:15px;line-height:1.7;">
+                        {{ $isAr ? 'هل أنت متأكد أنك تريد حذف هذا الفرع؟' : 'Are you sure you want to delete this branch?' }}
+                    </p>
+                    <div class="vb-modal-actions">
+                        <button type="button" class="vb-modal-btn vb-modal-btn-cancel" data-bs-dismiss="modal">
+                            {{ $isAr ? 'إلغاء' : 'Cancel' }}
+                        </button>
+                        <button type="button" class="vb-modal-btn vb-modal-btn-delete" id="confirmDeleteBranchBtn">
+                            <i class="bi bi-trash"></i>
+                            {{ $isAr ? 'حذف' : 'Delete' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
+@endsection
+
+@section('script')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('deleteBranchModal');
+        const confirmBtn = document.getElementById('confirmDeleteBranchBtn');
+        let pendingFormId = null;
+
+        document.querySelectorAll('[data-form-id]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                pendingFormId = this.getAttribute('data-form-id');
+            });
+        });
+
+        confirmBtn.addEventListener('click', function () {
+            if (!pendingFormId) return;
+            const form = document.getElementById(pendingFormId);
+            if (form) {
+                form.submit();
+            }
+        });
+
+        if (modal) {
+            modal.addEventListener('hidden.bs.modal', function () {
+                pendingFormId = null;
+            });
+        }
+    });
+</script>
 @endsection
