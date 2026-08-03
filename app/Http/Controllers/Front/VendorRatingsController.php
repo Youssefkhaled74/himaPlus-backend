@@ -58,9 +58,9 @@ class VendorRatingsController extends Controller
         }
 
         $reviewedItemsCount = (clone $baseRatingQuery)
-            ->selectRaw('CONCAT(forable_type, ":", forable_id) as key')
+            ->selectRaw('CONCAT(forable_type, ":", forable_id) as reviewed_key')
             ->get()
-            ->pluck('key')
+            ->pluck('reviewed_key')
             ->unique()
             ->count();
 
