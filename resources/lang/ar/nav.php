@@ -40,8 +40,9 @@ return [
     'services' => 'الخدمات',
     'products' => 'المنتجات',
     'discover_app' => 'اكتشف تطبيقنا',
-    'copyright' => '© 2025 هيماء. جميع الحقوق محفوظة.',
-    'powered_by' => 'بواسطة TPTC',
+    'copyright' => '© 2025 هيمابالس. جميع الحقوق محفوظة.',
+    'powered_by' => 'بواسطة Tptc',
+    'footer_address' => 'الرياض، المملكة العربية السعودية',
 
     // Phase 2 Keys
     'my_products' => 'منتجاتي',

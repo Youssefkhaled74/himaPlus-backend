@@ -40,8 +40,9 @@ return [
     'services' => 'Services',
     'products' => 'Products',
     'discover_app' => 'Discover our app',
-    'copyright' => '© 2025 Hema. All rights reserved.',
-    'powered_by' => 'Powered by TPTC',
+    'copyright' => '© 2025 HemaPulse . All right reserved.',
+    'powered_by' => 'Powered by Tptc',
+    'footer_address' => 'Riyadh, Saudi Arabia',
     
     // Phase 2 Keys
     'my_products' => 'My Products',

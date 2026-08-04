@@ -553,15 +553,12 @@
                                 @csrf
                                 <input type="hidden" name="order_id" value="{{ (int)$order->id }}">
                                 <label style="font-size:14px;font-weight:600;color:#374151;margin-bottom:8px;display:block;">{{ __('nav.select_shipping_method') }}</label>
-                                <div style="display:grid;gap:10px;margin-bottom:12px;">
-                                    @php
-                                        $selectedShippingMethodId = (int)($order->shipping_method_id ?? 0);
-                                    @endphp
+                                <div style="display:grid;gap:8px;margin-bottom:12px;" role="radiogroup" aria-label="{{ __('nav.select_shipping_method') }}">
                                     @foreach($shippingMethods as $method)
                                         <label class="vos-shipment-option">
-                                            <input type="radio" name="shipping_method_id" value="{{ $method->id }}" {{ ($selectedShippingMethodId > 0 && $selectedShippingMethodId === $method->id) || ($selectedShippingMethodId === 0 && $loop->first) ? 'checked' : '' }} required>
+                                            <input type="radio" name="shipping_method_id" value="{{ $method->id }}" {{ (int)($order->shipping_method_id ?? 0) === $method->id ? 'checked' : '' }} required>
                                             <span class="name">{{ $method->name }}</span>
-                                            <span class="price">{{ $method->base_price }} SAR</span>
+                                            <span class="price">{{ $method->base_price }} {{ __('nav.sar') }}</span>
                                         </label>
                                     @endforeach
                                 </div>

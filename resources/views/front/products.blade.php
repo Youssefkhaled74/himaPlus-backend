@@ -83,7 +83,7 @@
                     <div class="row g-4">
                         @foreach ($products as $g => $product)
                             <div class="col-md-6 col-lg-4">
-                                <article class="equipment-card h-100"  data-aos-once="false" data-aos-mirror="true" data-aos="fade-up">
+                                <article class="equipment-card h-100" data-href="{{ route('product', [$product->id]) }}" data-aos-once="false" data-aos-mirror="true" data-aos="fade-up">
                                     {{-- <img src="{{ asset($product->img) }}" class="equipment-card__image" alt="{{ $product->name }}"> --}}
                                     <div class="position-relative">
                                         <img src="{{ asset('storage/' . $product->img) }}" class="equipment-card__image" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
@@ -181,6 +181,12 @@
 <script>
     $(function(){
         $('#nav-products').addClass('active');
+
+        $(document).on('click', '.equipment-card', function (e) {
+            if ($(e.target).closest('button, a').length) return;
+            var href = $(this).data('href');
+            if (href) window.location.href = href;
+        });
 
         var suggestTimeout;
         $('[data-suggest]').each(function () {

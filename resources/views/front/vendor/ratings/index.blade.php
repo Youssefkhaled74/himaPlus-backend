@@ -210,8 +210,8 @@
     .vr-filter-actions .vr-btn-primary,
     .vr-filter-actions .vr-btn-outline {
         height: 50px;
-        min-width: 112px;
-        padding: 0 16px;
+        min-width: 116px;
+        padding: 0 18px;
         justify-content: center;
         border-radius: 12px;
         white-space: nowrap;
