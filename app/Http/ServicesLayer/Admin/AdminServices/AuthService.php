@@ -27,6 +27,7 @@ class AuthService
         try{
             $email = strtolower(trim((string) $request->email));
             $invalidLoginMessage = "Invalid email or password";
+            $remember = (bool) $request->boolean('remember');
 
             $admin = $this->model->where('email', $email)->first();
             if($admin){
@@ -38,7 +39,7 @@ class AuthService
                         if(FacadesAuth::guard('admin')->attempt([
                             'email' => $email,
                             'password' => $request->password,
-                        ])){
+                        ], $remember)){
 
                             return redirect(route('admin/index'));
                         }else{

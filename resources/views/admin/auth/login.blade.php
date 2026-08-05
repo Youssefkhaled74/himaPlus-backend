@@ -97,7 +97,7 @@
                             </div>
 
                             <div class="form-check admin-auth-check">
-                                <input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
+                                <input class="form-check-input" type="checkbox" name="remember" value="1" id="auth-remember-check">
                                 <label class="form-check-label" for="auth-remember-check">{{ __('admin.auth.remember_me') }}</label>
                             </div>
 
