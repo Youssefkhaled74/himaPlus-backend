@@ -34,16 +34,25 @@
                     <span class="hp-crumb text-body-secondary">{{ __('products.categories') }}</span>
                 </nav>
                 <div class="row g-4">
-                    @isset($report['categories'])
-                        @foreach ($report['categories'] as $g => $category)
+                    @forelse($report['categories'] ?? [] as $category)
                             <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                                 <a class="hp-cat-card" href="{{ route('categoryProducts', [$category->id]) }}">
                                     <img src="{{ asset($category->img) }}" alt="{{ $category->name }}" onerror="this.onerror=null;this.src='{{ asset('front/assets/images/emptyproducts.png') }}'">
                                     <span>{{ $category->name }}</span>
                                 </a>
                             </div>
-                        @endforeach
-                    @endisset
+                    @empty
+                        <div class="col-12">
+                            <div class="hp-empty-state">
+                                <div class="hp-empty-state__icon">
+                                    <i class="bi bi-grid-3x3-gap-fill"></i>
+                                </div>
+                                <h3 class="hp-empty-state__title">{{ __('products.no_categories') ?? 'No categories available yet' }}</h3>
+                                <p class="hp-empty-state__text">{{ __('products.categories_desc') }}</p>
+                                <a href="{{ route('products') }}" class="btn hp-hero-cta hp-hero-cta--sm">{{ __('nav.products') }}</a>
+                            </div>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </section>
