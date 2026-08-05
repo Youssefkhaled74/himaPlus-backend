@@ -471,11 +471,10 @@ class OrderController extends Controller
     public function orderTimeline(Request $request)
     {
         try{
-            // decrypt
             $decryptedData = [
-                'order_type' => decrypt($request->order_type),
-                'timeline_no' => decrypt($request->timeline_no),
-                'order_id' => decrypt($request->order_id),
+                'order_type' => $this->resolveTimelineInput($request->order_type),
+                'timeline_no' => $this->resolveTimelineInput($request->timeline_no),
+                'order_id' => $this->resolveTimelineInput($request->order_id),
                 'delivery_fee' => $request->delivery_fee,
             ];
             $request->merge($decryptedData);
@@ -592,6 +591,15 @@ class OrderController extends Controller
             ]);
             flash()->error(__('messages.something_went_wrong'));
             return back();
+        }
+    }
+
+    private function resolveTimelineInput($value)
+    {
+        try {
+            return decrypt($value);
+        } catch (\Throwable $e) {
+            return $value;
         }
     }
 
