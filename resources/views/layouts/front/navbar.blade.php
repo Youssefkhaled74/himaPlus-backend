@@ -167,15 +167,15 @@
 
                     <div class="header-icons d-xl-flex ms-4">
                         @if(auth()->check())
-                            <a class="text-decoration-none" href="{{ route('products') }}" id="nav-search"><i class="bi bi-search"></i></a>
-                            <a class="text-decoration-none" href="{{ route('user/favorites') }}" id="nav-heart"><i class="bi bi-heart"></i></a>
-                            <a class="text-decoration-none" href="{{ route('user/profile') }}" id="nav-user-profile"><i class="bi bi-person"></i></a>
-                            <a id="cartIcon" class="text-decoration-none" href="{{ route('user/cart') }}"><i class="bi bi-bag"></i><span id="cartCount" class="badge bg-danger">{{ $cartCount }}</span></a>
+                            <a class="text-decoration-none hp-nav-action" href="{{ route('products') }}" id="nav-search" aria-label="{{ __('nav.search') ?? 'Search' }}"><i class="bi bi-search"></i></a>
+                            <a class="text-decoration-none hp-nav-action" href="{{ route('user/favorites') }}" id="nav-heart" aria-label="{{ __('nav.favorites') ?? 'Favorites' }}"><i class="bi bi-heart"></i></a>
+                            <a class="text-decoration-none hp-nav-action" href="{{ route('user/profile') }}" id="nav-user-profile" aria-label="{{ __('profile.my_profile') }}"><i class="bi bi-person"></i></a>
+                            <a id="cartIcon" class="text-decoration-none hp-nav-action" href="{{ route('user/cart') }}" aria-label="{{ __('nav.cart') ?? 'Cart' }}"><i class="bi bi-basket2"></i><span id="cartCount" class="badge bg-danger">{{ $cartCount }}</span></a>
                         @else
-                            <a class="text-decoration-none" href="{{ route('products') }}" id="nav-search"><i class="bi bi-search"></i></a>
-                            <a class="text-decoration-none" href="{{ route('user/favorites') }}" id="nav-heart"><i class="bi bi-heart"></i></a>
-                            <a class="text-decoration-none" href="{{ route('login') }}" id="nav-person"><i class="bi bi-person"></i></a>
-                            <a id="cartIcon" class="text-decoration-none" href="{{ route('user/cart') }}"><i class="bi bi-bag"></i></a>
+                            <a class="text-decoration-none hp-nav-action" href="{{ route('products') }}" id="nav-search" aria-label="{{ __('nav.search') ?? 'Search' }}"><i class="bi bi-search"></i></a>
+                            <a class="text-decoration-none hp-nav-action" href="{{ route('user/favorites') }}" id="nav-heart" aria-label="{{ __('nav.favorites') ?? 'Favorites' }}"><i class="bi bi-heart"></i></a>
+                            <a class="text-decoration-none hp-nav-action" href="{{ route('login') }}" id="nav-person" aria-label="{{ __('profile.login') ?? 'Login' }}"><i class="bi bi-person"></i></a>
+                            <a id="cartIcon" class="text-decoration-none hp-nav-action" href="{{ route('user/cart') }}" aria-label="{{ __('nav.cart') ?? 'Cart' }}"><i class="bi bi-basket2"></i></a>
                         @endif
 
                         <div class="dropdown lang-dropdown">
