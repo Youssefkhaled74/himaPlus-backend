@@ -22,7 +22,7 @@
                             Request quotations, manage maintenance, and connect with trusted suppliers across Saudi Arabia.
                         </p>
                         <div class="d-flex flex-wrap gap-3" data-aos="fade-up" data-aos-delay="200">
-                            <a href="{{ route('products') }}" class="btn btn-gradient px-4 py-2">Explore Marketplace</a>
+                            <a href="{{ route('products') }}" class="btn hp-hero-cta px-4 py-2">Explore Marketplace</a>
                             <button type="button" class="btn btn-outline-light px-4 py-2" disabled aria-disabled="true">Request Maintenance</button>
                         </div>
                     </div>

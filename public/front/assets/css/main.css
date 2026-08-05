@@ -1153,6 +1153,34 @@ a:hover{text-decoration:underline}
 .btn-gradient:hover{ opacity:.95;color:#fff; }
 .form-check-input:checked { background-color:#0ea5e9; border-color:#0ea5e9; }
 
+.hp-hero-cta{
+  min-height: 88px;
+  min-width: 320px;
+  padding: 1.2rem 2.8rem;
+  border: 6px solid rgba(56, 172, 255, .85);
+  border-radius: 24px;
+  background: linear-gradient(90deg, #0f4fb3 0%, #1480b7 40%, #18c59a 100%);
+  color: #fff !important;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .01em;
+  box-shadow:
+    0 0 0 4px rgba(26, 145, 228, .18),
+    0 18px 34px rgba(10, 56, 139, .22);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.hp-hero-cta:hover,
+.hp-hero-cta:focus-visible{
+  color: #fff !important;
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 4px rgba(26, 145, 228, .22),
+    0 22px 38px rgba(10, 56, 139, .26);
+}
+
 .wishlist-btn{
   width: 36px; height: 36px;
   border-radius: 50%;
