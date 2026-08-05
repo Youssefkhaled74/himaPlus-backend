@@ -84,12 +84,30 @@
     </div>
 
     <div class="vo-tabs" style="background:#fff;border:1px solid var(--vo-border);padding:8px;">
-        <a href="{{ route('vendor/orders', ['tab' => $tab]) }}" class="vo-tab {{ $status === '' ? 'active' : '' }}">{{ __('nav.all') }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'pending']) }}" class="vo-tab {{ $status === 'pending' ? 'active' : '' }}">{{ __('messages.status_pending') }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'confirmed']) }}" class="vo-tab {{ $status === 'confirmed' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.confirmed') }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'processing']) }}" class="vo-tab {{ $status === 'processing' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.processing') }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'completed']) }}" class="vo-tab {{ $status === 'completed' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.completed') }}</a>
-        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'scheduled']) }}" class="vo-tab {{ $status === 'scheduled' ? 'active' : '' }}">{{ __('admin.pages.orders.statuses.scheduled') }}</a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab]) }}" class="vo-tab {{ $status === '' ? 'active' : '' }}">
+            {{ __('nav.all') }}
+            <span class="badge bg-light text-dark ms-2">{{ $counts['all'] ?? 0 }}</span>
+        </a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'pending']) }}" class="vo-tab {{ $status === 'pending' ? 'active' : '' }}">
+            {{ __('messages.status_pending') }}
+            <span class="badge bg-light text-dark ms-2">{{ $counts['pending'] ?? 0 }}</span>
+        </a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'confirmed']) }}" class="vo-tab {{ $status === 'confirmed' ? 'active' : '' }}">
+            {{ __('admin.pages.orders.statuses.confirmed') }}
+            <span class="badge bg-light text-dark ms-2">{{ $counts['confirmed'] ?? 0 }}</span>
+        </a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'processing']) }}" class="vo-tab {{ $status === 'processing' ? 'active' : '' }}">
+            {{ __('admin.pages.orders.statuses.processing') }}
+            <span class="badge bg-light text-dark ms-2">{{ $counts['processing'] ?? 0 }}</span>
+        </a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'completed']) }}" class="vo-tab {{ $status === 'completed' ? 'active' : '' }}">
+            {{ __('admin.pages.orders.statuses.completed') }}
+            <span class="badge bg-light text-dark ms-2">{{ $counts['completed'] ?? 0 }}</span>
+        </a>
+        <a href="{{ route('vendor/orders', ['tab' => $tab, 'status' => 'scheduled']) }}" class="vo-tab {{ $status === 'scheduled' ? 'active' : '' }}">
+            {{ __('admin.pages.orders.statuses.scheduled') }}
+            <span class="badge bg-light text-dark ms-2">{{ $counts['scheduled_status'] ?? 0 }}</span>
+        </a>
     </div>
 
     <form method="GET" action="{{ route('vendor/orders') }}" class="mb-3">

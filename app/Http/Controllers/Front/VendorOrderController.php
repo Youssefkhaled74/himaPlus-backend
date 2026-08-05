@@ -69,7 +69,7 @@ class VendorOrderController extends Controller
             ->with(['user:id,name,email,mobile', 'items.product', 'offers', 'timeline']);
         
         if ($status) {
-            $this->orderStatusService->applyStatusFilter($query, $status, [
+            $query = $this->orderStatusService->applyStatusFilter($query, $status, [
                 'audience' => 'front',
                 'provider_id' => (int) $vendor->id,
             ]);
@@ -100,6 +100,7 @@ class VendorOrderController extends Controller
             'maintenance' => $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'maintenance')->count(),
             'scheduled' => $this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, 'scheduled')->count(),
             'confirmed' => $this->orderStatusService->countByStatus($this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, $tab), OrderStatusService::STATUS_CONFIRMED, ['provider_id' => (int) $vendor->id]),
+            'pending' => $this->orderStatusService->countByStatus($this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, $tab), OrderStatusService::STATUS_PENDING, ['provider_id' => (int) $vendor->id]),
             'processing' => $this->orderStatusService->countByStatus($this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, $tab), OrderStatusService::STATUS_PROCESSING, ['provider_id' => (int) $vendor->id]),
             'completed' => $this->orderStatusService->countByStatus($this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, $tab), OrderStatusService::STATUS_COMPLETED, ['provider_id' => (int) $vendor->id]),
             'scheduled_status' => $this->orderStatusService->countByStatus($this->vendorOrderVisibilityService->visibleOrdersQuery((int) $vendor->id, $tab), OrderStatusService::STATUS_SCHEDULED, ['provider_id' => (int) $vendor->id]),
