@@ -156,14 +156,14 @@
 
     .vr-filter-bar {
         display: grid;
-        grid-template-columns: minmax(220px, 1.3fr) minmax(180px, 1fr) auto auto;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
         align-items: center;
     }
 
     .vr-filter-select {
-        flex: 1 1 180px;
-        min-width: 160px;
+        width: 100%;
+        min-width: 0;
         height: 50px;
         border: 1px solid #DCE4F0;
         border-radius: 12px;
@@ -189,8 +189,8 @@
     }
 
     .vr-rating-filter .vr-filter-select {
-        flex: 0 0 auto;
-        min-width: 150px;
+        flex: 1 1 auto;
+        min-width: 0;
     }
 
     .vr-rating-filter-label {
@@ -201,7 +201,12 @@
     }
 
     .vr-filter-actions {
-        display: contents;
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 
     .vr-filter-actions .vr-btn-primary,
@@ -374,10 +379,6 @@
         }
 
         .vr-filter-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: stretch;
             width: 100%;
         }
 
