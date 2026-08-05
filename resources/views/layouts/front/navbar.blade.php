@@ -95,24 +95,26 @@
                                     <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle" style="font-size:.65rem;min-width:18px;">{{ $vendorUnreadNotificationsCount > 99 ? '99+' : $vendorUnreadNotificationsCount }}</span>
                                 @endif
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end p-0" style="min-width:320px;max-width:360px;">
-                                <div class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
-                                    <strong style="font-size:.95rem;">{{ __('nav.notifications') }}</strong>
-                                    <a href="{{ route('vendor/notifications') }}" class="text-decoration-none" style="font-size:.8rem;">{{ __('nav.all') }}</a>
+                            <div class="dropdown-menu dropdown-menu-end hp-notification-menu">
+                                <div class="hp-notification-menu__head">
+                                    <strong>{{ __('nav.notifications') }}</strong>
+                                    <a href="{{ route('vendor/notifications') }}">{{ __('nav.all') }}</a>
                                 </div>
-                                @forelse($vendorRecentNotifications as $notification)
-                                    <a href="{{ route('vendor/notifications') }}" class="dropdown-item py-2" style="white-space:normal;">
-                                        <div class="d-flex align-items-start gap-2">
-                                            <i class="bi bi-{{ $notification->read_at ? 'bell' : 'bell-fill' }} text-primary mt-1"></i>
-                                            <div>
-                                                <div style="font-weight:700;font-size:.9rem;">{{ $notification->title }}</div>
-                                                <div class="text-muted" style="font-size:.8rem;line-height:1.4;">{{ \Illuminate\Support\Str::limit($notification->content ?? $notification->message ?? '-', 70) }}</div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                @empty
-                                    <div class="px-3 py-4 text-center text-muted" style="font-size:.85rem;">{{ __('nav.no_notifications') ?? 'No notifications yet' }}</div>
-                                @endforelse
+                                <div class="hp-notification-menu__list">
+                                    @forelse($vendorRecentNotifications as $notification)
+                                        <a href="{{ route('vendor/notifications') }}" class="hp-notification-menu__item">
+                                            <span class="hp-notification-menu__icon {{ $notification->read_at ? 'is-read' : 'is-unread' }}">
+                                                <i class="bi bi-bell{{ $notification->read_at ? '' : '-fill' }}"></i>
+                                            </span>
+                                            <span class="hp-notification-menu__body">
+                                                <span class="hp-notification-menu__title">{{ $notification->title }}</span>
+                                                <span class="hp-notification-menu__text">{{ \Illuminate\Support\Str::limit($notification->content ?? $notification->message ?? '-', 70) }}</span>
+                                            </span>
+                                        </a>
+                                    @empty
+                                        <div class="hp-notification-menu__empty">{{ __('nav.no_notifications') ?? 'No notifications yet' }}</div>
+                                    @endforelse
+                                </div>
                             </div>
                         </div>
                         <div class="dropdown">
@@ -191,4 +193,3 @@
         </div>
     </nav>
 </header>
-
