@@ -156,7 +156,7 @@
 
     .vr-filter-bar {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+        grid-template-columns: minmax(220px, 1.3fr) minmax(180px, 1fr) auto auto;
         gap: 12px;
         align-items: center;
     }
@@ -201,12 +201,7 @@
     }
 
     .vr-filter-actions {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        justify-content: flex-end;
-        margin-inline-start: 0;
-        flex-wrap: nowrap;
+        display: contents;
     }
 
     .vr-filter-actions .vr-btn-primary,
@@ -379,8 +374,11 @@
         }
 
         .vr-filter-actions {
-            width: 100%;
+            display: flex;
+            gap: 10px;
+            align-items: center;
             justify-content: stretch;
+            width: 100%;
         }
 
         .vr-filter-actions .vr-btn-primary,
