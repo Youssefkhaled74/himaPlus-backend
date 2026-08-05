@@ -31,6 +31,108 @@ body{
 .header-icons .bi{font-size:1.05rem; margin-left:0.75rem; color:#1f2b45}
 .header-icons .bi:hover{color:var(--hp-primary)}
 
+/* Notification dropdown */
+.hp-notification-menu{
+  min-width:340px;
+  max-width:380px;
+  padding:0;
+  overflow:hidden;
+  border:1px solid #d8e3f0;
+  border-radius:14px;
+  box-shadow:0 14px 38px rgba(15,23,42,.14);
+}
+.hp-notification-menu__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 16px;
+  border-bottom:1px solid #e7edf5;
+  background:#fff;
+}
+.hp-notification-menu__head strong{
+  color:#0f172a;
+  font-size:1rem;
+  font-weight:800;
+}
+.hp-notification-menu__head a{
+  color:var(--hp-primary);
+  font-size:.85rem;
+  font-weight:700;
+  text-decoration:none;
+}
+.hp-notification-menu__list{
+  max-height:320px;
+  overflow:auto;
+  background:#fff;
+}
+.hp-notification-menu__item{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:14px 16px;
+  text-decoration:none;
+  border-bottom:1px solid #edf2f7;
+  direction:inherit;
+}
+.hp-notification-menu__item:last-child{border-bottom:0}
+.hp-notification-menu__item:hover{background:#f8fbff}
+.hp-notification-menu__icon{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  flex:0 0 34px;
+  color:#fff;
+  background:linear-gradient(135deg,var(--hp-primary),var(--hp-accent));
+  box-shadow:0 8px 18px rgba(15,75,191,.15);
+}
+.hp-notification-menu__icon.is-read{
+  background:#e8f1ff;
+  color:var(--hp-primary);
+  box-shadow:none;
+}
+.hp-notification-menu__body{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+  flex:1;
+}
+.hp-notification-menu__title{
+  color:#111827;
+  font-size:.95rem;
+  font-weight:800;
+  line-height:1.25;
+  word-break:break-word;
+}
+.hp-notification-menu__text{
+  color:#64748b;
+  font-size:.82rem;
+  line-height:1.45;
+  word-break:break-word;
+}
+.hp-notification-menu__empty{
+  padding:20px 16px;
+  text-align:center;
+  color:#64748b;
+  font-size:.9rem;
+}
+[dir="rtl"] .hp-notification-menu__item{
+  flex-direction:row-reverse;
+  text-align:right;
+}
+[dir="rtl"] .hp-notification-menu__head{
+  direction:rtl;
+}
+[dir="rtl"] .hp-notification-menu__head a{
+  order:-1;
+}
+[dir="rtl"] .hp-notification-menu__icon{
+  margin-left:0;
+}
+
 /* RTL Product card buttons */
 [dir="rtl"] .hp-pill-btn.add-to-cart {margin-left: 0.5rem !important; margin-right: auto !important;}
 [dir="rtl"] .equipment-card .btn-gradient {margin-left: 0.5rem !important;}
