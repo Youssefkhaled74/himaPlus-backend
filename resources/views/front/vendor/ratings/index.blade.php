@@ -155,10 +155,10 @@
     }
 
     .vr-filter-bar {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
         gap: 12px;
+        align-items: center;
     }
 
     .vr-filter-select {
@@ -185,6 +185,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        min-width: 0;
     }
 
     .vr-rating-filter .vr-filter-select {
@@ -203,6 +204,7 @@
         display: flex;
         gap: 10px;
         align-items: center;
+        justify-content: flex-end;
         margin-inline-start: 0;
         flex-wrap: nowrap;
     }
@@ -361,8 +363,7 @@
         }
 
         .vr-filter-bar {
-            flex-direction: column;
-            align-items: stretch;
+            grid-template-columns: 1fr;
         }
 
         .vr-filter-select,
@@ -379,7 +380,7 @@
 
         .vr-filter-actions {
             width: 100%;
-            margin-inline-start: 0;
+            justify-content: stretch;
         }
 
         .vr-filter-actions .vr-btn-primary,
