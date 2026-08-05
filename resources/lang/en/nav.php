@@ -35,12 +35,12 @@ return [
     'verify_account' => 'Verify Account',
 
     // Footer
-    'footer_desc' => 'Hema connects healthcare providers with trusted suppliers, enabling compliant procurement, streamlined maintenance, and unified tracking.',
+    'footer_desc' => 'HemaPulse connects healthcare providers with trusted suppliers, making it easy to request quotes, order products, and manage maintenance in one place.',
     'site_map' => 'Site Map',
     'services' => 'Services',
     'products' => 'Products',
     'discover_app' => 'Discover our app',
-    'copyright' => '© 2025 HemaPulse . All right reserved.',
+    'copyright' => 'Copyright 2025 HemaPulse. All rights reserved.',
     'powered_by' => 'Powered by Tptc',
     'footer_address' => 'Riyadh, Saudi Arabia',
     
