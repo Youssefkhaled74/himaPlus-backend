@@ -105,6 +105,28 @@ class VendorNotificationsController extends Controller
         return back();
     }
 
+    public function open(Request $request, $id)
+    {
+        $vendorId = auth()->id();
+
+        $notification = Notification::where('id', $id)
+            ->where('user_id', $vendorId)
+            ->first();
+
+        if (!$notification) {
+            flash()->error(__('messages.not_found', ['item' => 'Notification']));
+            return back();
+        }
+
+        if (is_null($notification->read_at)) {
+            $notification->update(['read_at' => now()]);
+        }
+
+        $targetUrl = $notification->resolveDisplayUrl();
+
+        return redirect()->to($targetUrl ?: route('vendor/notifications'));
+    }
+
     public function markAllAsRead(Request $request)
     {
         $vendorId = auth()->id();
@@ -133,7 +155,6 @@ class VendorNotificationsController extends Controller
 
         $notification->display_title = $notification->title ?: __('nav.notification');
         $notification->display_message = $notification->message ?: ($notification->content ?: '-');
-        $notification->display_url = $notification->action_url ?: ($notification->order_id ? route('vendor/orders/show', $notification->order_id) : null);
         $notification->is_unread = is_null($notification->read_at);
         $notification->type_key = $type;
         $notification->type_label = $this->typeOptions()->get($type, __('nav.notification_system'));

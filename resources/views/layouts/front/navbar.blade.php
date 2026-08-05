@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="hp-notification-menu__list">
                                     @forelse($vendorRecentNotifications as $notification)
-                                        <a href="{{ route('vendor/notifications') }}" class="hp-notification-menu__item">
+                                        <a href="{{ route('vendor/notifications/open', $notification->id) }}" class="hp-notification-menu__item">
                                             <span class="hp-notification-menu__icon {{ $notification->read_at ? 'is-read' : 'is-unread' }}">
                                                 <i class="bi bi-bell{{ $notification->read_at ? '' : '-fill' }}"></i>
                                             </span>

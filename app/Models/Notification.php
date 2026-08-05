@@ -101,8 +101,46 @@ class Notification extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-	public function order()
+    public function order()
     {
         return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function resolveDisplayUrl(): ?string
+    {
+        if (!empty($this->action_url)) {
+            return $this->action_url;
+        }
+
+        if (!empty($this->order_id)) {
+            return route('vendor/orders/show', $this->order_id);
+        }
+
+        if (!empty($this->serviceable_type) && !empty($this->serviceable_id)) {
+            if (is_a($this->serviceable_type, Product::class, true)) {
+                return route('vendor/products/show', $this->serviceable_id);
+            }
+
+            if (is_a($this->serviceable_type, Order::class, true)) {
+                return route('vendor/orders/show', $this->serviceable_id);
+            }
+
+            if (is_a($this->serviceable_type, Offer::class, true)) {
+                $offer = $this->serviceable;
+                return route('vendor/orders/show', $offer?->order_id ?: $this->serviceable_id);
+            }
+        }
+
+        $metaUrl = data_get($this->meta, 'action_url') ?? data_get($this->meta, 'url');
+        if (!empty($metaUrl)) {
+            return $metaUrl;
+        }
+
+        return route('vendor/notifications');
+    }
+
+    public function getDisplayUrlAttribute(): ?string
+    {
+        return $this->resolveDisplayUrl();
     }
 }

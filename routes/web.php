@@ -209,6 +209,7 @@ Route::get('/categories', [VendorDashboardController::class, 'categories'])->nam
     
     // Notifications (Phase 3)
     Route::get('/notifications', [VendorNotificationsController::class, 'index'])->name('vendor/notifications');
+    Route::get('/notifications/{id}/open', [VendorNotificationsController::class, 'open'])->name('vendor/notifications/open');
     Route::post('/notifications/{id}/mark-as-read', [VendorNotificationsController::class, 'markAsRead'])->name('vendor/notifications/mark-as-read');
     Route::delete('/notifications/{id}', [VendorNotificationsController::class, 'delete'])->name('vendor/notifications/delete');
     Route::post('/notifications/mark-all-as-read', [VendorNotificationsController::class, 'markAllAsRead'])->name('vendor/notifications/mark-all-as-read');

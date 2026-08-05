@@ -616,7 +616,7 @@
 
                                 <div class="vn-actions">
                                     @if($notification->display_url)
-                                        <a href="{{ $notification->display_url }}" class="vn-action-btn primary">
+                                        <a href="{{ route('vendor/notifications/open', $notification->id) }}" class="vn-action-btn primary">
                                             <i class="bi bi-box-arrow-up-right"></i>
                                             {{ __('nav.view') }}
                                         </a>
