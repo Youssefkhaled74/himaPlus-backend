@@ -41,12 +41,21 @@
         }
         .vendor-offer-form .btn-secondary{
             background:#fff;border:1px solid #e5a0a0;color:#d14343;border-radius:16px;min-height:56px;padding:0 26px;font-weight:700;
+            display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
         }
         .vendor-offer-form .btn-secondary:hover{background:#fff5f5;color:#b91c1c;border-color:#dc8a8a;}
+        .vendor-offer-form .offer-actions{
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:12px;
+            align-items:stretch;
+        }
+        .vendor-offer-form .offer-actions > *{
+            width:100%;
+        }
         @media (max-width: 992px){
             .vendor-offer-form .card-header h4{font-size:28px;}
-            .vendor-offer-form .d-flex.justify-content-between{gap:10px;flex-direction:row-reverse;}
-            .vendor-offer-form .d-flex.justify-content-between .btn{flex:1;}
+            .vendor-offer-form .offer-actions{grid-template-columns:1fr;}
         }
     </style>
 @endsection
@@ -164,7 +173,7 @@
                             </div>
 
                             <!-- Buttons -->
-                            <div class="d-flex justify-content-between">
+                            <div class="offer-actions">
                                 <a href="{{ route('vendor/orders/my-offers') }}" class="btn btn-secondary">
                                     <i class="bi bi-arrow-left"></i> إلغاء
                                 </a>
