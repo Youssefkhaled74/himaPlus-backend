@@ -107,7 +107,7 @@ class OrderController extends Controller
         }
 
         $order = $this->order->where('id', $id)->with([
-            'items.product.category', 'timeline', 'provider.ratings', 'user', 'offer.provider', 'offers.provider', 'partial_receive', 'shipments.images', 'shipments.shippingMethod'
+            'items.product.category', 'timeline', 'provider.ratings', 'user', 'offer.provider', 'offers.provider', 'partial_receive', 'shipments.images', 'shipments.shippingMethod', 'device_category'
         ])->withCount('items')->first();
 
         $info = $this->infoRepository->getfirst();

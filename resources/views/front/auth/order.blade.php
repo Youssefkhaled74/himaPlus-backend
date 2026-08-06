@@ -385,6 +385,65 @@
                     </div>
                 </div>
 
+                @if ((int) $order->order_type === 3)
+                    @php
+                        $maintenanceFiles = array_values(array_filter(is_array($order->files) ? $order->files : []));
+                    @endphp
+                    <div class="od-card mb-4">
+                        <div class="od-panel-head">
+                            <div>
+                                <h5 class="od-panel-title">{{ __('nav.maintenance_request') ?? __('products.maintenance') }}</h5>
+                                <p class="od-panel-sub">{{ __('products.order_details') }} #{{ $order->id }}</p>
+                            </div>
+                        </div>
+                        <div class="od-panel-body">
+                            @if($order->device_category)
+                                <div class="od-detail-row">
+                                    <span class="od-detail-label">{{ __('products.categories') ?? __('nav.categories') }}</span>
+                                    <span class="od-detail-value">{{ $order->device_category->name }}</span>
+                                </div>
+                            @endif
+                            <div class="od-detail-row">
+                                <span class="od-detail-label">{{ __('nav.device_name') }}</span>
+                                <span class="od-detail-value">{{ $order->device_name ?? '---' }}</span>
+                            </div>
+                            <div class="od-detail-row">
+                                <span class="od-detail-label">{{ __('nav.serial_number') }}</span>
+                                <span class="od-detail-value">{{ $order->serial_number ?? '---' }}</span>
+                            </div>
+                            <div class="od-detail-row">
+                                <span class="od-detail-label">{{ __('nav.issue_description') }}</span>
+                                <span class="od-detail-value">{{ $order->issue_description ?? '---' }}</span>
+                            </div>
+                            <div class="od-detail-row">
+                                <span class="od-detail-label">{{ __('nav.preferred_service_time') }}</span>
+                                <span class="od-detail-value">
+                                    {{ $order->preferred_service_time ? \Carbon\Carbon::parse($order->preferred_service_time)->translatedFormat('M j, Y H:i') : '---' }}
+                                </span>
+                            </div>
+
+                            @if(count($maintenanceFiles))
+                                <div style="margin-top:12px;">
+                                    <span class="od-detail-label d-block mb-2">{{ __('products.files') }}</span>
+                                    <div class="files-grid">
+                                        @foreach($maintenanceFiles as $img)
+                                            <a href="{{ asset($img) }}" target="_blank" class="cell">
+                                                @if(in_array(strtolower(pathinfo($img, PATHINFO_EXTENSION)), ['jpg','jpeg','png','webp']))
+                                                    <img src="{{ asset($img) }}" alt="{{ __('products.files') }}">
+                                                @else
+                                                    <div style="width:90px;height:90px;border-radius:8px;border:1px solid #e5e7eb;display:grid;place-items:center;background:#f1f5f9;color:#475569;font-size:11px;">
+                                                        <i class="bi bi-file-earmark"></i> {{ strtoupper(pathinfo($img, PATHINFO_EXTENSION)) }}
+                                                    </div>
+                                                @endif
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
                 @if (isset($order->items) && count($order->items) > 0)
                     <div class="od-card mb-4">
                         <div class="od-panel-head">
